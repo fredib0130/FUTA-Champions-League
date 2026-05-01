@@ -1,4 +1,4 @@
-import { Team, Player, Match, NewsPost, Sponsor } from '../types';
+import { Team, Player, Match, NewsPost, Sponsor, CoefficientRanking } from '../types';
 
 export const TEAMS: Team[] = [
   'AGE', 'AGP', 'ANA', 'APH', 'BCH', 'BDG', 'CSP', 'CYS', 'ENT', 'FWT',
@@ -128,4 +128,38 @@ export const SPONSORS: Sponsor[] = [
   { id: 's1', name: 'Alat by Wema', logo: 'https://seeklogo.com/images/A/alat-logo-9E7D4E7B7D-seeklogo.com.png', tier: 'GOLD', website: '#' },
   { id: 's2', name: 'Pepsi', logo: 'https://seeklogo.com/images/P/pepsi-logo-BF1BD3C623-seeklogo.com.png', tier: 'GOLD', website: '#' },
   { id: 's3', name: 'Bolt', logo: 'https://seeklogo.com/images/B/bolt-logo-4966779BC2-seeklogo.com.png', tier: 'SILVER', website: '#' }
+];
+
+export const COEFFICIENTS: CoefficientRanking[] = [
+  { rank: 1, teamId: 'ifs', teamName: 'Information Systems', points2026: 4.00, points2025: 16.00, totalCoefficient: 20.00, isActive: true },
+  { rank: 2, teamId: 'mst', teamName: 'Marine Science', points2026: 4.00, points2025: 16.00, totalCoefficient: 20.00, isActive: true },
+  { rank: 3, teamId: 'bdg', teamName: 'Building', points2026: 4.00, points2025: 13.00, totalCoefficient: 17.00, isActive: true },
+  { rank: 4, teamId: 'ipe', teamName: 'IPE', points2026: 0.00, points2025: 17.00, totalCoefficient: 17.00, isActive: false },
+  { rank: 5, teamId: 'mcb', teamName: 'Micro-Biology', points2026: 4.00, points2025: 11.00, totalCoefficient: 15.00, isActive: true },
+  { rank: 6, teamId: 'agy', teamName: 'AGY', points2026: 0.00, points2025: 15.00, totalCoefficient: 15.00, isActive: false },
+  { rank: 7, teamId: 'fat', teamName: 'FAT', points2026: 0.00, points2025: 13.00, totalCoefficient: 13.00, isActive: false },
+  { rank: 8, teamId: 'phs', teamName: 'Physiology', points2026: 4.00, points2025: 7.00, totalCoefficient: 11.00, isActive: true },
+  { rank: 9, teamId: 'ent', teamName: 'Entrepreneurship', points2026: 4.00, points2025: 7.00, totalCoefficient: 11.00, isActive: true },
+  { rank: 10, teamId: 'csp', teamName: 'Crop Science', points2026: 3.00, points2025: 8.00, totalCoefficient: 11.00, isActive: true },
+  { rank: 11, teamId: 'mme', teamName: 'MME', points2026: 0.00, points2025: 11.00, totalCoefficient: 11.00, isActive: false },
+  { rank: 12, teamId: 'mne', teamName: 'MNE', points2026: 0.00, points2025: 11.00, totalCoefficient: 11.00, isActive: false },
+  { rank: 13, teamId: 'mts', teamName: 'MTS', points2026: 0.00, points2025: 9.00, totalCoefficient: 9.00, isActive: false },
+  { rank: 14, teamId: 'rsg', teamName: 'RSG', points2026: 0.00, points2025: 8.00, totalCoefficient: 8.00, isActive: false },
+  { rank: 15, teamId: 'mbbs', teamName: 'Medicine', points2026: 3.00, points2025: 4.00, totalCoefficient: 7.00, isActive: true },
+  { rank: 16, teamId: 'cys', teamName: 'Cyber Security', points2026: 3.00, points2025: 3.00, totalCoefficient: 6.00, isActive: true },
+  { rank: 17, teamId: 'ltt', teamName: 'LTT', points2026: 0.00, points2025: 6.00, totalCoefficient: 6.00, isActive: false },
+  { rank: 18, teamId: 'svg', teamName: 'SVG', points2026: 0.00, points2025: 6.00, totalCoefficient: 6.00, isActive: false },
+  { rank: 19, teamId: 'aph', teamName: 'Animal Production and Health', points2026: 4.00, points2025: 0.00, totalCoefficient: 4.00, isActive: true },
+  { rank: 20, teamId: 'ice', teamName: 'ICE', points2026: 4.00, points2025: 0.00, totalCoefficient: 4.00, isActive: true },
+  { rank: 21, teamId: 'phy', teamName: 'Physics', points2026: 4.00, points2025: 0.00, totalCoefficient: 4.00, isActive: true },
+  { rank: 22, teamId: 'bmt', teamName: 'BMT', points2026: 0.00, points2025: 4.00, totalCoefficient: 4.00, isActive: false },
+  { rank: 23, teamId: 'age', teamName: 'Agricultural Engineering', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
+  { rank: 24, teamId: 'agp', teamName: 'Applied Geo-Physics', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
+  { rank: 25, teamId: 'ana', teamName: 'Anatomy', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
+  { rank: 26, teamId: 'bch', teamName: 'Bio-Chemistry', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
+  { rank: 27, teamId: 'fwt', teamName: 'Forestry', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
+  { rank: 28, teamId: 'sta', teamName: 'Statistics', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
+  { rank: 29, teamId: 'idd', teamName: 'Industrial Design', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
+  { rank: 30, teamId: 'simt', teamName: 'Security Investment', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
+  { rank: 31, teamId: 'che', teamName: 'CHE', points2026: 0.00, points2025: 3.00, totalCoefficient: 3.00, isActive: false },
 ];

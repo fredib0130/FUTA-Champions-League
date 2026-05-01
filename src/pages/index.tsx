@@ -1,21 +1,23 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Link, useParams } from 'react-router-dom';
-import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone, Image as ImageIcon, Twitter, ExternalLink, ShieldCheck, Clock } from 'lucide-react';
+import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone, Image as ImageIcon, Twitter, ExternalLink, ShieldCheck, Clock, Medal } from 'lucide-react';
 import { Countdown } from '../components/Countdown';
 import { MatchCard } from '../components/MatchCard';
 import { PageHeader } from '../components/PageHeader';
-import { MATCHES, NEWS, SPONSORS, PLAYERS, TEAMS } from '../data/mockData';
+import { MATCHES, NEWS, SPONSORS, PLAYERS, TEAMS, COEFFICIENTS } from '../data/mockData';
 import { Match } from '../types';
 import { cn } from '../lib/utils';
 
 import { LeagueTable } from '../components/LeagueTable';
+import { CoefficientTable } from '../components/CoefficientTable';
 
 export function Home() {
   const featuredMatch = MATCHES.find(m => m.id === 'md1-1') || MATCHES[0];
   const latestNews = NEWS.slice(0, 2);
   const topPlayers = PLAYERS.slice(0, 3);
   const topTeamsTable = <LeagueTable limit={5} />;
+  const topCoefficients = COEFFICIENTS.slice(0, 3);
 
   return (
     <div className="space-y-32">
@@ -174,6 +176,60 @@ export function Home() {
               FULL PLAYER STATISTICS 
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Coefficient Highlights - TOP RANKED TEAMS (PRE-TOURNAMENT) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="glass rounded-[50px] p-8 sm:p-16 border border-primary/20 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] -mr-64 -mt-64 group-hover:bg-primary/10 transition-colors duration-1000" />
+          
+          <div className="relative z-10">
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+              <div className="max-w-2xl">
+                <div className="inline-flex items-center space-x-3 mb-6">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <ShieldCheck className="text-primary w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Official Pre-Tournament Rankings</span>
+                </div>
+                <h2 className="text-4xl sm:text-6xl font-display font-black italic uppercase tracking-tighter leading-none mb-6">
+                  TOP RANKED TEAMS <br />
+                  <span className="text-primary italic">(PRE-TOURNAMENT)</span>
+                </h2>
+                <p className="text-white/40 text-lg leading-relaxed">
+                  The FCL Coefficient Ranking measures team performance across previous seasons. It reflects consistency, historical strength, and competitive pedigree heading into the 2026 tournament.
+                </p>
+              </div>
+              <Link to="/rankings" className="group flex items-center space-x-4 bg-white/5 hover:bg-white/10 border border-white/10 px-8 py-4 rounded-2xl transition-all">
+                <span className="text-xs font-black uppercase tracking-widest leading-none">Explore Final Hierarchy</span>
+                <div className="p-2 bg-primary/20 rounded-lg text-primary group-hover:translate-x-1 transition-transform">
+                  <ArrowRight size={16} />
+                </div>
+              </Link>
+            </div>
+
+            <div className="grid lg:grid-cols-12 gap-12 items-center">
+              <div className="lg:col-span-8 overflow-hidden">
+                <CoefficientTable data={topCoefficients} />
+              </div>
+              <div className="lg:col-span-4 space-y-6">
+                <div className="p-10 glass rounded-[40px] border border-primary/20 bg-primary/5 relative group/card">
+                   <div className="absolute top-0 right-0 p-4 opacity-20 group-hover/card:opacity-100 transition-opacity">
+                     <Medal className="text-primary w-8 h-8" />
+                   </div>
+                   <h4 className="text-sm font-bold text-primary mb-4 italic uppercase tracking-widest leading-tight">Prestige & Power</h4>
+                   <p className="text-xs text-white/50 leading-relaxed mb-6">
+                     Higher coefficient = stronger historical performance. These departments are the "Departmental Kings" of FUTA sports.
+                   </p>
+                   <div className="p-3 bg-white/5 rounded-xl border border-white/10 flex items-center space-x-3">
+                     <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
+                     <span className="text-[8px] font-black text-white/40 uppercase tracking-widest">Calculated Pre-2026 Season</span>
+                   </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -996,6 +1052,7 @@ export function TeamProfile() {
   const { id } = useParams();
   const team = TEAMS.find(t => t.id === id);
   const teamPlayers = PLAYERS.filter(p => p.teamId === id);
+  const teamCoefficient = COEFFICIENTS.find(c => c.teamId === id);
 
   if (!team) return <div>Team not found</div>;
 
@@ -1005,15 +1062,25 @@ export function TeamProfile() {
         <div className="absolute inset-0 bg-primary/5 blur-[120px]" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row items-center md:items-end space-y-8 md:space-y-0 md:space-x-12">
-            <motion.img 
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              src={team.logo} 
-              alt={team.name} 
-              className="w-48 h-48 drop-shadow-2xl"
-            />
+            <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative">
+              <img 
+                src={team.logo} 
+                alt={team.name} 
+                className="w-48 h-48 drop-shadow-2xl relative z-10"
+              />
+              {teamCoefficient && (
+                <div className="absolute -top-4 -right-4 bg-primary text-dark font-black italic px-4 py-2 rounded-xl text-xl shadow-xl z-20 border-2 border-dark">
+                  #{teamCoefficient.rank}
+                </div>
+              )}
+            </motion.div>
             <div className="text-center md:text-left">
-              <div className="text-primary font-bold tracking-[0.3em] uppercase mb-2">Group {team.group}</div>
+              <div className="flex items-center justify-center md:justify-start space-x-3 mb-2">
+                <div className="text-primary font-bold tracking-[0.3em] uppercase">Group {team.group}</div>
+                {teamCoefficient && teamCoefficient.rank <= 3 && (
+                  <div className="px-2 py-0.5 bg-primary/20 rounded border border-primary/40 text-[8px] font-black text-primary uppercase tracking-[0.2em] italic">Top Seed</div>
+                )}
+              </div>
               <h1 className="text-5xl sm:text-7xl font-display font-black italic tracking-tighter uppercase mb-6">{team.name}</h1>
               <div className="flex space-x-8 justify-center md:justify-start">
                 <div>
@@ -1025,11 +1092,15 @@ export function TeamProfile() {
                   <div className="text-3xl font-display font-bold">{team.won}</div>
                   <div className="text-[10px] font-bold text-white/30 tracking-[0.2em]">WINS</div>
                 </div>
-                <div className="w-px h-10 bg-white/10" />
-                <div>
-                  <div className="text-3xl font-display font-bold">{team.goalsFor}</div>
-                  <div className="text-[10px] font-bold text-white/30 tracking-[0.2em]">GOALS</div>
-                </div>
+                {teamCoefficient && (
+                  <>
+                    <div className="w-px h-10 bg-white/10" />
+                    <div>
+                      <div className="text-3xl font-display font-bold text-primary">{teamCoefficient.totalCoefficient.toFixed(2)}</div>
+                      <div className="text-[10px] font-bold text-white/30 tracking-[0.2em]">COEFF</div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -1061,6 +1132,69 @@ export function TeamProfile() {
               <p className="text-white/50 leading-relaxed text-sm">
                 {team.description}
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export function Rankings() {
+  return (
+    <div>
+      <PageHeader 
+        title="FCL Coefficient Rankings" 
+        subtitle="Departmental Power Index & Pre-Tournament Hierarchy"
+      />
+      
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
+        <div className="grid lg:grid-cols-4 gap-12 mb-20">
+          <aside className="lg:col-span-1 space-y-8">
+            <div>
+              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-primary/10 rounded-full mb-4">
+                <Medal size={12} className="text-primary" />
+                <span className="text-[8px] font-black text-primary uppercase tracking-widest">Power Ranking Index</span>
+              </div>
+              <h3 className="text-2xl font-display italic uppercase tracking-tighter text-white mb-4">Historical Strength</h3>
+              <p className="text-sm text-white/50 leading-relaxed italic">
+                “The FCL Coefficient Ranking measures team performance across previous seasons. It reflects consistency, historical strength, and competitive pedigree heading into the 2026 tournament.”
+              </p>
+            </div>
+
+            <div className="p-8 glass rounded-[32px] border border-primary/20 bg-primary/5">
+              <h4 className="text-[10px] font-black text-primary uppercase tracking-widest mb-4">Seeding Note</h4>
+              <p className="text-[10px] text-white/40 leading-relaxed uppercase tracking-widest italic font-bold">
+                *FCL Team Coefficient Ranking was calculated before the commencement of the 2026 Tournament*
+              </p>
+            </div>
+          </aside>
+          <div className="lg:col-span-3">
+            <CoefficientTable data={COEFFICIENTS} />
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-12">
+          <div className="glass rounded-[40px] p-12 border border-white/10 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl -mr-16 -mt-16 group-hover:bg-primary/20 transition-colors" />
+            <h3 className="text-2xl font-display italic mb-6 uppercase tracking-tighter text-primary">Prestige & Seeding</h3>
+            <p className="text-white/60 leading-relaxed mb-8 text-sm">
+              A high coefficient isn't just about pride—it has direct sporting implications. The Top 8 teams in the coefficient ranking are designated as "Top Seeds" during the Season Draws, ensuring they avoid other heavyweights in the initial group stages.
+            </p>
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary"><ShieldCheck /></div>
+              <div className="text-[10px] font-black uppercase tracking-widest text-white/40 italic">Seeding protection for Top 8</div>
+            </div>
+          </div>
+          <div className="glass rounded-[40px] p-12 border border-white/10 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl -mr-16 -mt-16 group-hover:bg-primary/20 transition-colors" />
+            <h3 className="text-2xl font-display italic mb-6 uppercase tracking-tighter text-white">Rising Giants</h3>
+            <p className="text-white/60 leading-relaxed mb-8 text-sm">
+              The 2026 season has seen a massive surge from departments like <span className="text-white font-bold">APH</span> and <span className="text-white font-bold">ICE</span>. While they lack the 2025 legacy points, their rapid accumulation in 2026 makes them the most dangerous "Lower Seeds" in the current bracket.
+            </p>
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary"><TrendingUp /></div>
+              <div className="text-[10px] font-black uppercase tracking-widest text-white/40 italic">Tracking 2026 momentum</div>
             </div>
           </div>
         </div>

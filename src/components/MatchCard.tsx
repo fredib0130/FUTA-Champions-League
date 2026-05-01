@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Match, Team } from '../types';
-import { TEAMS } from '../data/mockData';
+import { TEAMS, COEFFICIENTS } from '../data/mockData';
 import { cn } from '../lib/utils';
 
 interface MatchCardProps {
@@ -11,14 +11,55 @@ interface MatchCardProps {
 export function MatchCard({ match }: MatchCardProps) {
   const homeTeam = TEAMS.find(t => t.id === match.homeTeamId);
   const awayTeam = TEAMS.find(t => t.id === match.awayTeamId);
+  const homeCoeff = COEFFICIENTS.find(c => c.teamId === match.homeTeamId);
+  const awayCoeff = COEFFICIENTS.find(c => c.teamId === match.awayTeamId);
 
   if (!homeTeam || !awayTeam) return null;
+
+  const getNarrativeLabel = (hRank: number | undefined, aRank: number | undefined) => {
+    if (!hRank || !aRank) return null;
+    
+    // Elite vs Underdog
+    if ((hRank <= 5 && aRank >= 20) || (aRank <= 5 && hRank >= 20)) {
+      return { label: 'Underdog vs Elite', class: 'bg-orange-500/10 text-orange-400 border-orange-500/30' };
+    }
+    
+    // High Coefficient Clash
+    if (hRank <= 8 && aRank <= 8) {
+      return { label: 'High Coefficient Clash', class: 'bg-primary/20 text-primary border-primary/40 shadow-[0_0_15px_rgba(255,200,0,0.1)]' };
+    }
+
+    return null;
+  };
+
+  const narrativeLabel = getNarrativeLabel(homeCoeff?.rank, awayCoeff?.rank);
+
+  const getSeedLabel = (rank: number | undefined) => {
+    if (!rank) return null;
+    if (rank <= 5) return { label: 'Top Seed', class: 'bg-primary/20 text-primary border-primary/30' };
+    if (rank >= 20) return { label: 'Underdog', class: 'bg-white/5 text-white/40 border-white/10' };
+    return null;
+  };
+
+  const homeLabel = getSeedLabel(homeCoeff?.rank);
+  const awayLabel = getSeedLabel(awayCoeff?.rank);
 
   return (
     <motion.div 
       whileHover={{ y: -4 }}
-      className="glass rounded-3xl p-6 relative overflow-hidden"
+      className="glass rounded-3xl p-6 relative overflow-hidden group"
     >
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      
+      {narrativeLabel && (
+        <div className={cn(
+          "absolute top-0 left-1/2 -translate-x-1/2 px-4 py-1 rounded-b-xl text-[8px] font-black uppercase tracking-widest border border-t-0 z-20",
+          narrativeLabel.class
+        )}>
+          {narrativeLabel.label}
+        </div>
+      )}
+
       {match.status === 'LIVE' && (
         <div className="absolute top-4 right-4 flex items-center space-x-2">
           <span className="flex h-2 w-2 relative">
@@ -32,7 +73,17 @@ export function MatchCard({ match }: MatchCardProps) {
       <div className="flex items-center justify-between space-x-4">
         {/* Home Team */}
         <div className="flex flex-col items-center flex-1 text-center">
-          <img src={homeTeam.logo} alt={homeTeam.name} className="w-16 h-16 mb-3" />
+          <div className="relative mb-3">
+            <img src={homeTeam.logo} alt={homeTeam.name} className="w-16 h-16" />
+            {homeLabel && (
+              <div className={cn(
+                "absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded border text-[7px] font-black uppercase tracking-tighter whitespace-nowrap",
+                homeLabel.class
+              )}>
+                {homeLabel.label}
+              </div>
+            )}
+          </div>
           <h3 className="font-bold text-sm tracking-tight">{homeTeam.name}</h3>
         </div>
 
@@ -50,7 +101,17 @@ export function MatchCard({ match }: MatchCardProps) {
 
         {/* Away Team */}
         <div className="flex flex-col items-center flex-1 text-center">
-          <img src={awayTeam.logo} alt={awayTeam.name} className="w-16 h-16 mb-3" />
+          <div className="relative mb-3">
+            <img src={awayTeam.logo} alt={awayTeam.name} className="w-16 h-16" />
+            {awayLabel && (
+              <div className={cn(
+                "absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded border text-[7px] font-black uppercase tracking-tighter whitespace-nowrap",
+                awayLabel.class
+              )}>
+                {awayLabel.label}
+              </div>
+            )}
+          </div>
           <h3 className="font-bold text-sm tracking-tight">{awayTeam.name}</h3>
         </div>
       </div>

@@ -12,7 +12,8 @@ import {
   Contact,
   TeamProfile,
   Table,
-  Playoffs
+  Playoffs,
+  Rankings
 } from './pages';
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="fixtures" element={<Fixtures />} />
           <Route path="table" element={<Table />} />
+          <Route path="rankings" element={<Rankings />} />
           <Route path="playoffs" element={<Playoffs />} />
           <Route path="teams" element={<Teams />} />
           <Route path="teams/:id" element={<TeamProfile />} />

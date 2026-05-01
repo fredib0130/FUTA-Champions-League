@@ -50,6 +50,16 @@ export interface NewsPost {
   category: string;
 }
 
+export interface CoefficientRanking {
+  rank: number;
+  teamId: string;
+  teamName: string;
+  points2026: number;
+  points2025: number;
+  totalCoefficient: number;
+  isActive: boolean; // green indicator if true, red if false
+}
+
 export interface Sponsor {
   id: string;
   name: string;
