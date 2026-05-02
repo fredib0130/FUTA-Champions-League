@@ -13,6 +13,10 @@ export const TEAMS: Team[] = [
   ][i] + ` (${abbr})`,
   logo: `https://api.dicebear.com/7.x/identicon/svg?seed=${abbr}`,
   group: 'League',
+  pot: (['BDG', 'IFS', 'MCB', 'MST', 'PHS'].includes(abbr) ? 'A' :
+        ['APH', 'CSP', 'ENT', 'ICE', 'PHY'].includes(abbr) ? 'B' :
+        ['AGE', 'AGP', 'CYS', 'FWT', 'MBBS'].includes(abbr) ? 'C' :
+        ['ANA', 'BCH', 'IDD', 'SIMT', 'STA'].includes(abbr) ? 'D' : undefined) as Team['pot'],
   played: 0,
   won: 0,
   drawn: 0,

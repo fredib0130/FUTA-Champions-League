@@ -3,6 +3,7 @@ export interface Team {
   name: string;
   logo: string;
   group: string;
+  pot?: 'A' | 'B' | 'C' | 'D';
   played: number;
   won: number;
   drawn: number;

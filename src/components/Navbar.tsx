@@ -9,6 +9,7 @@ const navItems = [
   { name: 'Fixtures', path: '/fixtures', icon: Calendar },
   { name: 'Standings', path: '/table', icon: BarChart3 },
   { name: 'Rankings', path: '/rankings', icon: Star },
+  { name: 'Pots', path: '/pots', icon: Trophy },
   { name: 'Playoffs', path: '/playoffs', icon: Trophy },
   { name: 'Teams', path: '/teams', icon: Users },
   { name: 'Stats', path: '/stats', icon: BarChart3 },

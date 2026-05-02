@@ -13,7 +13,8 @@ import {
   TeamProfile,
   Table,
   Playoffs,
-  Rankings
+  Rankings,
+  Pots
 } from './pages';
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="fixtures" element={<Fixtures />} />
           <Route path="table" element={<Table />} />
           <Route path="rankings" element={<Rankings />} />
+          <Route path="pots" element={<Pots />} />
           <Route path="playoffs" element={<Playoffs />} />
           <Route path="teams" element={<Teams />} />
           <Route path="teams/:id" element={<TeamProfile />} />

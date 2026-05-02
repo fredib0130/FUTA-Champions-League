@@ -180,6 +180,8 @@ export function Home() {
         </div>
       </section>
 
+      <PotAHighlight />
+
       {/* Coefficient Highlights - TOP RANKED TEAMS (PRE-TOURNAMENT) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="glass rounded-[50px] p-8 sm:p-16 border border-primary/20 relative overflow-hidden group">
@@ -1080,6 +1082,14 @@ export function TeamProfile() {
                 {teamCoefficient && teamCoefficient.rank <= 3 && (
                   <div className="px-2 py-0.5 bg-primary/20 rounded border border-primary/40 text-[8px] font-black text-primary uppercase tracking-[0.2em] italic">Top Seed</div>
                 )}
+                {team.pot && (
+                  <div className={cn(
+                    "px-2 py-0.5 rounded border text-[8px] font-black uppercase tracking-[0.2em] italic",
+                    team.pot === 'A' ? "bg-primary/20 border-primary/40 text-primary" : "bg-white/5 border-white/20 text-white/40"
+                  )}>
+                    Pot {team.pot}
+                  </div>
+                )}
               </div>
               <h1 className="text-5xl sm:text-7xl font-display font-black italic tracking-tighter uppercase mb-6">{team.name}</h1>
               <div className="flex space-x-8 justify-center md:justify-start">
@@ -1140,6 +1150,54 @@ export function TeamProfile() {
   );
 }
 
+function PotAHighlight() {
+  const potATeams = TEAMS.filter(t => t.pot === 'A');
+
+  return (
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+        <div>
+          <div className="inline-flex items-center space-x-2 px-3 py-1 bg-primary/10 rounded-full mb-4">
+            <Trophy size={12} className="text-primary" />
+            <span className="text-[10px] font-black text-primary uppercase tracking-widest leading-none">Elite Category</span>
+          </div>
+          <h2 className="text-4xl sm:text-6xl font-display font-black italic uppercase tracking-tighter">
+            TOP SEEDED <span className="text-primary italic">TEAMS</span> <br />
+            (POT A)
+          </h2>
+        </div>
+        <Link to="/pots" className="group flex items-center space-x-3 text-white/40 hover:text-primary transition-colors">
+          <span className="text-xs font-black uppercase tracking-widest">View All Seedings</span>
+          <ArrowRight className="group-hover:translate-x-1 transition-transform" size={18} />
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+        {potATeams.map((team, index) => (
+          <motion.div
+            key={team.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+          >
+            <Link 
+              to={`/teams/${team.id}`}
+              className="group block p-8 glass rounded-[40px] border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-all text-center relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                <Medal className="text-primary w-8 h-8" />
+              </div>
+              <img src={team.logo} alt={team.name} className="w-20 h-20 mx-auto mb-6 transform group-hover:scale-110 transition-transform duration-500" />
+              <h3 className="text-sm font-black uppercase tracking-widest text-white group-hover:text-primary mb-2 transition-colors">{team.id.toUpperCase()}</h3>
+              <p className="text-[8px] font-black text-white/30 uppercase tracking-[0.2em]">Title Contender</p>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function Rankings() {
   return (
     <div>
@@ -1197,6 +1255,130 @@ export function Rankings() {
               <div className="text-[10px] font-black uppercase tracking-widest text-white/40 italic">Tracking 2026 momentum</div>
             </div>
           </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export function Pots() {
+  const pots = {
+    A: {
+      color: 'from-blue-600/20 to-blue-900/40',
+      border: 'border-blue-500/30',
+      text: 'text-blue-400',
+      label: 'POT A',
+      subtitle: 'Top Seeded Teams',
+      glow: 'shadow-[0_0_30px_rgba(59,130,246,0.2)]',
+      teams: TEAMS.filter(t => t.pot === 'A')
+    },
+    B: {
+      color: 'from-green-600/20 to-green-900/40',
+      border: 'border-green-500/30',
+      text: 'text-green-400',
+      label: 'POT B',
+      subtitle: 'Competitive Seeds',
+      glow: 'shadow-[0_0_30px_rgba(34,197,94,0.1)]',
+      teams: TEAMS.filter(t => t.pot === 'B')
+    },
+    C: {
+      color: 'from-yellow-600/20 to-yellow-900/40',
+      border: 'border-yellow-500/30',
+      text: 'text-yellow-400',
+      label: 'POT C',
+      subtitle: 'Mid-Tier Contenders',
+      glow: 'shadow-[0_0_30px_rgba(234,179,8,0.1)]',
+      teams: TEAMS.filter(t => t.pot === 'C')
+    },
+    D: {
+      color: 'from-red-600/20 to-red-900/40',
+      border: 'border-red-500/30',
+      text: 'text-red-400',
+      label: 'POT D',
+      subtitle: 'Lower Seeded Teams',
+      glow: 'shadow-[0_0_30px_rgba(239,68,68,0.1)]',
+      teams: TEAMS.filter(t => t.pot === 'D')
+    }
+  };
+
+  return (
+    <div>
+      <PageHeader 
+        title="2026 POT SEEDINGS" 
+        subtitle="Tournament structure & competitive balance hierarchy"
+      />
+      
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-12 mb-20 p-12 glass rounded-[40px] border border-white/10">
+          <div className="max-w-2xl">
+            <h3 className="text-3xl font-display font-black italic uppercase tracking-tighter text-white mb-6">Tournament Seeding System</h3>
+            <p className="text-white/50 leading-relaxed italic">
+              “The FCL Pot Seeding system categorizes teams based on historical performance and coefficient rankings to ensure competitive balance in match scheduling and tournament structure.”
+            </p>
+          </div>
+          <div className="lg:w-1/3 p-8 bg-white/5 rounded-3xl border border-white/10">
+            <h4 className="text-[10px] font-black text-primary uppercase tracking-widest mb-4">Mechanism</h4>
+            <ul className="space-y-3">
+              <li className="flex items-center space-x-3 text-[10px] font-bold text-white/30 uppercase tracking-widest">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span>Prevents early elite clashes</span>
+              </li>
+              <li className="flex items-center space-x-3 text-[10px] font-bold text-white/30 uppercase tracking-widest">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span>Rewards historic consistency</span>
+              </li>
+              <li className="flex items-center space-x-3 text-[10px] font-bold text-white/30 uppercase tracking-widest">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span>Ensures diverse group stages</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {(Object.entries(pots) as [keyof typeof pots, typeof pots['A']][]).map(([key, pot]) => (
+            <motion.div
+              key={key}
+              whileHover={{ y: -8 }}
+              className={`relative rounded-[40px] overflow-hidden border ${pot.border} flex flex-col h-full bg-gradient-to-br ${pot.color} p-1 ${pot.glow}`}
+            >
+              <div className="p-8 h-full glass rounded-[36px] flex flex-col">
+                <div className="mb-8">
+                  <h4 className={`text-3xl font-black italic tracking-tighter leading-none mb-2 ${pot.text}`}>{pot.label}</h4>
+                  <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">{pot.subtitle}</p>
+                </div>
+
+                <div className="space-y-3 flex-1">
+                  {pot.teams.map((team) => (
+                    <Link 
+                      key={team.id}
+                      to={`/teams/${team.id}`}
+                      className="group flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 rounded-2xl transition-all"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <img src={team.logo} alt={team.name} className="w-8 h-8 rounded-lg" />
+                        <span className="text-xs font-bold text-white/80 group-hover:text-white transition-colors uppercase tracking-widest">
+                          {team.id.toUpperCase()}
+                        </span>
+                      </div>
+                      <ArrowRight size={14} className="text-white/20 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
+                  <div className="flex -space-x-2">
+                    {pot.teams.slice(0, 3).map(t => (
+                      <div key={t.id} className="w-6 h-6 rounded-full border-2 border-dark overflow-hidden bg-dark">
+                        <img src={t.logo} alt="" className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                  <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">Elite Contenders</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
     </div>

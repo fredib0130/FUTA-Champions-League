@@ -13,13 +13,20 @@ export function MatchCard({ match }: MatchCardProps) {
   const awayTeam = TEAMS.find(t => t.id === match.awayTeamId);
   const homeCoeff = COEFFICIENTS.find(c => c.teamId === match.homeTeamId);
   const awayCoeff = COEFFICIENTS.find(c => c.teamId === match.awayTeamId);
+  const homePot = homeTeam.pot;
+  const awayPot = awayTeam.pot;
 
   if (!homeTeam || !awayTeam) return null;
 
-  const getNarrativeLabel = (hRank: number | undefined, aRank: number | undefined) => {
+  const getNarrativeLabel = (hRank: number | undefined, aRank: number | undefined, hPot: string | undefined, aPot: string | undefined) => {
     if (!hRank || !aRank) return null;
     
-    // Elite vs Underdog
+    // Pot based narratives
+    if (hPot === 'A' && aPot === 'A') return { label: 'Top Seed Clash', class: 'bg-primary/20 text-primary border-primary/40 shadow-[0_0_15px_rgba(255,200,0,0.1)]' };
+    if ((hPot === 'A' && aPot === 'D') || (aPot === 'A' && hPot === 'D')) return { label: 'Upset Watch', class: 'bg-red-500/10 text-red-400 border-red-500/30' };
+    if ((hPot === 'B' && aPot === 'C') || (aPot === 'B' && hPot === 'C')) return { label: 'Balanced Fixture', class: 'bg-blue-500/10 text-blue-400 border-blue-500/30' };
+
+    // Elite vs Underdog (Coefficient based)
     if ((hRank <= 5 && aRank >= 20) || (aRank <= 5 && hRank >= 20)) {
       return { label: 'Underdog vs Elite', class: 'bg-orange-500/10 text-orange-400 border-orange-500/30' };
     }
@@ -32,17 +39,20 @@ export function MatchCard({ match }: MatchCardProps) {
     return null;
   };
 
-  const narrativeLabel = getNarrativeLabel(homeCoeff?.rank, awayCoeff?.rank);
+  const narrativeLabel = getNarrativeLabel(homeCoeff?.rank, awayCoeff?.rank, homePot, awayPot);
 
-  const getSeedLabel = (rank: number | undefined) => {
+  const getSeedLabel = (rank: number | undefined, pot: string | undefined) => {
+    if (pot) return { label: `Pot ${pot}`, class: pot === 'A' ? 'bg-primary/20 text-primary border-primary/30' : 'bg-white/5 text-white/40 border-white/10' };
     if (!rank) return null;
     if (rank <= 5) return { label: 'Top Seed', class: 'bg-primary/20 text-primary border-primary/30' };
     if (rank >= 20) return { label: 'Underdog', class: 'bg-white/5 text-white/40 border-white/10' };
     return null;
   };
 
-  const homeLabel = getSeedLabel(homeCoeff?.rank);
-  const awayLabel = getSeedLabel(awayCoeff?.rank);
+  const homeLabel = getSeedLabel(homeCoeff?.rank, homePot);
+  const awayLabel = getSeedLabel(awayCoeff?.rank, awayPot);
+
+  const higherSeedAdvantage = (homePot === 'A' && awayPot !== 'A') ? homeTeam.name : (awayPot === 'A' && homePot !== 'A') ? awayTeam.name : null;
 
   return (
     <motion.div 
@@ -97,6 +107,11 @@ export function MatchCard({ match }: MatchCardProps) {
             {match.status === 'UPCOMING' ? 'VS' : `${match.homeScore} - ${match.awayScore}`}
           </div>
           <div className="text-[10px] font-bold text-white/20 mt-2 tracking-widest">{match.venue}</div>
+          {higherSeedAdvantage && (
+            <div className="mt-4 px-3 py-1 bg-primary/10 rounded-full border border-primary/20 animate-pulse">
+              <span className="text-[7px] font-black text-primary uppercase tracking-widest whitespace-nowrap">Higher Seed Advantage: {higherSeedAdvantage}</span>
+            </div>
+          )}
         </div>
 
         {/* Away Team */}
