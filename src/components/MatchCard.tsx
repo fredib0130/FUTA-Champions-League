@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Match, Team } from '../types';
 import { TEAMS, COEFFICIENTS } from '../data/mockData';
 import { cn } from '../lib/utils';
+import { Trophy } from 'lucide-react';
 
 interface MatchCardProps {
   match: Match;
@@ -54,6 +55,26 @@ export function MatchCard({ match }: MatchCardProps) {
 
   const higherSeedAdvantage = (homePot === 'A' && awayPot !== 'A') ? homeTeam.name : (awayPot === 'A' && homePot !== 'A') ? awayTeam.name : null;
 
+  // Advanced Logic: Match Importance Score & Fixture Difficulty
+  const getMatchMetrics = () => {
+    const potValues = { A: 4, B: 3, C: 2, D: 1 };
+    const hVal = potValues[homePot as keyof typeof potValues] || 0;
+    const aVal = potValues[awayPot as keyof typeof potValues] || 0;
+    
+    // Importance: higher pots = higher importance
+    const importance = (hVal + aVal) * 1.25; 
+    // Difficulty: average of pot strengths
+    const difficulty = (hVal + aVal) / 2;
+    
+    return { 
+      importance: importance.toFixed(1), 
+      difficulty: difficulty.toFixed(1),
+      isHighStakes: importance >= 7.5
+    };
+  };
+
+  const metrics = getMatchMetrics();
+
   return (
     <motion.div 
       whileHover={{ y: -4 }}
@@ -85,6 +106,11 @@ export function MatchCard({ match }: MatchCardProps) {
         <div className="flex flex-col items-center flex-1 text-center">
           <div className="relative mb-3">
             <img src={homeTeam.logo} alt={homeTeam.name} className="w-16 h-16" />
+            {homeTeam.id === 'mst' && (
+              <div className="absolute -top-2 -right-2 bg-yellow-500 rounded-full p-1 border border-dark animate-bounce">
+                <Trophy size={10} className="text-dark" />
+              </div>
+            )}
             {homeLabel && (
               <div className={cn(
                 "absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded border text-[7px] font-black uppercase tracking-tighter whitespace-nowrap",
@@ -107,17 +133,40 @@ export function MatchCard({ match }: MatchCardProps) {
             {match.status === 'UPCOMING' ? 'VS' : `${match.homeScore} - ${match.awayScore}`}
           </div>
           <div className="text-[10px] font-bold text-white/20 mt-2 tracking-widest">{match.venue}</div>
-          {higherSeedAdvantage && (
-            <div className="mt-4 px-3 py-1 bg-primary/10 rounded-full border border-primary/20 animate-pulse">
-              <span className="text-[7px] font-black text-primary uppercase tracking-widest whitespace-nowrap">Higher Seed Advantage: {higherSeedAdvantage}</span>
+          
+          <div className="mt-4 flex flex-col items-center space-y-2">
+            {higherSeedAdvantage && (
+              <div className="px-3 py-1 bg-primary/10 rounded-full border border-primary/20 animate-pulse">
+                <span className="text-[7px] font-black text-primary uppercase tracking-widest whitespace-nowrap">Higher Seed Advantage: {higherSeedAdvantage}</span>
+              </div>
+            )}
+            
+            <div className="flex items-center space-x-3">
+              <div className="flex flex-col items-center">
+                <span className="text-[6px] font-black text-white/20 uppercase tracking-tighter">Match Importance</span>
+                <span className={cn(
+                  "text-[10px] font-black italic",
+                  metrics.isHighStakes ? "text-primary" : "text-white/40"
+                )}>{metrics.importance}/10</span>
+              </div>
+              <div className="w-[1px] h-4 bg-white/5" />
+              <div className="flex flex-col items-center">
+                <span className="text-[6px] font-black text-white/20 uppercase tracking-tighter">Difficulty Rating</span>
+                <span className="text-[10px] font-black text-white/40 italic">{metrics.difficulty}/4</span>
+              </div>
             </div>
-          )}
+          </div>
         </div>
 
         {/* Away Team */}
         <div className="flex flex-col items-center flex-1 text-center">
           <div className="relative mb-3">
             <img src={awayTeam.logo} alt={awayTeam.name} className="w-16 h-16" />
+            {awayTeam.id === 'mst' && (
+              <div className="absolute -top-2 -right-2 bg-yellow-500 rounded-full p-1 border border-dark animate-bounce">
+                <Trophy size={10} className="text-dark" />
+              </div>
+            )}
             {awayLabel && (
               <div className={cn(
                 "absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded border text-[7px] font-black uppercase tracking-tighter whitespace-nowrap",

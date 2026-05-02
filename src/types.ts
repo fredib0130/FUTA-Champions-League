@@ -1,3 +1,12 @@
+export interface ChampionRecord {
+  year: number;
+  winnerId: string;
+  winnerName: string;
+  runnerUpId: string;
+  runnerUpName: string;
+  score: string;
+}
+
 export interface Team {
   id: string;
   name: string;

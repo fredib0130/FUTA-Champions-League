@@ -1,4 +1,15 @@
-import { Team, Player, Match, NewsPost, Sponsor, CoefficientRanking } from '../types';
+import { Team, Player, Match, NewsPost, Sponsor, CoefficientRanking, ChampionRecord } from '../types';
+
+export const CHAMPIONS: ChampionRecord[] = [
+  { 
+    year: 2025, 
+    winnerId: 'mst', 
+    winnerName: 'Marine Science (MST)', 
+    runnerUpId: 'agy', 
+    runnerUpName: 'AGY', 
+    score: '3–1 on penalties after a 0–0 fulltime play' 
+  }
+];
 
 export const TEAMS: Team[] = [
   'AGE', 'AGP', 'ANA', 'APH', 'BCH', 'BDG', 'CSP', 'CYS', 'ENT', 'FWT',

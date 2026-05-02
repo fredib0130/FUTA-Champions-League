@@ -14,7 +14,8 @@ import {
   Table,
   Playoffs,
   Rankings,
-  Pots
+  Pots,
+  Champions
 } from './pages';
 
 export default function App() {
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="table" element={<Table />} />
           <Route path="rankings" element={<Rankings />} />
           <Route path="pots" element={<Pots />} />
+          <Route path="champions" element={<Champions />} />
           <Route path="playoffs" element={<Playoffs />} />
           <Route path="teams" element={<Teams />} />
           <Route path="teams/:id" element={<TeamProfile />} />

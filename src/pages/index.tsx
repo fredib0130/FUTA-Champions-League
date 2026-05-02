@@ -12,6 +12,8 @@ import { cn } from '../lib/utils';
 import { LeagueTable } from '../components/LeagueTable';
 import { CoefficientTable } from '../components/CoefficientTable';
 
+export { Champions } from './Champions';
+
 export function Home() {
   const featuredMatch = MATCHES.find(m => m.id === 'md1-1') || MATCHES[0];
   const latestNews = NEWS.slice(0, 2);
@@ -36,9 +38,15 @@ export function Home() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div className="inline-flex items-center space-x-3 px-4 py-2 rounded-full glass border border-primary/20 mb-8">
-                <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
-                <span className="text-[10px] font-bold tracking-[0.3em] text-primary uppercase">FCL Season Opener • June 5</span>
+              <div className="flex flex-wrap gap-4 mb-8">
+                <div className="inline-flex items-center space-x-3 px-4 py-2 rounded-full glass border border-primary/20">
+                  <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
+                  <span className="text-[10px] font-bold tracking-[0.3em] text-primary uppercase">FCL Season Opener • June 5</span>
+                </div>
+                <Link to="/champions" className="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass border border-yellow-500/30 bg-yellow-500/5 group/champ hover:bg-yellow-500/10 transition-colors">
+                  <Trophy size={14} className="text-yellow-500" />
+                  <span className="text-[10px] font-bold tracking-[0.2em] text-yellow-500 uppercase">Defending Champions: MST</span>
+                </Link>
               </div>
               
               <h1 className="text-6xl sm:text-9xl font-display font-black leading-[0.85] mb-10 tracking-tighter italic origin-left">
@@ -91,6 +99,30 @@ export function Home() {
 
       {/* Mini Table & Next Match Hub */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-12">
+          <div className="flex items-center space-x-3 mb-4">
+            <Medal className="text-yellow-500" size={20} />
+            <span className="text-xs font-black text-white/40 uppercase tracking-[0.3em]">Defending Champions</span>
+          </div>
+          <motion.div 
+            whileHover={{ y: -5 }}
+            className="glass rounded-3xl p-6 border border-yellow-500/20 bg-yellow-500/5 flex items-center justify-between group"
+          >
+            <div className="flex items-center space-x-6">
+               <div className="w-20 h-20 rounded-2xl bg-yellow-500/10 flex items-center justify-center p-3">
+                 <img src={TEAMS.find(t => t.id === 'mst')?.logo} alt="MST" className="w-full h-full object-contain" />
+               </div>
+               <div>
+                 <h3 className="text-2xl font-display font-black italic uppercase text-white group-hover:text-yellow-500 transition-colors">Marine Science (MST)</h3>
+                 <p className="text-sm text-white/40 font-medium">Kings of 2025. Returning to defend the throne.</p>
+               </div>
+            </div>
+            <Link to="/teams/mst" className="px-6 py-3 bg-yellow-500 text-dark font-black text-xs rounded-xl hover:scale-105 transition-transform uppercase tracking-widest">
+              Team Profile
+            </Link>
+          </motion.div>
+        </div>
+
         <div className="grid lg:grid-cols-3 gap-12 items-start">
           <div className="lg:col-span-2 space-y-8">
             <div className="flex items-center justify-between">
@@ -1082,6 +1114,12 @@ export function TeamProfile() {
                 {teamCoefficient && teamCoefficient.rank <= 3 && (
                   <div className="px-2 py-0.5 bg-primary/20 rounded border border-primary/40 text-[8px] font-black text-primary uppercase tracking-[0.2em] italic">Top Seed</div>
                 )}
+                {team.id === 'mst' && (
+                  <div className="px-2 py-0.5 bg-yellow-500/20 rounded border border-yellow-500/40 text-[8px] font-black text-yellow-500 uppercase tracking-[0.2em] italic flex items-center">
+                    <Trophy size={10} className="mr-1" />
+                    Defending Champions
+                  </div>
+                )}
                 {team.pot && (
                   <div className={cn(
                     "px-2 py-0.5 rounded border text-[8px] font-black uppercase tracking-[0.2em] italic",
@@ -1189,7 +1227,18 @@ function PotAHighlight() {
               </div>
               <img src={team.logo} alt={team.name} className="w-20 h-20 mx-auto mb-6 transform group-hover:scale-110 transition-transform duration-500" />
               <h3 className="text-sm font-black uppercase tracking-widest text-white group-hover:text-primary mb-2 transition-colors">{team.id.toUpperCase()}</h3>
-              <p className="text-[8px] font-black text-white/30 uppercase tracking-[0.2em]">Title Contender</p>
+              {team.id === 'mst' ? (
+                <p className="text-[8px] font-black text-yellow-500 uppercase tracking-[0.2em] mb-4 flex items-center justify-center">
+                  <Trophy size={10} className="mr-1" />
+                  Defending Champion
+                </p>
+              ) : (
+                <p className="text-[8px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Title Contender</p>
+              )}
+              <div className="pt-4 border-t border-white/5">
+                <div className="text-[7px] font-black text-primary uppercase tracking-[0.2em] mb-1">Match Importance Core</div>
+                <div className="text-xs font-black text-white tracking-widest italic">8.5 - 10.0</div>
+              </div>
             </Link>
           </motion.div>
         ))}
@@ -1303,12 +1352,33 @@ export function Pots() {
 
   return (
     <div>
-      <PageHeader 
-        title="2026 POT SEEDINGS" 
-        subtitle="Tournament structure & competitive balance hierarchy"
-      />
+      <div className="relative h-[300px] sm:h-[400px] overflow-hidden">
+        <img 
+          src="/src/assets/images/regenerated_image_1777706109226.png" 
+          className="w-full h-full object-cover opacity-40 scale-110"
+          alt="Pots Header"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center pt-20 px-4 text-center">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-6xl sm:text-8xl font-display font-black italic uppercase tracking-tighter text-white mb-2"
+          >
+            2026 POT <span className="text-primary italic">SEEDINGS</span>
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-white/40 font-black uppercase tracking-[0.4em] text-[10px]"
+          >
+            Tournament structure & competitive balance hierarchy
+          </motion.p>
+        </div>
+      </div>
       
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 -mt-16 relative z-10">
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-12 mb-20 p-12 glass rounded-[40px] border border-white/10">
           <div className="max-w-2xl">
             <h3 className="text-3xl font-display font-black italic uppercase tracking-tighter text-white mb-6">Tournament Seeding System</h3>
