@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { CoefficientRanking } from '../types';
+import { CoefficientRanking, Team } from '../types';
+import { TEAMS } from '../data/mockData';
 import { ChevronUp, ChevronDown, Info, Medal, TrendingUp, History, Search } from 'lucide-react';
 
 interface CoefficientTableProps {
@@ -123,6 +124,14 @@ export const CoefficientTable: React.FC<CoefficientTableProps> = ({ data, limit,
                     </td>
                     <td className="px-6 py-5">
                       <div className="flex items-center space-x-4">
+                        <div className="relative shrink-0">
+                          <img 
+                            src={TEAMS.find(t => t.id === ranking.teamId.toLowerCase())?.logo || `https://api.dicebear.com/7.x/identicon/svg?seed=${ranking.teamId}`} 
+                            alt="" 
+                            className="w-10 h-10 rounded-xl relative z-10 bg-white/5 p-1" 
+                          />
+                          <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full scale-0 group-hover:scale-100 transition-transform duration-500" />
+                        </div>
                         <div className="flex flex-col">
                           <span className="font-bold tracking-tight text-white group-hover:text-primary transition-colors">{ranking.teamName}</span>
                           {isTop5 && (

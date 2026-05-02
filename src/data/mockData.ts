@@ -11,7 +11,27 @@ export const TEAMS: Team[] = [
     'ICE', 'Industrial Design', 'Information Systems', 'Medicine', 'Micro-Biology',
     'Marine Science', 'Physiology', 'Physics', 'Security Investment', 'Statistics'
   ][i] + ` (${abbr})`,
-  logo: `https://api.dicebear.com/7.x/identicon/svg?seed=${abbr}`,
+  logo: {
+    'AGE': '/src/assets/images/regenerated_image_1777705264864.jpg',
+    'ANA': '/src/assets/images/regenerated_image_1777538779090.x/identicon/svg/regenerated_image_1777704715914.jpg',
+    'APH': '/src/assets/images/regenerated_image_1777705267922.jpg',
+    'BCH': '/src/assets/images/regenerated_image_1777538784664.x/identicon/svg/regenerated_image_1777704721405.jpg',
+    'BDG': '/src/assets/images/regenerated_image_1777538786231.x/identicon/svg/regenerated_image_1777704722697.jpg',
+    'CSP': '/src/assets/images/regenerated_image_1777538787210.x/identicon/svg/regenerated_image_1777704723602.jpg',
+    'CYS': '/src/assets/images/regenerated_image_1777705274536.jpg',
+    'ENT': '/src/assets/images/regenerated_image_1777705275737.jpg',
+    'FWT': '/src/assets/images/regenerated_image_1777705279379.jpg',
+    'ICE': '/src/assets/images/regenerated_image_1777705282538.jpg',
+    'IDD': '/src/assets/images/regenerated_image_1777705286463.jpg',
+    'IFS': '/src/assets/images/regenerated_image_1777705288323.jpg',
+    'MBBS': '/src/assets/images/regenerated_image_1777705289136.jpg',
+    'MCB': '/src/assets/images/regenerated_image_1777705291271.jpg',
+    'MST': '/src/assets/images/regenerated_image_1777705294158.jpg',
+    'PHS': '/src/assets/images/regenerated_image_1777705295060.jpg',
+    'PHY': '/src/assets/images/regenerated_image_1777705298466.jpg',
+    'SIMT': '/src/assets/images/regenerated_image_1777705299222.jpg',
+    'STA': '/src/assets/images/regenerated_image_1777705302130.jpg'
+  }[abbr] || `https://api.dicebear.com/7.x/identicon/svg?seed=${abbr}`,
   group: 'League',
   pot: (['BDG', 'IFS', 'MCB', 'MST', 'PHS'].includes(abbr) ? 'A' :
         ['APH', 'CSP', 'ENT', 'ICE', 'PHY'].includes(abbr) ? 'B' :
@@ -29,34 +49,6 @@ export const TEAMS: Team[] = [
   description: `${abbr} Department official football team. Ready for FCL 2026.`,
   squad: []
 })).sort((a, b) => a.name.localeCompare(b.name));
-
-// Apply regenerated identicons to all 20 teams in alphabetical order
-[
-  '/regenerated_image_1777538774871.x/identicon/svg',
-  '/regenerated_image_1777538778166.x/identicon/svg',
-  '/regenerated_image_1777538779090.x/identicon/svg',
-  '/regenerated_image_1777538782691.x/identicon/svg',
-  '/regenerated_image_1777538784664.x/identicon/svg',
-  '/regenerated_image_1777538786231.x/identicon/svg',
-  '/regenerated_image_1777538787210.x/identicon/svg',
-  '/regenerated_image_1777538788385.x/identicon/svg',
-  '/regenerated_image_1777538790557.x/identicon/svg',
-  '/regenerated_image_1777538793690.x/identicon/svg',
-  '/regenerated_image_1777539044419.png',
-  '/regenerated_image_1777539047336.x/identicon/svg',
-  '/regenerated_image_1777539049054.x/identicon/svg',
-  '/regenerated_image_1777539049756.x/identicon/svg',
-  '/regenerated_image_1777539050574.x/identicon/svg',
-  '/regenerated_image_1777539053021.x/identicon/svg',
-  '/regenerated_image_1777539053751.x/identicon/svg',
-  '/regenerated_image_1777539056610.x/identicon/svg',
-  '/regenerated_image_1777539057345.x/identicon/svg',
-  '/regenerated_image_1777539060274.x/identicon/svg',
-].forEach((logo, i) => {
-  if (TEAMS[i]) {
-    TEAMS[i].logo = logo;
-  }
-});
 
 export const PLAYERS: Player[] = Array.from({ length: 150 }, (_, i) => ({
   id: `player-${i + 1}`,
