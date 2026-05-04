@@ -75,16 +75,16 @@ export const PLAYERS: Player[] = Array.from({ length: 150 }, (_, i) => ({
 
 export const MATCHES: Match[] = [
   // --- MATCHDAY 1 (June 5 - 7) ---
-  { id: 'md1-1', homeTeamId: 'age', awayTeamId: 'simt', date: '2026-06-05', time: '16:00', venue: 'FUTA Main Bowl', status: 'UPCOMING', matchday: 1 }, // OPENING MATCH
-  { id: 'md1-2', homeTeamId: 'agp', awayTeamId: 'bch', date: '2026-06-06', time: '10:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-3', homeTeamId: 'cys', awayTeamId: 'ana', date: '2026-06-06', time: '12:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-4', homeTeamId: 'phs', awayTeamId: 'aph', date: '2026-06-06', time: '14:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-5', homeTeamId: 'bdg', awayTeamId: 'ent', date: '2026-06-06', time: '16:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-6', homeTeamId: 'ifs', awayTeamId: 'csp', date: '2026-06-07', time: '10:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-7', homeTeamId: 'fwt', awayTeamId: 'idd', date: '2026-06-07', time: '12:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-8', homeTeamId: 'mst', awayTeamId: 'ice', date: '2026-06-07', time: '14:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-9', homeTeamId: 'mbbs', awayTeamId: 'sta', date: '2026-06-07', time: '16:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-10', homeTeamId: 'mcb', awayTeamId: 'phy', date: '2026-06-07', time: '17:30', venue: 'FUTA Main Bowl', status: 'UPCOMING', matchday: 1 },
+  { id: 'md1-1', homeTeamId: 'mst', awayTeamId: 'ice', date: '2026-06-05', time: '15:30', venue: 'FUTA Main Bowl', status: 'UPCOMING', matchday: 1 }, // OPENING MATCH
+  { id: 'md1-2', homeTeamId: 'age', awayTeamId: 'simt', date: '2026-06-06', time: '08:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 1 },
+  { id: 'md1-3', homeTeamId: 'agp', awayTeamId: 'bch', date: '2026-06-06', time: '09:30', venue: 'Pitch B', status: 'UPCOMING', matchday: 1 },
+  { id: 'md1-4', homeTeamId: 'cys', awayTeamId: 'ana', date: '2026-06-06', time: '11:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 1 },
+  { id: 'md1-5', homeTeamId: 'phs', awayTeamId: 'aph', date: '2026-06-06', time: '12:30', venue: 'Pitch B', status: 'UPCOMING', matchday: 1 },
+  { id: 'md1-6', homeTeamId: 'bdg', awayTeamId: 'ent', date: '2026-06-06', time: '14:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 1 },
+  { id: 'md1-7', homeTeamId: 'ifs', awayTeamId: 'csp', date: '2026-06-06', time: '15:30', venue: 'Pitch B', status: 'UPCOMING', matchday: 1 },
+  { id: 'md1-8', homeTeamId: 'fwt', awayTeamId: 'idd', date: '2026-06-06', time: '17:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 1 },
+  { id: 'md1-9', homeTeamId: 'mbbs', awayTeamId: 'sta', date: '2026-06-07', time: '08:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 1 },
+  { id: 'md1-10', homeTeamId: 'mcb', awayTeamId: 'phy', date: '2026-06-07', time: '09:30', venue: 'FUTA Main Bowl', status: 'UPCOMING', matchday: 1 },
 
   // --- MATCHDAY 2 (June 10 - 11) ---
   { id: 'md2-1', homeTeamId: 'csp', awayTeamId: 'sta', date: '2026-06-10', time: '10:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 2 },

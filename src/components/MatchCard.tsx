@@ -74,15 +74,25 @@ export function MatchCard({ match }: MatchCardProps) {
   };
 
   const metrics = getMatchMetrics();
+  const isOpeningMatch = match.id === 'md1-1';
 
   return (
     <motion.div 
       whileHover={{ y: -4 }}
-      className="glass rounded-3xl p-6 relative overflow-hidden group"
+      className={cn(
+        "glass rounded-3xl p-6 relative overflow-hidden group",
+        isOpeningMatch && "border-primary/40 bg-primary/5 shadow-[0_0_30px_rgba(0,229,255,0.1)]"
+      )}
     >
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       
-      {narrativeLabel && (
+      {isOpeningMatch && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 px-6 py-1.5 bg-primary text-dark rounded-b-2xl text-[10px] font-black uppercase tracking-[0.2em] z-30 shadow-lg">
+          Season Opener
+        </div>
+      )}
+
+      {narrativeLabel && !isOpeningMatch && (
         <div className={cn(
           "absolute top-0 left-1/2 -translate-x-1/2 px-4 py-1 rounded-b-xl text-[8px] font-black uppercase tracking-widest border border-t-0 z-20",
           narrativeLabel.class

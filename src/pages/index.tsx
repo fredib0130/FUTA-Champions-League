@@ -41,7 +41,7 @@ export function Home() {
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="inline-flex items-center space-x-3 px-4 py-2 rounded-full glass border border-primary/20">
                   <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
-                  <span className="text-[10px] font-bold tracking-[0.3em] text-primary uppercase">FCL Season Opener • June 5</span>
+                  <span className="text-[10px] font-bold tracking-[0.3em] text-primary uppercase">Opening Match • June 5 • 3:30 PM</span>
                 </div>
                 <Link to="/champions" className="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass border border-yellow-500/30 bg-yellow-500/5 group/champ hover:bg-yellow-500/10 transition-colors">
                   <Trophy size={14} className="text-yellow-500" />
@@ -50,18 +50,18 @@ export function Home() {
               </div>
               
               <h1 className="text-6xl sm:text-9xl font-display font-black leading-[0.85] mb-10 tracking-tighter italic origin-left">
-                20 TEAMS.<br />
-                <span className="text-primary italic">3 MATCHES.</span> <br />
-                ONE CHAMPION.
+                MST <span className="text-primary tracking-widest">VS</span> ICE.<br />
+                <span className="text-primary italic">THE OPENER.</span> <br />
+                SEASON 2026.
               </h1>
               
               <p className="text-lg text-white/50 mb-12 max-w-lg leading-relaxed font-medium">
-                The high-stakes university league is back. Every match is a final. 20 teams battle through a limited league format for the ultimate crown.
+                The defending champions return. Marine Science (MST) faces off against ICE in the ultimate season opener. Don't miss the kickoff.
               </p>
 
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
                 <Link to="/fixtures" className="px-10 py-5 sporty-gradient rounded-full font-black text-dark text-center hover:scale-105 active:scale-95 transition-all flex items-center justify-center group shadow-[0_0_40px_rgba(0,229,255,0.3)]">
-                  MATCHDAY 1 FIXTURES
+                  DON'T MISS THE KICKOFF
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link to="/table" className="px-10 py-5 glass border border-white/10 rounded-full font-black text-center hover:bg-white/10 active:scale-95 transition-all">
@@ -86,8 +86,8 @@ export function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-transparent to-transparent flex flex-col justify-end p-8">
                     <div className="glass p-6 rounded-3xl backdrop-blur-md">
-                      <p className="text-[10px] font-bold text-primary tracking-[0.2em] mb-3 uppercase">Opening Match • Starts In</p>
-                      <Countdown targetDate="2026-06-05T16:00:00" />
+                      <p className="text-[10px] font-bold text-primary tracking-[0.2em] mb-3 uppercase">Season Opener • Starts In</p>
+                      <Countdown targetDate="2026-06-05T15:30:00" />
                     </div>
                   </div>
                 </div>
@@ -126,10 +126,16 @@ export function Home() {
         <div className="grid lg:grid-cols-3 gap-12 items-start">
           <div className="lg:col-span-2 space-y-8">
             <div className="flex items-center justify-between">
-              <h2 className="text-3xl font-display italic uppercase tracking-tighter">FEATURED ACTION</h2>
+              <div className="flex items-center space-x-4">
+                <h2 className="text-3xl font-display italic uppercase tracking-tighter">OPENING FIXTURE</h2>
+                <div className="px-3 py-1 bg-primary/20 border border-primary/40 rounded-full text-[10px] font-black text-primary uppercase tracking-widest animate-pulse">Live from Main Bowl</div>
+              </div>
               <Link to="/fixtures" className="text-primary font-bold text-sm hover:underline">VIEW ALL</Link>
             </div>
-            <MatchCard match={featuredMatch} />
+            <div className="relative p-1 bg-gradient-to-r from-primary/50 to-blue-500/50 rounded-[42px] group">
+              <div className="absolute -inset-1 bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              <MatchCard match={featuredMatch} />
+            </div>
             <div className="grid sm:grid-cols-2 gap-6">
               {MATCHES.filter(m => m.id !== featuredMatch.id).slice(0, 2).map(m => (
                 <div key={m.id}>
@@ -333,7 +339,7 @@ export function Fixtures() {
   const matchWeeks = [1, 2, 3]; 
 
   const filteredMatches = MATCHES.filter(m => m.matchday === activeMW);
-  const matchdayOpeningLabel = activeMW === 1 ? 'Opening Weekend (June 5-7)' : activeMW === 2 ? 'Mid-Season Clash (June 10-11)' : 'Final League Push (June 13-15)';
+  const matchdayOpeningLabel = activeMW === 1 ? 'Season Opener & Week 1 (June 5-7)' : activeMW === 2 ? 'Mid-Season Clash (June 10-11)' : 'Final League Push (June 13-15)';
 
   return (
     <div>
