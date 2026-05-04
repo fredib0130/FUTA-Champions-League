@@ -23,8 +23,8 @@ export const TEAMS: Team[] = [
     'Marine Science', 'Physiology', 'Physics', 'Security Investment', 'Statistics'
   ][i] + ` (${abbr})`,
   logo: {
-    'AGE': '/src/assets/images/regenerated_image_1777725930512.png',
-    'AGP': '/src/assets/images/regenerated_image_1777725935903.png',
+    'AGE': '/logos/AGE.png',
+    'AGP': '/logos/AGP.png',
     'ANA': '/src/assets/images/regenerated_image_1777725939750.png',
     'APH': '/src/assets/images/regenerated_image_1777725948293.png',
     'BCH': '/src/assets/images/regenerated_image_1777726376964.png',
@@ -35,10 +35,10 @@ export const TEAMS: Team[] = [
     'FWT': '/src/assets/images/regenerated_image_1777726785281.png',
     'ICE': '/src/assets/images/regenerated_image_1777726788433.png',
     'IDD': '/src/assets/images/regenerated_image_1777726792140.png',
-    'IFS': '/src/assets/images/regenerated_image_1777727100111.png',
+    'IFS': '/logos/IFS.png',
     'MBBS': '/src/assets/images/regenerated_image_1777727111700.png',
     'MCB': '/src/assets/images/regenerated_image_1777727113618.png',
-    'MST': '/src/assets/images/regenerated_image_1777727115589.png',
+    'MST': '/logos/MST.png',
     'PHS': '/src/assets/images/regenerated_image_1777705295060.jpg',
     'PHY': '/src/assets/images/regenerated_image_1777705298466.jpg',
     'SIMT': '/src/assets/images/regenerated_image_1777705299222.jpg',
