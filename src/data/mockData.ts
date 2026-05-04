@@ -11,6 +11,29 @@ export const CHAMPIONS: ChampionRecord[] = [
   }
 ];
 
+export const TEAM_BIOS: Record<string, string> = {
+  AGE: "NUESA (SEET) runners-up make their debut in the FUTA Champions League and look like one of the strongest sides in POT C. Led by Jones, AGE will be aiming for an impressive first outing. Currently ranked 23rd overall.",
+  ANA: "BAMSSA (SBMS) runners-up and one of the newest sides in POT D. Though ranked 25th overall, ANA could spring surprises against teams like CYS, ENT, and BDG.",
+  APH: "A historic Awopegba department featuring notable names like Alaga and Samuel Chi. Despite never winning the Awopegba tournament, APH arrives as NAAS (SAAT) runners-up. Ranked 19th overall.",
+  AGP: "NAEMS (SEMS) runners-up entering quietly but with potential. Ranked 24th overall, AGP will look to improve and match SEMS’ top faculty reputation.",
+  BCH: "NALSS (SLS) debutants joining MCB as SLS representatives. New to the competition and currently ranked 26th overall.",
+  BDG: "NAES (SET) champions and one of the tournament’s elite sides. With experience and quality, BDG returns for their second appearance, ranked 3rd overall and aiming even higher.",
+  CSP: "NAAS (SAAT) second-highest ranked team (10th overall). With FAT absent this year, CSP will look to establish dominance despite qualifying as runners-up.",
+  CYS: "After a disappointing 2025 campaign, CYS returns as ACOMS (SOC) second-best team. Ranked 16th overall and eager to redeem themselves.",
+  ENT: "From 2025 underdogs to a rising powerhouse, ENT has climbed from 14th to 9th in the rankings. Representing ALITECH (SLIT), they continue to prove strength beyond numbers.",
+  FWT: "Making their debut as FA Cup runners-up (NAAS – SAAT). Ranked 27th overall, FWT will rely on players like Kobo to make an impact.",
+  ICE: "New SEET champions after dethroning IPE. A fresh and ambitious side looking to match or surpass IPE’s 2025 performance. Currently around the 20th mark.",
+  IDD: "Stepping in for 2025 runners-up SVG (NAES – SET), IDD joins BDG as SET representatives in this year’s competition.",
+  IFS: "ACOMS (SOC) champions back-to-back and joint top-ranked team alongside MST. Despite losing key players, IFS retains a solid core and will look to go beyond their 2025 quarter-final exit.",
+  MST: "Defending champions, FA Cup winners, and NAEMS (SEMS) champions. Joint top-ranked team with an 18-game unbeaten run. A dominant force and clear tournament favorites.",
+  MBBS: "The sole representative from SCS, automatically qualified. Their performance this year will determine if they can improve on their 2025 showing.",
+  MCB: "NALSS (SLS) powerhouse and 5th overall ranked team. With stars like Martial, KDB, and Newton, MCB aims to break into the top four.",
+  PHY: "NAPSS (SPS) champions and debutants after displacing MTS. Ranked 13th, PHY will aim to elevate SPS’ standing.",
+  PHS: "Back-to-back BAMSSA (SBMS) champions and ranked 8th overall. A strong and consistent side ready to make a statement.",
+  SIMT: "True underdogs of the tournament. Against all odds, SIMT qualifies and enters ranked 30th, with nothing to lose and everything to prove.",
+  STA: "Earned qualification by defeating NAPSS (SPS) runners-up. STA will be determined to prove their place and compete strongly."
+};
+
 export const TEAMS: Team[] = [
   'AGE', 'AGP', 'ANA', 'APH', 'BCH', 'BDG', 'CSP', 'CYS', 'ENT', 'FWT',
   'ICE', 'IDD', 'IFS', 'MBBS', 'MCB', 'MST', 'PHS', 'PHY', 'SIMT', 'STA'
@@ -58,7 +81,7 @@ export const TEAMS: Team[] = [
   goalDifference: 0,
   points: 0,
   form: [],
-  description: `${abbr} Department official football team. Ready for FCL 2026.`,
+  description: TEAM_BIOS[abbr] || `${abbr} Department official football team. Ready for FCL 2026.`,
   squad: []
 })).sort((a, b) => a.name.localeCompare(b.name));
 
