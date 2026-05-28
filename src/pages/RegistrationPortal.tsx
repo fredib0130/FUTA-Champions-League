@@ -46,7 +46,7 @@ interface TeamRegistration {
 }
 
 // Access codes mapping for all 20 teams
-const TEAM_CODES: Record<string, string> = {
+export const accessCodes: Record<string, string> = {
   AGE: "AGE2026FCL",
   AGP: "AGP2026FCL",
   ANA: "ANA2026FCL",
@@ -68,6 +68,10 @@ const TEAM_CODES: Record<string, string> = {
   SIMT: "SIMT2026FCL",
   STA: "STA2026FCL",
 };
+
+export const ADMIN_PASSWORD = "AdminFCL";
+
+export const registrations: Record<string, any> = {};
 
 const LEVEL_OPTIONS = ['100', '200', '300', '400', '500', 'Postgraduate'];
 const POSITION_OPTIONS = [
@@ -180,6 +184,7 @@ const INITIAL_REGISTRATIONS: Record<string, TeamRegistration> = {
 };
 
 export default function RegistrationPortal() {
+  const [selectedTeam, setSelectedTeam] = useState("");
   const [accessCode, setAccessCode] = useState('');
   const [loginError, setLoginError] = useState('');
   const [activeTeam, setActiveTeam] = useState<typeof TEAMS[0] | null>(null);
@@ -246,16 +251,20 @@ export default function RegistrationPortal() {
     setLoginError('');
     const code = accessCode.trim().toUpperCase();
 
-    if (code === 'ADMIN2026') {
+    if (accessCode.trim() === ADMIN_PASSWORD || code === ADMIN_PASSWORD.toUpperCase()) {
       setIsAdmin(true);
       setActiveTeam(null);
       return;
     }
 
-    // Check if code matches any team
-    const matchedAbbr = Object.keys(TEAM_CODES).find(abbr => TEAM_CODES[abbr] === code);
-    if (matchedAbbr) {
-      const matchTeam = TEAMS.find(t => t.id === matchedAbbr.toLowerCase());
+    if (!selectedTeam) {
+      setLoginError('Please select your team first.');
+      return;
+    }
+
+    const teamKey = selectedTeam.toUpperCase();
+    if (accessCodes[teamKey] === accessCode.trim().toUpperCase()) {
+      const matchTeam = TEAMS.find(t => t.id === teamKey.toLowerCase());
       if (matchTeam) {
         setActiveTeam(matchTeam);
         setIsAdmin(false);
@@ -278,7 +287,7 @@ export default function RegistrationPortal() {
       }
     }
 
-    setLoginError('Invalid accreditation access code. Please check and try again.');
+    setLoginError('Invalid accreditation code for the selected team.');
   };
 
   const handleLogout = () => {
@@ -287,6 +296,7 @@ export default function RegistrationPortal() {
     setActiveTab('info');
     setSelectedAdminTeam(null);
     setAccessCode('');
+    setSelectedTeam('');
   };
 
   // Get active team registration
@@ -691,22 +701,37 @@ export default function RegistrationPortal() {
               Welcome to the FUTA Champions League 2026 registration hub. Each participating department must enter their unique access code to register rosters, verify student IDs, and unlock credentials.
             </p>
 
-            <form onSubmit={handleLogin} className="w-full max-w-md space-y-4">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="text-white/40 w-5 h-5" />
-                </div>
+            <form onSubmit={handleLogin} className="w-full max-w-md space-y-6 text-left">
+              {/* TEAM SELECT DESIGN */}
+              <div className="space-y-1.5Packed">
+                <label className="text-[10px] font-bold tracking-widest text-white/40 uppercase block mb-1">SELECT TEAM</label>
+                <select
+                  className="w-full border border-white/10 p-4 rounded-xl bg-[#090D22] text-white outline-none focus:border-primary transition-all text-sm font-semibold"
+                  value={selectedTeam}
+                  onChange={(e) => setSelectedTeam(e.target.value)}
+                >
+                  <option value="" className="text-white/40">Select Team</option>
+                  {Object.keys(accessCodes).map((teamKey) => (
+                    <option key={teamKey} value={teamKey} className="text-white bg-[#090D22]">
+                      {teamKey}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* CODE INPUT ONLY (NO PLACEHOLDER CLUTTER) */}
+              <div className="space-y-1.5 font-sans">
+                <label className="text-[10px] font-bold tracking-widest text-white/40 uppercase block mb-1">ENTER ACCESS CODE</label>
                 <input
                   type="password"
+                  className="w-full border border-white/10 p-4 rounded-xl bg-[#090D22] text-white outline-none focus:border-primary transition-all font-mono tracking-widest text-center text-sm"
                   value={accessCode}
                   onChange={(e) => setAccessCode(e.target.value)}
-                  placeholder="ENTER ACCESS CODE (e.g. MST2026FCL)"
-                  className="w-full pl-12 pr-6 py-5 rounded-2xl bg-white/5 border border-white/10 text-center font-mono font-bold tracking-[0.2em] outline-none text-white focus:border-primary focus:bg-white/[0.08] transition-all uppercase placeholder:tracking-normal placeholder:font-sans placeholder:text-sm"
                 />
               </div>
 
               {loginError && (
-                <div className="flex items-start bg-red-500/10 border border-red-500/20 text-red-500 text-xs text-left p-4 rounded-xl space-x-2">
+                <div className="flex items-start bg-red-500/10 border border-red-500/20 text-red-500 text-xs p-4 rounded-xl space-x-2">
                   <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
                   <span>{loginError}</span>
                 </div>
@@ -714,7 +739,7 @@ export default function RegistrationPortal() {
 
               <button 
                 type="submit" 
-                className="w-full py-5 sporty-gradient rounded-2xl font-black text-sm text-dark tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 flex items-center justify-center space-x-2"
+                className="w-full py-4.5 bg-green-600 hover:bg-green-700 rounded-xl font-black text-sm text-white tracking-widest hover:scale-[1.01] active:scale-95 transition-all shadow-lg shadow-green-900/20 hover:shadow-green-950/40 flex items-center justify-center space-x-2 border border-green-500/30"
               >
                 <span>VERIFY & ENTER ACCREDITATION HUB</span>
                 <Unlock size={16} />
@@ -728,19 +753,19 @@ export default function RegistrationPortal() {
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <button 
-                  onClick={() => { setAccessCode('MST2026FCL'); setLoginError(''); }}
+                  onClick={() => { setSelectedTeam('MST'); setAccessCode('MST2026FCL'); setLoginError(''); }}
                   className="px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-xs hover:bg-white/10 hover:border-white/20 transition-all font-mono text-white/70"
                 >
                   Marine Science (MST)
                 </button>
                 <button 
-                  onClick={() => { setAccessCode('IFS2026FCL'); setLoginError(''); }}
+                  onClick={() => { setSelectedTeam('IFS'); setAccessCode('IFS2026FCL'); setLoginError(''); }}
                   className="px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-xs hover:bg-white/10 hover:border-white/20 transition-all font-mono text-white/70"
                 >
                   Info Systems (IFS)
                 </button>
                 <button 
-                  onClick={() => { setAccessCode('ADMIN2026'); setLoginError(''); }}
+                  onClick={() => { setSelectedTeam(''); setAccessCode(ADMIN_PASSWORD); setLoginError(''); }}
                   className="px-4 py-2.5 bg-primary/10 border border-primary/20 text-primary rounded-xl text-xs hover:bg-primary/20 transition-all font-semibold"
                 >
                   Admin Terminal Access
@@ -773,7 +798,7 @@ export default function RegistrationPortal() {
                     ● {activeReg.status}
                   </span>
                 </div>
-                <p className="text-xs text-white/40 mt-1 font-mono uppercase tracking-widest">Accreditation Access ID: {TEAM_CODES[activeTeam.id.toUpperCase()]}</p>
+                <p className="text-xs text-white/40 mt-1 font-mono uppercase tracking-widest">Accreditation Access ID: {accessCodes[activeTeam.id.toUpperCase()]}</p>
               </div>
             </div>
 
