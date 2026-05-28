@@ -13,6 +13,7 @@ import { LeagueTable } from '../components/LeagueTable';
 import { CoefficientTable } from '../components/CoefficientTable';
 
 export { Champions } from './Champions';
+export { default as RegistrationPortal } from './RegistrationPortal';
 
 export function Home() {
   const featuredMatch = MATCHES.find(m => m.id === 'md1-1') || MATCHES[0];

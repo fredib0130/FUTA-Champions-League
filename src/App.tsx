@@ -15,7 +15,8 @@ import {
   Playoffs,
   Rankings,
   Pots,
-  Champions
+  Champions,
+  RegistrationPortal
 } from './pages';
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="registration" element={<RegistrationPortal />} />
           <Route path="fixtures" element={<Fixtures />} />
           <Route path="table" element={<Table />} />
           <Route path="rankings" element={<Rankings />} />

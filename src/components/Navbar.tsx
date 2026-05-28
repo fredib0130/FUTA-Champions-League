@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Calendar, Users, BarChart3, Image as ImageIcon, Newspaper, Info, Star, Trophy, Medal } from 'lucide-react';
+import { Menu, X, Calendar, Users, BarChart3, Image as ImageIcon, Newspaper, Info, Star, Trophy, Medal, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import { APP_LOGO } from '../constants';
@@ -8,6 +8,7 @@ import { APP_LOGO } from '../constants';
 const navItems = [
   { name: 'Fixtures', path: '/fixtures', icon: Calendar },
   { name: 'Standings', path: '/table', icon: BarChart3 },
+  { name: 'Accreditation', path: '/registration', icon: ShieldCheck },
   { name: 'Rankings', path: '/rankings', icon: Star },
   { name: 'Pots', path: '/pots', icon: Trophy },
   { name: 'Playoffs', path: '/playoffs', icon: Trophy },
