@@ -18,7 +18,7 @@ interface PlayerRegistration {
   department: string;
   level: string; // 100, 200, 300, 400, 500, etc.
   position: 'GK' | 'DEF' | 'MID' | 'FWD';
-  passportPath: string | null; // Optional base64 photo
+  passportPath: string | null; // photo
   idCardName: string;
   idCardSize: string;
   idCardData: string; // Base64 string for preview
@@ -29,10 +29,10 @@ interface PlayerRegistration {
 interface CoachRegistration {
   id: string;
   fullName: string;
-  role: 'Head Coach' | 'Assistant Coach' | 'Technical Director' | 'Team Manager';
+  role: 'Head Coach' | 'Assistant Coach';
   phone: string;
   email: string;
-  passportPath: string | null; // Optional base64 photo
+  passportPath: string | null; // photo
 }
 
 interface TeamRegistration {
@@ -83,10 +83,234 @@ const POSITION_OPTIONS = [
 
 const COACH_ROLES = [
   'Head Coach',
-  'Assistant Coach',
-  'Technical Director',
-  'Team Manager'
+  'Assistant Coach'
 ];
+
+// --- TEAM COLOR SCHEME MAPPING ---
+interface TeamTheme {
+  primary: string;
+  border: string;
+  glow: string;
+}
+
+const getTeamColor = (teamId: string): TeamTheme => {
+  const mapping: Record<string, TeamTheme> = {
+    mst: { primary: '#00E5FF', border: 'rgba(0, 229, 255, 0.1)', glow: 'rgba(0, 229, 255, 0.35)' },     // Marine Science (Neon Cyan)
+    ifs: { primary: '#D042FF', border: 'rgba(208, 66, 255, 0.1)', glow: 'rgba(208, 66, 255, 0.35)' },    // Info Systems (Electric Violet)
+    bdg: { primary: '#FFA000', border: 'rgba(255, 160, 0, 0.1)', glow: 'rgba(255, 160, 0, 0.35)' },       // Building (Neon Gold/Amber)
+    mcb: { primary: '#00E676', border: 'rgba(0, 230, 118, 0.1)', glow: 'rgba(0, 230, 118, 0.35)' },     // Micro-Biology (Neon Green)
+    cys: { primary: '#FF1744', border: 'rgba(255, 23, 68, 0.1)', glow: 'rgba(255, 23, 68, 0.35)' },      // Cyber Security (Vibrant Crimson)
+    age: { primary: '#1DE9B6', border: 'rgba(29, 233, 182, 0.1)', glow: 'rgba(29, 233, 182, 0.35)' },    // Agricultural (Turquoise)
+    ana: { primary: '#2979FF', border: 'rgba(41, 121, 255, 0.1)', glow: 'rgba(41, 121, 255, 0.35)' },     // Anatomy (Cobalt Blue)
+    aph: { primary: '#FF9100', border: 'rgba(255, 145, 0, 0.1)', glow: 'rgba(255, 145, 0, 0.35)' },      // Animal Production (Bright Orange)
+    bch: { primary: '#E040FB', border: 'rgba(224, 64, 251, 0.1)', glow: 'rgba(224, 64, 251, 0.35)' },     // Bio-Chemistry (Bright Pink/Fuchsia)
+    csp: { primary: '#76FF03', border: 'rgba(118, 255, 3, 0.1)', glow: 'rgba(118, 255, 3, 0.35)' },      // Crop Science (Lime Green)
+    ent: { primary: '#00B0FF', border: 'rgba(0, 176, 255, 0.1)', glow: 'rgba(0, 176, 255, 0.35)' },     // Entrepreneurship (Azure)
+    fwt: { primary: '#C6FF00', border: 'rgba(198, 255, 0, 0.1)', glow: 'rgba(198, 255, 0, 0.35)' },      // Forestry (Volt Yellow-Green)
+    ice: { primary: '#651FFF', border: 'rgba(101, 31, 255, 0.1)', glow: 'rgba(101, 31, 255, 0.35)' },     // ICE (Indigo Purple)
+    idd: { primary: '#FFE082', border: 'rgba(255, 224, 130, 0.1)', glow: 'rgba(255, 224, 130, 0.35)' },    // Industrial Design (Champagne)
+    mbbs: { primary: '#F50057', border: 'rgba(245, 0, 87, 0.1)', glow: 'rgba(245, 0, 87, 0.35)' },       // Medicine (Rose Red)
+    phy: { primary: '#E65100', border: 'rgba(230, 81, 0, 0.1)', glow: 'rgba(230, 81, 0, 0.35)' },        // Physics (Copper/Deep Dark Orange)
+    phs: { primary: '#29B6F6', border: 'rgba(41, 182, 246, 0.1)', glow: 'rgba(41, 182, 246, 0.35)' },     // Physiology (Ice Blue)
+    simt: { primary: '#FFEB3B', border: 'rgba(255, 235, 59, 0.1)', glow: 'rgba(255, 235, 59, 0.35)' },    // Security Investment (Bright Yellow)
+    sta: { primary: '#CDDC39', border: 'rgba(205, 220, 57, 0.1)', glow: 'rgba(205, 220, 57, 0.35)' },     // Statistics (Pear Green)
+  };
+  return mapping[teamId.toLowerCase()] || { primary: '#00E5FF', border: 'rgba(0, 229, 255, 0.1)', glow: 'rgba(0, 229, 255, 0.35)' };
+};
+
+// --- AUTHENTIC VECTOR QR CODE GENERATOR ---
+const AccreditationQR = ({ value }: { value: string }) => {
+  return (
+    <svg className="w-12 h-12 bg-white p-1 rounded-md flex-shrink-0" viewBox="0 0 29 29" shapeRendering="crispEdges">
+      <path fill="#ffffff" d="M0,0 h29 v29 h-29 z" />
+      {/* Corner detection squares */}
+      <path fill="#000000" d="M1,1 h7 v1 h-7 z M1,2 h1 v5 h-1 z M7,2 h1 v5 h-1 z M1,7 h7 v1 h-7 z M3,3 h3 v3 h-3 z" />
+      <path fill="#000000" d="M21,1 h7 v1 h-7 z M21,2 h1 v5 h-1 z M27,2 h1 v5 h-1 z M21,7 h7 v1 h-7 z M23,3 h3 v3 h-3 z" />
+      <path fill="#000000" d="M1,21 h7 v1 h-7 z M1,22 h1 v5 h-1 z M7,22 h1 v5 h-1 z M1,27 h7 v1 h-7 z M3,23 h3 v3 h-3 z" />
+      {/* Alignment box right */}
+      <path fill="#000000" d="M22,22 h3 v1 h-3 z M22,23 h1 v2 h-1 z M24,23 h1 v2 h-1 z M22,25 h3 v1 h-3 z M24,24 h1 v1 h-1 z" />
+      {/* Random high-density digital dots */}
+      <path fill="#000000" d="M9,3 h1 v1 h-1 z M13,3 h2 v1 h-2 z M17,3 h1 v1 h-1 z M11,5 h1 v2 h-1 z M15,5 h2 v1 h-2 z M13,7 h1 v1 h-1 z M19,7 h1 v1 h-1 z" />
+      <path fill="#000000" d="M3,9 h1 v1 h-1 z M5,11 h2 v1 h-2 z M1,13 h3 v1 h-3 z M7,13 h1 v2 h-1 z M9,9 h2 v1 h-2 z M15,9 h2 v2 h-2 z M19,9 h2 v1 h-2 z M9,11 h1 v3 h-1 z M13,11 h1 v1 h-1 z M11,13 h3 v1 h-3 z M17,13 h1 v1 h-1 z M19,13 h4 v1 h-4 z" />
+      <path fill="#000000" d="M9,15 h1 v4 h-1 z M12,15 h3 v1 h-3 z M17,15 h2 v2 h-2 z M13,17 h1 v3 h-1 z M15,19 h3 v1 h-3 z M19,19 h2 v1 h-2 z" />
+      <path fill="#000000" d="M21,9 h2 v1 h-2 z M24,11 h3 v1 h-3 z M22,15 h4 v1 h-4 z M27,17 h1 v3 h-1 z" />
+      <path fill="#000000" d="M3,18 h2 v1 h-2 z M7,19 h1 v2 h-1 z M1,16 h3 v1 h-3 z" />
+      <path fill="#000000" d="M11,21 h2 v1 h-2 z M15,22 h3 v1 h-3 z M18,24 h2 v1 h-2 z M13,26 h2 v1 h-2 z" />
+    </svg>
+  );
+};
+
+// --- HIGH-DEF SPORTS ACCREDITATION BADGE COMPONENT ---
+interface AccreditationCardProps {
+  member: any;
+  type: 'player' | 'coach';
+  team: typeof TEAMS[0];
+  isApproved: boolean;
+}
+
+const AccreditationCard = ({ member, type, team, isApproved }: AccreditationCardProps) => {
+  const teamColor = getTeamColor(team.id);
+  const isPlayer = type === 'player';
+  
+  // Clean ID and serial code
+  const memberSerial = isPlayer 
+    ? (member.matricNumber ? member.matricNumber.split('/').pop() : '000') 
+    : 'STAFF';
+  const accId = `FCL26-${team.id.toUpperCase()}-${isPlayer ? 'PL' : 'CO'}-${memberSerial}`;
+
+  const roleLabel = isPlayer 
+    ? (member.position === 'GK' ? 'GOALKEEPER' : member.position === 'DEF' ? 'DEFENDER' : member.position === 'MID' ? 'MIDFIELDER' : 'FORWARD') 
+    : (member.role?.toUpperCase() || 'COACH OFFICIAL');
+
+  return (
+    <div 
+      className="relative w-72 h-[456px] rounded-2xl overflow-hidden bg-[#070A1A] border flex flex-col justify-between shadow-2xl transition-all duration-300 transform select-none"
+      style={{
+        boxShadow: `0 20px 40px -8px rgba(0, 0, 0, 0.9), 0 0 25px -5px ${teamColor.glow}`,
+        borderColor: `${teamColor.primary}44`
+      }}
+    >
+      {/* Glossy laminated specular highlight layers */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.03] to-white/[0.12] pointer-events-none z-30 mix-blend-overlay" />
+      <div className="absolute top-[-60%] left-[-60%] w-[220%] h-[220%] rotate-[27deg] bg-gradient-to-r from-transparent via-white/[0.02] to-transparent pointer-events-none z-20 animate-pulse duration-5000" />
+
+      {/* Sporty carbon fiber mesh overlay */}
+      <div className="absolute inset-0 opacity-[0.05] bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:10px_10px] pointer-events-none" />
+
+      {/* Elegant faded watermarked tournament logo layer */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none z-0">
+        <svg className="w-48 h-48 rotate-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="M12 2v20" />
+          <circle cx="12" cy="11" r="4" />
+        </svg>
+      </div>
+
+      {/* Colored neon sidebar accents */}
+      <div className="absolute top-0 bottom-0 left-0 w-1 transition-colors duration-300" style={{ backgroundColor: teamColor.primary }} />
+      <div className="absolute top-0 bottom-0 right-0 w-1 transition-colors duration-300" style={{ backgroundColor: teamColor.primary }} />
+
+      {/* LANYARD CUTOUT / HEADER HOLE */}
+      <div className="pt-4 px-5 relative z-10 flex flex-col items-center">
+        <div className="w-12 h-3.5 rounded-full bg-[#03050B] border border-white/10 mb-2.5 shadow-inner flex items-center justify-center">
+          <div className="w-6 h-1 rounded-full bg-black/60" />
+        </div>
+
+        {/* FCL Branding Strip */}
+        <div className="w-full flex justify-between items-center border-b border-white/10 pb-2">
+          <div className="flex items-center space-x-1.5">
+            <svg className="w-4 h-4" style={{ color: teamColor.primary }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <div className="text-left leading-none">
+              <span className="text-[9px] font-display font-black tracking-tight italic text-white block">FUTA CHAMPIONS</span>
+              <span className="text-[7px] font-mono tracking-widest text-[#00E5FF] font-black uppercase">LEAGUE</span>
+            </div>
+          </div>
+          <div className="text-right leading-none">
+            <span className="text-[10px] font-mono font-black text-white tracking-widest">FCL 2026</span>
+            <span className="text-[6px] font-bold text-white/35 block mt-0.5 tracking-wider uppercase">OFFICIAL ACC.</span>
+          </div>
+        </div>
+      </div>
+
+      {/* MIDDLE: PASSPORT PICTURE CONTEXT */}
+      <div className="px-5 py-2 flex flex-col items-center relative z-10">
+        <div className="relative">
+          {/* Subtle colored glow backdrop aura */}
+          <div 
+            className="absolute -inset-1 rounded-xl opacity-50 blur-sm transition-all duration-300"
+            style={{ backgroundColor: teamColor.primary }}
+          />
+
+          <div className="relative w-[104px] h-[104px] rounded-xl bg-[#090D22] border-2 border-white/10 overflow-hidden flex items-center justify-center shadow-lg">
+            {member.passportPath ? (
+              <img src={member.passportPath} className="w-full h-full object-cover" alt="Staff Portrait" />
+            ) : (
+              <svg className="text-white/20 w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            )}
+          </div>
+
+          {/* Genuine Approved Seal overlay */}
+          <div 
+            className="absolute bottom-[-5px] right-[-5px] w-6.5 h-6.5 rounded-full bg-[#070A1A] border flex items-center justify-center shadow-md transition-all duration-300"
+            style={{ borderColor: teamColor.primary }}
+          >
+            <svg className="w-3.5 h-3.5" style={{ color: teamColor.primary }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* MEMBER PARTICIPANT INFORMATION PLATFORM */}
+      <div className="px-5 text-center flex-1 flex flex-col justify-center relative z-10 space-y-1.5">
+        <h4 className="font-display font-bold tracking-tight text-white uppercase text-base truncate leading-none">
+          {member.fullName}
+        </h4>
+
+        {/* Floating Custom Role Tag with glowing dropshadow */}
+        <div className="flex justify-center">
+          <span 
+            className="px-2.5 py-0.5 text-[8.5px] font-black tracking-widest uppercase rounded-md text-slate-950 inline-block transition-colors duration-300 whitespace-nowrap"
+            style={{ 
+              backgroundColor: teamColor.primary,
+              textShadow: '0 0.5px 1px rgba(0,0,0,0.3)',
+              boxShadow: `0 3px 8px ${teamColor.glow}`
+            }}
+          >
+            {roleLabel}
+          </span>
+        </div>
+
+        {/* Core Team metadata */}
+        <div className="flex items-center justify-center space-x-1.5 bg-white/[0.03] py-1 px-3 rounded-lg border border-white/5 max-w-max mx-auto">
+          <img src={team.logo} className="w-3.5 h-3.5 object-contain" alt="" />
+          <span className="font-mono text-[8.5px] text-white/70 uppercase tracking-widest font-black truncate max-w-[130px]">
+            {team.name.replace(/ \(\w+\)$/, '')}
+          </span>
+        </div>
+
+        {/* Matric code (or Coaching STAFF license) */}
+        <p className="font-mono text-[9.5px] tracking-widest font-black uppercase" style={{ color: teamColor.primary }}>
+          {isPlayer ? member.matricNumber : 'ACC_COACHING_OFFICIAL'}
+        </p>
+      </div>
+
+      {/* ACCREDITATION FOOTER MATRIX STRIP */}
+      <div className="bg-[#03050B] border-t border-white/5 px-4.5 py-2.5 flex items-center justify-between relative z-10">
+        <div className="text-left space-y-0.5">
+          <span className="text-[6.5px] text-white/30 uppercase font-mono tracking-widest block font-bold">ACC_ID_SPEC</span>
+          <span className="font-mono text-[8.5px] font-bold text-white block tracking-tight uppercase">{accId}</span>
+
+          {/* Genuine FCL dynamic accreditation indicators */}
+          <div className="flex items-center space-x-1">
+            <span className={`w-1.5 h-1.5 rounded-full inline-block ${isApproved ? "bg-green-500 animate-pulse" : "bg-amber-500"}`} />
+            <span className={`text-[7px] font-mono tracking-widest font-bold uppercase ${isApproved ? "text-green-500" : "text-amber-500"}`}>
+              {isApproved ? 'FCL_ACCREDITED' : 'PREVIEW_DRAFT'}
+            </span>
+          </div>
+        </div>
+
+        {/* Hologram stamp & QR code panel */}
+        <div className="flex items-center space-x-2.5">
+          {/* Circular Metallic Anti-Counterfeit Hologram overlay */}
+          <div className="relative w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-400 via-fuchsia-500 to-yellow-300 border border-white/10 opacity-70 shadow-inner overflow-hidden flex-shrink-0">
+            <div className="absolute inset-0 bg-transparent opacity-50 mix-blend-overlay" />
+            <div className="absolute inset-0 flex items-center justify-center text-white/30">
+              <span className="font-mono text-[5.5px] tracking-tighter uppercase font-bold text-slate-900">LICENSE</span>
+            </div>
+          </div>
+
+          <AccreditationQR value={`fcl://verify/2026/${accId}?name=${encodeURIComponent(member.fullName)}`} />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function RegistrationPortal() {
   const [selectedTeam, setSelectedTeam] = useState("");
@@ -97,7 +321,15 @@ export default function RegistrationPortal() {
   const [registrations, setRegistrations] = useState<Record<string, TeamRegistration>>({});
   
   // Dashboard navigation states
-  const [activeTab, setActiveTab] = useState<'info' | 'players' | 'coaches' | 'submitted_print'>('info');
+  const [activeTab, setActiveTab] = useState<'info' | 'players' | 'coaches' | 'submitted_print' | 'badges'>('info');
+  
+  // Accreditation Badges States
+  const [selectedBadgeMember, setSelectedBadgeMember] = useState<any | null>(null);
+  const [selectedBadgeType, setSelectedBadgeType] = useState<'player' | 'coach'>('player');
+  const [printingMember, setPrintingMember] = useState<{ member: any; type: 'player' | 'coach' } | null>(null);
+  const [printingAllSelected, setPrintingAllSelected] = useState(false);
+  const [adminViewSubTab, setAdminViewSubTab] = useState<'audit' | 'badges'>('audit');
+  const [badgeSearchQuery, setBadgeSearchQuery] = useState('');
   
   // Modals
   const [isPlayerModalOpen, setIsPlayerModalOpen] = useState(false);
@@ -113,14 +345,14 @@ export default function RegistrationPortal() {
     idCardName: '',
     idCardSize: '',
     idCardData: '',
-    passportPath: null as string | null
+    passportPath: '',
   });
   const [coachForm, setCoachForm] = useState({
     fullName: '',
     role: 'Head Coach' as any,
     phone: '',
     email: '',
-    passportPath: null as string | null
+    passportPath: ''
   });
   
   // Upload and drag/drop states
@@ -222,8 +454,8 @@ export default function RegistrationPortal() {
       return;
     }
 
-    if (!playerForm.fullName || !playerForm.matricNumber || !playerForm.idCardData) {
-      alert("Important: Full Name, Matriculation Number, and FUTA ID Card upload are mandatory.");
+    if (!playerForm.fullName || !playerForm.matricNumber || !playerForm.passportPath || !playerForm.idCardData) {
+      alert("Important: Full Name, Matriculation Number, Passport Photograph and FUTA ID Card upload are mandatory.");
       return;
     }
 
@@ -281,8 +513,8 @@ export default function RegistrationPortal() {
       return;
     }
 
-    if (!coachForm.fullName || !coachForm.phone || !coachForm.email) {
-      alert("Important: Full Name, Phone, and Email Address are mandatory.");
+    if (!coachForm.fullName || !coachForm.phone || !coachForm.email || !coachForm.passportPath) {
+      alert("Important: Full Name, Phone, Email Address and Passport Photograph are mandatory.");
       return;
     }
 
@@ -446,10 +678,18 @@ export default function RegistrationPortal() {
     }
   };
 
-  // Optional Passport upload
+  // Passport upload
   const handlePassportChange = (e: React.ChangeEvent<HTMLInputElement>, role: 'player' | 'coach') => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      const extension = file.name.split('.').pop()?.toLowerCase();
+      
+      // Reject file formats outside of .jpg/.jpeg
+      if (extension !== 'jpg' && extension !== 'jpeg') {
+        alert("Invalid format: Accreditation system exclusively accepts .jpg or .jpeg images.");
+        return;
+      }
+
       if (file.size > 1.5 * 1024 * 1024) {
         alert("Image too large. Please upload an image smaller than 1.5MB.");
         return;
@@ -870,6 +1110,16 @@ export default function RegistrationPortal() {
               <User size={14} />
               <span>COACHING STAFF ({activeReg.coaches.length}/2)</span>
             </button>
+            <button
+              onClick={() => setActiveTab('badges')}
+              className={cn(
+                "px-6 py-4 font-bold text-xs tracking-widest uppercase border-b-2 transition-all flex items-center space-x-2 whitespace-nowrap",
+                activeTab === 'badges' ? "border-primary text-primary" : "border-transparent text-white/60 hover:text-white"
+              )}
+            >
+              <ShieldCheck size={14} className="text-[#00E5FF] drop-shadow-[0_0_4px_rgba(0,229,255,0.4)]" />
+              <span>🪪 OFFICIAL BADGES</span>
+            </button>
           </div>
 
           {/* --- TAB CONTENT: GUIDELINES --- */}
@@ -1230,6 +1480,125 @@ export default function RegistrationPortal() {
               </div>
             </div>
           )}
+
+          {/* --- TAB CONTENT: OFFICIAL BADGES GALLERY --- */}
+          {activeTab === 'badges' && (
+            <div className="space-y-8 animate-fadeIn">
+              {/* Header Action controls */}
+              <div className="glass p-6 sm:p-8 rounded-[38px] border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+                <div className="relative z-10">
+                  <h3 className="text-xl font-display font-bold uppercase text-white flex items-center space-x-2">
+                    <span className="text-glow text-[#00E5FF]">REPRESENTATION ACCREDITATION BADGES</span>
+                  </h3>
+                  <p className="text-xs text-white/40 mt-1 max-w-xl">
+                    Verified tournament-official laminated licenses with full security indicators. Search team credentials or trigger high-res printing.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 w-full md:w-auto relative z-10">
+                  <div className="relative flex-1 md:flex-initial">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Search size={14} className="text-white/40" />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search name or matric..."
+                      value={badgeSearchQuery}
+                      onChange={(e) => setBadgeSearchQuery(e.target.value)}
+                      className="w-full pl-9 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-xs outline-none focus:border-[#00E5FF] text-white"
+                    />
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setPrintingAllSelected(true);
+                      setTimeout(() => {
+                        window.print();
+                        setPrintingAllSelected(false);
+                      }, 100);
+                    }}
+                    disabled={activeReg.players.length === 0 && activeReg.coaches.length === 0}
+                    className="px-5 py-3 bg-gradient-to-r from-red-500 to-red-700 text-white font-black tracking-widest text-xs rounded-xl hover:scale-105 active:scale-95 transition-transform uppercase flex items-center space-x-2 disabled:opacity-30 disabled:cursor-not-allowed w-full md:w-auto justify-center"
+                  >
+                    <Printer size={14} />
+                    <span>PRINT ALL BADGES</span>
+                  </button>
+                </div>
+              </div>
+
+              {activeReg.players.length === 0 && activeReg.coaches.length === 0 ? (
+                <div className="text-center py-20 bg-white/[0.01] border border-white/5 rounded-3xl p-8">
+                  <ShieldCheck size={48} className="mx-auto text-white/10 mb-4 animate-pulse" />
+                  <h4 className="font-display text-lg uppercase text-white/60 mb-2">No Accreditations Prepared</h4>
+                  <p className="text-xs text-white/30 max-w-sm mx-auto">
+                    Please upload athlete and official staff photographs under the registers to render badge models. Only verified squads gain full tournament badges.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
+                  {/* Rendering Coaches Badges */}
+                  {activeReg.coaches
+                    .filter(c => c.fullName.toLowerCase().includes(badgeSearchQuery.toLowerCase()))
+                    .map((coach) => {
+                      const isApproved = activeReg.status === 'verified';
+                      return (
+                        <div key={coach.id} className="space-y-4 flex flex-col items-center p-4 bg-white/[0.01] border border-white/5 rounded-3xl hover:bg-white/[0.02] hover:border-white/10 transition-all duration-300">
+                          <AccreditationCard 
+                            member={coach}
+                            type="coach"
+                            team={activeTeam}
+                            isApproved={isApproved}
+                          />
+                          <button
+                            onClick={() => {
+                              setPrintingMember({ member: coach, type: 'coach' });
+                              setTimeout(() => {
+                                window.print();
+                                setPrintingMember(null);
+                              }, 100);
+                            }}
+                            className="px-4 py-2 w-full justify-center bg-[#070A1A] hover:bg-[#00E5FF]/20 hover:text-[#00E5FF] hover:border-[#00E5FF]/30 text-white/70 border border-white/10 text-[10px] font-bold tracking-widest uppercase rounded-lg flex items-center space-x-1.5 transition-all"
+                          >
+                            <Printer size={12} />
+                            <span>PRINT BADGE</span>
+                          </button>
+                        </div>
+                      );
+                    })}
+
+                  {/* Rendering Players Badges */}
+                  {activeReg.players
+                    .filter(p => p.fullName.toLowerCase().includes(badgeSearchQuery.toLowerCase()) || p.matricNumber.toLowerCase().includes(badgeSearchQuery.toLowerCase()))
+                    .map((player) => {
+                      const isApproved = activeReg.status === 'verified';
+                      return (
+                        <div key={player.id} className="space-y-4 flex flex-col items-center p-4 bg-white/[0.01] border border-white/5 rounded-3xl hover:bg-white/[0.02] hover:border-white/10 transition-all duration-300">
+                          <AccreditationCard 
+                            member={player}
+                            type="player"
+                            team={activeTeam}
+                            isApproved={isApproved}
+                          />
+                          <button
+                            onClick={() => {
+                              setPrintingMember({ member: player, type: 'player' });
+                              setTimeout(() => {
+                                window.print();
+                                setPrintingMember(null);
+                              }, 100);
+                            }}
+                            className="px-4 py-2 w-full justify-center bg-[#070A1A] hover:bg-[#00E5FF]/20 hover:text-[#00E5FF] hover:border-[#00E5FF]/30 text-white/70 border border-white/10 text-[10px] font-bold tracking-widest uppercase rounded-lg flex items-center space-x-1.5 transition-all"
+                          >
+                            <Printer size={12} />
+                            <span>PRINT BADGE</span>
+                          </button>
+                        </div>
+                      );
+                    })}
+                </div>
+              )}
+            </div>
+          )}
         </section>
       )}
 
@@ -1436,84 +1805,194 @@ export default function RegistrationPortal() {
                           </button>
                         </div>
                       </div>
+                                   {/* Admin workspace sub-tabs */}
+                    <div className="flex border-b border-white/10 pb-0.5 gap-6 mb-4 no-print">
+                      <button
+                        type="button"
+                        onClick={() => setAdminViewSubTab('audit')}
+                        className={cn(
+                          "pb-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all flex items-center space-x-1.5",
+                          adminViewSubTab === 'audit' ? "border-primary text-primary" : "border-transparent text-white/40 hover:text-white"
+                        )}
+                      >
+                        <FileText size={12} />
+                        <span>1. ID CARD AUDIT</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setAdminViewSubTab('badges')}
+                        className={cn(
+                          "pb-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all flex items-center space-x-1.5",
+                          adminViewSubTab === 'badges' ? "border-primary text-primary" : "border-transparent text-white/40 hover:text-white"
+                        )}
+                      >
+                        <ShieldCheck size={12} />
+                        <span>2. SQUAD CREDENTIAL BADGES ({reg.players.length + reg.coaches.length})</span>
+                      </button>
                     </div>
 
-                    {/* Athletes ID Scan Verification workstation */}
-                    <div className="space-y-4">
-                      <h4 className="text-sm font-display font-medium uppercase tracking-tight text-white italic">ATHLETES SQUAD AUDIT</h4>
-                      <p className="text-xs text-white/40">Verify uploaded matric codes and confirm image integrity of FUTA student ID scans.</p>
+                    {adminViewSubTab === 'audit' ? (
+                      <div className="space-y-4">
+                        <h4 className="text-sm font-display font-medium uppercase tracking-tight text-white italic">ATHLETES SQUAD AUDIT</h4>
+                        <p className="text-xs text-white/40">Verify uploaded matric codes and confirm image integrity of FUTA student ID scans.</p>
 
-                      {reg.players.length === 0 ? (
-                        <p className="text-xs text-white/30 italic py-6 text-center">No athletes registered in this team draft yet.</p>
-                      ) : (
-                        <div className="space-y-4">
-                          {reg.players.map((player) => (
-                            <div key={player.id} className="p-4 bg-white/5 border border-white/10 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
-                              <div className="flex items-center space-x-4">
-                                <div className="w-12 h-12 rounded-lg bg-white/5 overflow-hidden flex-shrink-0 flex items-center justify-center border border-white/10">
-                                  {player.passportPath ? (
-                                    <img src={player.passportPath} className="w-full h-full object-cover" alt="" />
-                                  ) : (
-                                    <User className="text-white/20 w-6 h-6" />
+                        {reg.players.length === 0 ? (
+                          <p className="text-xs text-white/30 italic py-6 text-center">No athletes registered in this team draft yet.</p>
+                        ) : (
+                          <div className="space-y-4">
+                            {reg.players.map((player) => (
+                              <div key={player.id} className="p-4 bg-white/5 border border-white/10 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div className="flex items-center space-x-4 font-semibold">
+                                  <div className="w-12 h-12 rounded-lg bg-white/5 overflow-hidden flex-shrink-0 flex items-center justify-center border border-white/10 animate-fadeIn">
+                                    {player.passportPath ? (
+                                      <img src={player.passportPath} className="w-full h-full object-cover" alt="" />
+                                    ) : (
+                                      <User className="text-white/20 w-6 h-6" />
+                                    )}
+                                  </div>
+                                  <div>
+                                    <h5 className="text-sm font-bold text-white uppercase">{player.fullName}</h5>
+                                    <p className="text-xs font-mono font-bold text-primary mt-0.5">{player.matricNumber} • Position: {player.position}</p>
+                                    <p className="text-[10px] text-white/50 mt-1 flex items-center">
+                                      <FileText size={11} className="mr-1" />
+                                      <span>Uploaded ID Slot: {player.idCardName} ({player.idCardSize})</span>
+                                    </p>
+                                  </div>
+                                </div>
+
+                                {/* Workspace action controls */}
+                                <div className="flex items-center gap-3">
+                                  {player.idCardData && player.idCardData !== 'placeholder_id' && (
+                                    <a 
+                                      href={player.idCardData} 
+                                      download={player.idCardName}
+                                      className="p-2 bg-white/5 hover:bg-white/10 text-white rounded-lg text-xs font-semibold flex items-center space-x-1 border border-white/10"
+                                    >
+                                      <Download size={13} />
+                                      <span>DOWNLOAD ID</span>
+                                    </a>
                                   )}
-                                </div>
-                                <div>
-                                  <h5 className="text-sm font-bold text-white uppercase">{player.fullName}</h5>
-                                  <p className="text-xs font-mono font-bold text-primary mt-0.5">{player.matricNumber} • Position: {player.position}</p>
-                                  <p className="text-[10px] text-white/50 mt-1 flex items-center">
-                                    <FileText size={11} className="mr-1" />
-                                    <span>Uploaded ID Slot: {player.idCardName} ({player.idCardSize})</span>
-                                  </p>
+
+                                  <div className="flex rounded-lg overflow-hidden border border-white/10">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleVerifyIdCard(selectedAdminTeam, player.id, 'approved')}
+                                      className={cn(
+                                        "px-3 py-1.5 text-[10px] font-bold tracking-widest uppercase transition-colors",
+                                        player.idCardStatus === 'approved' 
+                                          ? "bg-green-500 text-dark" 
+                                          : "bg-white/5 text-white/60 hover:bg-white/10"
+                                      )}
+                                    >
+                                      ACTIVATE
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const reason = prompt("Enter ID CARD Rejection Mistake:");
+                                        if (reason) handleVerifyIdCard(selectedAdminTeam, player.id, 'rejected', reason);
+                                      }}
+                                      className={cn(
+                                        "px-3 py-1.5 text-[10px] font-bold tracking-widest uppercase transition-colors border-l border-white/10",
+                                        player.idCardStatus === 'rejected' 
+                                          ? "bg-red-500 text-white" 
+                                          : "bg-white/5 text-white/60 hover:bg-white/10"
+                                      )}
+                                    >
+                                      REJECT
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
-
-                              {/* Workspace action controls */}
-                              <div className="flex items-center gap-3">
-                                {player.idCardData && player.idCardData !== 'placeholder_id' && (
-                                  <a 
-                                    href={player.idCardData} 
-                                    download={player.idCardName}
-                                    className="p-2 bg-white/5 hover:bg-white/10 text-white rounded-lg text-xs font-semibold flex items-center space-x-1 border border-white/10"
-                                  >
-                                    <Download size={13} />
-                                    <span>DOWNLOAD ID</span>
-                                  </a>
-                                )}
-
-                                <div className="flex rounded-lg overflow-hidden border border-white/10">
-                                  <button
-                                    onClick={() => handleVerifyIdCard(selectedAdminTeam, player.id, 'approved')}
-                                    className={cn(
-                                      "px-3 py-1.5 text-[10px] font-bold tracking-widest uppercase transition-colors",
-                                      player.idCardStatus === 'approved' 
-                                        ? "bg-green-500 text-dark" 
-                                        : "bg-white/5 text-white/60 hover:bg-white/10"
-                                    )}
-                                  >
-                                    ACTIVATE
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      const reason = prompt("Enter ID CARD Rejection Mistake:");
-                                      if (reason) handleVerifyIdCard(selectedAdminTeam, player.id, 'rejected', reason);
-                                    }}
-                                    className={cn(
-                                      "px-3 py-1.5 text-[10px] font-bold tracking-widest uppercase transition-colors border-l border-white/10",
-                                      player.idCardStatus === 'rejected' 
-                                        ? "bg-red-500 text-white" 
-                                        : "bg-white/5 text-white/60 hover:bg-white/10"
-                                    )}
-                                  >
-                                    REJECT
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="space-y-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
+                          <div>
+                            <h4 className="text-sm font-display font-medium uppercase tracking-tight text-white italic">TEAM ACCREDITED CARDS</h4>
+                            <p className="text-xs text-white/45 mt-0.5">Physical vertical layout cards generated instantly for this athlete delegation.</p>
+                          </div>
+                          
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setPrintingAllSelected(true);
+                              setTimeout(() => {
+                                window.print();
+                                setPrintingAllSelected(false);
+                              }, 100);
+                            }}
+                            disabled={reg.players.length === 0 && reg.coaches.length === 0}
+                            className="px-4 py-2 bg-red-500 hover:bg-red-600 outline-none text-dark font-black tracking-widest text-xs rounded-xl hover:scale-105 active:scale-95 transition-transform uppercase flex items-center space-x-1.5 disabled:opacity-30 disabled:cursor-not-allowed justify-center"
+                          >
+                            <Printer size={13} />
+                            <span>PRINT SQUAD WRAP PACK</span>
+                          </button>
                         </div>
-                      )}
-                    </div>
-                  </div>
+
+                        {reg.players.length === 0 && reg.coaches.length === 0 ? (
+                          <p className="text-xs text-white/30 italic text-center py-12">No athlete or technical records submitted for this team draft.</p>
+                        ) : (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-items-center">
+                            {/* Render Technical Staff */}
+                            {reg.coaches.map((c: any) => (
+                              <div key={c.id} className="space-y-4 flex flex-col items-center p-4 bg-white/[0.01] border border-white/5 rounded-3xl hover:bg-white/[0.02] hover:border-white/10 transition-all duration-300">
+                                <AccreditationCard 
+                                  member={c}
+                                  type="coach"
+                                  team={teamMeta}
+                                  isApproved={reg.status === 'verified'}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setPrintingMember({ member: c, type: 'coach' });
+                                    setTimeout(() => {
+                                      window.print();
+                                      setPrintingMember(null);
+                                    }, 100);
+                                  }}
+                                  className="px-4 py-2 w-full justify-center bg-[#070A1A] hover:bg-[#00E5FF]/20 hover:text-[#00E5FF] hover:border-[#00E5FF]/30 text-white/70 border border-white/10 text-[10px] font-bold tracking-widest uppercase rounded-lg flex items-center space-x-1.5 transition-all"
+                                >
+                                  <Printer size={12} />
+                                  <span>PRINT COMPACT CARD</span>
+                                </button>
+                              </div>
+                            ))}
+
+                            {/* Render Roster Team */}
+                            {reg.players.map((p: any) => (
+                              <div key={p.id} className="space-y-4 flex flex-col items-center p-4 bg-white/[0.01] border border-white/5 rounded-3xl hover:bg-white/[0.02] hover:border-white/10 transition-all duration-300">
+                                <AccreditationCard 
+                                  member={p}
+                                  type="player"
+                                  team={teamMeta}
+                                  isApproved={reg.status === 'verified'}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setPrintingMember({ member: p, type: 'player' });
+                                    setTimeout(() => {
+                                      window.print();
+                                      setPrintingMember(null);
+                                    }, 100);
+                                  }}
+                                  className="px-4 py-2 w-full justify-center bg-[#070A1A] hover:bg-[#00E5FF]/20 hover:text-[#00E5FF] hover:border-[#00E5FF]/30 text-white/70 border border-white/10 text-[10px] font-bold tracking-widest uppercase rounded-lg flex items-center space-x-1.5 transition-all"
+                                >
+                                  <Printer size={12} />
+                                  <span>PRINT COMPACT CARD</span>
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>         </div>
                 );
               })() : (
                 <div className="glass p-12 rounded-[40px] border border-white/5 text-center flex flex-col items-center justify-center h-full min-h-[300px]">
@@ -1622,9 +2101,9 @@ export default function RegistrationPortal() {
                   </div>
                 </div>
 
-                {/* Passport Portrait Upload (Optional) */}
+                {/* Passport Portrait Upload (Required) */}
                 <div>
-                  <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-1.5">Passport Photograph (Optional)</label>
+                  <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-1.5">Passport Photograph (Required)</label>
                   <div className="flex items-center space-x-4">
                     <div className="w-14 h-14 rounded-lg bg-white/5 border border-white/10 flex-shrink-0 flex items-center justify-center overflow-hidden">
                       {playerForm.passportPath ? (
@@ -1635,7 +2114,7 @@ export default function RegistrationPortal() {
                     </div>
                     <input
                       type="file"
-                      accept="image/*"
+                      accept=".jpg,.jpeg"
                       onChange={(e) => handlePassportChange(e, 'player')}
                       className="text-xs text-white/55 file:mr-4 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-[10px] file:font-bold file:tracking-wider file:uppercase file:bg-white/10 file:text-white hover:file:bg-white/15"
                     />
@@ -1806,9 +2285,9 @@ export default function RegistrationPortal() {
                   </div>
                 </div>
 
-                {/* Optional Passport portrait uploader */}
+                {/* Required Passport portrait uploader */}
                 <div>
-                  <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-1.5">Staff Photograph (Optional)</label>
+                  <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-1.5">Staff Photograph (Required)</label>
                   <div className="flex items-center space-x-4">
                     <div className="w-14 h-14 rounded-lg bg-white/5 border border-white/10 flex-shrink-0 flex items-center justify-center overflow-hidden">
                       {coachForm.passportPath ? (
@@ -1819,7 +2298,7 @@ export default function RegistrationPortal() {
                     </div>
                     <input
                       type="file"
-                      accept="image/*"
+                      accept=".jpg,.jpeg"
                       onChange={(e) => handlePassportChange(e, 'coach')}
                       className="text-xs text-white/55 file:mr-4 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-[10px] file:font-bold file:tracking-wider file:uppercase file:bg-white/10 file:text-white"
                     />
@@ -1847,6 +2326,104 @@ export default function RegistrationPortal() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Dynamic Laminated print style blocks */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media print {
+          body {
+            background: #03050B !important;
+            color: #ffffff !important;
+          }
+          .no-print, header, footer, nav, section, dialog, .fixed, .fixed * {
+            display: none !important;
+            height: 0 !important;
+            opacity: 0 !important;
+            overflow: hidden !important;
+            visibility: hidden !important;
+          }
+          #print-target {
+            display: flex !important;
+            visibility: visible !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+            z-index: 9999999 !important;
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            justify-content: center !important;
+            align-items: center !important;
+          }
+          #print-target * {
+            visibility: visible !important;
+          }
+          #print-target .print-all-grid {
+            display: grid !important;
+            grid-template-cols: repeat(2, minmax(0, 1fr)) !important;
+            gap: 24px !important;
+            padding: 24px !important;
+            background: transparent !important;
+          }
+          #print-target .print-card-box {
+            display: inline-flex !important;
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
+            margin-bottom: 12px;
+          }
+        }
+      `}} />
+
+      {/* INVISIBLE CONTAINER FOR ACCREDITED BADGE PRINTING OPERATIONS */}
+      {(() => {
+        const printingTeamObject = isAdmin && selectedAdminTeam 
+          ? TEAMS.find(t => t.id === selectedAdminTeam) 
+          : activeTeam;
+
+        const printingTeamRegistration = isAdmin && selectedAdminTeam 
+          ? registrations[selectedAdminTeam] 
+          : activeReg;
+
+        return (
+          <div id="print-target" className="hidden">
+            {printingMember && printingTeamObject && (
+              <AccreditationCard 
+                member={printingMember.member}
+                type={printingMember.type}
+                team={printingTeamObject}
+                isApproved={printingTeamRegistration?.status === 'verified'}
+              />
+            )}
+            {printingAllSelected && printingTeamObject && printingTeamRegistration && (
+              <div className="print-all-grid">
+                {printingTeamRegistration.coaches.map((c: any) => (
+                  <div key={c.id} className="print-card-box">
+                    <AccreditationCard 
+                      member={c}
+                      type="coach"
+                      team={printingTeamObject}
+                      isApproved={printingTeamRegistration.status === 'verified'}
+                    />
+                  </div>
+                ))}
+                {printingTeamRegistration.players.map((p: any) => (
+                  <div key={p.id} className="print-card-box">
+                    <AccreditationCard 
+                      member={p}
+                      type="player"
+                      team={printingTeamObject}
+                      isApproved={printingTeamRegistration.status === 'verified'}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })()}
     </div>
   );
 }
