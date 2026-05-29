@@ -745,33 +745,6 @@ export default function RegistrationPortal() {
                 <Unlock size={16} />
               </button>
             </form>
-
-            <div className="mt-12 pt-8 border-t border-white/5 w-full">
-              <p className="text-white/30 text-xs font-semibold uppercase tracking-widest mb-4 flex items-center justify-center space-x-1.5">
-                <HelpCircle size={14} className="text-primary" />
-                <span>DEMO ASSISTANCE / QUICK CODES</span>
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <button 
-                  onClick={() => { setSelectedTeam('MST'); setAccessCode('MST2026FCL'); setLoginError(''); }}
-                  className="px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-xs hover:bg-white/10 hover:border-white/20 transition-all font-mono text-white/70"
-                >
-                  Marine Science (MST)
-                </button>
-                <button 
-                  onClick={() => { setSelectedTeam('IFS'); setAccessCode('IFS2026FCL'); setLoginError(''); }}
-                  className="px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-xs hover:bg-white/10 hover:border-white/20 transition-all font-mono text-white/70"
-                >
-                  Info Systems (IFS)
-                </button>
-                <button 
-                  onClick={() => { setSelectedTeam(''); setAccessCode(ADMIN_PASSWORD); setLoginError(''); }}
-                  className="px-4 py-2.5 bg-primary/10 border border-primary/20 text-primary rounded-xl text-xs hover:bg-primary/20 transition-all font-semibold"
-                >
-                  Admin Terminal Access
-                </button>
-              </div>
-            </div>
           </div>
         </section>
       )}
