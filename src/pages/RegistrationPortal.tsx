@@ -88,108 +88,13 @@ const COACH_ROLES = [
   'Team Manager'
 ];
 
-// Seed initial mock data so they do not start entirely from scratch
-const INITIAL_REGISTRATIONS: Record<string, TeamRegistration> = {
-  mst: {
-    teamId: 'mst',
-    status: 'incomplete',
-    players: [
-      {
-        id: 'mst-p1',
-        fullName: 'Adekunle Jones',
-        matricNumber: 'MST/2019/1004',
-        department: 'Marine Science',
-        level: '500',
-        position: 'FWD',
-        passportPath: null,
-        idCardName: 'futa_card_ade.jpg',
-        idCardSize: '185 KB',
-        idCardData: 'placeholder_id',
-        idCardStatus: 'approved'
-      },
-      {
-        id: 'mst-p2',
-        fullName: 'Tunde Bakare',
-        matricNumber: 'MST/2021/4102',
-        department: 'Marine Science',
-        level: '300',
-        position: 'MID',
-        passportPath: null,
-        idCardName: 'futa_card_tunde.jpg',
-        idCardSize: '142 KB',
-        idCardData: 'placeholder_id',
-        idCardStatus: 'approved'
-      },
-      {
-        id: 'mst-p3',
-        fullName: 'Chisom Okoro',
-        matricNumber: 'MST/2020/2156',
-        department: 'Marine Science',
-        level: '400',
-        position: 'DEF',
-        passportPath: null,
-        idCardName: 'chisom_id_card.jpeg',
-        idCardSize: '210 KB',
-        idCardData: 'placeholder_id',
-        idCardStatus: 'pending'
-      }
-    ],
-    coaches: [
-      {
-        id: 'mst-c1',
-        fullName: 'Professor O. A. Adebayo',
-        role: 'Head Coach',
-        phone: '08034567891',
-        email: 'adebayo.mst@futa.edu.ng',
-        passportPath: null
-      }
-    ]
-  },
-  ifs: {
-    teamId: 'ifs',
-    status: 'submitted',
-    submittedAt: '2026-05-27T08:14:22.000Z',
-    players: Array.from({ length: 23 }, (_, idx) => ({
-      id: `ifs-p${idx + 1}`,
-      fullName: `IFS Star ${idx + 1}`,
-      matricNumber: `IFS/202${idx % 4}/${1000 + idx}`,
-      department: 'Information Systems',
-      level: '300',
-      position: ['GK', 'DEF', 'MID', 'FWD'][idx % 4] as any,
-      passportPath: null,
-      idCardName: `ifs_student_card_${idx + 1}.jpeg`,
-      idCardSize: '190 KB',
-      idCardData: 'placeholder_id',
-      idCardStatus: idx % 6 === 0 ? 'pending' : 'approved'
-    })),
-    coaches: [
-      {
-        id: 'ifs-c1',
-        fullName: 'Dr. Stella Gbagbe',
-        role: 'Head Coach',
-        phone: '09012345678',
-        email: 's.gbagbe@futa.edu.ng',
-        passportPath: null
-      },
-      {
-        id: 'ifs-c2',
-        fullName: 'Coach Festus',
-        role: 'Assistant Coach',
-        phone: '08122334455',
-        email: 'festus.coaching@gmail.com',
-        passportPath: null
-      }
-    ]
-  }
-};
-
 export default function RegistrationPortal() {
   const [selectedTeam, setSelectedTeam] = useState("");
   const [accessCode, setAccessCode] = useState('');
   const [loginError, setLoginError] = useState('');
   const [activeTeam, setActiveTeam] = useState<typeof TEAMS[0] | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [registrations, setRegistrations] = useState<Record<string, TeamRegistration>>(INITIAL_REGISTRATIONS);
+  const [registrations, setRegistrations] = useState<Record<string, TeamRegistration>>({});
   
   // Dashboard navigation states
   const [activeTab, setActiveTab] = useState<'info' | 'players' | 'coaches' | 'submitted_print'>('info');
