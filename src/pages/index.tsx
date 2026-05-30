@@ -482,21 +482,25 @@ export const knockoutStructure = {
   quarterFinals: [
     {
       id: "QF1",
+      dateRange: "22nd June 2026 - 23rd June 2026",
       fixture: "Seed 1 vs PO1"
     },
 
     {
       id: "QF2",
+      dateRange: "22nd June 2026 - 23rd June 2026",
       fixture: "Seed 2 vs PO2"
     },
 
     {
       id: "QF3",
+      dateRange: "22nd June 2026 - 23rd June 2026",
       fixture: "PO3 vs PO5"
     },
 
     {
       id: "QF4",
+      dateRange: "22nd June 2026 - 23rd June 2026",
       fixture: "PO4 vs PO6"
     }
   ],
@@ -504,11 +508,13 @@ export const knockoutStructure = {
   semiFinalsFirstLeg: [
     {
       id: "SF1",
+      date: "26th June 2026",
       fixture: "QF1 vs QF3"
     },
 
     {
       id: "SF2",
+      date: "26th June 2026",
       fixture: "QF2 vs QF4"
     }
   ],
@@ -516,11 +522,13 @@ export const knockoutStructure = {
   semiFinalsSecondLeg: [
     {
       id: "SF1",
+      date: "28th June 2026",
       fixture: "QF3 vs QF1"
     },
 
     {
       id: "SF2",
+      date: "28th June 2026",
       fixture: "QF4 vs QF2"
     }
   ],
@@ -814,7 +822,7 @@ export function Playoffs() {
                   <div className="border-t border-white/5 px-6 py-4.5 bg-black/40 flex items-center justify-between text-white/40 font-mono text-[9px] tracking-wider font-bold">
                     <span className="flex items-center">
                       <Clock size={11} className="mr-1.5 text-primary" />
-                      <span>{match.dateRange || "TO BE SCHEDULED"}</span>
+                      <span>{match.dateRange || match.date || "TO BE SCHEDULED"}</span>
                     </span>
                     <span className="uppercase text-white/20">FUTA CL 2026</span>
                   </div>

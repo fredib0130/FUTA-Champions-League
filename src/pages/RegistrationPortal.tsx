@@ -4,10 +4,10 @@ import {
   Lock, Unlock, Users, ShieldCheck, AlertCircle, CheckCircle2, XCircle, 
   Upload, Download, Search, Building2, UserPlus, FileSpreadsheet, 
   Printer, ArrowLeft, Trash2, User, Calendar, GraduationCap, Eye, 
-  RefreshCw, FileText, UploadCloud, Check, HelpCircle, ArrowRight, Info
+  RefreshCw, FileText, UploadCloud, Check, HelpCircle, ArrowRight, Info, Trophy
 } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
-import { TEAMS } from '../data/mockData';
+import { TEAMS, MATCHES, COEFFICIENTS } from '../data/mockData';
 import { cn } from '../lib/utils';
 
 // --- TYPE DEFINITIONS ---
@@ -321,7 +321,35 @@ export default function RegistrationPortal() {
   const [registrations, setRegistrations] = useState<Record<string, TeamRegistration>>({});
   
   // Dashboard navigation states
-  const [activeTab, setActiveTab] = useState<'info' | 'players' | 'coaches' | 'submitted_print' | 'badges'>('info');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'players' | 'coaches' | 'lineups' | 'fixtures' | 'badges' | 'profile' | 'submitted_print'>('dashboard');
+
+  // Match Lineup State
+  const [lineup, setLineup] = useState<{
+    formation: string;
+    captainId: string;
+    players: Record<string, string>;
+  }>(() => {
+    return {
+      formation: '4-3-3',
+      captainId: '',
+      players: {}
+    };
+  });
+
+  useEffect(() => {
+    if (activeTeam) {
+      const saved = localStorage.getItem(`fcl_lineup_${activeTeam.id}`);
+      if (saved) {
+        try {
+          setLineup(JSON.parse(saved));
+        } catch (err) {
+          setLineup({ formation: '4-3-3', captainId: '', players: {} });
+        }
+      } else {
+        setLineup({ formation: '4-3-3', captainId: '', players: {} });
+      }
+    }
+  }, [activeTeam]);
   
   // Accreditation Badges States
   const [selectedBadgeMember, setSelectedBadgeMember] = useState<any | null>(null);
@@ -1081,14 +1109,14 @@ export default function RegistrationPortal() {
           {/* Tab Selection Navigation */}
           <div className="flex border-b border-white/10 mb-8 overflow-x-auto no-scrollbar">
             <button
-              onClick={() => setActiveTab('info')}
+              onClick={() => setActiveTab('dashboard')}
               className={cn(
                 "px-6 py-4 font-bold text-xs tracking-widest uppercase border-b-2 transition-all flex items-center space-x-2 whitespace-nowrap",
-                activeTab === 'info' ? "border-primary text-primary" : "border-transparent text-white/60 hover:text-white"
+                activeTab === 'dashboard' ? "border-primary text-primary" : "border-transparent text-white/60 hover:text-white"
               )}
             >
               <Info size={14} />
-              <span>ACCREDITATION GUIDELINES</span>
+              <span>DASHBOARD</span>
             </button>
             <button
               onClick={() => setActiveTab('players')}
@@ -1098,7 +1126,7 @@ export default function RegistrationPortal() {
               )}
             >
               <Users size={14} />
-              <span>SQUAD REGISTER ({activeReg.players.length}/23)</span>
+              <span>PLAYERS ({activeReg.players.length}/23)</span>
             </button>
             <button
               onClick={() => setActiveTab('coaches')}
@@ -1108,7 +1136,27 @@ export default function RegistrationPortal() {
               )}
             >
               <User size={14} />
-              <span>COACHING STAFF ({activeReg.coaches.length}/2)</span>
+              <span>COACHES ({activeReg.coaches.length}/2)</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('lineups')}
+              className={cn(
+                "px-6 py-4 font-bold text-xs tracking-widest uppercase border-b-2 transition-all flex items-center space-x-2 whitespace-nowrap",
+                activeTab === 'lineups' ? "border-primary text-primary" : "border-transparent text-white/60 hover:text-white"
+              )}
+            >
+              <FileText size={14} />
+              <span>MATCH LINEUPS</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('fixtures')}
+              className={cn(
+                "px-6 py-4 font-bold text-xs tracking-widest uppercase border-b-2 transition-all flex items-center space-x-2 whitespace-nowrap",
+                activeTab === 'fixtures' ? "border-primary text-primary" : "border-transparent text-white/60 hover:text-white"
+              )}
+            >
+              <Calendar size={14} />
+              <span>FIXTURES</span>
             </button>
             <button
               onClick={() => setActiveTab('badges')}
@@ -1118,65 +1166,124 @@ export default function RegistrationPortal() {
               )}
             >
               <ShieldCheck size={14} className="text-[#00E5FF] drop-shadow-[0_0_4px_rgba(0,229,255,0.4)]" />
-              <span>🪪 OFFICIAL BADGES</span>
+              <span>ACCREDITATION CARDS</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('profile')}
+              className={cn(
+                "px-6 py-4 font-bold text-xs tracking-widest uppercase border-b-2 transition-all flex items-center space-x-2 whitespace-nowrap",
+                activeTab === 'profile' ? "border-primary text-primary" : "border-transparent text-white/60 hover:text-white"
+              )}
+            >
+              <GraduationCap size={14} />
+              <span>PROFILE</span>
             </button>
           </div>
 
-          {/* --- TAB CONTENT: GUIDELINES --- */}
-          {activeTab === 'info' && (
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="glass p-8 rounded-3xl border border-white/10 space-y-6">
-                <h3 className="text-xl font-display font-bold italic uppercase text-primary tracking-tight">FCL 2026 ACCREDITATION GUIDELINES</h3>
-                <div className="space-y-4 text-sm text-white/60 leading-relaxed">
-                  <p>
-                    ACC-REG is the secure system through which all 20 FUTA Champions League sports delegations submit profiles for identity verification. To protect tournament integrity:
-                  </p>
-                  <ul className="list-disc leading-relaxed pl-5 space-y-2.5">
-                    <li><strong className="text-white">Matriculation Integrity</strong>: All players must be registered with valid and correct matriculation directories corresponding to their active department codes.</li>
-                    <li><strong className="text-white">Active Student Badge</strong>: Upload of actual FUTA School Identity Card scans is strictly mandatory for validation.</li>
-                    <li><strong className="text-white">Strict Capacity</strong>: Squad sizes are dynamically validated—capped absolutely at 23 student-athletes and 2 coaches.</li>
-                    <li><strong className="text-white">Accreditation Locking</strong>: Once you submit the dossier, editing locks down. The organizer commission rejects cards with mistakes so teams can resolve anomalies.</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="glass p-8 rounded-3xl border border-white/10 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-xl font-display font-bold italic uppercase text-white tracking-tight mb-4">ACC_STATUS_REPORT</h3>
-                  <div className="space-y-3.5">
-                    <div className="flex justify-between items-center py-2.5 border-b border-white/5">
-                      <span className="text-xs text-white/50">Minimum Roster Required</span>
-                      <span className="text-xs font-mono font-bold text-green-500 font-bold">15 Players (MET)</span>
-                    </div>
-                    <div className="flex justify-between items-center py-2.5 border-b border-white/5">
-                      <span className="text-xs text-white/50">Matriculation Check</span>
-                      <span className="text-xs font-mono font-bold text-blue-400">PASSED AUTOMATIC</span>
-                    </div>
-                    <div className="flex justify-between items-center py-2.5 border-b border-white/5">
-                      <span className="text-xs text-white/50">Card Accreditation Format</span>
-                      <span className="text-xs font-mono font-bold text-white/80">JPG / JPEG</span>
-                    </div>
-                    <div className="flex justify-between items-center py-2.5 border-b border-white/5">
-                      <span className="text-xs text-white/50">Verification Status</span>
-                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-glow text-primary">{activeReg.status}</span>
-                    </div>
+          {/* --- TAB CONTENT: DASHBOARD --- */}
+          {activeTab === 'dashboard' && (
+            <div className="space-y-8">
+              {/* Dashboard Grid Header statistics */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Guidelines Checklist */}
+                <div className="glass p-8 rounded-3xl border border-white/10 space-y-6 bg-white/[0.01]">
+                  <h3 className="text-xl font-display font-bold italic uppercase text-primary tracking-tight">FCL 2026 ACCREDITATION TIMELINE & CHECKS</h3>
+                  <div className="space-y-4 text-sm text-white/60 leading-relaxed">
+                    <p>
+                      Welcome to the official FCL team dashboard. Please complete the rosters beneath the active thresholds. Verified departments must clear both administrative and photographic checks to secure licenses.
+                    </p>
+                    <ul className="list-disc leading-relaxed pl-5 space-y-2.5 text-xs text-white/50">
+                      <li><strong className="text-white">Active Roster Limits</strong>: Minimum 15 players must be uploaded before dossier submission is enabled.</li>
+                      <li><strong className="text-white">ID Authentication Scans</strong>: Every athlete card requires a corresponding student identification scan (.jpg format).</li>
+                      <li><strong className="text-white">Review Workflow</strong>: Once submitted, your squad register locks down. The tech board inspects each profile individual records in sequence.</li>
+                    </ul>
                   </div>
                 </div>
 
-                <div className="pt-6">
-                  {activeReg.status === 'incomplete' || activeReg.status === 'pending' ? (
-                    <button
-                      onClick={() => setActiveTab('players')}
-                      className="px-6 py-4 sporty-gradient text-dark font-black tracking-widest text-xs rounded-xl hover:scale-[1.02] transition-transform uppercase flex items-center justify-center space-x-2"
-                    >
-                      <span>GO TO ATHLETE REGISTER</span>
-                      <ArrowRight size={14} />
-                    </button>
-                  ) : (
-                    <div className="p-4 bg-white/5 rounded-xl border border-white/5 text-center text-xs text-white/40">
-                      Roster under technical verification lock. Changes are currently frozen.
+                {/* Status Report details */}
+                <div className="glass p-8 rounded-3xl border border-white/10 flex flex-col justify-between bg-white/[0.01]">
+                  <div>
+                    <h3 className="text-xl font-display font-bold italic text-white uppercase tracking-tight mb-4">ACC_STATUS_REPORT</h3>
+                    <div className="space-y-3.5">
+                      <div className="flex justify-between items-center py-2.5 border-b border-white/5">
+                        <span className="text-xs text-white/50">Minimum Roster Required</span>
+                        <span className={cn(
+                          "text-xs font-mono font-bold",
+                          activeReg.players.length >= 15 ? "text-green-500" : "text-amber-500"
+                        )}>
+                          15 Players ({activeReg.players.length >= 15 ? "MET" : "INCOMPLETE"})
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center py-2.5 border-b border-white/5">
+                        <span className="text-xs text-white/50">Matriculation Check</span>
+                        <span className="text-xs font-mono font-bold text-blue-400">PASSED AUTOMATIC</span>
+                      </div>
+                      <div className="flex justify-between items-center py-2.5 border-b border-white/5">
+                        <span className="text-xs text-white/50">Card Accreditation Format</span>
+                        <span className="text-xs font-mono font-bold text-white/80">JPG / JPEG</span>
+                      </div>
+                      <div className="flex justify-between items-center py-2.5 border-b border-white/5">
+                        <span className="text-xs text-white/50">Verification Status</span>
+                        <span className="text-xs font-mono font-bold uppercase tracking-wider text-glow text-primary">{activeReg.status}</span>
+                      </div>
                     </div>
-                  )}
+                  </div>
+
+                  <div className="pt-6">
+                    {activeReg.status === 'incomplete' || activeReg.status === 'pending' ? (
+                      <button
+                        onClick={() => setActiveTab('players')}
+                        className="px-6 py-4 sporty-gradient text-dark font-black tracking-widest text-xs rounded-xl hover:scale-[1.02] transition-transform uppercase flex items-center justify-center space-x-2"
+                      >
+                        <span>GO TO ATHLETE REGISTER</span>
+                        <ArrowRight size={14} />
+                      </button>
+                    ) : (
+                      <div className="p-4 bg-white/5 rounded-xl border border-white/5 text-center text-xs text-white/40">
+                        Roster locked during administrative verification review.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Group Standings Summary Widget */}
+              <div className="glass p-8 rounded-[36px] border border-white/10 bg-white/[0.01] space-y-6">
+                <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                  <div>
+                    <h3 className="text-lg font-display font-bold italic uppercase tracking-tight text-white">GROUP STANDINGS PERFORMANCE</h3>
+                    <p className="text-xs text-white/40">Real-time departmental FCL statistics overview.</p>
+                  </div>
+                  <div className="px-3.5 py-1.5 border border-primary/30 bg-primary/10 text-primary font-mono text-[9px] font-bold uppercase tracking-widest rounded-xl">
+                    Group {activeTeam.group}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-6 text-center text-white">
+                  <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Played</div>
+                    <div className="text-3xl font-display font-black mt-1">{activeTeam.played}</div>
+                  </div>
+                  <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Won</div>
+                    <div className="text-3xl font-display font-black text-green-500 mt-1">{activeTeam.won}</div>
+                  </div>
+                  <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Drawn</div>
+                    <div className="text-3xl font-display font-black text-white/60 mt-1">{activeTeam.drawn}</div>
+                  </div>
+                  <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Lost</div>
+                    <div className="text-3xl font-display font-black text-red-500 mt-1">{activeTeam.lost}</div>
+                  </div>
+                  <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Goal Diff</div>
+                    <div className="text-3xl font-display font-black text-primary mt-1">{activeTeam.goalDifference > 0 ? `+${activeTeam.goalDifference}` : activeTeam.goalDifference}</div>
+                  </div>
+                  <div className="p-4 sporty-gradient rounded-2xl text-dark">
+                    <div className="text-[10px] font-bold uppercase tracking-widest opacity-60">Points</div>
+                    <div className="text-3xl font-display font-black mt-1">{activeTeam.points}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1373,6 +1480,474 @@ export default function RegistrationPortal() {
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* --- TAB CONTENT: MATCH LINEUPS --- */}
+          {activeTab === 'lineups' && (
+            <div className="space-y-8">
+              {/* Tactical Control Bar */}
+              <div className="glass p-6 sm:p-8 rounded-[38px] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden bg-white/[0.01]">
+                <div>
+                  <h3 className="text-xl font-display font-bold uppercase text-white">TACTICAL BOARD & MATCH LINEUP</h3>
+                  <p className="text-xs text-white/40 mt-1">
+                    Designate your starting eleven squad roster, assign formations, and select your captain.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-4">
+                  {/* Select Formation */}
+                  <div className="flex items-center space-x-3">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/30">FORMATION:</span>
+                    <select
+                      value={lineup.formation}
+                      onChange={(e) => {
+                        const nextForm = e.target.value;
+                        setLineup(prev => {
+                          const updated = { ...prev, formation: nextForm };
+                          localStorage.setItem(`fcl_lineup_${activeTeam.id}`, JSON.stringify(updated));
+                          return updated;
+                        });
+                      }}
+                      className="px-4 py-2 bg-[#090D22] border border-white/10 rounded-xl text-xs text-white outline-none focus:border-primary font-bold"
+                    >
+                      <option value="4-3-3">4-3-3 Attack</option>
+                      <option value="4-4-2">4-4-2 Classic</option>
+                      <option value="3-5-2">3-5-2 Wingbacks</option>
+                    </select>
+                  </div>
+
+                  {/* Clear Lineup */}
+                  <button
+                    onClick={() => {
+                      if (confirm("Are you sure you want to reset your match lineup?")) {
+                        setLineup(prev => {
+                          const updated = { ...prev, players: {}, captainId: '' };
+                          localStorage.setItem(`fcl_lineup_${activeTeam.id}`, JSON.stringify(updated));
+                          return updated;
+                        });
+                      }
+                    }}
+                    className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-bold uppercase tracking-widest border border-white/10 flex items-center space-x-1"
+                  >
+                    <Trash2 size={12} />
+                    <span>Reset XI</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid lg:grid-cols-12 gap-8 items-start">
+                {/* 1. Tactical football Pitch visualizer (8 cols) */}
+                <div className="lg:col-span-8">
+                  <div className="relative aspect-[4/5] md:aspect-[5/4] sm:aspect-square w-full bg-gradient-to-b from-emerald-800 via-emerald-700 to-emerald-950 border-2 border-emerald-500/20 rounded-[40px] p-6 overflow-hidden shadow-2xl select-none">
+                    {/* Pitch markings */}
+                    <div className="absolute inset-4 border border-white/10 rounded-[32px] pointer-events-none" />
+                    <div className="absolute top-1/2 left-4 right-4 h-0.5 bg-white/10 pointer-events-none" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-white/10 rounded-full pointer-events-none" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white/20 rounded-full pointer-events-none" />
+                    
+                    {/* Goal Penalty area top */}
+                    <div className="absolute top-4 left-1/2 -translate-x-1/2 w-2/5 h-1/5 border-b border-x border-white/10 pointer-events-none" />
+                    <div className="absolute top-4 left-1/2 -translate-x-1/2 w-1/5 h-[8%] border-b border-x border-white/10 pointer-events-none" />
+                    
+                    {/* Goal Penalty area bottom */}
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-2/5 h-1/5 border-t border-x border-white/10 pointer-events-none" />
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-1/5 h-[8%] border-t border-x border-white/10 pointer-events-none" />
+
+                    {/* Team logo background overlay */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 opacity-[0.04] pointer-events-none">
+                      <img src={activeTeam.logo} alt="" className="w-full h-full object-contain" />
+                    </div>
+
+                    {/* Draw tactical lineup coordinates based on active formation */}
+                    {(() => {
+                      const getSpots = () => {
+                        const form = lineup.formation;
+                        if (form === '4-4-2') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LB', label: 'LB', x: 18, y: 68 },
+                            { id: 'LCB', label: 'CB', x: 39, y: 72 },
+                            { id: 'RCB', label: 'CB', x: 61, y: 72 },
+                            { id: 'RB', label: 'RB', x: 82, y: 68 },
+                            { id: 'LM', label: 'LM', x: 18, y: 45 },
+                            { id: 'LCM', label: 'CM', x: 39, y: 48 },
+                            { id: 'RCM', label: 'CM', x: 61, y: 48 },
+                            { id: 'RM', label: 'RM', x: 82, y: 45 },
+                            { id: 'LS', label: 'CF', x: 35, y: 22 },
+                            { id: 'RS', label: 'CF', x: 65, y: 22 },
+                          ];
+                        }
+                        if (form === '3-5-2') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LCB', label: 'CB', x: 25, y: 71 },
+                            { id: 'CCB', label: 'CB', x: 50, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 75, y: 71 },
+                            { id: 'LWB', label: 'LWB', x: 13, y: 46 },
+                            { id: 'LCM', label: 'LCM', x: 34, y: 50 },
+                            { id: 'DM', label: 'DM', x: 50, y: 56 },
+                            { id: 'RCM', label: 'RCM', x: 66, y: 50 },
+                            { id: 'RWB', label: 'RWB', x: 87, y: 46 },
+                            { id: 'LS', label: 'CF', x: 35, y: 22 },
+                            { id: 'RS', label: 'CF', x: 65, y: 22 },
+                          ];
+                        }
+                        // Default 4-3-3 Attack
+                        return [
+                          { id: 'GK', label: 'GK', x: 50, y: 88 },
+                          { id: 'LB', label: 'LB', x: 18, y: 68 },
+                          { id: 'LCB', label: 'CB', x: 39, y: 72 },
+                          { id: 'RCB', label: 'CB', x: 61, y: 72 },
+                          { id: 'RB', label: 'RB', x: 82, y: 68 },
+                          { id: 'LCM', label: 'LCM', x: 30, y: 48 },
+                          { id: 'CM', label: 'CM', x: 50, y: 53 },
+                          { id: 'RCM', label: 'RCM', x: 70, y: 48 },
+                          { id: 'LW', label: 'LW', x: 22, y: 24 },
+                          { id: 'ST', label: 'CF', x: 50, y: 20 },
+                          { id: 'RW', label: 'RW', x: 78, y: 24 },
+                        ];
+                      };
+
+                      return getSpots().map((spot) => {
+                        const assignedPlayerId = lineup.players[spot.id];
+                        const player = activeReg.players.find(p => p.id === assignedPlayerId);
+                        const isCaptain = lineup.captainId === assignedPlayerId;
+
+                        return (
+                          <div
+                            key={spot.id}
+                            className="absolute flex flex-col items-center justify-center translate-x-[-50%] translate-y-[-50%] transition-all"
+                            style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
+                          >
+                            {/* Visual Spot Circle */}
+                            <div className="group/spot relative">
+                              <div className={cn(
+                                "w-11 h-11 sm:w-13 sm:h-13 rounded-full border-2 flex items-center justify-center transition-all duration-300 relative bg-[#070a1e] cursor-pointer shadow-lg",
+                                player ? "border-primary scale-100 group-hover/spot:scale-105" : "border-white/20 hover:border-white/40 border-dashed"
+                              )}>
+                                {player?.passportPath ? (
+                                  <img src={player.passportPath} className="w-full h-full object-cover rounded-full" alt="" />
+                                ) : (
+                                  <span className="text-[10px] font-bold text-white/40">{spot.label}</span>
+                                )}
+
+                                {/* Captain Armband overlay tag */}
+                                {player && isCaptain && (
+                                  <div className="absolute -top-1 -right-1 bg-yellow-500 text-dark border-dark border text-[8px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-md">
+                                    C
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Dropdown / Player selection controller */}
+                              <div className="absolute top-[120%] left-1/2 -translate-x-1/2 bg-[#090D22] border border-white/10 rounded-xl p-1.5 opacity-0 pointer-events-none group-hover/spot:opacity-100 group-hover/spot:pointer-events-auto transition-opacity z-50 shadow-2xl min-w-[140px] text-center">
+                                <p className="text-[9px] font-bold text-white/30 uppercase tracking-wider border-b border-white/5 pb-1 mb-1.5">{spot.label} Selection</p>
+                                <select
+                                  value={assignedPlayerId || ""}
+                                  onChange={(e) => {
+                                    const nextId = e.target.value;
+                                    setLineup(prev => {
+                                      const updatedPlayers = { ...prev.players };
+                                      if (nextId) {
+                                        updatedPlayers[spot.id] = nextId;
+                                      } else {
+                                        delete updatedPlayers[spot.id];
+                                      }
+                                      const updated = { ...prev, players: updatedPlayers };
+                                      localStorage.setItem(`fcl_lineup_${activeTeam.id}`, JSON.stringify(updated));
+                                      return updated;
+                                    });
+                                  }}
+                                  className="w-full bg-[#070a1e] text-[10px] font-semibold text-white/80 rounded border border-white/10 p-1 outline-none font-bold"
+                                >
+                                  <option value="">-- Vacant --</option>
+                                  {activeReg.players.map((p) => {
+                                    const isUsed = Object.entries(lineup.players).some(([k, v]) => v === p.id && k !== spot.id);
+                                    return (
+                                      <option key={p.id} value={p.id} disabled={isUsed} className="bg-[#090D22]">
+                                        {p.fullName.split(' ')[0]} {p.matricNumber.slice(-4)} {isUsed ? '(Used)' : ''}
+                                      </option>
+                                    );
+                                  })}
+                                </select>
+
+                                {player && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setLineup(prev => {
+                                        const updated = { ...prev, captainId: player.id };
+                                        localStorage.setItem(`fcl_lineup_${activeTeam.id}`, JSON.stringify(updated));
+                                        return updated;
+                                      });
+                                    }}
+                                    className="w-full text-[8px] text-yellow-500 hover:underline uppercase tracking-widest block mt-1.5 pt-1 border-t border-white/5 font-bold"
+                                  >
+                                    Assign Captain
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Player info tag */}
+                            <p className="text-[9px] font-bold text-white mt-1 uppercase max-w-[65px] truncate text-center drop-shadow-md">
+                              {player ? player.fullName.split(' ')[0] : 'Vacant'}
+                            </p>
+                          </div>
+                        );
+                      });
+                    })()}
+                  </div>
+                </div>
+
+                {/* 2. Lineup squad summary and checks (4 cols) */}
+                <div className="lg:col-span-4 space-y-6">
+                  {/* Validation Panel */}
+                  <div className="glass p-6 rounded-3xl border border-white/10 bg-white/[0.01] space-y-4">
+                    <h4 className="text-sm font-display font-medium text-white uppercase italic tracking-tight">XI DIRECTORS</h4>
+                    
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center py-2 border-b border-white/5">
+                        <span className="text-xs text-white/50">XI Selection Progress</span>
+                        <span className="text-xs font-mono font-bold text-white uppercase italic">
+                          {Object.keys(lineup.players).length} / 11 Slots
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center py-2 border-b border-white/5">
+                        <span className="text-xs text-white/50">Captain Assigned</span>
+                        {lineup.captainId ? (
+                          <span className="text-xs font-mono font-bold text-yellow-500 uppercase flex items-center">
+                            <Check size={12} className="mr-0.5" />
+                            {activeReg.players.find(p => p.id === lineup.captainId)?.fullName.split(' ')[0] || "YES"}
+                          </span>
+                        ) : (
+                          <span className="text-xs font-mono font-bold text-red-400 uppercase">MISSING</span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="pt-3">
+                      <p className="text-[10px] text-white/40 leading-relaxed uppercase font-sans">
+                        Setup matchday lineups values for use in tournament game-ready sheets. Standard starting arrays sync to team lists automatically.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Registered Player Squad list for quick review */}
+                  <div className="glass p-6 rounded-3xl border border-white/10 bg-white/[0.01] space-y-4">
+                    <h4 className="text-sm font-display font-medium text-white uppercase italic tracking-tight">SQUAD ROSTER OVERVIEW</h4>
+                    
+                    <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1 no-scrollbar">
+                      {activeReg.players.map((p) => {
+                        const spotKey = Object.keys(lineup.players).find(k => lineup.players[k] === p.id);
+                        return (
+                          <div key={p.id} className="p-2.5 bg-white/5 rounded-xl flex items-center justify-between border border-white/5 text-xs text-white font-bold">
+                            <span className="truncate uppercase max-w-[140px]">{p.fullName}</span>
+                            <span className={cn(
+                              "text-[8px] tracking-widest uppercase font-mono px-2 py-0.5 rounded",
+                              spotKey ? "bg-primary/20 text-primary border border-primary/20" : "bg-white/5 text-white/40"
+                            )}>
+                              {spotKey ? `START XI (${spotKey})` : 'RES'}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* --- TAB CONTENT: FIXTURES --- */}
+          {activeTab === 'fixtures' && (
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-display font-medium uppercase tracking-tight text-white">FCL MATCH SCHEDULE</h3>
+                  <p className="text-xs text-white/40">These are the 3 group stage fixtures scheduled for your department in FCL 2026.</p>
+                </div>
+              </div>
+
+              {(() => {
+                const myFixtures = MATCHES.filter(m => 
+                  m.homeTeamId.toLowerCase() === activeTeam.id.toLowerCase() || 
+                  m.awayTeamId.toLowerCase() === activeTeam.id.toLowerCase()
+                );
+
+                if (myFixtures.length === 0) {
+                  return (
+                    <div className="text-center py-20 bg-white/[0.01] border border-white/5 rounded-3xl">
+                      <Calendar size={48} className="mx-auto text-white/10 mb-4" />
+                      <p className="text-xs text-white/30 font-semibold italic">No fixtures scheduled yet for your department.</p>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {myFixtures.map((match) => {
+                      const opponentId = match.homeTeamId.toLowerCase() === activeTeam.id.toLowerCase() ? match.awayTeamId : match.homeTeamId;
+                      const opponentMeta = TEAMS.find(t => t.id.toLowerCase() === opponentId.toLowerCase());
+                      const isHome = match.homeTeamId.toLowerCase() === activeTeam.id.toLowerCase();
+
+                      return (
+                        <div key={match.id} className="glass rounded-[32px] border border-white/10 hover:border-primary/40 transition-all duration-300 overflow-hidden flex flex-col justify-between bg-white/[0.01]">
+                          {/* Match Header info */}
+                          <div className="bg-white/5 px-6 py-4 flex justify-between items-center border-b border-white/5">
+                            <span className="text-[9px] font-mono font-bold text-white/45 tracking-widest">MATCHDAY 0{match.matchday}</span>
+                            <span className="text-[9px] font-bold text-primary tracking-widest uppercase italic bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
+                              {opponentMeta?.id.toUpperCase() || opponentId.toUpperCase()}
+                            </span>
+                          </div>
+
+                          <div className="p-8 flex flex-col items-center space-y-6">
+                            {/* Comparison of Logos */}
+                            <div className="flex items-center justify-center space-x-8">
+                              <img src={activeTeam.logo} alt="" className="w-16 h-16 object-contain p-1 bg-white/5 rounded-xl border border-white/10" />
+                              <span className="text-xl font-display font-black italic text-glow text-primary">VS</span>
+                              <img src={opponentMeta?.logo} alt="" className="w-16 h-16 object-contain p-1 bg-white/5 rounded-xl border border-white/10" />
+                            </div>
+
+                            {/* Opponent name & home/away details */}
+                            <div className="text-center min-w-0">
+                              <h4 className="font-display font-black text-white italic tracking-tight text-lg uppercase truncate">
+                                vs {opponentMeta?.name || opponentId.toUpperCase()}
+                              </h4>
+                              <p className="text-[10px] text-white/35 uppercase tracking-wider mt-1 block font-mono">
+                                Role: {isHome ? 'HOST (HOME)' : 'CHALLENGER (AWAY)'}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Match Details footer */}
+                          <div className="bg-black/40 border-t border-white/5 px-6 py-4.5 flex items-center justify-between text-[10px] font-mono text-white/40 font-bold tracking-wider">
+                            <span className="flex items-center">
+                              <Calendar size={12} className="text-primary mr-1.5" />
+                              <span>{match.date} • {match.time}</span>
+                            </span>
+                            <span>{match.venue}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+
+          {/* --- TAB CONTENT: PROFILE --- */}
+          {activeTab === 'profile' && (
+            <div className="grid lg:grid-cols-12 gap-12 items-start">
+              {/* Profile Details (8 columns) */}
+              <div className="lg:col-span-8 space-y-8">
+                {/* Dossier profile card */}
+                <div className="glass p-8 sm:p-10 rounded-[40px] border border-white/10 bg-white/[0.01] space-y-6 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
+                    <Building2 size={240} />
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-8">
+                    <img src={activeTeam.logo} alt="" className="w-24 h-24 object-contain p-2 bg-white/5 rounded-3xl border border-white/10 shadow-2xl relative z-10" />
+                    <div>
+                      <h3 className="text-2xl sm:text-4xl font-display font-black italic uppercase tracking-tight text-white mb-2">{activeTeam.name}</h3>
+                      <p className="text-xs text-white/50 leading-relaxed max-w-lg">{activeTeam.description}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-white/10">
+                    <div>
+                      <span className="text-[9px] text-white/35 uppercase tracking-widest font-bold">Accreditation ID</span>
+                      <p className="text-sm font-mono text-primary font-bold mt-1 uppercase">{activeTeam.id}</p>
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-white/35 uppercase tracking-widest font-bold">Tournament Pot</span>
+                      <p className="text-sm font-bold text-white mt-1 uppercase">Pot {activeTeam.pot || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-white/35 uppercase tracking-widest font-bold">Group Segment</span>
+                      <p className="text-sm font-bold text-white mt-1 uppercase">Group {activeTeam.group}</p>
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-white/35 uppercase tracking-widest font-bold">Staff Representative</span>
+                      <p className="text-sm font-bold text-white mt-1 uppercase truncate">{activeReg.coaches[0]?.fullName || 'Not Registered'}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Technical Officials list */}
+                <div className="glass p-8 rounded-[32px] border border-white/10 bg-white/[0.01] space-y-4">
+                  <h4 className="text-lg font-display font-bold italic uppercase tracking-tight text-white">DELEGATION OFFICIAL REPRESENTATIVES</h4>
+                  {activeReg.coaches.length === 0 ? (
+                    <p className="text-xs text-white/30 italic">No representative registered. Please complete staff coordinates under Technical Coach register.</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {activeReg.coaches.map((coach, i) => (
+                        <div key={i} className="p-4 bg-white/5 rounded-full flex items-center justify-between border border-white/5 font-semibold">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 overflow-hidden flex items-center justify-center">
+                              {coach.passportPath ? <img src={coach.passportPath} className="w-full h-full object-cover" alt="" /> : <User className="text-white/20 w-5 h-5" />}
+                            </div>
+                            <div>
+                              <p className="text-xs font-bold text-white uppercase">{coach.fullName}</p>
+                              <p className="text-[9px] text-white/40 mt-0.5">{coach.role} • {coach.email}</p>
+                            </div>
+                          </div>
+                          <span className="text-[10px] text-primary tracking-widest font-bold font-mono uppercase bg-primary/10 px-3 py-1 rounded-full border border-primary/10Color">
+                            {coach.phone}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* FCL Seed ranks details (4 columns) */}
+              <div className="lg:col-span-4 space-y-6">
+                {(() => {
+                  const myCoefficient = COEFFICIENTS.find(c => c.teamId.toLowerCase() === activeTeam.id.toLowerCase());
+                  return (
+                    <div className="glass p-8 rounded-[40px] border border-white/10 bg-white/[0.01] space-y-6 relative overflow-hidden group">
+                      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                        <Trophy className="text-primary w-8 h-8" />
+                      </div>
+                      <h4 className="text-sm font-bold text-primary italic uppercase tracking-widest">DEPARTMENTAL PEDIGREE</h4>
+
+                      <div className="space-y-4">
+                        <div>
+                          <span className="text-[10px] text-white/30 uppercase tracking-widest block font-bold">Coefficient Place</span>
+                          <div className="text-4xl font-display font-black text-white italic mt-1">
+                            #{myCoefficient?.rank || '20'}
+                          </div>
+                        </div>
+
+                        <div>
+                          <span className="text-[10px] text-white/30 uppercase tracking-widest block font-bold">Total Coefficient score</span>
+                          <div className="text-lg font-mono font-bold text-primary mt-1">
+                            {myCoefficient?.totalCoefficient.toFixed(2) || '0.00'} Pts
+                          </div>
+                        </div>
+
+                        <div>
+                          <span className="text-[10px] text-white/30 uppercase tracking-widest block font-bold">Tournament Tier</span>
+                          <div className="text-xs text-white mt-1 uppercase font-bold tracking-wider">
+                            {myCoefficient && myCoefficient.rank <= 4 ? 'SEED SECTOR LEVEL A' : myCoefficient && myCoefficient.rank <= 8 ? 'SEED SECTOR LEVEL B' : 'OPEN CHALLENGER'}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-white/5">
+                        <p className="text-[9.5px] leading-relaxed text-white/40 uppercase italic font-sans">
+                          The departmental power coefficient ranks are computed from legacy performance across prior FCL campaigns.
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
             </div>
           )}
 

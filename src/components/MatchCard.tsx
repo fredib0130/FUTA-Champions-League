@@ -10,14 +10,15 @@ interface MatchCardProps {
 }
 
 export function MatchCard({ match }: MatchCardProps) {
-  const homeTeam = TEAMS.find(t => t.id === match.homeTeamId);
-  const awayTeam = TEAMS.find(t => t.id === match.awayTeamId);
-  const homeCoeff = COEFFICIENTS.find(c => c.teamId === match.homeTeamId);
-  const awayCoeff = COEFFICIENTS.find(c => c.teamId === match.awayTeamId);
-  const homePot = homeTeam.pot;
-  const awayPot = awayTeam.pot;
+  const homeTeam = TEAMS.find(t => t.id === match.homeTeamId.toLowerCase());
+  const awayTeam = TEAMS.find(t => t.id === match.awayTeamId.toLowerCase());
+  const homeCoeff = homeTeam ? COEFFICIENTS.find(c => c.teamId === homeTeam.id) : undefined;
+  const awayCoeff = awayTeam ? COEFFICIENTS.find(c => c.teamId === awayTeam.id) : undefined;
 
   if (!homeTeam || !awayTeam) return null;
+
+  const homePot = homeTeam.pot;
+  const awayPot = awayTeam.pot;
 
   const getNarrativeLabel = (hRank: number | undefined, aRank: number | undefined, hPot: string | undefined, aPot: string | undefined) => {
     if (!hRank || !aRank) return null;
