@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
+import fileUpload from "express-fileupload";
 
 const app = express();
 const PORT = 3000;
@@ -212,6 +213,9 @@ function saveAuditLogs(logs: AuditLog[]) {
 // Express Parsers
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(fileUpload({
+  limits: { fileSize: 50 * 1024 * 1024 }
+}));
 
 // Express Authorization Middleware
 function authenticateToken(req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -448,6 +452,93 @@ app.post("/api/registrations", (req, res) => {
   }
   saveRegistrations(registrations);
   res.json({ success: true });
+});
+
+// Multipart File Upload endpoint supporting the POST standard
+app.post("/api/upload", (req, res) => {
+  try {
+    const files = (req as any).files;
+    const team = req.body.team;
+
+    if (!files || !files.file || !team) {
+      res.status(400).json({ error: "Missing file or team" });
+      return;
+    }
+
+    const file = Array.isArray(files.file) ? files.file[0] : files.file;
+
+    // Convert file to buffer and write it
+    const buffer = file.data;
+    const teamUpper = team.toUpperCase();
+
+    // Validate if team exists in list
+    if (!TEAMS_FOLDER_LIST.includes(teamUpper)) {
+      res.status(400).json({ error: `Invalid team identifier: ${team}` });
+      return;
+    }
+
+    const teamDir = path.join(UPLOADS_DIR, teamUpper);
+    if (!fs.existsSync(teamDir)) {
+      fs.mkdirSync(teamDir, { recursive: true });
+    } else {
+      // Clear folder first to match original cleanup behavior
+      try {
+        const existingFiles = fs.readdirSync(teamDir);
+        for (const f of existingFiles) {
+          fs.unlinkSync(path.join(teamDir, f));
+        }
+      } catch (err) {
+        console.error("Error unlinking old file:", err);
+      }
+    }
+
+    // Sanitize filename to prevent directory traversal
+    const sanitizedFilename = file.name.toLowerCase().replace(/[^a-z0-9\._-]/g, "");
+    const filePathOnDisk = path.join(teamDir, sanitizedFilename);
+    
+    fs.writeFileSync(filePathOnDisk, buffer);
+
+    const relativePath = `/uploads/team-logos/${teamUpper}/${sanitizedFilename}`;
+    console.log("Saving file:", relativePath);
+
+    // Update registrations
+    const regs = getRegistrations();
+    const teamLower = team.toLowerCase();
+    if (!regs[teamLower]) {
+      regs[teamLower] = {
+        teamId: teamLower,
+        status: "pending",
+        players: [],
+        coaches: []
+      };
+    }
+    
+    regs[teamLower].logoUrl = relativePath;
+    regs[teamLower].logoStatus = "Pending";
+    regs[teamLower].logoUploadedBy = "Coach";
+    regs[teamLower].logoUploadedAt = new Date().toISOString().split('T')[0];
+    saveRegistrations(regs);
+
+    // Write audit log
+    const audits = getAuditLogs();
+    audits.unshift({
+      id: `audit-${Date.now()}`,
+      adminName: "Coach",
+      role: "Team Official",
+      action: `Coach uploaded new logo via multipart form for ${teamUpper}`,
+      timestamp: new Date().toLocaleString()
+    });
+    saveAuditLogs(audits);
+
+    res.json({
+      success: true,
+      url: relativePath,
+      registration: regs[teamLower]
+    });
+  } catch (error) {
+    console.error("Upload failed:", error);
+    res.status(500).json({ error: "Upload failed" });
+  }
 });
 
 // Team Logo Upload endpoint
