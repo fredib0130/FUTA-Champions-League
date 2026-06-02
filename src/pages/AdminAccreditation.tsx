@@ -14,6 +14,7 @@ import { TEAMS } from '../data/mockData';
 import { fclApi, AdminUser, AuditLogItem } from '../lib/api';
 import { APP_LOGO } from '../constants';
 import { cn } from '../lib/utils';
+import { TeamLogo } from '../components/TeamLogo';
 
 // --- ACCREDITATION CONSTS ---
 const POSITION_LABELS: Record<string, string> = {
@@ -320,7 +321,7 @@ export default function AdminAccreditation() {
             type: 'player',
             teamId: tId,
             teamName: teamMeta.name,
-            teamLogo: teamMeta.logo
+            teamLogo: teamMeta.logoUrl
           });
         });
       }
@@ -332,7 +333,7 @@ export default function AdminAccreditation() {
             type: 'coach',
             teamId: tId,
             teamName: teamMeta.name,
-            teamLogo: teamMeta.logo
+            teamLogo: teamMeta.logoUrl
           });
         });
       }
@@ -559,7 +560,7 @@ export default function AdminAccreditation() {
                             {/* Department detail */}
                             <td>
                               <div className="flex items-center space-x-2">
-                                <img src={member.teamLogo} className="w-5 h-5 object-contain" alt="" />
+                                <TeamLogo teamId={member.teamId} logoUrl={member.teamLogo} size="custom" className="w-5 h-5 object-contain bg-transparent border-0 shadow-none font-bold text-[6px]" />
                                 <span className="font-semibold uppercase text-white/90">{member.teamName}</span>
                               </div>
                             </td>
@@ -675,7 +676,7 @@ export default function AdminAccreditation() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           <div className="p-2 bg-white/5 rounded-xl border border-white/10 w-11 h-11 flex items-center justify-center">
-                            <img src={team.logo} className="w-full h-full object-contain" alt="" />
+                            <TeamLogo teamId={team.id} logoUrl={team.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-bold text-[8px]" />
                           </div>
                           <div>
                             <h4 className="font-bold uppercase text-white leading-tight">{team.name}</h4>

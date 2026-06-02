@@ -4,6 +4,7 @@ import { Trophy, Medal, Crown, Star, ArrowRight, History } from 'lucide-react';
 import { CHAMPIONS, TEAMS } from '../data/mockData';
 import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
+import { TeamLogo } from '../components/TeamLogo';
 
 export function Champions() {
   const latestChampion = CHAMPIONS[0]; // Sort by year latest first if more
@@ -61,10 +62,11 @@ export function Champions() {
             <div className="flex flex-col md:flex-row items-center gap-12 relative z-10">
               <div className="relative">
                 <div className="w-48 h-48 sm:w-64 sm:h-64 rounded-full bg-primary/10 border-2 border-primary/20 flex items-center justify-center relative">
-                  <img 
-                    src={TEAMS.find(t => t.id === latestChampion.winnerId.toLowerCase())?.logo} 
-                    alt={latestChampion.winnerName} 
-                    className="w-32 h-32 sm:w-44 sm:h-44 object-contain transform group-hover:scale-110 transition-transform duration-700" 
+                  <TeamLogo 
+                    teamId={latestChampion.winnerId.toLowerCase()} 
+                    logoUrl={TEAMS.find(t => t.id === latestChampion.winnerId.toLowerCase())?.logoUrl} 
+                    size="custom"
+                    className="w-32 h-32 sm:w-44 sm:h-44 object-contain transform group-hover:scale-110 transition-all duration-700 font-display font-black text-[36px]" 
                   />
                   <div className="absolute inset-0 rounded-full border-4 border-primary/20 border-dashed animate-spin-slow" />
                 </div>

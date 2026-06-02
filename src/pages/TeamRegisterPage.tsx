@@ -10,6 +10,7 @@ import { TEAMS } from '../data/mockData';
 import { fclApi } from '../lib/api';
 import { cn } from '../lib/utils';
 import { accessCodes } from './RegistrationPortal';
+import { TeamLogo } from '../components/TeamLogo';
 
 const getTeamColor = (teamId: string) => {
   const mapping: Record<string, string> = {
@@ -267,7 +268,7 @@ export default function TeamRegisterPage() {
                 className="w-20 h-20 rounded-3xl mx-auto flex items-center justify-center p-3.5 mb-6"
                 style={{ backgroundColor: `${teamColor}10`, border: `1px solid ${teamColor}33` }}
               >
-                <img src={activeTeam.logo} alt={activeTeam.name} className="w-full h-full object-contain" />
+                <TeamLogo teamId={activeTeam.id} logoUrl={registration?.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-bold text-[18px]" />
               </div>
               <h3 className="text-2xl font-display font-black uppercase italic text-white tracking-tight">REP AUTHORIZATION</h3>
               <p className="text-white/40 text-xs mt-2 leading-relaxed uppercase tracking-wider font-semibold">
@@ -329,14 +330,7 @@ export default function TeamRegisterPage() {
 
                 <div className="flex items-center space-x-6 bg-white/[0.02] p-5 rounded-3xl border border-white/5">
                   <div className="w-24 h-24 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-center p-3 relative flex-shrink-0">
-                    <img 
-                      src={registration?.logoUrl || activeTeam.logo} 
-                      alt="Team Crest" 
-                      className="w-full h-full object-contain"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/assets/default-team-logo.png';
-                      }}
-                    />
+                    <TeamLogo teamId={activeTeam.id} logoUrl={registration?.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-bold text-[24px]" />
                   </div>
 
                   <div className="space-y-2">

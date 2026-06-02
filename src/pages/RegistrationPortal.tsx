@@ -12,6 +12,8 @@ import { PageHeader } from '../components/PageHeader';
 import { TEAMS, MATCHES, COEFFICIENTS } from '../data/mockData';
 import { cn } from '../lib/utils';
 import { APP_LOGO } from '../constants';
+import { TeamLogo } from '../components/TeamLogo';
+import { Link } from 'react-router-dom';
 
 // --- TYPE DEFINITIONS ---
 interface PlayerRegistration {
@@ -335,7 +337,7 @@ const AccreditationCard = ({ member, type, team, isApproved, id }: Accreditation
 
         {/* Department/Club metadata banner */}
         <div className="flex items-center justify-center space-x-1.5 bg-white/[0.03] py-1 px-3.5 rounded-lg border border-white/5 max-w-max mx-auto shadow-inner">
-          <img src={team.logo} className="w-3.5 h-3.5 object-contain" alt="" referrerPolicy="no-referrer" />
+          <TeamLogo teamId={team.id} logoUrl={team.logoUrl} size="custom" className="w-3.5 h-3.5 object-contain bg-transparent border-0 p-0 shadow-none font-bold text-[4px]" />
           <span className="font-mono text-[8px] text-white/70 uppercase tracking-widest font-black truncate max-w-[130px]">
             {team.name.replace(/ \(\w+\)$/, '')}
           </span>
@@ -1021,7 +1023,7 @@ export default function RegistrationPortal() {
           <div className="glass rounded-[32px] p-6 sm:p-8 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
             <div className="flex items-center space-x-6">
               <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center p-2 border border-white/10 shadow-inner group">
-                <img src={activeTeam.logo} alt={activeTeam.name} className="w-full h-full object-contain group-hover:scale-105 transition-transform" />
+                <TeamLogo teamId={activeTeam.id} logoUrl={activeTeam.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-bold text-[14px]" />
               </div>
               <div>
                 <div className="flex flex-wrap items-center gap-3">
@@ -1647,8 +1649,8 @@ export default function RegistrationPortal() {
                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-1/5 h-[8%] border-t border-x border-white/10 pointer-events-none" />
 
                     {/* Team logo background overlay */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 opacity-[0.04] pointer-events-none">
-                      <img src={activeTeam.logo} alt="" className="w-full h-full object-contain" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 opacity-[0.04] pointer-events-none flex items-center justify-center">
+                      <TeamLogo teamId={activeTeam.id} logoUrl={activeTeam.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-bold text-[36px]" />
                     </div>
 
                     {/* Draw tactical lineup coordinates based on active formation */}
@@ -1897,9 +1899,13 @@ export default function RegistrationPortal() {
                           <div className="p-8 flex flex-col items-center space-y-6">
                             {/* Comparison of Logos */}
                             <div className="flex items-center justify-center space-x-8">
-                              <img src={activeTeam.logo} alt="" className="w-16 h-16 object-contain p-1 bg-white/5 rounded-xl border border-white/10" />
+                              <TeamLogo teamId={activeTeam.id} logoUrl={activeTeam.logoUrl} size="lg" />
                               <span className="text-xl font-display font-black italic text-glow text-primary">VS</span>
-                              <img src={opponentMeta?.logo} alt="" className="w-16 h-16 object-contain p-1 bg-white/5 rounded-xl border border-white/10" />
+                              {opponentMeta ? (
+                                <TeamLogo teamId={opponentMeta.id} logoUrl={opponentMeta.logoUrl} size="lg" />
+                              ) : (
+                                <div className="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 text-white/30 font-mono text-xl font-black">?</div>
+                              )}
                             </div>
 
                             {/* Opponent name & home/away details */}
@@ -1942,7 +1948,7 @@ export default function RegistrationPortal() {
                   </div>
 
                   <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-8">
-                    <img src={activeTeam.logo} alt="" className="w-24 h-24 object-contain p-2 bg-white/5 rounded-3xl border border-white/10 shadow-2xl relative z-10" />
+                    <TeamLogo teamId={activeTeam.id} logoUrl={activeTeam.logoUrl} size="xl" className="relative z-10" />
                     <div>
                       <h3 className="text-2xl sm:text-4xl font-display font-black italic uppercase tracking-tight text-white mb-2">{activeTeam.name}</h3>
                       <p className="text-xs text-white/50 leading-relaxed max-w-lg">{activeTeam.description}</p>
@@ -2071,7 +2077,7 @@ export default function RegistrationPortal() {
                   <div className="flex justify-between items-center border-b border-primary/20 pb-6 relative z-10">
                     <div className="flex items-center space-x-4">
                       <div className="w-14 h-14 rounded-xl bg-white/5 p-2 flex items-center justify-center border border-white/10">
-                        <img src={activeTeam.logo} alt="" className="w-full h-full object-contain" />
+                        <TeamLogo teamId={activeTeam.id} logoUrl={activeTeam.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-bold text-[12px]" />
                       </div>
                       <div>
                         <h4 className="text-2xl font-display font-black italic uppercase text-primary tracking-tight leading-none">{activeTeam.name.toUpperCase()}</h4>
@@ -2387,7 +2393,7 @@ export default function RegistrationPortal() {
                     >
                       <div className="flex items-center space-x-3.5">
                         <div className="w-10 h-10 rounded-lg bg-white/5 p-1.5 flex items-center justify-center border border-white/10">
-                          <img src={team.logo} className="w-full h-full object-contain" alt="" />
+                          <TeamLogo teamId={team.id} logoUrl={team.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-bold text-[8px]" />
                         </div>
                         <div>
                           <h4 className="font-display font-medium text-sm text-white group-hover:text-primary transition-colors uppercase leading-none">{team.id.toUpperCase()}</h4>
@@ -2431,7 +2437,7 @@ export default function RegistrationPortal() {
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-white/10 pb-6">
                       <div className="flex items-center space-x-4">
                         <div className="w-14 h-14 rounded-2xl bg-white/5 p-2 flex items-center justify-center border border-white/10">
-                          <img src={teamMeta.logo} alt="" className="w-full h-full object-contain" />
+                          <TeamLogo teamId={teamMeta.id} logoUrl={teamMeta.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-bold text-[12px]" />
                         </div>
                         <div>
                           <h3 className="text-xl font-display font-black italic uppercase text-white">{teamMeta.name}</h3>

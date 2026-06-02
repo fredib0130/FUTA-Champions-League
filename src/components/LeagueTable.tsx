@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Team } from '../types';
 import { useMatchState } from '../context/MatchStateContext';
+import { TeamLogo } from './TeamLogo';
 
 interface LeagueTableProps {
   limit?: number;
@@ -83,7 +84,7 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
                 </td>
                 <td className="px-4 py-4">
                   <div className="flex items-center space-x-3">
-                    <img src={team.logo} alt={team.name} className="w-8 h-8 object-contain" />
+                    <TeamLogo teamId={team.id} logoUrl={team.logoUrl} size="sm" />
                     <span className="font-bold text-sm tracking-tight group-hover:text-primary transition-colors">
                       {team.name}
                     </span>

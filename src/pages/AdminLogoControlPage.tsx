@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useMatchState } from '../context/MatchStateContext';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   ShieldCheck, AlertCircle, CheckCircle2, XCircle, Search, 
   Trash2, Download, RefreshCw, Upload, FileImage, 
@@ -10,6 +11,7 @@ import { PageHeader } from '../components/PageHeader';
 import { TEAMS } from '../data/mockData';
 import { fclApi, AuditLogItem } from '../lib/api';
 import { cn } from '../lib/utils';
+import { TeamLogo } from '../components/TeamLogo';
 
 export default function AdminLogoControlPage() {
   const navigate = useNavigate();
@@ -390,14 +392,7 @@ export default function AdminLogoControlPage() {
                     {/* Logo Graphic Comparison Panel */}
                     <div className="flex items-center space-x-4 bg-[#03050C]/50 p-4 border border-white/5 rounded-2xl">
                       <div className="w-20 h-20 bg-black/40 border border-white/5 rounded-xl flex items-center justify-center p-2.5 relative flex-shrink-0">
-                        <img 
-                          src={team.logoUrl || team.logo} 
-                          alt="In-use crest logo" 
-                          className="w-full h-full object-contain"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = '/assets/default-team-logo.png';
-                          }}
-                        />
+                        <TeamLogo teamId={team.id} logoUrl={team.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-bold text-[20px]" />
                       </div>
 
                       <div className="space-y-1.5 font-mono text-[9px] text-white/45">

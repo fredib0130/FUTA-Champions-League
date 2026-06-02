@@ -10,7 +10,7 @@ export interface ChampionRecord {
 export interface Team {
   id: string;
   name: string;
-  logo: string;
+  logoUrl: string | null;
   group: string;
   pot?: 'A' | 'B' | 'C' | 'D';
   played: number;

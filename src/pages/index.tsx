@@ -12,6 +12,7 @@ import { useMatchState } from '../context/MatchStateContext';
 
 import { LeagueTable } from '../components/LeagueTable';
 import { CoefficientTable } from '../components/CoefficientTable';
+import { TeamLogo } from '../components/TeamLogo';
 
 export { Champions } from './Champions';
 export { default as RegistrationPortal } from './RegistrationPortal';
@@ -112,8 +113,8 @@ export function Home() {
             className="glass rounded-3xl p-6 border border-yellow-500/20 bg-yellow-500/5 flex items-center justify-between group"
           >
             <div className="flex items-center space-x-6">
-               <div className="w-20 h-20 rounded-2xl bg-yellow-500/10 flex items-center justify-center p-3">
-                 <img src={TEAMS.find(t => t.id === 'mst')?.logo} alt="MST" className="w-full h-full object-contain" />
+               <div className="w-20 h-20 rounded-2xl bg-yellow-500/10 flex items-center justify-center p-2.5">
+                 <TeamLogo teamId="mst" logoUrl={TEAMS.find(t => t.id === 'mst')?.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-display text-[20px] font-black" />
                </div>
                <div>
                  <h3 className="text-2xl font-display font-black italic uppercase text-white group-hover:text-yellow-500 transition-colors">MST</h3>
@@ -558,7 +559,7 @@ export function Playoffs() {
   interface DisplayEntity {
     name: string;
     sub: string;
-    logos: string[];
+    teamIds: string[];
   }
 
   const resolveEntity = (str: string): DisplayEntity => {
@@ -567,11 +568,11 @@ export function Playoffs() {
     // Single seeds
     if (trimmed === "Seed 1") {
       const t = sortedTeams[0];
-      return { name: t?.name || "Seed 1", sub: "Group Stage Winner", logos: t ? [t.logo] : [] };
+      return { name: t?.name || "Seed 1", sub: "Group Stage Winner", teamIds: t ? [t.id] : [] };
     }
     if (trimmed === "Seed 2") {
       const t = sortedTeams[1];
-      return { name: t?.name || "Seed 2", sub: "Group Stage Runner-Up", logos: t ? [t.logo] : [] };
+      return { name: t?.name || "Seed 2", sub: "Group Stage Runner-Up", teamIds: t ? [t.id] : [] };
     }
     
     // Grouped seeds
@@ -581,7 +582,7 @@ export function Playoffs() {
       return { 
         name: `${t1?.name || "Seed 3"} / ${t2?.name || "Seed 4"}`, 
         sub: "Rank 3/4 Seeding", 
-        logos: [t1?.logo, t2?.logo].filter(Boolean) as string[] 
+        teamIds: [t1?.id, t2?.id].filter(Boolean) as string[] 
       };
     }
     if (trimmed.includes("5/6")) {
@@ -590,7 +591,7 @@ export function Playoffs() {
       return { 
         name: `${t1?.name || "Seed 5"} / ${t2?.name || "Seed 6"}`, 
         sub: "Rank 5/6 Seeding", 
-        logos: [t1?.logo, t2?.logo].filter(Boolean) as string[] 
+        teamIds: [t1?.id, t2?.id].filter(Boolean) as string[] 
       };
     }
     if (trimmed.includes("7/8")) {
@@ -599,7 +600,7 @@ export function Playoffs() {
       return { 
         name: `${t1?.name || "Seed 7"} / ${t2?.name || "Seed 8"}`, 
         sub: "Rank 7/8 Seeding", 
-        logos: [t1?.logo, t2?.logo].filter(Boolean) as string[] 
+        teamIds: [t1?.id, t2?.id].filter(Boolean) as string[] 
       };
     }
     if (trimmed.includes("9/10")) {
@@ -608,7 +609,7 @@ export function Playoffs() {
       return { 
         name: `${t1?.name || "Seed 9"} / ${t2?.name || "Seed 10"}`, 
         sub: "Rank 9/10 Seeding", 
-        logos: [t1?.logo, t2?.logo].filter(Boolean) as string[] 
+        teamIds: [t1?.id, t2?.id].filter(Boolean) as string[] 
       };
     }
     if (trimmed.includes("11/12")) {
@@ -617,7 +618,7 @@ export function Playoffs() {
       return { 
         name: `${t1?.name || "Seed 11"} / ${t2?.name || "Seed 12"}`, 
         sub: "Rank 11/12 Seeding", 
-        logos: [t1?.logo, t2?.logo].filter(Boolean) as string[] 
+        teamIds: [t1?.id, t2?.id].filter(Boolean) as string[] 
       };
     }
     if (trimmed.includes("13/14")) {
@@ -626,25 +627,25 @@ export function Playoffs() {
       return { 
         name: `${t1?.name || "Seed 13"} / ${t2?.name || "Seed 14"}`, 
         sub: "Rank 13/14 Seeding", 
-        logos: [t1?.logo, t2?.logo].filter(Boolean) as string[] 
+        teamIds: [t1?.id, t2?.id].filter(Boolean) as string[] 
       };
     }
 
     // Playoff/Quarter/Semi placeholders
     if (trimmed.startsWith("PO")) {
       const matchNum = trimmed.replace("PO", "");
-      return { name: `Winner of Playoff ${matchNum}`, sub: "Knockout Challenger", logos: [] };
+      return { name: `Winner of Playoff ${matchNum}`, sub: "Knockout Challenger", teamIds: [] };
     }
     if (trimmed.startsWith("QF")) {
       const matchNum = trimmed.replace("QF", "");
-      return { name: `Winner of Quarter ${matchNum}`, sub: "Semi-Final Contender", logos: [] };
+      return { name: `Winner of Quarter ${matchNum}`, sub: "Semi-Final Contender", teamIds: [] };
     }
     if (trimmed.startsWith("SF")) {
       const matchNum = trimmed.replace("SF", "");
-      return { name: `Winner of Semi ${matchNum}`, sub: "Title Finalist", logos: [] };
+      return { name: `Winner of Semi ${matchNum}`, sub: "Title Finalist", teamIds: [] };
     }
 
-    return { name: trimmed, sub: "Qualified Squad", logos: [] };
+    return { name: trimmed, sub: "Qualified Squad", teamIds: [] };
   };
 
   const stageTabs = [
@@ -772,9 +773,9 @@ export function Playoffs() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4 flex-1">
                         <div className="flex -space-x-2 flex-shrink-0">
-                          {team1.logos.length > 0 ? (
-                            team1.logos.map((logo, idx) => (
-                              <img key={idx} src={logo} className="w-11 h-11 object-contain bg-white/5 rounded-lg border border-white/10 p-1" alt="" />
+                          {team1.teamIds.length > 0 ? (
+                            team1.teamIds.map((tid, idx) => (
+                              <TeamLogo key={idx} teamId={tid} logoUrl={TEAMS.find(t => t.id === tid)?.logoUrl} className="w-11 h-11" size="custom" />
                             ))
                           ) : (
                             <div className="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 text-white/30 font-mono text-xs font-black">
@@ -803,9 +804,9 @@ export function Playoffs() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4 flex-1">
                         <div className="flex -space-x-2 flex-shrink-0">
-                          {team2.logos.length > 0 ? (
-                            team2.logos.map((logo, idx) => (
-                              <img key={idx} src={logo} className="w-11 h-11 object-contain bg-white/5 rounded-lg border border-white/10 p-1" alt="" />
+                          {team2.teamIds.length > 0 ? (
+                            team2.teamIds.map((tid, idx) => (
+                              <TeamLogo key={idx} teamId={tid} logoUrl={TEAMS.find(t => t.id === tid)?.logoUrl} className="w-11 h-11" size="custom" />
                             ))
                           ) : (
                             <div className="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 text-white/30 font-mono text-xs font-black">
@@ -861,7 +862,7 @@ export function Teams() {
               >
                 <div className="relative mb-6">
                   <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-0 group-hover:scale-100 transition-transform" />
-                  <img src={team.logo} alt={team.name} className="w-24 h-24 relative z-10" />
+                  <TeamLogo teamId={team.id} logoUrl={team.logoUrl} size="xl" className="relative z-10" />
                 </div>
                 <div className="text-[10px] font-bold text-primary mb-1 tracking-widest uppercase italic">Group {team.group}</div>
                 <h3 className="text-xl font-display mb-4">{team.name}</h3>
@@ -1387,10 +1388,11 @@ export function TeamProfile() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row items-center md:items-end space-y-8 md:space-y-0 md:space-x-12">
             <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative">
-              <img 
-                src={team.logo} 
-                alt={team.name} 
-                className="w-48 h-48 drop-shadow-2xl relative z-10"
+              <TeamLogo 
+                teamId={team.id}
+                logoUrl={team.logoUrl} 
+                size="custom" 
+                className="w-48 h-48 drop-shadow-2xl relative z-10 text-[48px] font-display font-black rounded-[36px]"
               />
               {teamCoefficient && (
                 <div className="absolute -top-4 -right-4 bg-primary text-dark font-black italic px-4 py-2 rounded-xl text-xl shadow-xl z-20 border-2 border-dark">
@@ -1515,7 +1517,7 @@ function PotAHighlight() {
               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
                 <Medal className="text-primary w-8 h-8" />
               </div>
-              <img src={team.logo} alt={team.name} className="w-20 h-20 mx-auto mb-6 transform group-hover:scale-110 transition-transform duration-500" />
+              <TeamLogo teamId={team.id} logoUrl={team.logoUrl} size="lg" className="mx-auto mb-6 transform group-hover:scale-110 transition-all duration-500" />
               <h3 className="text-sm font-black uppercase tracking-widest text-white group-hover:text-primary mb-2 transition-colors">{team.id.toUpperCase()}</h3>
               {team.id === 'mst' ? (
                 <p className="text-[8px] font-black text-yellow-500 uppercase tracking-[0.2em] mb-4 flex items-center justify-center">
@@ -1716,7 +1718,7 @@ export function Pots() {
                       className="group flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 rounded-2xl transition-all"
                     >
                       <div className="flex items-center space-x-3">
-                        <img src={team.logo} alt={team.name} className="w-8 h-8 rounded-lg" />
+                        <TeamLogo teamId={team.id} logoUrl={team.logoUrl} size="sm" className="rounded-lg" />
                         <span className="text-xs font-bold text-white/80 group-hover:text-white transition-colors uppercase tracking-widest">
                           {team.id.toUpperCase()}
                         </span>
@@ -1727,10 +1729,10 @@ export function Pots() {
                 </div>
 
                 <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
-                  <div className="flex -space-x-2">
+                  <div className="flex -space-x-1.5 matches-glow-logos">
                     {pot.teams.slice(0, 3).map(t => (
-                      <div key={t.id} className="w-6 h-6 rounded-full border-2 border-dark overflow-hidden bg-dark">
-                        <img src={t.logo} alt="" className="w-full h-full object-cover" />
+                      <div key={t.id} className="w-6 h-6 rounded-full border border-dark overflow-hidden bg-dark flex items-center justify-center">
+                        <TeamLogo teamId={t.id} logoUrl={t.logoUrl} size="xs" className="w-[100%] h-[100%] object-cover rounded-full border-0 p-0 font-bold" />
                       </div>
                     ))}
                   </div>

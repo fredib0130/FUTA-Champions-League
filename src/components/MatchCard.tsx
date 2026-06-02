@@ -6,6 +6,7 @@ import { cn } from '../lib/utils';
 import { Trophy, ChevronDown, ChevronUp, Radio } from 'lucide-react';
 import { useMatchState } from '../context/MatchStateContext';
 import { Link } from 'react-router-dom';
+import { TeamLogo } from './TeamLogo';
 
 interface MatchCardProps {
   match: Match;
@@ -128,8 +129,12 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
         {/* Home Team */}
         <div className="flex flex-col items-center flex-1 text-center">
           <div className="relative mb-3">
-            <img src={homeTeam.logo} alt={homeTeam.name} className="w-16 h-16" />
-            {homeTeam.id === 'mst' && (
+            {homeTeam ? (
+              <TeamLogo teamId={homeTeam.id} logoUrl={homeTeam.logoUrl} size="lg" />
+            ) : (
+              <div className="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 text-white/30 font-mono text-xl font-black">?</div>
+            )}
+            {homeTeam && homeTeam.id === 'mst' && (
               <div className="absolute -top-2 -right-2 bg-yellow-500 rounded-full p-1 border border-dark animate-bounce">
                 <Trophy size={10} className="text-dark" />
               </div>
@@ -197,8 +202,12 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
         {/* Away Team */}
         <div className="flex flex-col items-center flex-1 text-center">
           <div className="relative mb-3">
-            <img src={awayTeam.logo} alt={awayTeam.name} className="w-16 h-16" />
-            {awayTeam.id === 'mst' && (
+            {awayTeam ? (
+              <TeamLogo teamId={awayTeam.id} logoUrl={awayTeam.logoUrl} size="lg" />
+            ) : (
+              <div className="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 text-white/30 font-mono text-xl font-black">?</div>
+            )}
+            {awayTeam && awayTeam.id === 'mst' && (
               <div className="absolute -top-2 -right-2 bg-yellow-500 rounded-full p-1 border border-dark animate-bounce">
                 <Trophy size={10} className="text-dark" />
               </div>

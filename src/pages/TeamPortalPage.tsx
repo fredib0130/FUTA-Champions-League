@@ -9,6 +9,7 @@ import { TEAMS } from '../data/mockData';
 import { fclApi } from '../lib/api';
 import { cn } from '../lib/utils';
 import { accessCodes } from './RegistrationPortal';
+import { TeamLogo } from '../components/TeamLogo';
 
 const getTeamColor = (teamId: string) => {
   const mapping: Record<string, string> = {
@@ -328,14 +329,7 @@ export default function TeamPortalPage() {
                     className="w-16 h-16 rounded-2xl flex items-center justify-center p-3 relative"
                     style={{ backgroundColor: `${activeColor}10`, border: `1px solid ${activeColor}22` }}
                   >
-                    <img 
-                      src={registration?.logoUrl || activeTeamObj?.logo} 
-                      alt="Team Crest" 
-                      className="w-full h-full object-contain"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/assets/default-team-logo.png';
-                      }}
-                    />
+                    <TeamLogo teamId={activeTeamId} logoUrl={registration?.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-bold text-[16px]" />
                   </div>
                   <div>
                     <h4 className="text-md font-display font-black leading-tight uppercase italic">{activeTeamObj?.name.split(' (')[0]}</h4>
@@ -382,14 +376,7 @@ export default function TeamPortalPage() {
                   <div className="p-5.5 rounded-2xl bg-white/[0.01] border border-white/5 space-y-1.5">
                     <span className="text-[9px] font-bold text-white/30 uppercase block font-mono">CURRENT FLAG</span>
                     <div className="w-12 h-14 bg-black/40 border border-white/5 rounded-xl p-2 flex items-center justify-center">
-                      <img 
-                        src={registration?.logoUrl || activeTeamObj?.logo} 
-                        alt="Logo" 
-                        className="w-full h-full object-contain"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/assets/default-team-logo.png';
-                        }}
-                      />
+                      <TeamLogo teamId={activeTeamId} logoUrl={registration?.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-bold text-[12px]" />
                     </div>
                   </div>
 

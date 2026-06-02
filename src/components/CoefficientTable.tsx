@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { CoefficientRanking, Team } from '../types';
 import { TEAMS } from '../data/mockData';
 import { ChevronUp, ChevronDown, Info, Medal, TrendingUp, History, Search } from 'lucide-react';
+import { TeamLogo } from './TeamLogo';
 
 interface CoefficientTableProps {
   data: CoefficientRanking[];
@@ -125,10 +126,11 @@ export const CoefficientTable: React.FC<CoefficientTableProps> = ({ data, limit,
                     <td className="px-6 py-5">
                       <div className="flex items-center space-x-4">
                         <div className="relative shrink-0">
-                          <img 
-                            src={TEAMS.find(t => t.id === ranking.teamId.toLowerCase())?.logo || `https://api.dicebear.com/7.x/identicon/svg?seed=${ranking.teamId}`} 
-                            alt="" 
-                            className="w-10 h-10 rounded-xl relative z-10 bg-white/5 p-1" 
+                          <TeamLogo 
+                            teamId={ranking.teamId.toLowerCase()} 
+                            logoUrl={TEAMS.find(t => t.id === ranking.teamId.toLowerCase())?.logoUrl} 
+                            size="custom" 
+                            className="w-10 h-10 relative z-10 p-0 text-[11px]" 
                           />
                           <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full scale-0 group-hover:scale-100 transition-transform duration-500" />
                         </div>

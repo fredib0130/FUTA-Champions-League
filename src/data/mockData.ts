@@ -45,28 +45,7 @@ export const TEAMS: Team[] = [
     'Information and Communication Engineering', 'Industrial Design', 'Information Systems', 'Medicine and Surgery', 'Micro Biology',
     'Marine Science and Technology', 'Physiology', 'Physics', 'Securities and Investment Management Technology', 'Statistics'
   ][i] + ` (${abbr})`,
-  logo: {
-    'AGE': '/logos/AGE.jpg',
-    'AGP': '/logos/AGP.jpg',
-    'ANA': '/logos/ANA.jpg',
-    'APH': '/logos/APH.jpg',
-    'BCH': '/logos/BCH.jpg',
-    'BDG': '/logos/BDG.jpg',
-    'CSP': '/logos/CSP.jpg',
-    'CYS': '/logos/CYS.jpg',
-    'ENT': '/logos/ENT.jpg',
-    'FWT': '/logos/FWT.jpg',
-    'ICE': '/logos/ICE.jpg',
-    'IDD': '/logos/IDD.jpg',
-    'IFS': '/logos/IFS.jpg',
-    'MBBS': '/logos/MBBS.jpg',
-    'MCB': '/logos/MCB.jpg',
-    'MST': '/logos/MST.jpg',
-    'PHS': '/logos/PHS.jpg',
-    'PHY': '/logos/PHY.jpg',
-    'SIMT': '/logos/SIMT.jpg',
-    'STA': '/logos/STA.jpg'
-  }[abbr] || `https://api.dicebear.com/7.x/identicon/svg?seed=${abbr}`,
+  logoUrl: null,
   group: 'League',
   pot: (['BDG', 'IFS', 'MCB', 'MST', 'PHS'].includes(abbr) ? 'A' :
         ['APH', 'CSP', 'ENT', 'ICE', 'PHY'].includes(abbr) ? 'B' :

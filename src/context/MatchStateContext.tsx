@@ -419,7 +419,9 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           TEAMS.forEach(team => {
             const reg = res.registrations[team.id];
             if (reg && reg.logoUrl && reg.logoStatus === "Approved") {
-              team.logo = reg.logoUrl;
+              team.logoUrl = reg.logoUrl;
+            } else {
+              team.logoUrl = null;
             }
           });
 
@@ -429,9 +431,9 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             const updated = prevTeams.map(t => {
               const reg = res.registrations[t.id];
               if (reg && reg.logoUrl && reg.logoStatus === "Approved") {
-                return { ...t, logo: reg.logoUrl };
+                return { ...t, logoUrl: reg.logoUrl };
               }
-              return t;
+              return { ...t, logoUrl: null };
             });
             localStorage.setItem('fcl_admin_teams', JSON.stringify(updated));
             return updated;
