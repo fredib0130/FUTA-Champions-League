@@ -362,88 +362,116 @@ export default function TeamPortalPage() {
             {/* MAIN LOGO STATUS & ACTION SCREEN */}
             <div className="lg:col-span-8 space-y-8">
               
-              {/* STATUS INDICATOR CARD */}
-              <div className="glass rounded-[35px] p-8 sm:p-10 border border-white/10 relative">
-                <h3 className="text-xl font-display font-black uppercase italic tracking-tight mb-2">
-                  TEAM CREST STANDING
-                </h3>
-                <p className="text-white/40 text-xs mb-8 uppercase tracking-wider font-semibold">
-                  Official logo clearance details recorded on the database
-                </p>
+              {/* TEAM LOGO MAIN SYSTEM */}
+              <div className="glass rounded-[35px] p-8 sm:p-10 border border-white/10 relative overflow-hidden" id="team-logo-section">
+                
+                {/* Visual Accent Background Glow */}
+                <div 
+                  className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-[80px] opacity-15 pointer-events-none"
+                  style={{ backgroundColor: activeColor }}
+                />
 
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  
-                  <div className="p-5.5 rounded-2xl bg-white/[0.01] border border-white/5 space-y-1.5">
-                    <span className="text-[9px] font-bold text-white/30 uppercase block font-mono">CURRENT FLAG</span>
-                    <div className="w-12 h-14 bg-black/40 border border-white/5 rounded-xl p-2 flex items-center justify-center">
-                      <TeamLogo teamId={activeTeamId} logoUrl={registration?.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-bold text-[12px]" />
-                    </div>
+                <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-white/5 pb-6 mb-8 gap-4">
+                  <div>
+                    <span className="text-[9px] font-mono font-black text-primary uppercase tracking-widest block mb-1">
+                      SELF-SERVICE PORTAL
+                    </span>
+                    <h3 className="text-2xl font-display font-black uppercase italic tracking-tight text-white m-0">
+                      TEAM LOGO SYSTEM
+                    </h3>
                   </div>
-
-                  <div className="p-5.5 rounded-2xl bg-white/[0.01] border border-white/5 space-y-2">
-                    <span className="text-[9px] font-bold text-white/30 uppercase block font-mono">LOGO CLEAR STATUS</span>
-                    <div className="inline-flex">
-                      {registration?.logoStatus === 'Approved' ? (
-                        <span className="px-3 py-1 bg-green-500/5 text-green-500 border border-green-500/20 rounded-full text-[9px] font-black uppercase tracking-wider">
-                          APPROVED
-                        </span>
-                      ) : registration?.logoStatus === 'Rejected' ? (
-                        <span className="px-3 py-1 bg-red-400/5 text-red-500 border border-red-500/20 rounded-full text-[9px] font-black uppercase tracking-wider">
-                          REJECTED
-                        </span>
-                      ) : registration?.logoUrl ? (
-                        <span className="px-3 py-1 bg-amber-500/5 text-amber-500 border border-amber-500/20 rounded-full text-[9px] font-black uppercase tracking-wider animate-pulse">
-                          PENDING REVIEW
-                        </span>
-                      ) : (
-                        <span className="px-3 py-1 bg-white/5 text-white/40 border border-white/10 rounded-full text-[9px] font-bold uppercase tracking-wider">
-                          AWAITING UPLOAD
-                        </span>
-                      )}
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
+                      DATABASE LIVE
+                    </span>
                   </div>
-
-                  <div className="p-5.5 rounded-2xl bg-white/[0.01] border border-white/5 space-y-2">
-                    <span className="text-[9px] font-bold text-white/30 uppercase block font-mono">TIMELINE UPDATE</span>
-                    <p className="text-xs font-bold text-white">
-                      {registration?.logoUploadedAt || 'No modifications logged'}
-                    </p>
-                  </div>
-
                 </div>
 
-                {registration?.logoFeedback && (
-                  <div className="mt-8 p-5 rounded-2xl bg-red-500/5 border border-red-500/15 text-xs text-red-400 font-medium">
-                    <span className="font-bold text-[9px] uppercase tracking-wider block font-mono text-red-500 mb-1">
-                      SUPER ADMIN AUDIT REASON:
+                {/* Grid Split Content: Current Logo & Upload Box */}
+                <div className="grid md:grid-cols-12 gap-8 items-start">
+                  
+                  {/* Current Logo and Meta Details */}
+                  <div className="md:col-span-4 flex flex-col items-center text-center space-y-4 p-6 bg-white/[0.01] border border-white/5 rounded-2xl">
+                    <span className="text-[9px] font-mono font-bold text-white/30 uppercase tracking-widest">
+                      CURRENT LOGO
                     </span>
-                    "{registration.logoFeedback}"
-                  </div>
-                )}
-              </div>
+                    
+                    <div className="w-28 h-28 bg-black/40 border border-white/5 rounded-[24px] p-4 flex items-center justify-center shadow-lg relative group">
+                      <TeamLogo teamId={activeTeamId} logoUrl={registration?.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-black text-[28px]" />
+                    </div>
 
-              {/* ACTION UPLOADER OR WARNING IF APPROVED */}
-              {registration?.logoStatus === 'Approved' ? (
-                /* APPROVED REPLACEMENT RULE SCREEN */
-                <div className="glass rounded-[35px] p-8 sm:p-10 border border-green-500/10 bg-green-500/[0.01] relative">
-                  <div className="w-12 h-12 bg-green-500/10 text-green-500 rounded-2xl flex items-center justify-center mb-5 border border-green-500/20">
-                    <CheckCircle2 size={22} strokeWidth={2.5} />
-                  </div>
-                  <h3 className="text-lg font-display font-black text-green-500 uppercase italic tracking-tight mb-2">
-                    Crest Clearance Approved
-                  </h3>
-                  <p className="text-white/50 text-xs leading-relaxed max-w-xl">
-                    Your team logo has been fully cleared and verified by the Super Admin team, and is currently visible across all platform views. Only approved team representatives or Super Admins may replace this asset if an explicit change is required. To replace, upload a clean asset below.
-                  </p>
+                    <div className="space-y-1">
+                      <h5 className="text-xs font-bold text-white uppercase tracking-wider">
+                        {activeTeamObj?.name.split(' (')[0]}
+                      </h5>
+                      <span className="text-[9px] font-mono text-white/40 block">
+                        Last Modified: {registration?.logoUploadedAt || 'None'}
+                      </span>
+                    </div>
 
-                  <div className="border-t border-white/5 pt-8 mt-8">
+                    {/* Permissions and Allowed Badges inline */}
+                    <div className="w-full pt-4 border-t border-white/5 text-left space-y-2">
+                      <span className="text-[8px] font-bold text-white/30 uppercase tracking-wider block font-mono">
+                        AUTHORIZED SCOPE
+                      </span>
+                      <div className="space-y-1 text-[10px] text-white/60 font-medium font-sans">
+                        <div className="flex items-center space-x-1.5 text-emerald-400">
+                          <span>✓</span>
+                          <span>Team Coach / Captain</span>
+                        </div>
+                        <div className="flex items-center space-x-1.5 text-emerald-400">
+                          <span>✓</span>
+                          <span>Authorized Reps</span>
+                        </div>
+                        <div className="flex items-center space-x-1.5 text-red-400/80">
+                          <span>✗</span>
+                          <span>Secondary accounts</span>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* Upload Area Controls */}
+                  <div className="md:col-span-8 space-y-6">
+                    
+                    <div className="space-y-1.5">
+                      <span className="text-[9px] font-mono font-bold text-white/30 uppercase tracking-widest block">
+                        UPLOAD NEW LOGO
+                      </span>
+                      <p className="text-xs text-white/60 leading-relaxed font-semibold">
+                        Upload your official crest to update the FCL League website instantly. Files will overwrite previous logo configurations on the disk. No administrative authorization holds apply.
+                      </p>
+                    </div>
+
+                    {/* Upload rules list */}
+                    <div className="grid grid-cols-3 gap-3 bg-white/[0.02] border border-white/5 rounded-xl p-3.5 text-center font-mono">
+                      <div>
+                        <span className="block text-[8px] text-white/30 uppercase">Formats</span>
+                        <span className="text-[10px] text-primary font-bold">PNG, JPG, SVG</span>
+                      </div>
+                      <div>
+                        <span className="block text-[8px] text-white/30 uppercase">Max Size</span>
+                        <span className="text-[10px] text-primary font-bold">5 MB Max</span>
+                      </div>
+                      <div>
+                        <span className="block text-[8px] text-white/30 uppercase">Ideal Size</span>
+                        <span className="text-[10px] text-primary font-bold">1000 x 1000px</span>
+                      </div>
+                    </div>
+
+                    {/* Drag & Drop uploader area */}
                     <div 
                       onDragEnter={handleDrag}
                       onDragOver={handleDrag}
                       onDragLeave={handleDrag}
                       onDrop={handleDrop}
                       onClick={() => fileInputRef.current?.click()}
-                      className="border border-dashed border-white/10 rounded-3xl p-8 text-center cursor-pointer hover:bg-white/[0.01] hover:border-white/20 transition-all"
+                      className={cn(
+                        "border border-dashed rounded-2xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all",
+                        dragActive ? "border-primary bg-primary/5 shadow-[0_0_15px_rgba(0,229,255,0.1)]" : "border-white/10 hover:border-white/20 bg-white/[0.01]"
+                      )}
                     >
                       <input 
                         type="file"
@@ -452,35 +480,43 @@ export default function TeamPortalPage() {
                         onChange={handleFileChange}
                         className="hidden"
                       />
+
                       {filePreview ? (
                         <div className="space-y-4">
-                          <img src={filePreview} alt="Selected override preview" className="w-20 h-20 object-contain mx-auto" />
-                          <p className="text-xs font-bold text-white leading-none">{selectedFile?.name}</p>
-                          <p className="text-[9px] font-mono text-white/40">
-                            Size: {selectedFile ? (selectedFile.size / (1024 * 1024)).toFixed(2) : 0} MB
-                            {dimensions && ` • Dimensions: ${dimensions.width}x${dimensions.height}px`}
-                          </p>
+                          <div className="w-16 h-16 bg-black/40 border border-white/10 rounded-xl p-1.5 mx-auto flex items-center justify-center">
+                            <img src={filePreview} alt="Selected preview file" className="w-[100%] h-[100%] object-contain" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-white max-w-[200px] truncate mx-auto">{selectedFile?.name}</p>
+                            <p className="text-[9px] font-mono text-white/40 mt-1">
+                              Size: {selectedFile ? (selectedFile.size / (1024 * 1024)).toFixed(2) : 0} MB
+                              {dimensions && ` • Dimensions: ${dimensions.width}x${dimensions.height}px`}
+                            </p>
+                          </div>
                         </div>
                       ) : (
-                        <div className="space-y-1.5 text-white/40">
-                          <UploadCloud size={18} className="mx-auto" />
-                          <p className="text-xs font-bold text-white">Click here to select replacement logo</p>
-                          <p className="text-[8.5px] uppercase font-mono tracking-wider font-semibold">Will overwrite and queue for review</p>
+                        <div className="space-y-2.5 text-white/40">
+                          <UploadCloud size={20} className="mx-auto text-white/30 animate-pulse" />
+                          <div>
+                            <p className="text-xs font-bold text-white">Drag & drop logo identity files here</p>
+                            <p className="text-[9px] uppercase tracking-wider font-semibold font-mono mt-1">Or click to select graphic</p>
+                          </div>
                         </div>
                       )}
                     </div>
 
+                    {/* Message banners inside */}
                     {validationError && (
-                      <div className="mt-4 p-4 rounded-xl bg-red-400/5 border border-red-500/15 flex items-center space-x-2 text-xs text-red-500">
-                        <AlertCircle size={14} />
+                      <div className="p-3.5 rounded-xl bg-red-400/5 border border-red-500/15 flex items-center space-x-2 text-xs text-red-500 font-medium">
+                        <AlertCircle size={14} className="flex-shrink-0" />
                         <span>{validationError}</span>
                       </div>
                     )}
 
                     {uploadSuccess && (
-                      <div className="mt-4 p-4 rounded-xl bg-green-500/5 border border-green-500/15 flex items-center space-x-2 text-xs text-green-500">
-                        <CheckCircle2 size={14} />
-                        <span>Logo updated successfully and queued for review!</span>
+                      <div className="p-3.5 rounded-xl bg-green-500/5 border border-green-500/15 flex items-center space-x-2 text-xs text-green-500 font-medium">
+                        <CheckCircle2 size={14} className="flex-shrink-0" />
+                        <span>Logo successfully uploaded and active globally on the FCL website!</span>
                       </div>
                     )}
 
@@ -488,98 +524,22 @@ export default function TeamPortalPage() {
                       <button 
                         onClick={handleUploadLogo}
                         disabled={isUploading}
-                        className="w-full mt-4.5 py-4 bg-primary text-dark rounded-2xl font-black text-xs uppercase tracking-widest cursor-pointer hover:scale-101 transition-all"
+                        className="w-full py-4 bg-primary text-dark rounded-xl font-black text-xs uppercase tracking-widest cursor-pointer hover:scale-[1.01] transition-transform flex items-center justify-center space-x-2 shadow-md shadow-primary/10"
                       >
-                        {isUploading ? 'SAVING LOGO REPLACEMENT...' : 'COMMIT LOGO OVERWRITE'}
+                        {isUploading ? (
+                          <RefreshCw size={13} className="animate-spin" />
+                        ) : (
+                          <UploadCloud size={13} />
+                        )}
+                        <span>{isUploading ? 'SAVING CREST GRAPHIC...' : 'UPLOAD NEW LOGO'}</span>
                       </button>
                     )}
+
                   </div>
+
                 </div>
-              ) : (
-                /* RAW IDENTITY UPLOADER SCREEN */
-                <div className="glass rounded-[35px] p-8 sm:p-10 border border-white/10 relative">
-                  <div className="mb-6 flex justify-between items-center">
-                    <h4 className="text-xs font-bold text-white italic uppercase tracking-widest leading-none">
-                      Drag and Drop File Upload
-                    </h4>
-                    <span className="text-[9px] font-mono text-white/30 font-bold uppercase">PNG, JPG, SVG allowed</span>
-                  </div>
 
-                  <div 
-                    onDragEnter={handleDrag}
-                    onDragOver={handleDrag}
-                    onDragLeave={handleDrag}
-                    onDrop={handleDrop}
-                    onClick={() => fileInputRef.current?.click()}
-                    className={cn(
-                      "border-2 border-dashed rounded-3xl p-10 flex flex-col items-center justify-center text-center cursor-pointer transition-all",
-                      dragActive ? "border-primary bg-primary/5 shadow-2" : "border-white/10 hover:border-white/20 bg-white/[0.01]"
-                    )}
-                  >
-                    <input 
-                      type="file"
-                      ref={fileInputRef}
-                      accept=".png,.jpg,.jpeg,.svg"
-                      onChange={handleFileChange}
-                      className="hidden"
-                    />
-
-                    {filePreview ? (
-                      <div className="space-y-4">
-                        <div className="w-20 h-20 bg-black/40 border border-white/10 rounded-2xl p-2 mx-auto flex items-center justify-center">
-                          <img src={filePreview} alt="Selected preview file" className="w-[85%] h-[85%] object-contain" />
-                        </div>
-                        <div className="space-y-1">
-                          <p className="text-xs font-bold text-white max-w-[260px] truncate mx-auto">{selectedFile?.name}</p>
-                          <p className="text-[9px] font-mono text-white/40">
-                            Size: {selectedFile ? (selectedFile.size / (1024 * 1024)).toFixed(2) : 0} MB
-                            {dimensions && ` • Dimensions: ${dimensions.width}x${dimensions.height}px`}
-                          </p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="space-y-3.5">
-                        <div className="w-12 h-12 bg-white/[0.03] text-white/30 rounded-2xl flex items-center justify-center mx-auto">
-                          <UploadCloud size={24} />
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-white">Drag & drop logo identity files here</p>
-                          <p className="text-[9px] text-white/40 uppercase tracking-wider font-bold mt-1.5">Or click to select from finder</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {validationError && (
-                    <div className="mt-5 p-4 rounded-xl bg-red-400/5 border border-red-500/15 flex items-center space-x-2 text-xs text-red-500">
-                      <AlertCircle size={14} />
-                      <span>{validationError}</span>
-                    </div>
-                  )}
-
-                  {uploadSuccess && (
-                    <div className="mt-5 p-4 rounded-xl bg-green-500/5 border border-green-500/15 flex items-center space-x-2 text-xs text-green-500">
-                      <CheckCircle2 size={14} />
-                      <span>Team Logo uploaded successfully and queued for approval!</span>
-                    </div>
-                  )}
-
-                  {selectedFile && !validationError && (
-                    <button 
-                      onClick={handleUploadLogo}
-                      disabled={isUploading}
-                      className="w-full mt-6 py-4.5 bg-primary text-dark rounded-2xl font-black text-xs uppercase tracking-widest cursor-pointer hover:scale-101 transition-transform"
-                    >
-                      {isUploading ? (
-                        <RefreshCw size={13} className="animate-spin" />
-                      ) : (
-                        <UploadCloud size={13} />
-                      )}
-                      <span>{isUploading ? 'SAVING GRAPHIC FILE...' : 'SUBMIT TEAM CREST'}</span>
-                    </button>
-                  )}
-                </div>
-              )}
+              </div>
 
             </div>
 

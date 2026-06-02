@@ -1,16 +1,112 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useMatchState } from '../context/MatchStateContext';
 import { 
-  ArrowLeft, Radio, Trophy, Calendar, Sparkles, Award, Shield, FileText, Send, Clock, List, Users
+  ArrowLeft, Radio, Trophy, Calendar, Sparkles, Award, Shield, FileText, Send, Clock, List, Users, X
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+
+interface Toast {
+  id: string;
+  type: 'goal' | 'status-change';
+  title: string;
+  message: string;
+  matchId?: string;
+  timestamp: number;
+}
 
 export default function PublicMatchCenter() {
   const { matchId } = useParams<{ matchId: string }>();
   const { 
     matches, teams, detailedStats, goalScorers, cards, subs, commentaries, reports, activeMinAndStatus 
   } = useMatchState();
+
+  const [toasts, setToasts] = useState<Toast[]>([]);
+  const prevGoalScorersRef = useRef<any[]>([]);
+  const prevMatchesRef = useRef<any[]>([]);
+  const isFirstMountRef = useRef(true);
+
+  const getTeamName = (teamIdCode: string) => {
+    const t = teams.find(team => team.id.toLowerCase() === teamIdCode.toLowerCase() || team.name.toLowerCase() === teamIdCode.toLowerCase());
+    return t ? t.name : teamIdCode.toUpperCase();
+  };
+
+  const removeToast = (id: string) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
+
+  const addToast = (toast: Omit<Toast, 'id' | 'timestamp'>) => {
+    const id = `${toast.type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const newToast: Toast = { ...toast, id, timestamp: Date.now() };
+    setToasts(prev => [...prev, newToast]);
+    
+    // Auto dismiss after 6 seconds
+    setTimeout(() => {
+      removeToast(id);
+    }, 6000);
+  };
+
+  useEffect(() => {
+    if (isFirstMountRef.current) {
+      prevGoalScorersRef.current = goalScorers;
+      prevMatchesRef.current = matches;
+      isFirstMountRef.current = false;
+      return;
+    }
+
+    // Goal detection update
+    const prevGoalScorers = prevGoalScorersRef.current;
+    const newGoals = goalScorers.filter(cg => !prevGoalScorers.some(pg => pg.id === cg.id));
+
+    newGoals.forEach(g => {
+      const associatedMatch = matches.find(m => m.id === g.matchId);
+      if (!associatedMatch) return;
+
+      const isCurrentMatch = g.matchId === matchId;
+      const scoringTeamName = getTeamName(g.team);
+      const opposingTeamId = associatedMatch.homeTeam.toLowerCase() === g.team.toLowerCase() ? associatedMatch.awayTeam : associatedMatch.homeTeam;
+      const opposingTeamName = getTeamName(opposingTeamId);
+
+      const title = isCurrentMatch ? "⚽ GOAL SCORED!" : "⚽ GOAL AT ANOTHER VENUE";
+      const message = `${scoringTeamName} has scored against ${opposingTeamName}! Scored by ${g.playerName} (${g.minute}')`;
+
+      addToast({
+        type: 'goal',
+        title,
+        message,
+        matchId: g.matchId
+      });
+    });
+
+    // Match Status detection update
+    const prevMatches = prevMatchesRef.current;
+    matches.forEach(cm => {
+      const pm = prevMatches.find(x => x.id === cm.id);
+      if (pm && pm.status !== cm.status) {
+        const isCurrentMatch = cm.id === matchId;
+        const homeName = getTeamName(cm.homeTeam);
+        const awayName = getTeamName(cm.awayTeam);
+
+        let statusTextValue = cm.status;
+        if (cm.status === 'Live') statusTextValue = 'Started/In Progress';
+        if (cm.status === 'Finished') statusTextValue = 'Finished/Full Time';
+
+        const title = isCurrentMatch ? "🕒 MATCH STATUS UPDATE" : "🕒 DISPATCH FROM OTHER VENUE";
+        const message = `${homeName} vs ${awayName} is now ${statusTextValue}!`;
+
+        addToast({
+          type: 'status-change',
+          title,
+          message,
+          matchId: cm.id
+        });
+      }
+    });
+
+    // Update refs to latest verified values
+    prevGoalScorersRef.current = goalScorers;
+    prevMatchesRef.current = matches;
+  }, [goalScorers, matches, matchId, teams]);
 
   const match = matches.find(m => m.id === matchId);
 
@@ -107,6 +203,59 @@ export default function PublicMatchCenter() {
 
   return (
     <div className="min-h-screen bg-navy text-white pb-32">
+      
+      {/* Real-time Dynamic Notification Overlay Layer */}
+      <div id="toast-overlay" className="fixed top-6 right-6 z-50 flex flex-col gap-3.5 max-w-sm w-full pointer-events-none">
+        <AnimatePresence>
+          {toasts.map((toast) => (
+            <motion.div
+              key={toast.id}
+              initial={{ opacity: 0, x: 50, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.85, x: 20 }}
+              transition={{ type: "spring", stiffness: 350, damping: 25 }}
+              className="pointer-events-auto w-full border border-white/10 bg-[#0B0F19]/95 backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.6)] rounded-2xl p-4 flex gap-3.5 items-start overflow-hidden relative group"
+              id={`toast-${toast.id}`}
+            >
+              <div className={`absolute top-0 left-0 w-1 h-full ${toast.type === 'goal' ? 'bg-emerald-500 shadow-[0_0_12px_#10b981]' : 'bg-primary shadow-[0_0_12px_#00E5FF]'}`} />
+              
+              <div className={`flex-shrink-0 p-2 rounded-xl bg-white/[0.04] border border-white/5 flex items-center justify-center ${toast.type === 'goal' ? 'text-emerald-400' : 'text-primary'}`}>
+                {toast.type === 'goal' ? (
+                  <Trophy size={18} className="animate-bounce" />
+                ) : (
+                  <Clock size={18} />
+                )}
+              </div>
+
+              <div className="flex-grow min-w-0 pr-4 text-left">
+                <h4 className="text-[9px] font-black tracking-widest uppercase font-display text-white/40 mb-0.5">
+                  {toast.title}
+                </h4>
+                <p className="text-xs font-sans font-medium text-white/90 leading-relaxed">
+                  {toast.message}
+                </p>
+                {toast.matchId && matches.some(m => m.id === toast.matchId) && (
+                  <Link 
+                    to={`/matches/${toast.matchId}`}
+                    className="mt-2 inline-flex items-center gap-1.5 text-[10px] font-semibold text-primary hover:text-white transition-colors uppercase tracking-wider font-mono"
+                  >
+                    <span>View Match Live</span>
+                    <span>→</span>
+                  </Link>
+                )}
+              </div>
+
+              <button
+                onClick={() => removeToast(toast.id)}
+                className="p-1 text-white/30 hover:text-white rounded-lg hover:bg-white/5 transition-all cursor-pointer flex-shrink-0"
+                id={`dismiss-${toast.id}`}
+              >
+                <X size={14} className="stroke-[2.5]" />
+              </button>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
       
       {/* Upper header */}
       <section className="bg-navy-dark py-4 px-4 border-b border-white/5 mb-8">

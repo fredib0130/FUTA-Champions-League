@@ -399,6 +399,84 @@ app.post("/api/auth/admins", authenticateToken, requireRole(["Super Admin"]), (r
   });
 });
 
+app.post("/api/admin/create", (req, res) => {
+  const { identifier, username, password, role } = req.body;
+  const adminUsername = (identifier || username || "").trim();
+
+  if (!adminUsername || !password || !role) {
+    res.status(400).json({ error: "Fields identifier/username, password and role are required." });
+    return;
+  }
+
+  let mappedRole: "Super Admin" | "Match Commissioner" | "Media Officer" = "Super Admin";
+  const normalizedRole = role.toLowerCase().replace(/\s+/g, "");
+  if (normalizedRole === "superadmin") {
+    mappedRole = "Super Admin";
+  } else if (normalizedRole === "matchcommissioner") {
+    mappedRole = "Match Commissioner";
+  } else if (normalizedRole === "mediaofficer") {
+    mappedRole = "Media Officer";
+  }
+
+  const admins = getAdmins();
+  const matchedIdx = admins.findIndex(a => a.username.toLowerCase() === adminUsername.toLowerCase());
+
+  if (matchedIdx >= 0) {
+    admins[matchedIdx].passwordHash = hashPassword(password);
+    admins[matchedIdx].role = mappedRole;
+    saveAdmins(admins);
+
+    const audits = getAuditLogs();
+    audits.unshift({
+      id: `audit-${Date.now()}`,
+      adminName: "System Bootstrap",
+      role: "System",
+      action: `Updated administrator account "${adminUsername}" with role [${mappedRole}] via /api/admin/create`,
+      timestamp: new Date().toLocaleString()
+    });
+    saveAuditLogs(audits);
+
+    res.json({
+      success: true,
+      message: "Administrator account updated successfully.",
+      user: {
+        username: adminUsername,
+        role: mappedRole
+      }
+    });
+    return;
+  }
+
+  const newAdmin: AdminAccount = {
+    username: adminUsername,
+    passwordHash: hashPassword(password),
+    role: mappedRole,
+    createdAt: new Date().toISOString()
+  };
+
+  admins.push(newAdmin);
+  saveAdmins(admins);
+
+  const audits = getAuditLogs();
+  audits.unshift({
+    id: `audit-${Date.now()}`,
+    adminName: "System Bootstrap",
+    role: "System",
+    action: `Created administrator account "${newAdmin.username}" with role [${newAdmin.role}] via /api/admin/create`,
+    timestamp: new Date().toLocaleString()
+  });
+  saveAuditLogs(audits);
+
+  res.json({
+    success: true,
+    user: {
+      username: newAdmin.username,
+      role: newAdmin.role,
+      createdAt: newAdmin.createdAt
+    }
+  });
+});
+
 app.delete("/api/auth/admins/:username", authenticateToken, requireRole(["Super Admin"]), (req, res) => {
   const { username } = req.params;
   const operatorName = (req as any).user.username;
@@ -455,7 +533,7 @@ app.post("/api/registrations", (req, res) => {
 });
 
 // Multipart File Upload endpoint supporting the POST standard
-app.post("/api/upload", (req, res) => {
+const handleMultipartUpload = (req: express.Request, res: express.Response) => {
   try {
     const files = (req as any).files;
     const team = req.body.team;
@@ -469,11 +547,10 @@ app.post("/api/upload", (req, res) => {
 
     // Convert file to buffer and write it
     const buffer = file.data;
-    const teamUpper = team.toUpperCase();
+    const teamUpper = team.toUpperCase().replace(/[^A-Z0-9_-]/g, "");
 
-    // Validate if team exists in list
-    if (!TEAMS_FOLDER_LIST.includes(teamUpper)) {
-      res.status(400).json({ error: `Invalid team identifier: ${team}` });
+    if (!teamUpper) {
+      res.status(400).json({ error: "Invalid team identifier" });
       return;
     }
 
@@ -513,11 +590,17 @@ app.post("/api/upload", (req, res) => {
       };
     }
     
+    const hasExistingLogo = !!(regs[teamLower].logoUrl);
+    
     regs[teamLower].logoUrl = relativePath;
-    regs[teamLower].logoStatus = "Pending";
+    regs[teamLower].logoStatus = "Approved";
     regs[teamLower].logoUploadedBy = "Coach";
     regs[teamLower].logoUploadedAt = new Date().toISOString().split('T')[0];
     saveRegistrations(regs);
+
+    const actionText = hasExistingLogo
+      ? `${teamUpper} replaced existing logo`
+      : `${teamUpper} uploaded new team logo`;
 
     // Write audit log
     const audits = getAuditLogs();
@@ -525,7 +608,7 @@ app.post("/api/upload", (req, res) => {
       id: `audit-${Date.now()}`,
       adminName: "Coach",
       role: "Team Official",
-      action: `Coach uploaded new logo via multipart form for ${teamUpper}`,
+      action: actionText,
       timestamp: new Date().toLocaleString()
     });
     saveAuditLogs(audits);
@@ -539,7 +622,10 @@ app.post("/api/upload", (req, res) => {
     console.error("Upload failed:", error);
     res.status(500).json({ error: "Upload failed" });
   }
-});
+};
+
+app.post("/api/upload", handleMultipartUpload);
+app.post("/api/upload-logo", handleMultipartUpload);
 
 // Team Logo Upload endpoint
 app.post("/api/registrations/:teamId/logo", (req, res) => {
@@ -604,22 +690,29 @@ app.post("/api/registrations/:teamId/logo", (req, res) => {
   
   // Update registrations
   const regs = getRegistrations();
-  if (!regs[teamId.toLowerCase()]) {
-    regs[teamId.toLowerCase()] = {
-      teamId: teamId.toLowerCase(),
+  const teamKey = teamId.toLowerCase();
+  if (!regs[teamKey]) {
+    regs[teamKey] = {
+      teamId: teamKey,
       status: "pending",
       players: [],
       coaches: []
     };
   }
   
+  const hasExistingLogo = !!(regs[teamKey].logoUrl);
+  
   const logoUrl = `/uploads/team-logos/${teamUpper}/${sanitizedFilename}`;
-  regs[teamId.toLowerCase()].logoUrl = logoUrl;
-  regs[teamId.toLowerCase()].logoStatus = "Pending";
-  regs[teamId.toLowerCase()].logoUploadedBy = uploadedBy;
-  regs[teamId.toLowerCase()].logoUploadedAt = new Date().toISOString().split('T')[0];
+  regs[teamKey].logoUrl = logoUrl;
+  regs[teamKey].logoStatus = "Approved";
+  regs[teamKey].logoUploadedBy = uploadedBy;
+  regs[teamKey].logoUploadedAt = new Date().toISOString().split('T')[0];
   
   saveRegistrations(regs);
+  
+  const actionText = hasExistingLogo
+    ? `${teamUpper} replaced existing logo`
+    : `${teamUpper} uploaded new team logo`;
   
   // Write audit log
   const audits = getAuditLogs();
@@ -627,7 +720,7 @@ app.post("/api/registrations/:teamId/logo", (req, res) => {
     id: `audit-${Date.now()}`,
     adminName: uploadedBy,
     role: uploadedBy === "Super Admin" ? "Super Admin" : "Team Official",
-    action: `${uploadedBy} uploaded new logo for ${teamUpper}`,
+    action: actionText,
     timestamp: new Date().toLocaleString()
   });
   saveAuditLogs(audits);
