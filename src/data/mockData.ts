@@ -1,4 +1,4 @@
-import { Team, Player, Match, NewsPost, Sponsor, CoefficientRanking, ChampionRecord } from '../types';
+import { Team, Player, Match, NewsPost, Sponsor, CoefficientRanking, ChampionRecord, MatchStats } from '../types';
 
 export const CHAMPIONS: ChampionRecord[] = [
   { 
@@ -46,26 +46,26 @@ export const TEAMS: Team[] = [
     'Marine Science and Technology', 'Physiology', 'Physics', 'Securities and Investment Management Technology', 'Statistics'
   ][i] + ` (${abbr})`,
   logo: {
-    'AGE': 'public/logos/AGE.jpg',
-    'AGP': 'public/logos/AGP.jpg',
-    'ANA': 'public/logos/ANA.jpg',
-    'APH': 'public/logos/APH.jpg',
-    'BCH': 'public/logos/BCH.jpg',
-    'BDG': 'public/logos/BDG.jpg',
-    'CSP': 'public/logos/CSP.jpg',
-    'CYS': 'public/logos/CYS.jpg',
-    'ENT': 'public/logos/ENT.jpg',
-    'FWT': 'public/logos/FWT.jpg',
-    'ICE': 'public/logos/ICE.jpg',
-    'IDD': 'public/logos/IDD.jpg',
-    'IFS': 'public/logos/IFS.jpg',
-    'MBBS': 'public/logos/MBBS.jpg',
-    'MCB': 'public/logos/MCB.jpg',
-    'MST': 'public/logos/MST.jpg',
-    'PHS': 'public/logos/PHS.jpg',
-    'PHY': 'public/logos/PHY.jpg',
-    'SIMT': 'public/logos/SIMT.jpg',
-    'STA': 'public/logos/STA.jpg'
+    'AGE': '/logos/AGE.jpg',
+    'AGP': '/logos/AGP.jpg',
+    'ANA': '/logos/ANA.jpg',
+    'APH': '/logos/APH.jpg',
+    'BCH': '/logos/BCH.jpg',
+    'BDG': '/logos/BDG.jpg',
+    'CSP': '/logos/CSP.jpg',
+    'CYS': '/logos/CYS.jpg',
+    'ENT': '/logos/ENT.jpg',
+    'FWT': '/logos/FWT.jpg',
+    'ICE': '/logos/ICE.jpg',
+    'IDD': '/logos/IDD.jpg',
+    'IFS': '/logos/IFS.jpg',
+    'MBBS': '/logos/MBBS.jpg',
+    'MCB': '/logos/MCB.jpg',
+    'MST': '/logos/MST.jpg',
+    'PHS': '/logos/PHS.jpg',
+    'PHY': '/logos/PHY.jpg',
+    'SIMT': '/logos/SIMT.jpg',
+    'STA': '/logos/STA.jpg'
   }[abbr] || `https://api.dicebear.com/7.x/identicon/svg?seed=${abbr}`,
   group: 'League',
   pot: (['BDG', 'IFS', 'MCB', 'MST', 'PHS'].includes(abbr) ? 'A' :
@@ -98,40 +98,40 @@ export const PLAYERS: Player[] = Array.from({ length: 150 }, (_, i) => ({
 
 export const MATCHES: Match[] = [
   // --- MATCHDAY 1 (June 5 - 7) ---
-  { id: 'md1-1', homeTeamId: 'MST', awayTeamId: 'ICE', date: '2026-06-05', time: '15:30', venue: 'FUTA Main Pitch', status: 'UPCOMING', matchday: 1 }, // OPENING MATCH
-  { id: 'md1-2', homeTeamId: 'AGE', awayTeamId: 'SIMT', date: '2026-06-06', time: '08:00', venue: 'FUTA Mini Pitch', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-3', homeTeamId: 'AGP', awayTeamId: 'BCH', date: '2026-06-06', time: '09:30', venue: 'Pitch B', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-4', homeTeamId: 'CYS', awayTeamId: 'ANA', date: '2026-06-06', time: '11:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-5', homeTeamId: 'PHS', awayTeamId: 'APH', date: '2026-06-06', time: '12:30', venue: 'Pitch B', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-6', homeTeamId: 'BDG', awayTeamId: 'ENT', date: '2026-06-06', time: '14:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-7', homeTeamId: 'IFS', awayTeamId: 'CSP', date: '2026-06-06', time: '15:30', venue: 'Pitch B', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-8', homeTeamId: 'FWT', awayTeamId: 'IDD', date: '2026-06-06', time: '17:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-9', homeTeamId: 'MBBS', awayTeamId: 'STA', date: '2026-06-07', time: '08:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 1 },
-  { id: 'md1-10', homeTeamId: 'MCB', awayTeamId: 'PHY', date: '2026-06-07', time: '09:30', venue: 'FUTA Main Bowl', status: 'UPCOMING', matchday: 1 },
+  { id: 'md1-1', homeTeam: 'MST', awayTeam: 'ICE', date: '2026-06-05', time: '15:30', venue: 'FUTA Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 }, // OPENING MATCH
+  { id: 'md1-2', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-06', time: '08:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-3', homeTeam: 'PHS', awayTeam: 'APH', date: '2026-06-06', time: '09:30', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-4', homeTeam: 'CYS', awayTeam: 'ANA', date: '2026-06-06', time: '11:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-5', homeTeam: 'BDG', awayTeam: 'ENT', date: '2026-06-06', time: '12:30', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-6', homeTeam: 'FWT', awayTeam: 'IDD', date: '2026-06-07', time: '08:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-7', homeTeam: 'IFS', awayTeam: 'CSP', date: '2026-06-07', time: '09:30', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-8', homeTeam: 'AGP', awayTeam: 'BCH', date: '2026-06-07', time: '11:00', venue: 'FUTA Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-9', homeTeam: 'MCB', awayTeam: 'PHY', date: '2026-06-07', time: '12:30', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-10', homeTeam: 'MBBS', awayTeam: 'STA', date: '2026-06-07', time: '14:00', venue: 'FUTA Main Bowl', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
 
   // --- MATCHDAY 2 (June 10 - 11) ---
-  { id: 'md2-1', homeTeamId: 'CSP', awayTeamId: 'STA', date: '2026-06-10', time: '10:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 2 },
-  { id: 'md2-2', homeTeamId: 'PHY', awayTeamId: 'SIMT', date: '2026-06-10', time: '12:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 2 },
-  { id: 'md2-3', homeTeamId: 'PHS', awayTeamId: 'AGP', date: '2026-06-10', time: '14:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 2 },
-  { id: 'md2-4', homeTeamId: 'MST', awayTeamId: 'CYS', date: '2026-06-10', time: '16:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 2 },
-  { id: 'md2-5', homeTeamId: 'MCB', awayTeamId: 'AGE', date: '2026-06-11', time: '10:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 2 },
-  { id: 'md2-6', homeTeamId: 'IFS', awayTeamId: 'MBBS', date: '2026-06-11', time: '12:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 2 },
-  { id: 'md2-7', homeTeamId: 'APH', awayTeamId: 'IDD', date: '2026-06-11', time: '14:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 2 },
-  { id: 'md2-8', homeTeamId: 'ICE', awayTeamId: 'BCH', date: '2026-06-11', time: '16:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 2 },
-  { id: 'md2-9', homeTeamId: 'BDG', awayTeamId: 'FWT', date: '2026-06-11', time: '17:30', venue: 'FUTA Main Bowl', status: 'UPCOMING', matchday: 2 },
-  { id: 'md2-10', homeTeamId: 'ENT', awayTeamId: 'ANA', date: '2026-06-11', time: '18:00', venue: 'FUTA Main Bowl', status: 'UPCOMING', matchday: 2 },
+  { id: 'md2-1', homeTeam: 'CSP', awayTeam: 'STA', date: '2026-06-10', time: '10:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-2', homeTeam: 'PHS', awayTeam: 'AGP', date: '2026-06-10', time: '12:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-3', homeTeam: 'PHY', awayTeam: 'SIMT', date: '2026-06-10', time: '14:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-4', homeTeam: 'MST', awayTeam: 'CYS', date: '2026-06-10', time: '16:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-5', homeTeam: 'APH', awayTeam: 'IDD', date: '2026-06-11', time: '10:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-6', homeTeam: 'IFS', awayTeam: 'MBBS', date: '2026-06-11', time: '12:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-7', homeTeam: 'ENT', awayTeam: 'ANA', date: '2026-06-11', time: '14:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-8', homeTeam: 'MCB', awayTeam: 'AGE', date: '2026-06-11', time: '16:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-9', homeTeam: 'ICE', awayTeam: 'BCH', date: '2026-06-11', time: '17:30', venue: 'FUTA Main Bowl', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-10', homeTeam: 'BDG', awayTeam: 'FWT', date: '2026-06-11', time: '18:00', venue: 'FUTA Main Bowl', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
 
   // --- MATCHDAY 3 (June 13 - 15) ---
-  { id: 'md3-1', homeTeamId: 'MST', awayTeamId: 'SIMT', date: '2026-06-13', time: '10:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 3 },
-  { id: 'md3-2', homeTeamId: 'ENT', awayTeamId: 'MBBS', date: '2026-06-13', time: '12:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 3 },
-  { id: 'md3-3', homeTeamId: 'PHS', awayTeamId: 'BCH', date: '2026-06-13', time: '14:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 3 },
-  { id: 'md3-4', homeTeamId: 'ICE', awayTeamId: 'FWT', date: '2026-06-13', time: '16:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 3 },
-  { id: 'md3-5', homeTeamId: 'BDG', awayTeamId: 'ANA', date: '2026-06-14', time: '10:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 3 },
-  { id: 'md3-6', homeTeamId: 'CSP', awayTeamId: 'CYS', date: '2026-06-14', time: '12:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 3 },
-  { id: 'md3-7', homeTeamId: 'IFS', awayTeamId: 'STA', date: '2026-06-14', time: '14:00', venue: 'Pitch A', status: 'UPCOMING', matchday: 3 },
-  { id: 'md3-8', homeTeamId: 'PHY', awayTeamId: 'AGP', date: '2026-06-14', time: '16:00', venue: 'Pitch B', status: 'UPCOMING', matchday: 3 },
-  { id: 'md3-9', homeTeamId: 'MCB', awayTeamId: 'IDD', date: '2026-06-15', time: '16:00', venue: 'FUTA Main Bowl', status: 'UPCOMING', matchday: 3 },
-  { id: 'md3-10', homeTeamId: 'APH', awayTeamId: 'AGE', date: '2026-06-15', time: '18:00', venue: 'FUTA Main Bowl', status: 'UPCOMING', matchday: 3 },
+  { id: 'md3-1', homeTeam: 'MST', awayTeam: 'SIMT', date: '2026-06-13', time: '10:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-2', homeTeam: 'ENT', awayTeam: 'MBBS', date: '2026-06-13', time: '12:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-3', homeTeam: 'PHS', awayTeam: 'BCH', date: '2026-06-13', time: '14:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-4', homeTeam: 'ICE', awayTeam: 'FWT', date: '2026-06-13', time: '16:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-5', homeTeam: 'BDG', awayTeam: 'ANA', date: '2026-06-14', time: '10:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-6', homeTeam: 'CSP', awayTeam: 'CYS', date: '2026-06-14', time: '12:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-7', homeTeam: 'IFS', awayTeam: 'STA', date: '2026-06-14', time: '14:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-8', homeTeam: 'PHY', awayTeam: 'AGP', date: '2026-06-14', time: '16:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-9', homeTeam: 'MCB', awayTeam: 'IDD', date: '2026-06-15', time: '16:00', venue: 'FUTA Main Bowl', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-10', homeTeam: 'APH', awayTeam: 'AGE', date: '2026-06-15', time: '18:00', venue: 'FUTA Main Bowl', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
 ];
 
 export const NEWS: NewsPost[] = [
@@ -194,3 +194,17 @@ export const COEFFICIENTS: CoefficientRanking[] = [
   { rank: 30, teamId: 'simt', teamName: 'Securities and Investment Management Technology', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
   { rank: 31, teamId: 'che', teamName: 'Chemistry', points2026: 0.00, points2025: 3.00, totalCoefficient: 3.00, isActive: false },
 ];
+
+export const MOCK_MATCH_STATS: MatchStats[] = MATCHES.map((match) => {
+  const charSum = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return {
+    matchId: match.id,
+    cornersHome: (charSum % 7) + 2,
+    cornersAway: (charSum % 6) + 1,
+    yellowCardsHome: charSum % 4,
+    yellowCardsAway: charSum % 5,
+    redCardsHome: charSum % 11 === 0 ? 1 : 0,
+    redCardsAway: charSum % 13 === 0 ? 1 : 0
+  };
+});
+

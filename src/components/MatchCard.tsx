@@ -1,21 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Match, Team } from '../types';
-import { TEAMS, COEFFICIENTS } from '../data/mockData';
+import { COEFFICIENTS } from '../data/mockData';
 import { cn } from '../lib/utils';
-import { Trophy } from 'lucide-react';
+import { Trophy, ChevronDown, ChevronUp, Radio } from 'lucide-react';
+import { useMatchState } from '../context/MatchStateContext';
+import { Link } from 'react-router-dom';
 
 interface MatchCardProps {
   match: Match;
 }
 
-export function MatchCard({ match }: MatchCardProps) {
-  const homeTeam = TEAMS.find(t => t.id === match.homeTeamId.toLowerCase());
-  const awayTeam = TEAMS.find(t => t.id === match.awayTeamId.toLowerCase());
+export function MatchCard({ match: initialMatch }: MatchCardProps) {
+  const { teams, detailedStats, activeMinAndStatus, matches } = useMatchState();
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Fetch from live state list
+  const match = matches.find(m => m.id === initialMatch.id) || initialMatch;
+
+  const homeTeam = teams.find(t => t.id === match.homeTeam.toLowerCase());
+  const awayTeam = teams.find(t => t.id === match.awayTeam.toLowerCase());
   const homeCoeff = homeTeam ? COEFFICIENTS.find(c => c.teamId === homeTeam.id) : undefined;
   const awayCoeff = awayTeam ? COEFFICIENTS.find(c => c.teamId === awayTeam.id) : undefined;
 
   if (!homeTeam || !awayTeam) return null;
+
+  const stats = detailedStats[match.id];
+  const liveTimer = activeMinAndStatus[match.id];
+  const liveMinute = liveTimer ? liveTimer.liveMinute : 'Live';
 
   const homePot = homeTeam.pot;
   const awayPot = awayTeam.pot;
@@ -102,7 +114,7 @@ export function MatchCard({ match }: MatchCardProps) {
         </div>
       )}
 
-      {match.status === 'LIVE' && (
+      {match.status === 'Live' && (
         <div className="absolute top-4 right-4 flex items-center space-x-2">
           <span className="flex h-2 w-2 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -136,12 +148,25 @@ export function MatchCard({ match }: MatchCardProps) {
 
         {/* Score/VS */}
         <div className="flex flex-col items-center">
-          <div className="text-sm font-bold text-white/40 mb-1">{match.time}</div>
+          <div className="text-xs font-black uppercase tracking-widest text-primary mb-1 flex items-center gap-1">
+            {match.status === 'Live' ? (
+              <span className="flex items-center gap-1.5 text-red-500 animate-pulse font-mono">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block" />
+                {liveMinute}
+              </span>
+            ) : match.status === 'Half Time' ? (
+              <span className="text-yellow-400 font-mono">HT</span>
+            ) : match.status === 'Finished' ? (
+              <span className="text-white/40 font-mono">FT</span>
+            ) : (
+              <span className="text-white/40">{match.time}</span>
+            )}
+          </div>
           <div className={cn(
             "font-display text-4xl font-bold px-4 tracking-tighter",
-            match.status === 'FINISHED' ? "text-white" : "text-primary"
+            match.status === 'Finished' ? "text-white" : "text-primary"
           )}>
-            {match.status === 'UPCOMING' ? 'VS' : `${match.homeScore} - ${match.awayScore}`}
+            {match.status === 'Upcoming' ? 'VS' : `${match.homeScore} - ${match.awayScore}`}
           </div>
           <div className="text-[10px] font-bold text-white/20 mt-2 tracking-widest">{match.venue}</div>
           
@@ -189,6 +214,87 @@ export function MatchCard({ match }: MatchCardProps) {
           </div>
           <h3 className="font-bold text-sm tracking-tight">{awayTeam.name}</h3>
         </div>
+      </div>
+
+      {/* Expanded Match Stats */}
+      {isExpanded && stats && (
+        <motion.div 
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          className="mt-6 pt-6 border-t border-white/5 space-y-4"
+        >
+          <p className="text-[10px] font-bold text-center tracking-widest text-primary uppercase">
+            Match Statistics
+          </p>
+          
+          <div className="grid grid-cols-3 gap-y-4 items-center text-center">
+            {/* Corners */}
+            <div className="text-sm font-mono font-bold text-white">
+              {stats.cornersHome}
+            </div>
+            <div className="text-[9px] font-bold text-white/40 uppercase tracking-widest flex items-center justify-center gap-1">
+              <span>🚩</span> Corners
+            </div>
+            <div className="text-sm font-mono font-bold text-white">
+              {stats.cornersAway}
+            </div>
+
+            {/* Yellow Cards */}
+            <div className="text-sm font-mono font-bold text-white">
+              {stats.yellowCardsHome}
+            </div>
+            <div className="text-[9px] font-bold text-white/40 uppercase tracking-widest flex items-center justify-center gap-1.5">
+              <span className="w-2 h-3 bg-yellow-400 rounded-sm inline-block shadow-sm" /> Yellows
+            </div>
+            <div className="text-sm font-mono font-bold text-white">
+              {stats.yellowCardsAway}
+            </div>
+
+            {/* Red Cards */}
+            <div className="text-sm font-mono font-bold text-white">
+              {stats.redCardsHome}
+            </div>
+            <div className="text-[9px] font-bold text-white/40 uppercase tracking-widest flex items-center justify-center gap-1.5">
+              <span className="w-2 h-3 bg-red-500 rounded-sm inline-block shadow-sm" /> Red Cards
+            </div>
+            <div className="text-sm font-mono font-bold text-white">
+              {stats.redCardsAway}
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      <div className="mt-6 pt-4 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex gap-3">
+          <Link
+            to={`/matches/${match.id}`}
+            className="text-[10px] font-black bg-white/5 border border-white/10 hover:border-primary/50 text-white hover:text-primary transition-all duration-300 px-3.5 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-1.5"
+          >
+            <Radio size={10} className="text-primary" />
+            <span>Match Center</span>
+          </Link>
+          
+          {localStorage.getItem('fcl_admin_user') && (
+            <Link
+              to={`/admin/matches/${match.id}`}
+              className="text-[10px] font-black bg-primary/10 border border-primary/20 hover:bg-primary text-primary hover:text-dark transition-all duration-300 px-3.5 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-1"
+            >
+              <span>Admin Desk ⚙️</span>
+            </Link>
+          )}
+        </div>
+
+        <button 
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsExpanded(!isExpanded);
+          }}
+          className="text-[9px] font-black text-white/40 hover:text-primary transition-colors flex items-center space-x-1 uppercase tracking-widest cursor-pointer"
+        >
+          <span>{isExpanded ? 'Hide Match Stats' : 'View Match Stats'}</span>
+          {isExpanded ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
+        </button>
       </div>
     </motion.div>
   );

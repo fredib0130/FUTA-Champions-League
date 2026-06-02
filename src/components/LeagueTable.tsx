@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { TEAMS } from '../data/mockData';
 import { Team } from '../types';
+import { useMatchState } from '../context/MatchStateContext';
 
 interface LeagueTableProps {
   limit?: number;
@@ -9,7 +9,8 @@ interface LeagueTableProps {
 }
 
 export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
-  const sortedTeams = [...TEAMS].sort((a, b) => {
+  const { teams } = useMatchState();
+  const sortedTeams = [...teams].sort((a, b) => {
     if (b.points !== a.points) return b.points - a.points;
     if (b.goalDifference !== a.goalDifference) return b.goalDifference - a.goalDifference;
     if (b.goalsFor !== a.goalsFor) return b.goalsFor - a.goalsFor;

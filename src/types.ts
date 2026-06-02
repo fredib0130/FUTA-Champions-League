@@ -39,14 +39,19 @@ export interface Player {
 
 export interface Match {
   id: string;
-  homeTeamId: string;
-  awayTeamId: string;
-  homeScore?: number;
-  awayScore?: number;
+  homeTeam: string;
+  awayTeam: string;
   date: string;
   time: string;
-  status: 'UPCOMING' | 'LIVE' | 'FINISHED';
   venue: string;
+  status: 'Upcoming' | 'Live' | 'Finished';
+
+  homeScore: number;
+  awayScore: number;
+
+  lineupSubmittedHome: boolean;
+  lineupSubmittedAway: boolean;
+
   matchday: number;
 }
 
@@ -77,3 +82,37 @@ export interface Sponsor {
   tier: 'GOLD' | 'SILVER' | 'BRONZE';
   website: string;
 }
+
+export interface MatchStats {
+  matchId: string;
+
+  cornersHome: number;
+  cornersAway: number;
+
+  yellowCardsHome: number;
+  yellowCardsAway: number;
+
+  redCardsHome: number;
+  redCardsAway: number;
+}
+
+export interface GoalScorer {
+  id: string;
+
+  matchId: string;
+
+  playerName: string;
+
+  team: string;
+
+  minute: number;
+
+  type:
+    | "Goal"
+    | "Penalty"
+    | "Own Goal";
+
+  assist?: string;
+}
+
+

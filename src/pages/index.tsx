@@ -5,9 +5,10 @@ import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone
 import { Countdown } from '../components/Countdown';
 import { MatchCard } from '../components/MatchCard';
 import { PageHeader } from '../components/PageHeader';
-import { MATCHES, NEWS, SPONSORS, PLAYERS, TEAMS, COEFFICIENTS } from '../data/mockData';
+import { NEWS, SPONSORS, PLAYERS, COEFFICIENTS, TEAMS } from '../data/mockData';
 import { Match } from '../types';
 import { cn } from '../lib/utils';
+import { useMatchState } from '../context/MatchStateContext';
 
 import { LeagueTable } from '../components/LeagueTable';
 import { CoefficientTable } from '../components/CoefficientTable';
@@ -16,7 +17,8 @@ export { Champions } from './Champions';
 export { default as RegistrationPortal } from './RegistrationPortal';
 
 export function Home() {
-  const featuredMatch = MATCHES.find(m => m.id === 'md1-1') || MATCHES[0];
+  const { matches } = useMatchState();
+  const featuredMatch = matches.find(m => m.id === 'md1-1') || matches[0];
   const latestNews = NEWS.slice(0, 2);
   const topPlayers = PLAYERS.slice(0, 3);
   const topTeamsTable = <LeagueTable limit={5} />;
@@ -138,7 +140,7 @@ export function Home() {
               <MatchCard match={featuredMatch} />
             </div>
             <div className="grid sm:grid-cols-2 gap-6">
-              {MATCHES.filter(m => m.id !== featuredMatch.id).slice(0, 2).map(m => (
+              {matches.filter(m => m.id !== featuredMatch.id).slice(0, 2).map(m => (
                 <div key={m.id}>
                   <MatchCard match={m} />
                 </div>
@@ -336,10 +338,11 @@ export function Home() {
   );
 }
 export function Fixtures() {
+  const { matches } = useMatchState();
   const [activeMW, setActiveMW] = React.useState(1);
   const matchWeeks = [1, 2, 3]; 
 
-  const filteredMatches = MATCHES.filter(m => m.matchday === activeMW);
+  const filteredMatches = matches.filter(m => m.matchday === activeMW);
   const matchdayOpeningLabel = activeMW === 1 ? 'Season Opener & Week 1 (June 5-7)' : activeMW === 2 ? 'Mid-Season Clash (June 10-11)' : 'Final League Push (June 13-15)';
 
   return (

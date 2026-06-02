@@ -1,0 +1,420 @@
+import React from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { useMatchState } from '../context/MatchStateContext';
+import { 
+  ArrowLeft, Radio, Trophy, Calendar, Sparkles, Award, Shield, FileText, Send, Clock, List, Users
+} from 'lucide-react';
+import { motion } from 'framer-motion';
+
+export default function PublicMatchCenter() {
+  const { matchId } = useParams<{ matchId: string }>();
+  const { 
+    matches, teams, detailedStats, goalScorers, cards, subs, commentaries, reports, activeMinAndStatus 
+  } = useMatchState();
+
+  const match = matches.find(m => m.id === matchId);
+
+  if (!match) {
+    return (
+      <div className="min-h-screen bg-navy text-white flex flex-col items-center justify-center p-4">
+        <ArrowLeft size={32} className="text-white/20 mb-3" />
+        <h2 className="text-xl font-display font-black text-white">Match Center Not Found</h2>
+        <Link to="/fixtures" className="text-primary mt-2 font-bold hover:underline">Return to Fixtures</Link>
+      </div>
+    );
+  }
+
+  const homeTeam = teams.find(t => t.id === match.homeTeam.toLowerCase());
+  const awayTeam = teams.find(t => t.id === match.awayTeam.toLowerCase());
+
+  if (!homeTeam || !awayTeam) return null;
+
+  // Active timer settings
+  const timer = activeMinAndStatus[match.id] || { liveMinute: '0\'', isPaused: true };
+
+  // Score details
+  const isFinished = match.status === 'Finished' || match.status === 'Full Time';
+  const isUpcoming = match.status === 'Upcoming';
+
+  // Stats
+  const stats = detailedStats[match.id] || {
+    possessionHome: 50, possessionAway: 50,
+    shotsHome: 0, shotsAway: 0,
+    shotsOnTargetHome: 0, shotsOnTargetAway: 0,
+    cornersHome: 0, cornersAway: 0,
+    foulsHome: 0, foulsAway: 0,
+    yellowCardsHome: 0, yellowCardsAway: 0,
+    redCardsHome: 0, redCardsAway: 0,
+    offsidesHome: 0, offsidesAway: 0,
+    savesHome: 0, savesAway: 0
+  };
+
+  const matchGoals = goalScorers.filter(g => g.matchId === match.id);
+  const matchCards = cards.filter(c => c.matchId === match.id);
+  const matchSubs = subs.filter(s => s.matchId === match.id);
+  const matchCommentary = commentaries[match.id] || [];
+  const publishedReport = reports[match.id];
+
+  // Dynamic timelines
+  const timelineEvents = [
+    ...matchGoals.map(g => ({
+      type: 'goal' as const,
+      minute: g.minute,
+      text: `⚽ GOOOAL! ${g.playerName} (${g.type})${g.assist ? ` - Assist by ${g.assist}` : ''}`,
+      team: g.team
+    })),
+    ...matchCards.map(c => ({
+      type: 'card' as const,
+      minute: c.minute,
+      text: `${c.type === 'Yellow' ? '🟨' : '🟥'} CARD Shown to ${c.playerName} (${c.type})`,
+      team: c.teamAbbr
+    })),
+    ...matchSubs.map(s => ({
+      type: 'sub' as const,
+      minute: s.minute,
+      text: `🔄 SUB: ${s.playerIn} IN | ${s.playerOut} OUT`,
+      team: s.teamAbbr
+    }))
+  ].sort((a, b) => b.minute - a.minute);
+
+  // Home vs Away scorers lists block
+  const homeScorers = matchGoals.filter(g => {
+    const isHome = g.team.toLowerCase() === match.homeTeam.toLowerCase();
+    // Own Goals scored by away team count for home scoreboard, but belong to away scorers section
+    if (g.type === 'Own Goal') {
+      return !isHome;
+    }
+    return isHome;
+  });
+
+  const awayScorers = matchGoals.filter(g => {
+    const isAway = g.team.toLowerCase() === match.awayTeam.toLowerCase();
+    if (g.type === 'Own Goal') {
+      return !isAway;
+    }
+    return isAway;
+  });
+
+  // Structural details
+  const getProgressWidths = (h: number, a: number) => {
+    const total = h + a;
+    if (total === 0) return { homePercent: 50, awayPercent: 50 };
+    return {
+      homePercent: Math.round((h / total) * 100),
+      awayPercent: Math.round((a / total) * 100)
+    };
+  };
+
+  return (
+    <div className="min-h-screen bg-navy text-white pb-32">
+      
+      {/* Upper header */}
+      <section className="bg-navy-dark py-4 px-4 border-b border-white/5 mb-8">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <Link
+            to="/fixtures"
+            className="px-4 py-2 bg-white/5 border border-white/10 text-xs font-bold font-sans uppercase rounded-xl hover:bg-white/10 transition-all cursor-pointer flex items-center gap-1"
+          >
+            <ArrowLeft size={13} />
+            <span>Fixtures & Results</span>
+          </Link>
+
+          <span className="text-[10px] bg-primary/20 text-primary border border-primary/30 px-3 py-1 rounded-full font-black uppercase tracking-widest flex items-center gap-1.5 animate-pulse">
+            <Radio size={12} />
+            <span>FCL Live Center</span>
+          </span>
+        </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        {/* BIG HERO SCOREBOARD */}
+        <div className="relative p-8 md:p-12 rounded-[40px] border border-white/10 bg-gradient-to-br from-navy-dark to-navy/40 overflow-hidden shadow-2xl">
+          <div className="absolute inset-0 z-0">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-primary/5 blur-[120px] rounded-full" />
+          </div>
+
+          <div className="relative z-10 grid md:grid-cols-3 items-center gap-8 text-center md:text-left">
+            
+            {/* Home Team */}
+            <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-right flex-1 justify-end">
+              <div>
+                <h2 className="text-2xl font-display font-black leading-tight uppercase">{homeTeam.name}</h2>
+                <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mt-1">Defending Rank: #1</p>
+                
+                {/* Scorers on Home */}
+                {homeScorers.length > 0 && (
+                  <div className="text-[10px] text-white/60 space-y-0.5 mt-2 font-mono">
+                    {homeScorers.map((scorer, idx) => (
+                      <div key={idx}>
+                        ⚽ {scorer.playerName} {scorer.minute}'{scorer.type === 'Penalty' ? ' (P)' : scorer.type === 'Own Goal' ? ' (OG)' : ''}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <img src={homeTeam.logo} alt={homeTeam.name} className="w-20 h-20 object-contain flex-shrink-0" />
+            </div>
+
+            {/* Main center score block */}
+            <div className="text-center md:border-l md:border-r border-white/10 px-8">
+              <span className="text-[10px] font-black uppercase tracking-[0.25em] text-primary flex items-center justify-center gap-1 mb-2">
+                {match.status === 'Live' ? (
+                  <span className="text-red-500 animate-pulse font-mono font-bold flex items-center gap-1">
+                    <span className="w-1 px-1 h-3 rounded-full bg-red-500 inline-block" />
+                    LIVE • {timer.liveMinute}
+                  </span>
+                ) : match.status === 'Half Time' ? (
+                  <span className="text-yellow-400 font-mono font-bold">HT - HALF TIME</span>
+                ) : match.status === 'Finished' ? (
+                  <span className="text-white/40 font-mono font-bold">FT - FULL TIME</span>
+                ) : (
+                  <span className="text-white/30 font-bold">{match.time} • SCHEDULED</span>
+                )}
+              </span>
+
+              <div className="text-6xl font-display italic font-black text-white px-2 tracking-widest drop-shadow-lg">
+                {isUpcoming ? 'VS' : `${match.homeScore} - ${match.awayScore}`}
+              </div>
+
+              <div className="text-xs text-white/40 font-bold uppercase mt-4 tracking-wider font-sans">
+                🏟️ Stadium: {match.venue}
+              </div>
+
+              <div className="text-[9px] text-white/20 uppercase font-bold tracking-widest mt-1 leading-normal">
+                Officially Administered Event
+              </div>
+            </div>
+
+            {/* Away Team */}
+            <div className="flex flex-col md:flex-row-reverse items-center gap-4 text-center md:text-left flex-1 justify-start">
+              <img src={awayTeam.logo} alt={awayTeam.name} className="w-20 h-20 object-contain flex-shrink-0" />
+              <div>
+                <h2 className="text-2xl font-display font-black leading-tight uppercase">{awayTeam.name}</h2>
+                <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mt-1">Status: Registered</p>
+                
+                {/* Scorers on Away */}
+                {awayScorers.length > 0 && (
+                  <div className="text-[10px] text-white/60 space-y-0.5 mt-2 font-mono">
+                    {awayScorers.map((scorer, idx) => (
+                      <div key={idx}>
+                        ⚽ {scorer.playerName} {scorer.minute}'{scorer.type === 'Penalty' ? ' (P)' : scorer.type === 'Own Goal' ? ' (OG)' : ''}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* THREE COLUMN GRID: STATS, TIMELINE & LINEUPS, COMMENTARY & REPORT */}
+        <div className="grid lg:grid-cols-3 gap-8">
+          
+          {/* COL 1: MATCH STATISTICS percentage bars */}
+          <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60">
+            <h3 className="text-sm font-display font-black uppercase tracking-wider text-white mb-6 flex items-center gap-2 pb-4 border-b border-b-white/5">
+              <Award size={15} className="text-primary" />
+              <span>MATCH DAY SCIENTIFIC METRICS</span>
+            </h3>
+
+            {isUpcoming ? (
+              <div className="text-center py-20 text-white/35">
+                <Clock className="w-12 h-12 mx-auto text-white/15 mb-3" />
+                <p className="text-xs font-bold uppercase tracking-widest">Awaiting Kickoff</p>
+                <p className="text-[10px] text-white/20 px-4 mt-2 leading-relaxed">Statistics will generate proportionally as soon as match begins.</p>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                
+                {/* Possession Percentage Bar */}
+                <div className="space-y-2">
+                  <div className="flex justify-between font-mono text-xs font-black text-white/80">
+                    <span>{stats.possessionHome}%</span>
+                    <span className="text-[10px] font-sans font-bold text-white/40 uppercase tracking-widest">BALL POSSESSION</span>
+                    <span>{stats.possessionAway}%</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-white/5 flex overflow-hidden">
+                    <div style={{ width: `${stats.possessionHome}%` }} className="bg-primary h-full transition-all duration-500" />
+                    <div style={{ width: `${stats.possessionAway}%` }} className="bg-yellow-400 h-full transition-all duration-500" />
+                  </div>
+                </div>
+
+                {/* Shorthand Stat Bars */}
+                {([
+                  { label: '🔥 SHOOT SUMMARY', home: stats.shotsHome, away: stats.shotsAway },
+                  { label: '🎯 SHOTS ON TARGET', home: stats.shotsOnTargetHome, away: stats.shotsOnTargetAway },
+                  { label: '🚩 CORNER KICKS', home: stats.cornersHome, away: stats.cornersAway },
+                  { label: '⚠️ SQUAD FOULS', home: stats.foulsHome, away: stats.foulsAway },
+                  { label: '🟨 YELLOW WARNINGS', home: stats.yellowCardsHome, away: stats.yellowCardsAway },
+                  { label: '🟥 RED EXPULSIONS', home: stats.redCardsHome, away: stats.redCardsAway },
+                  { label: '🧤 GOALKEEPER SAVES', home: stats.savesHome, away: stats.savesAway }
+                ] as const).map((statRow, idx) => {
+                  const widths = getProgressWidths(statRow.home, statRow.away);
+                  return (
+                    <div key={idx} className="space-y-1.5 pt-4 border-t border-white/5">
+                      <div className="flex justify-between items-center text-xs font-bold">
+                        <span className="font-mono font-black text-white/90">{statRow.home}</span>
+                        <span className="text-[8px] tracking-widest uppercase text-white/30">{statRow.label}</span>
+                        <span className="font-mono font-black text-white/90">{statRow.away}</span>
+                      </div>
+                      <div className="w-full h-1.5 rounded-full bg-white/5 flex overflow-hidden">
+                        <div style={{ width: `${widths.homePercent}%` }} className="bg-primary/90 h-full transition-all duration-500" />
+                        <div style={{ width: `${widths.awayPercent}%` }} className="bg-yellow-400/90 h-full transition-all duration-500" />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* COL 2: TIMELINE SYSTEM & SQUAD LINEUPS */}
+          <div className="space-y-8 lg:col-span-1">
+            
+            {/* Timeline component */}
+            <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60">
+              <h3 className="text-sm font-display font-black uppercase tracking-wider text-white mb-6 flex items-center gap-2 pb-4 border-b border-b-white/5">
+                <List size={15} className="text-primary" />
+                <span>OFFICIAL TIMELINE RECORD</span>
+              </h3>
+
+              {timelineEvents.length === 0 ? (
+                <div className="text-center py-16 text-white/30 border border-dashed border-white/15 rounded-2xl">
+                  <p className="text-xs font-bold uppercase tracking-widest">No major events yet</p>
+                  <p className="text-[10px] mt-1.5 leading-normal text-white/20">The timeline is automatically updated in real time as events transpire.</p>
+                </div>
+              ) : (
+                <div className="relative pl-6 border-l border-white/10 space-y-6">
+                  {timelineEvents.map((ev, i) => (
+                    <div key={i} className="relative text-xs">
+                      <span className="absolute -left-9.5 top-0 w-6 h-6 rounded-full bg-navy border border-white/10 text-primary flex items-center justify-center font-mono font-bold text-[9px]">
+                        {ev.minute}'
+                      </span>
+                      <div className="p-3 bg-white/[0.02] border border-white/5 rounded-xl">
+                        <p className="text-white/80 font-bold leading-normal">{ev.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Lineups displays */}
+            <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60 space-y-6">
+              <h3 className="text-sm font-display font-black uppercase tracking-wider text-white flex items-center gap-2 pb-4 border-b border-b-white/5">
+                <Users size={15} className="text-primary" />
+                <span>COMBAT SQUAD SATELLITE</span>
+              </h3>
+
+              <div className="grid grid-cols-2 gap-4">
+                {/* Home starting */}
+                <div className="space-y-2">
+                  <span className="text-[9px] font-black tracking-widest uppercase text-primary font-display">{match.homeTeam} XI</span>
+                  <div className="space-y-1">
+                    {['GK', 'LB', 'CB1', 'CB2', 'RB', 'LW', 'ST', 'RW'].map(s => (
+                      <div key={s} className="bg-white/5 p-1 px-2 rounded font-mono text-[10px] text-white/70 truncate border border-white/5">
+                        <span className="text-primary font-bold mr-1.5">{s}</span>
+                        Player {s === 'GK' ? '1' : s === 'LB' ? '2' : s === 'CB1' ? '3' : '4'}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Away starting */}
+                <div className="space-y-2">
+                  <span className="text-[9px] font-black tracking-widest uppercase text-yellow-400 font-display">{match.awayTeam} XI</span>
+                  <div className="space-y-1">
+                    {['GK', 'LB', 'CB1', 'CB2', 'RB', 'LM', 'CM1', 'RM', 'ST1'].map(s => (
+                      <div key={s} className="bg-white/5 p-1 px-2 rounded font-mono text-[10px] text-white/70 truncate border border-white/5">
+                        <span className="text-yellow-400 font-bold mr-1.5">{s}</span>
+                        Player {s === 'GK' ? '12' : s === 'LB' ? '13' : '14'}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* COL 3: LIVE COMMENTARY & STATISTICAL REPORTS */}
+          <div className="space-y-8 lg:col-span-1">
+            
+            {/* Live commentary display */}
+            <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60">
+              <h3 className="text-sm font-display font-black uppercase tracking-wider text-white mb-6 flex items-center gap-2 pb-4 border-b border-b-white/5">
+                <Send size={14} className="text-primary animate-pulse" />
+                <span>RAPID TRANSMISSION COMMENTARY FEED</span>
+              </h3>
+
+              <div className="space-y-4 max-h-[450px] overflow-y-auto pr-1">
+                {matchCommentary.length === 0 ? (
+                  <p className="text-center text-xs text-white/30 font-bold uppercase tracking-widest py-10">No live feed postings</p>
+                ) : (
+                  matchCommentary.map((comm) => (
+                    <div key={comm.id} className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 text-xs text-left hover:bg-white/[0.04] transition-all">
+                      <div className="flex gap-2 items-center font-bold font-mono text-[10px] mb-1.5 text-primary">
+                        <span>{comm.minute}</span>
+                        <span className="text-white/20 text-[8px] font-sans">{comm.timestamp}</span>
+                      </div>
+                      <p className="text-white/80 font-medium leading-relaxed">{comm.text}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Published Match Report panel */}
+            {publishedReport && publishedReport.isPublished && (
+              <div className="glass border border-yellow-500/20 rounded-[32px] p-6 bg-yellow-500/5 shadow-lg space-y-4 relative">
+                <div className="absolute top-0 right-6 -translate-y-1/2 px-2.5 py-0.5 bg-yellow-500 rounded font-black text-dark text-[8px] uppercase tracking-widest">
+                  Official Match Report Published
+                </div>
+
+                <h3 className="text-xs font-display font-black uppercase tracking-wider text-yellow-500 flex items-center gap-2 mb-2">
+                  <FileText size={15} />
+                  <span>POST-MATCH SUMMARY ANALYSIS</span>
+                </h3>
+
+                <div className="space-y-3.5 text-xs leading-relaxed text-white/80 font-medium">
+                  <div>
+                    <h4 className="text-[10px] font-black uppercase tracking-wider text-yellow-500 mb-1">MVP Player of Match</h4>
+                    <span className="bg-yellow-500/25 border border-yellow-500/30 text-yellow-400 px-3 py-1 rounded font-bold text-xs inline-block">
+                      🏆 {publishedReport.playerOfMatch}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h4 className="text-[10px] font-black uppercase tracking-wider text-white/50 mb-1">Match Overview</h4>
+                    <p className="leading-relaxed font-sans">{publishedReport.summary}</p>
+                  </div>
+
+                  <div>
+                    <h4 className="text-[10px] font-black uppercase tracking-wider text-white/50 mb-1">Tactical Play Analysis</h4>
+                    <p className="leading-relaxed font-sans">{publishedReport.tacticalAnalysis}</p>
+                  </div>
+
+                  {publishedReport.keyMoments && publishedReport.keyMoments.length > 0 && (
+                    <div>
+                      <h4 className="text-[10px] font-black uppercase tracking-wider text-white/50 mb-1">Highlight Highlights</h4>
+                      <ul className="list-disc pl-5 space-y-1 text-white/70">
+                        {publishedReport.keyMoments.map((mom, idx) => (
+                          <li key={idx} className="font-sans font-medium">{mom}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  );
+}
