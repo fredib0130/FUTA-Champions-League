@@ -53,6 +53,11 @@ export interface Match {
   lineupSubmittedAway: boolean;
 
   matchday: number;
+
+  firstHalfAddedTime?: number;
+  secondHalfAddedTime?: number;
+  homePenalties?: number;
+  awayPenalties?: number;
 }
 
 export interface NewsPost {
@@ -105,7 +110,7 @@ export interface GoalScorer {
 
   team: string;
 
-  minute: number;
+  minute: number | string;
 
   type:
     | "Goal"
@@ -113,6 +118,25 @@ export interface GoalScorer {
     | "Own Goal";
 
   assist?: string;
+}
+
+export function parseMinuteToNumeric(minStr: string | number): number {
+  if (typeof minStr === 'number') return minStr;
+  const cleaned = minStr.replace("'", "").trim();
+  if (cleaned.includes('+')) {
+    const parts = cleaned.split('+');
+    const base = parseFloat(parts[0]) || 0;
+    const added = parseFloat(parts[1]) || 0;
+    // Keep 30+2 played after 30 but before 31
+    return base + (added / 100);
+  }
+  return parseFloat(cleaned) || 0;
+}
+
+export function formatMinuteDisplay(minute: string | number): string {
+  const mStr = String(minute).trim();
+  if (mStr.endsWith("'")) return mStr;
+  return `${mStr}'`;
 }
 
 

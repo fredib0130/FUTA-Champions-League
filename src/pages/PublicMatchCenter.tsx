@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useMatchState } from '../context/MatchStateContext';
+import { parseMinuteToNumeric, formatMinuteDisplay } from '../types';
 import { 
   ArrowLeft, Radio, Trophy, Calendar, Sparkles, Award, Shield, FileText, Send, Clock, List, Users, X
 } from 'lucide-react';
@@ -171,7 +172,7 @@ export default function PublicMatchCenter() {
       text: `🔄 SUB: ${s.playerIn} IN | ${s.playerOut} OUT`,
       team: s.teamAbbr
     }))
-  ].sort((a, b) => b.minute - a.minute);
+  ].sort((a, b) => parseMinuteToNumeric(b.minute) - parseMinuteToNumeric(a.minute));
 
   // Home vs Away scorers lists block
   const homeScorers = matchGoals.filter(g => {
@@ -296,7 +297,7 @@ export default function PublicMatchCenter() {
                   <div className="text-[10px] text-white/60 space-y-0.5 mt-2 font-mono">
                     {homeScorers.map((scorer, idx) => (
                       <div key={idx}>
-                        ⚽ {scorer.playerName} {scorer.minute}'{scorer.type === 'Penalty' ? ' (P)' : scorer.type === 'Own Goal' ? ' (OG)' : ''}
+                        ⚽ {scorer.playerName} {formatMinuteDisplay(scorer.minute)}{scorer.type === 'Penalty' ? ' (P)' : scorer.type === 'Own Goal' ? ' (OG)' : ''}
                       </div>
                     ))}
                   </div>
@@ -326,6 +327,12 @@ export default function PublicMatchCenter() {
                 {isUpcoming ? 'VS' : `${match.homeScore} - ${match.awayScore}`}
               </div>
 
+              {(match.homePenalties !== undefined && match.awayPenalties !== undefined) && (
+                <div className="mt-3 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 inline-block text-amber-400 font-display font-black text-xs uppercase tracking-wider">
+                  {match.homeTeam} {match.homePenalties}–{match.awayPenalties} {match.awayTeam} (Penalties)
+                </div>
+              )}
+
               <div className="text-xs text-white/40 font-bold uppercase mt-4 tracking-wider font-sans">
                 🏟️ Stadium: {match.venue}
               </div>
@@ -347,7 +354,7 @@ export default function PublicMatchCenter() {
                   <div className="text-[10px] text-white/60 space-y-0.5 mt-2 font-mono">
                     {awayScorers.map((scorer, idx) => (
                       <div key={idx}>
-                        ⚽ {scorer.playerName} {scorer.minute}'{scorer.type === 'Penalty' ? ' (P)' : scorer.type === 'Own Goal' ? ' (OG)' : ''}
+                        ⚽ {scorer.playerName} {formatMinuteDisplay(scorer.minute)}{scorer.type === 'Penalty' ? ' (P)' : scorer.type === 'Own Goal' ? ' (OG)' : ''}
                       </div>
                     ))}
                   </div>
@@ -438,8 +445,8 @@ export default function PublicMatchCenter() {
                 <div className="relative pl-6 border-l border-white/10 space-y-6">
                   {timelineEvents.map((ev, i) => (
                     <div key={i} className="relative text-xs">
-                      <span className="absolute -left-9.5 top-0 w-6 h-6 rounded-full bg-navy border border-white/10 text-primary flex items-center justify-center font-mono font-bold text-[9px]">
-                        {ev.minute}'
+                      <span className="absolute -left-9.5 top-0 w-[30px] h-6 rounded-full bg-navy border border-white/10 text-primary flex items-center justify-center font-mono font-bold text-[9px]">
+                        {formatMinuteDisplay(ev.minute)}
                       </span>
                       <div className="p-3 bg-white/[0.02] border border-white/5 rounded-xl">
                         <p className="text-white/80 font-bold leading-normal">{ev.text}</p>

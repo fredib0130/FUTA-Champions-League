@@ -168,10 +168,15 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
             )}
           </div>
           <div className={cn(
-            "font-display text-4xl font-bold px-4 tracking-tighter",
+            "font-display text-4xl font-bold px-4 tracking-tighter flex flex-col items-center",
             match.status === 'Finished' ? "text-white" : "text-primary"
           )}>
-            {match.status === 'Upcoming' ? 'VS' : `${match.homeScore} - ${match.awayScore}`}
+            <span>{match.status === 'Upcoming' ? 'VS' : `${match.homeScore} - ${match.awayScore}`}</span>
+            {(match.homePenalties !== undefined && match.awayPenalties !== undefined) && (
+              <span className="text-[10px] text-amber-400 font-sans font-black tracking-widest uppercase mt-1 leading-none">
+                ({match.homePenalties}-{match.awayPenalties} pens)
+              </span>
+            )}
           </div>
           <div className="text-[10px] font-bold text-white/20 mt-2 tracking-widest">{match.venue}</div>
           

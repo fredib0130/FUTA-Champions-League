@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useMatchState, CommentaryItem, CardEvent, SubEvent } from '../context/MatchStateContext';
-import { Match, Team, GoalScorer } from '../types';
+import { Match, Team, GoalScorer, parseMinuteToNumeric, formatMinuteDisplay } from '../types';
 import { 
   ArrowLeft, Play, Pause, Square, Check, X, Shield, Plus, Minus, Trash, Send,
   FileText, Key, Calendar, Layout, Award, Users, AlertCircle, Sparkles, Clock, List
@@ -18,7 +18,7 @@ export default function AdminMatchController() {
     endMatch, updateMatchMinute, updateMatchStatusDirectly, incrementGoal, decrementGoal,
     updateScoreManually, addGoalEvent, removeLastGoalEvent, addCardEvent, removeCardEvent,
     addSubEvent, removeSubEvent, updateMatchStats, approveLineup, rejectLineup, lockLineups,
-    addCommentary, deleteCommentary, saveMatchReport, addAuditLog
+    addCommentary, deleteCommentary, saveMatchReport, addAuditLog, updateMatchAddedTime, updateMatchPenalties
   } = useMatchState();
 
   // Route security
@@ -81,19 +81,19 @@ export default function AdminMatchController() {
   // Form states
   const [goalPlayer, setGoalPlayer] = useState('');
   const [goalTeam, setGoalTeam] = useState(match.homeTeam);
-  const [goalMin, setGoalMin] = useState(parseInt(timer.liveMinute) || 12);
+  const [goalMin, setGoalMin] = useState<string | number>(timer.liveMinute.replace("'", "") || 12);
   const [goalType, setGoalType] = useState<'Goal' | 'Penalty' | 'Own Goal'>('Goal');
   const [goalAssist, setGoalAssist] = useState('');
 
   const [cardPlayer, setCardPlayer] = useState('');
   const [cardTeam, setCardTeam] = useState(match.homeTeam);
-  const [cardMin, setCardMin] = useState(parseInt(timer.liveMinute) || 24);
+  const [cardMin, setCardMin] = useState<string | number>(timer.liveMinute.replace("'", "") || 24);
   const [cardType, setCardType] = useState<'Yellow' | 'Second Yellow' | 'Red'>('Yellow');
 
   const [subTeam, setSubTeam] = useState(match.homeTeam);
   const [subOut, setSubOut] = useState('');
   const [subIn, setSubIn] = useState('');
-  const [subMin, setSubMin] = useState(parseInt(timer.liveMinute) || 60);
+  const [subMin, setSubMin] = useState<string | number>(timer.liveMinute.replace("'", "") || 30);
 
   const [commentsInput, setCommentsInput] = useState('');
   const [commentsType, setCommentsType] = useState<CommentaryItem['type']>('general');
@@ -198,7 +198,7 @@ export default function AdminMatchController() {
       text: `🔄 SUB (${s.teamAbbr}): IN ➡️ ${s.playerIn} | OUT ➡️ ${s.playerOut}`,
       raw: s
     }))
-  ].sort((a, b) => b.minute - a.minute); // Chronological desc (latest first)
+  ].sort((a, b) => parseMinuteToNumeric(b.minute) - parseMinuteToNumeric(a.minute)); // Chronological desc (latest first)
 
   // Quick preset stats buttons
   const adjustStat = (field: keyof typeof stats, direction: 'up' | 'down') => {
@@ -393,6 +393,37 @@ export default function AdminMatchController() {
                       Set Min
                     </button>
                   </div>
+
+                  {/* Injury Time (Added Time) controls */}
+                  <div className="pt-3 border-t border-white/5 space-y-3">
+                    <span className="text-[9px] font-black text-white/40 uppercase tracking-widest block">SET ADDED INJURY TIME (MINS)</span>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-1">First Half (+)</label>
+                        <select
+                          value={match.firstHalfAddedTime || 0}
+                          onChange={(e) => updateMatchAddedTime(match.id, parseInt(e.target.value) || 0, match.secondHalfAddedTime || 0)}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono font-bold text-white focus:outline-none focus:border-primary/50"
+                        >
+                          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(val => (
+                            <option key={val} value={val} className="bg-neutral-900 text-white">+{val} min</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-1">Second Half (+)</label>
+                        <select
+                          value={match.secondHalfAddedTime || 0}
+                          onChange={(e) => updateMatchAddedTime(match.id, match.firstHalfAddedTime || 0, parseInt(e.target.value) || 0)}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono font-bold text-white focus:outline-none focus:border-primary/50"
+                        >
+                          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(val => (
+                            <option key={val} value={val} className="bg-neutral-900 text-white">+{val} min</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Score Controls */}
@@ -479,6 +510,52 @@ export default function AdminMatchController() {
                       <span>Revert Last Goal Event</span>
                     </button>
                   </div>
+
+                  {/* Penalty Shootout section (for knockout tied matches) */}
+                  <div className="pt-3 border-t border-white/5 space-y-3">
+                    <span className="text-[9px] font-black text-amber-400 uppercase tracking-widest block">PENALTY SHOOTOUT SCORES</span>
+                    <div className="grid grid-cols-2 gap-3 items-end">
+                      <div>
+                        <label className="text-[8px] font-black text-white/30 uppercase block mb-1 font-mono">{match.homeTeam} Pens</label>
+                        <input
+                          type="number"
+                          min="0"
+                          value={match.homePenalties ?? ''}
+                          onChange={(e) => {
+                            const val = e.target.value === '' ? null : parseInt(e.target.value);
+                            updateMatchPenalties(match.id, val, match.awayPenalties ?? 0);
+                          }}
+                          placeholder="0"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 text-xs font-mono font-bold text-white focus:outline-none focus:border-amber-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[8px] font-black text-white/30 uppercase block mb-1 font-mono">{match.awayTeam} Pens</label>
+                        <input
+                          type="number"
+                          min="0"
+                          value={match.awayPenalties ?? ''}
+                          onChange={(e) => {
+                            const val = e.target.value === '' ? null : parseInt(e.target.value);
+                            updateMatchPenalties(match.id, match.homePenalties ?? 0, val);
+                          }}
+                          placeholder="0"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 text-xs font-mono font-bold text-white focus:outline-none focus:border-amber-500"
+                        />
+                      </div>
+                    </div>
+                    {(match.homePenalties !== undefined || match.awayPenalties !== undefined) && (
+                      <div className="flex justify-between items-center bg-amber-500/5 border border-amber-500/10 rounded-lg p-2 mt-1">
+                        <span className="text-[10px] text-amber-200">Current Pen Score: {match.homeTeam} {match.homePenalties ?? 0} – {match.awayPenalties ?? 0} {match.awayTeam}</span>
+                        <button
+                          onClick={() => updateMatchPenalties(match.id, null, null)}
+                          className="text-[9px] font-bold text-red-500 underline hover:text-red-400"
+                        >
+                          Clear
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
               </div>
@@ -524,11 +601,10 @@ export default function AdminMatchController() {
                     <div>
                       <label className="text-[8px] font-black text-white/40 uppercase tracking-widest block mb-1">Match Minute*</label>
                       <input
-                        type="number"
-                        min="0"
-                        max="120"
+                        type="text"
                         value={goalMin}
-                        onChange={(e) => setGoalMin(parseInt(e.target.value) || 0)}
+                        onChange={(e) => setGoalMin(e.target.value)}
+                        placeholder="e.g. 12 or 30+1"
                         className="w-full bg-navy-dark border border-white/10 rounded-lg px-2 py-2 text-xs font-mono font-bold text-white focus:outline-none"
                         required
                       />
@@ -599,11 +675,10 @@ export default function AdminMatchController() {
                     <div>
                       <label className="text-[8px] font-black text-white/40 uppercase tracking-widest block mb-1">Offense Minute*</label>
                       <input
-                        type="number"
-                        min="0"
-                        max="120"
+                        type="text"
                         value={cardMin}
-                        onChange={(e) => setCardMin(parseInt(e.target.value) || 0)}
+                        onChange={(e) => setCardMin(e.target.value)}
+                        placeholder="e.g. 24 or 60+1"
                         className="w-full bg-navy-dark border border-white/10 rounded-lg px-2 py-2 text-xs font-mono font-bold text-white focus:outline-none"
                         required
                       />
@@ -659,11 +734,10 @@ export default function AdminMatchController() {
                     <div>
                       <label className="text-[8px] font-black text-white/40 uppercase tracking-widest block mb-1">Minute*</label>
                       <input
-                        type="number"
-                        min="0"
-                        max="120"
+                        type="text"
                         value={subMin}
-                        onChange={(e) => setSubMin(parseInt(e.target.value) || 0)}
+                        onChange={(e) => setSubMin(e.target.value)}
+                        placeholder="e.g. 45 or 60+3"
                         className="w-full bg-navy-dark border border-white/10 rounded-lg px-2 py-2 text-xs font-mono font-bold text-white focus:outline-none"
                         required
                       />
@@ -969,8 +1043,8 @@ export default function AdminMatchController() {
                     <div key={i} className="relative text-xs">
                       
                       {/* Left circular bullet indicator */}
-                      <span className="absolute -left-9.5 top-0.5 w-6 h-6 rounded-full bg-navy border border-white/15 flex items-center justify-center font-mono font-bold text-[9px] text-primary">
-                        {ev.minute}'
+                      <span className="absolute -left-9.5 top-0.5 w-[30px] h-6 rounded-full bg-navy border border-white/15 flex items-center justify-center font-mono font-bold text-[9px] text-primary">
+                        {formatMinuteDisplay(ev.minute)}
                       </span>
 
                       <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 shadow-sm hover:bg-white/[0.04] transition-all relative flex justify-between items-start gap-2">
