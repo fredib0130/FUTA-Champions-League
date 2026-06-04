@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Match, Team, GoalScorer, MatchStats } from '../types';
+import { Match, Team, GoalScorer, MatchStats, Article, NewsItem, MatchPhoto } from '../types';
 import { MATCHES, TEAMS, MOCK_MATCH_STATS } from '../data/mockData';
 import { fclApi } from '../lib/api';
 
@@ -76,7 +76,7 @@ export interface AuditLogItem {
 
 export interface AdminUser {
   username: string;
-  role: 'Super Admin' | 'Match Commissioner' | 'Media Officer';
+  role: 'Super Admin' | 'Match Commissioner' | 'Media Officer' | 'Team Official';
 }
 
 interface MatchStateContextType {
@@ -92,6 +92,15 @@ interface MatchStateContextType {
   auditLogs: AuditLogItem[];
   currentUser: AdminUser | null;
   activeMinAndStatus: Record<string, { liveMinute: string; isPaused: boolean }>;
+  articles: Article[];
+  newsItems: NewsItem[];
+  matchPhotos: MatchPhoto[];
+  saveArticle: (article: Article) => void;
+  deleteArticle: (id: string) => void;
+  saveNewsItem: (newsItem: NewsItem) => void;
+  deleteNewsItem: (id: string) => void;
+  saveMatchPhoto: (photo: MatchPhoto) => void;
+  deleteMatchPhoto: (id: string) => void;
   
   // Auth
   login: (username: string, passwordHashOrPlain: string, role: AdminUser['role']) => Promise<boolean>;
@@ -140,6 +149,11 @@ interface MatchStateContextType {
   // Helper
   addAuditLog: (action: string, matchId?: string) => void;
   resetAllData: () => void;
+
+  // Fixture Management
+  createFixture: (newMatch: Omit<Match, 'id' | 'homeScore' | 'awayScore' | 'lineupSubmittedHome' | 'lineupSubmittedAway'>) => void;
+  editFixture: (matchId: string, updatedFields: Partial<Match>) => void;
+  deleteFixture: (matchId: string) => void;
 }
 
 const MatchStateContext = createContext<MatchStateContextType | undefined>(undefined);
@@ -163,6 +177,11 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   
   // Realtime Live Minute progressing tick (simulating actual runtime minutage)
   const [activeMinAndStatus, setActiveMinAndStatus] = useState<Record<string, { liveMinute: string; isPaused: boolean }>>({});
+
+  // Media & Match Reporting States
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+  const [matchPhotos, setMatchPhotos] = useState<MatchPhoto[]>([]);
 
   // Helper to load all state from localStorage or seed initial data
   const loadState = () => {
@@ -338,6 +357,134 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     // 11. Timer Cache
     const storedTimers = localStorage.getItem('fcl_admin_timers');
     setActiveMinAndStatus(storedTimers ? JSON.parse(storedTimers) : {});
+
+    // 12. Articles Load & Seed
+    const storedArticles = localStorage.getItem('fcl_admin_articles');
+    let loadedArticles: Article[] = [];
+    if (storedArticles) {
+      loadedArticles = JSON.parse(storedArticles);
+    } else {
+      loadedArticles = [
+        {
+          id: 'art-1',
+          title: 'Titan Clash: MST vs IFS Preview',
+          featuredImage: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?q=80&w=1000',
+          author: 'Fabrizio',
+          category: 'Match Preview',
+          body: 'The undisputed titans of the FUTA Champions League, defending champions MST and Information Systems (IFS) are set to lock horns in a match that will define the early leadership of the tournament. Both teams possess unyielding midfields and lightning-fast wingers. Pundits expect a tight, tactical battle of wits.',
+          tags: ['MST', 'IFS', 'Preview', 'Titans'],
+          isPublished: true,
+          createdAt: '2026-06-03 14:00',
+          matchId: 'md1-1'
+        },
+        {
+          id: 'art-2',
+          title: 'Underdog Story: SIMT Aim for Stars',
+          featuredImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
+          author: 'AB2Fresh',
+          category: 'Team Spotlight',
+          body: 'Securities and Investment Management Technology (SIMT) qualified against all odds. Entertaining, disciplined, and with nothing to lose, their coaching staff believes SIMT can shock the established order. This spotlight takes a deep dive into incredibly passionate qualification stories.',
+          tags: ['SIMT', 'Spotlight', 'Underdogs'],
+          isPublished: true,
+          createdAt: '2026-06-04 09:30'
+        }
+      ];
+      localStorage.setItem('fcl_admin_articles', JSON.stringify(loadedArticles));
+    }
+    setArticles(loadedArticles);
+
+    // 13. News Items Load & Seed
+    const storedNews = localStorage.getItem('fcl_admin_news');
+    let loadedNews: NewsItem[] = [];
+    if (storedNews) {
+      loadedNews = JSON.parse(storedNews);
+    } else {
+      loadedNews = [
+        {
+          id: 'news-1',
+          title: 'Tournament Accreditation Commences',
+          featuredImage: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1000',
+          author: 'FrediB',
+          category: 'Registration Updates',
+          body: 'The FCL Committee invites all sports officials and department coaches to complete player and technical official credential submissions by midnight. Ensure all matric numbers and official FUTA student ID card uploads are completely legible.',
+          tags: ['Accreditation', 'FCL2026', 'Registration'],
+          isPublished: true,
+          createdAt: '2026-06-01 10:00'
+        },
+        {
+          id: 'news-2',
+          title: 'Matchday 1 Fixtures & Venue Scheduling Confirmed',
+          featuredImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
+          author: 'Ousman',
+          category: 'Fixture Announcement',
+          body: 'The operations team has successfully verified and locked down the pitch availability for Matchday 1. FUTA Sports Complex Pitch A and Pitch B will feature consecutive action starting from 10:00 UTC.',
+          tags: ['Fixtures', 'Matchday1', 'Scheduling'],
+          isPublished: true,
+          createdAt: '2026-06-03 11:30'
+        },
+        {
+          id: 'news-3',
+          title: 'FCL Announces New Media Partnership with FUTA Radio',
+          featuredImage: 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1000',
+          author: 'FrediB',
+          category: 'Committee Announcement',
+          body: 'FCL 2026 is officially partnering with FUTA Radio 93.1 FM to broadcast live commentaries, post-match media pressers, and interview summaries directly to the student populace.',
+          tags: ['FUTA Radio', 'Media Partner', 'Collaboration'],
+          isPublished: true,
+          createdAt: '2026-06-04 15:45'
+        }
+      ];
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    }
+    setNewsItems(loadedNews);
+
+    // 14. Match Photos Load & Seed
+    const storedPhotos = localStorage.getItem('fcl_admin_match_photos');
+    let loadedPhotos: MatchPhoto[] = [];
+    if (storedPhotos) {
+      loadedPhotos = JSON.parse(storedPhotos);
+    } else {
+      loadedPhotos = [
+        {
+          id: 'photo-1',
+          matchId: 'md1-1',
+          fileUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=600',
+          category: 'Match Action',
+          uploadedAt: '2026-06-04 14:00',
+          uploadedBy: 'AB2Fresh',
+          originalSize: '4.8 MB',
+          compressedSize: '1.9 MB',
+          ratio: '60%',
+          folderStage: '2026/MD1'
+        },
+        {
+          id: 'photo-2',
+          matchId: 'md1-1',
+          fileUrl: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?q=80&w=600',
+          category: 'Goal Celebration',
+          uploadedAt: '2026-06-04 14:15',
+          uploadedBy: 'AB2Fresh',
+          originalSize: '6.2 MB',
+          compressedSize: '2.3 MB',
+          ratio: '63%',
+          folderStage: '2026/MD1'
+        },
+        {
+          id: 'photo-3',
+          matchId: 'md1-1',
+          fileUrl: 'https://images.unsplash.com/photo-1517649763962-0c623066013B?q=80&w=600',
+          category: 'Crowd',
+          uploadedAt: '2026-06-04 14:30',
+          uploadedBy: 'Fabrizio',
+          originalSize: '3.1 MB',
+          compressedSize: '1.2 MB',
+          ratio: '61%',
+          folderStage: '2026/MD1'
+        }
+      ];
+      localStorage.setItem('fcl_admin_match_photos', JSON.stringify(loadedPhotos));
+    }
+    setMatchPhotos(loadedPhotos);
   };
 
   // Standing calculation helper
@@ -1337,11 +1484,117 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     localStorage.removeItem('fcl_admin_commentaries');
     localStorage.removeItem('fcl_admin_reports');
     localStorage.removeItem('fcl_admin_timers');
+    localStorage.removeItem('fcl_admin_articles');
+    localStorage.removeItem('fcl_admin_news');
+    localStorage.removeItem('fcl_admin_match_photos');
     
     // refresh state
     loadState();
     
     // Broadcast updates
+    channel.postMessage({ type: 'FCL_STATE_UPDATE' });
+  };
+
+  const createFixture = (newMatch: Omit<Match, 'id' | 'homeScore' | 'awayScore' | 'lineupSubmittedHome' | 'lineupSubmittedAway'>) => {
+    const matchId = `match-${Date.now()}`;
+    const fullMatch: Match = {
+      ...newMatch,
+      id: matchId,
+      homeScore: 0,
+      awayScore: 0,
+      lineupSubmittedHome: false,
+      lineupSubmittedAway: false,
+      firstHalfAddedTime: 0,
+      secondHalfAddedTime: 0
+    };
+    const updated = [...matches, fullMatch];
+    addAuditLog(`Created fixture: ${fullMatch.homeTeam} vs ${fullMatch.awayTeam} (MW ${fullMatch.matchday})`, matchId);
+    saveAndBroadcast(updated);
+  };
+
+  const editFixture = (matchId: string, updatedFields: Partial<Match>) => {
+    const updated = matches.map(m => {
+      if (m.id === matchId) {
+        return { ...m, ...updatedFields };
+      }
+      return m;
+    });
+    const match = matches.find(m => m.id === matchId);
+    const label = match ? `${match.homeTeam} vs ${match.awayTeam}` : 'match';
+    addAuditLog(`Edited fixture settings for ${label}`, matchId);
+    saveAndBroadcast(updated);
+  };
+
+  const deleteFixture = (matchId: string) => {
+    const matchToDelete = matches.find(m => m.id === matchId);
+    const updated = matches.filter(m => m.id !== matchId);
+    addAuditLog(`Deleted fixture: ${matchToDelete ? `${matchToDelete.homeTeam} vs ${matchToDelete.awayTeam}` : 'match'}`);
+    saveAndBroadcast(updated);
+  };
+
+  const saveArticle = (article: Article) => {
+    const fresh = [...articles];
+    const idx = fresh.findIndex(a => a.id === article.id);
+    if (idx >= 0) {
+      fresh[idx] = article;
+    } else {
+      fresh.push(article);
+    }
+    setArticles(fresh);
+    localStorage.setItem('fcl_admin_articles', JSON.stringify(fresh));
+    addAuditLog(`${currentUser ? currentUser.username : 'Commissioner'} published article: ${article.title}`);
+    channel.postMessage({ type: 'FCL_STATE_UPDATE' });
+  };
+
+  const deleteArticle = (id: string) => {
+    const fresh = articles.filter(a => a.id !== id);
+    setArticles(fresh);
+    localStorage.setItem('fcl_admin_articles', JSON.stringify(fresh));
+    addAuditLog(`Deleted article ID: ${id}`);
+    channel.postMessage({ type: 'FCL_STATE_UPDATE' });
+  };
+
+  const saveNewsItem = (newsItem: NewsItem) => {
+    const fresh = [...newsItems];
+    const idx = fresh.findIndex(n => n.id === newsItem.id);
+    if (idx >= 0) {
+      fresh[idx] = newsItem;
+    } else {
+      fresh.push(newsItem);
+    }
+    setNewsItems(fresh);
+    localStorage.setItem('fcl_admin_news', JSON.stringify(fresh));
+    addAuditLog(`${currentUser ? currentUser.username : 'Commissioner'} published Committee Announcement: ${newsItem.title}`);
+    channel.postMessage({ type: 'FCL_STATE_UPDATE' });
+  };
+
+  const deleteNewsItem = (id: string) => {
+    const fresh = newsItems.filter(n => n.id !== id);
+    setNewsItems(fresh);
+    localStorage.setItem('fcl_admin_news', JSON.stringify(fresh));
+    addAuditLog(`Deleted News Item ID: ${id}`);
+    channel.postMessage({ type: 'FCL_STATE_UPDATE' });
+  };
+
+  const saveMatchPhoto = (photo: MatchPhoto) => {
+    const fresh = [...matchPhotos];
+    const idx = fresh.findIndex(p => p.id === photo.id);
+    if (idx >= 0) {
+      fresh[idx] = photo;
+    } else {
+      fresh.push(photo);
+    }
+    setMatchPhotos(fresh);
+    localStorage.setItem('fcl_admin_match_photos', JSON.stringify(fresh));
+    addAuditLog(`${currentUser ? currentUser.username : 'Commissioner'} uploaded photo: ${photo.category} to ${photo.folderStage || 'Match'}`);
+    channel.postMessage({ type: 'FCL_STATE_UPDATE' });
+  };
+
+  const deleteMatchPhoto = (id: string) => {
+    const fresh = matchPhotos.filter(p => p.id !== id);
+    setMatchPhotos(fresh);
+    localStorage.setItem('fcl_admin_match_photos', JSON.stringify(fresh));
+    addAuditLog(`Deleted match photo ID: ${id}`);
     channel.postMessage({ type: 'FCL_STATE_UPDATE' });
   };
 
@@ -1389,7 +1642,19 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         deleteCommentary,
         saveMatchReport,
         addAuditLog,
-        resetAllData
+        resetAllData,
+        createFixture,
+        editFixture,
+        deleteFixture,
+        articles,
+        newsItems,
+        matchPhotos,
+        saveArticle,
+        deleteArticle,
+        saveNewsItem,
+        deleteNewsItem,
+        saveMatchPhoto,
+        deleteMatchPhoto
       }}
     >
       {children}

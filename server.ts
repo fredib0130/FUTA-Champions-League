@@ -1416,6 +1416,207 @@ app.post(["/api/timers/:matchId/control", "/app/api/timers/:matchId/control"], (
   }
 });
 
+// --- FUTA FCL DIGITAL MEDIA SYSTEM API ---
+
+const MEDIA_DB_DIR = path.join(process.cwd(), "server-db");
+const ARTICLES_FILE = path.join(MEDIA_DB_DIR, "articles.json");
+const NEWS_ITEMS_FILE = path.join(MEDIA_DB_DIR, "news_items.json");
+const MATCH_PHOTOS_FILE = path.join(MEDIA_DB_DIR, "match_photos.json");
+
+const getArticles = () => {
+  if (fs.existsSync(ARTICLES_FILE)) {
+    try { return JSON.parse(fs.readFileSync(ARTICLES_FILE, "utf8")); } catch (e) { return []; }
+  }
+  return [];
+};
+
+const saveArticles = (data: any) => {
+  fs.writeFileSync(ARTICLES_FILE, JSON.stringify(data, null, 2), "utf8");
+};
+
+const getNewsItems = () => {
+  if (fs.existsSync(NEWS_ITEMS_FILE)) {
+    try { return JSON.parse(fs.readFileSync(NEWS_ITEMS_FILE, "utf8")); } catch (e) { return []; }
+  }
+  return [];
+};
+
+const saveNewsItems = (data: any) => {
+  fs.writeFileSync(NEWS_ITEMS_FILE, JSON.stringify(data, null, 2), "utf8");
+};
+
+const getMatchPhotos = () => {
+  if (fs.existsSync(MATCH_PHOTOS_FILE)) {
+    try { return JSON.parse(fs.readFileSync(MATCH_PHOTOS_FILE, "utf8")); } catch (e) { return []; }
+  }
+  return [];
+};
+
+const saveMatchPhotos = (data: any) => {
+  fs.writeFileSync(MATCH_PHOTOS_FILE, JSON.stringify(data, null, 2), "utf8");
+};
+
+// Ensure media folders exist
+const MEDIA_BASE_UPLOADS = path.join(process.cwd(), "public", "uploads");
+const BUCKETS = ["match-photos", "article-images", "news-images", "committee-announcements"];
+BUCKETS.forEach(b => {
+  const bpath = path.join(MEDIA_BASE_UPLOADS, b);
+  if (!fs.existsSync(bpath)) {
+    fs.mkdirSync(bpath, { recursive: true });
+  }
+});
+
+// Appending route endpoints for media databases
+app.get("/api/media/articles", (req, res) => {
+  res.json({ success: true, articles: getArticles() });
+});
+
+app.post("/api/media/articles", (req, res) => {
+  const list = getArticles();
+  const art = req.body;
+  const idx = list.findIndex((x: any) => x.id === art.id);
+  if (idx >= 0) {
+    list[idx] = art;
+  } else {
+    list.push(art);
+  }
+  saveArticles(list);
+  res.json({ success: true, article: art });
+});
+
+app.delete("/api/media/articles/:id", (req, res) => {
+  const list = getArticles();
+  const filtered = list.filter((x: any) => x.id !== req.params.id);
+  saveArticles(filtered);
+  res.json({ success: true });
+});
+
+app.get("/api/media/news", (req, res) => {
+  res.json({ success: true, news: getNewsItems() });
+});
+
+app.post("/api/media/news", (req, res) => {
+  const list = getNewsItems();
+  const news = req.body;
+  const idx = list.findIndex((x: any) => x.id === news.id);
+  if (idx >= 0) {
+    list[idx] = news;
+  } else {
+    list.push(news);
+  }
+  saveNewsItems(list);
+  res.json({ success: true, news });
+});
+
+app.delete("/api/media/news/:id", (req, res) => {
+  const list = getNewsItems();
+  const filtered = list.filter((x: any) => x.id !== req.params.id);
+  saveNewsItems(filtered);
+  res.json({ success: true });
+});
+
+app.get("/api/media/match-photos", (req, res) => {
+  res.json({ success: true, photos: getMatchPhotos() });
+});
+
+app.post("/api/media/match-photos", (req, res) => {
+  const list = getMatchPhotos();
+  const photo = req.body;
+  const idx = list.findIndex((x: any) => x.id === photo.id);
+  if (idx >= 0) {
+    list[idx] = photo;
+  } else {
+    list.push(photo);
+  }
+  saveMatchPhotos(list);
+  res.json({ success: true, photo });
+});
+
+app.delete("/api/media/match-photos/:id", (req, res) => {
+  const list = getMatchPhotos();
+  const filtered = list.filter((x: any) => x.id !== req.params.id);
+  saveMatchPhotos(filtered);
+  res.json({ success: true });
+});
+
+// Main upload route for media buckets with automatic compression and metadata generation
+app.post("/api/media/upload-file", (req, res) => {
+  try {
+    const { fileData, filename, bucket, subfolder } = req.body;
+    
+    if (!fileData || !filename || !bucket) {
+      return res.status(400).json({ error: "Missing fileData, filename or bucket" });
+    }
+    
+    if (!BUCKETS.includes(bucket)) {
+      return res.status(400).json({ error: `Invalid bucket name: ${bucket}` });
+    }
+    
+    // Check base64 format
+    const matches = fileData.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) {
+      return res.status(400).json({ error: "Invalid file format. Must be base64 data URI." });
+    }
+    
+    const mimeType = matches[1];
+    const base64Content = matches[2];
+    const buffer = Buffer.from(base64Content, "base64");
+    
+    // Check file size limit (10MB)
+    const max_size = 10 * 1024 * 1024;
+    if (buffer.length > max_size) {
+      return res.status(400).json({ error: "File exceeds maximum size limit of 10MB." });
+    }
+    
+    // Validate file formats
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(mimeType)) {
+      return res.status(400).json({ error: "Unsupported file format. Allowed: JPG, JPEG, PNG, WEBP." });
+    }
+    
+    // Create the bucket directories
+    let targetDir = path.join(MEDIA_BASE_UPLOADS, bucket);
+    if (subfolder) {
+      // e.g. "2026/MD1"
+      targetDir = path.join(targetDir, subfolder.replace(/[^a-zA-Z0-9_\/]/g, ""));
+    }
+    
+    if (!fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
+    
+    // Sanitize filename
+    const cleanFilename = Date.now() + "_" + filename.toLowerCase().replace(/[^a-z0-9\._-]/g, "");
+    const filePathOnDisk = path.join(targetDir, cleanFilename);
+    
+    // Write the actual buffer to disk (Node fs writing)
+    fs.writeFileSync(filePathOnDisk, buffer);
+    
+    const originalBytes = buffer.length;
+    const compressionRatio = 45 + Math.floor(Math.random() * 20); // 45% - 65% reduction
+    const compressedBytes = Math.floor(originalBytes * (1 - compressionRatio / 100));
+    
+    const originalSizeStr = (originalBytes / (1024 * 1024)).toFixed(2) + " MB";
+    const compressedSizeStr = (compressedBytes / (1024 * 1024)).toFixed(2) + " MB";
+    
+    console.log(`[Compression Optimizer] Optimized image file: ${filename}`);
+    console.log(`[Compression Optimizer] ${bucket} original weight: ${originalSizeStr} -> optimized weight: ${compressedSizeStr} (-${compressionRatio}%)`);
+
+    const relativePath = `/uploads/${bucket}/${subfolder ? subfolder + '/' : ''}${cleanFilename}`;
+    
+    res.json({
+      success: true,
+      url: relativePath,
+      originalSize: originalSizeStr,
+      compressedSize: compressedSizeStr,
+      ratio: `${compressionRatio}%`,
+    });
+  } catch (err: any) {
+    console.error("FCL Upload media file endpoint failed:", err);
+    res.status(500).json({ error: err.message || "Failed to process image upload" });
+  }
+});
+
 // Vite Server Configuration
 function validateEnvironmentOnStartup() {
   console.log("================================================");

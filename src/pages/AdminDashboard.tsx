@@ -3,15 +3,85 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useMatchState, AuditLogItem } from '../context/MatchStateContext';
 import { 
   Trophy, LogOut, Radio, Play, Calendar, CheckCircle, Shield, 
-  Settings, Users, ClipboardList, Activity, ArrowRight, RefreshCw, AlertTriangle, ShieldCheck
+  Settings, Users, ClipboardList, Activity, ArrowRight, RefreshCw, AlertTriangle, ShieldCheck, Camera
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function AdminDashboard() {
   const { 
-    currentUser, logout, matches, teams, goalScorers, cards, auditLogs, resetAllData 
+    currentUser, logout, matches, teams, goalScorers, cards, auditLogs, resetAllData,
+    createFixture, editFixture, deleteFixture
   } = useMatchState();
   const navigate = useNavigate();
+
+  // Create fixture form states
+  const [isCreating, setIsCreating] = React.useState(false);
+  const [newMatchday, setNewMatchday] = React.useState(1);
+  const [newHomeTeam, setNewHomeTeam] = React.useState('');
+  const [newAwayTeam, setNewAwayTeam] = React.useState('');
+  const [newDate, setNewDate] = React.useState('June 8, 2026');
+  const [newTime, setNewTime] = React.useState('16:00');
+  const [newVenue, setNewVenue] = React.useState('FUTA Sports Complex');
+
+  // Edit fixture states
+  const [editingMatchId, setEditingMatchId] = React.useState<string | null>(null);
+  const [editMatchday, setEditMatchday] = React.useState(1);
+  const [editHomeTeam, setEditHomeTeam] = React.useState('');
+  const [editAwayTeam, setEditAwayTeam] = React.useState('');
+  const [editDate, setEditDate] = React.useState('');
+  const [editTime, setEditTime] = React.useState('');
+  const [editVenue, setEditVenue] = React.useState('');
+
+  const handleCreateFixture = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newHomeTeam || !newAwayTeam) {
+      alert('Please select both home and away departments!');
+      return;
+    }
+    if (newHomeTeam === newAwayTeam) {
+      alert('Error: A department cannot play against itself!');
+      return;
+    }
+    createFixture({
+      homeTeam: newHomeTeam,
+      awayTeam: newAwayTeam,
+      matchday: Number(newMatchday),
+      date: newDate,
+      time: newTime,
+      venue: newVenue,
+      status: 'Upcoming'
+    });
+    setIsCreating(false);
+    alert(`Successfully scheduled fixture: ${newHomeTeam} vs ${newAwayTeam}!`);
+    setNewHomeTeam('');
+    setNewAwayTeam('');
+  };
+
+  const handleSaveEditFixture = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingMatchId) return;
+    if (editHomeTeam === editAwayTeam) {
+      alert('Error: A department cannot play against itself!');
+      return;
+    }
+    editFixture(editingMatchId, {
+      homeTeam: editHomeTeam,
+      awayTeam: editAwayTeam,
+      matchday: Number(editMatchday),
+      date: editDate,
+      time: editTime,
+      venue: editVenue
+    });
+    setEditingMatchId(null);
+    alert('Fixture updated successfully!');
+  };
+
+  const handleDeleteFixture = (matchId: string, summary: string) => {
+    if (confirm(`⚠️ Are you sure you want to delete the fixture: ${summary}? This cannot be undone.`)) {
+      deleteFixture(matchId);
+      alert('Fixture has been successfully deleted!');
+    }
+  };
 
   // Route guarding
   React.useEffect(() => {
@@ -99,27 +169,63 @@ export default function AdminDashboard() {
               <Trophy className="w-full h-full text-primary" />
             </div>
             <h2 className="text-3xl font-display font-black uppercase italic tracking-tight text-white mb-2">
-              Match commissioner panel
+              {currentUser?.role === 'Super Admin' && "SUPER ADMINISTRATOR CONTROL CENTER"}
+              {currentUser?.role === 'Match Commissioner' && "MATCH COMMISSIONER CONTROL DESK"}
+              {currentUser?.role === 'Media Officer' && "MEDIA OPERATIONS DESK"}
+              {currentUser?.role === 'Team Official' && "TEAM OFFICIALS CENTRAL PORTAL"}
             </h2>
             <p className="text-sm font-medium text-white/60 max-w-2xl leading-relaxed">
-              Welcome back to the operations cockpit. Here you can start live matches, progressive minutes, control scores, issue cards, record substitutions, and approve tactical lineups list in real-time. Standings automatically calculate when a match completes.
+              {currentUser?.role === 'Super Admin' && "Welcome back to the FUTA Champions League command cockpit. You have full global administrative authority to manage fixtures, create credentials, approve registrations, reset tables, and supervise tournament settings."}
+              {currentUser?.role === 'Match Commissioner' && "Welcome back to the operations cockpit. Here you can start live matches, progressive minutes, control scores, issue cards, record substitutions, and approve tactical lineups in real-time."}
+              {currentUser?.role === 'Media Officer' && "Welcome back, Media Officer. Use the dashboard to publish live commentaries, edit public schedules, compile match reports, and manage public communications."}
+              {currentUser?.role === 'Team Official' && "Welcome back to the team delegation workspace. Here you can configure your department's roster, edit lineups, upload official logos, and track your accredited student players."}
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0 flex-wrap justify-end">
             <Link
               to="/admin/accreditation"
-              className="flex-shrink-0 px-6 py-4.5 bg-primary hover:bg-primary-hover text-dark font-black tracking-widest text-[10px] uppercase rounded-2xl shadow-[0_4px_20px_rgba(0,229,255,0.25)] hover:shadow-[0_4px_30px_rgba(0,229,255,0.35)] hover:scale-102 active:scale-98 transition-all flex items-center justify-center space-x-2 group cursor-pointer"
+              className="flex-shrink-0 px-5 py-4 bg-primary hover:bg-primary-hover text-dark font-black tracking-widest text-[9px] uppercase rounded-2xl shadow-[0_4px_20px_rgba(0,229,255,0.25)] hover:shadow-[0_4px_30px_rgba(0,229,255,0.35)] hover:scale-102 active:scale-98 transition-all flex items-center justify-center space-x-2 group cursor-pointer"
             >
               <ShieldCheck size={16} className="text-dark group-hover:rotate-12 transition-transform" />
               <span>ACCREDITATION DESK</span>
             </Link>
+            
+            {(currentUser?.role === 'Super Admin' || currentUser?.role === 'Team Official') && (
+              <>
+                <Link
+                  to="/registration"
+                  className="flex-shrink-0 px-5 py-4 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 hover:from-blue-500/30 hover:to-indigo-500/30 border border-white/10 text-white font-black tracking-widest text-[9px] uppercase rounded-2xl hover:scale-102 active:scale-98 transition-all flex items-center justify-center space-x-2 cursor-pointer"
+                >
+                  <Users size={16} className="text-primary" />
+                  <span>SQUAD REGISTER PORTAL</span>
+                </Link>
+                <Link
+                  to="/portal/team"
+                  className="flex-shrink-0 px-5 py-4 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 hover:from-indigo-500/30 hover:to-purple-500/30 border border-white/10 text-white font-black tracking-widest text-[9px] uppercase rounded-2xl hover:scale-102 active:scale-98 transition-all flex items-center justify-center space-x-2 cursor-pointer"
+                >
+                  <Trophy size={16} className="text-primary" />
+                  <span>TEAM HUB</span>
+                </Link>
+              </>
+            )}
+
             {currentUser?.role === 'Super Admin' && (
               <Link
                 to="/admin/team-logos"
-                className="flex-shrink-0 px-6 py-4.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-black tracking-widest text-[10px] uppercase rounded-2xl hover:scale-102 active:scale-98 transition-all flex items-center justify-center space-x-2 cursor-pointer"
+                className="flex-shrink-0 px-5 py-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-black tracking-widest text-[9px] uppercase rounded-2xl hover:scale-102 active:scale-98 transition-all flex items-center justify-center space-x-2 cursor-pointer"
               >
                 <Trophy size={16} className="text-primary" />
                 <span>LOGO OPERATIONS</span>
+              </Link>
+            )}
+
+            {(currentUser?.role === 'Super Admin' || currentUser?.role === 'Match Commissioner' || currentUser?.role === 'Media Officer') && (
+              <Link
+                to="/admin/media"
+                className="flex-shrink-0 px-5 py-4 bg-[#00e5ff] text-dark hover:bg-opacity-95 font-black tracking-widest text-[9px] uppercase rounded-2xl hover:scale-102 active:scale-98 transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-[0_4px_20px_rgba(0,229,255,0.15)]"
+              >
+                <Camera size={16} className="text-dark" />
+                <span>MEDIA OPERATIONS</span>
               </Link>
             )}
           </div>
@@ -210,8 +316,141 @@ export default function AdminDashboard() {
                   <Activity size={18} className="text-primary" />
                   <span>ACTIVE MATCH INTEGRATION REGISTER</span>
                 </h3>
-                <span className="px-2.5 py-1 rounded bg-white/5 border border-white/10 font-mono text-[10px] text-gray-400 font-bold uppercase">{matches.length} fixtures total</span>
+                <div className="flex items-center gap-2">
+                  <span className="hidden sm:inline-block px-2.5 py-1 rounded bg-white/5 border border-white/10 font-mono text-[10px] text-gray-400 font-bold uppercase">{matches.length} fixtures total</span>
+                  {currentUser?.role === 'Super Admin' && (
+                    <button
+                      onClick={() => setIsCreating(!isCreating)}
+                      className="px-3.5 py-1.5 bg-primary hover:bg-primary-hover text-dark text-[10px] font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-1"
+                    >
+                      {isCreating ? 'Close Form' : '+ New Fixture'}
+                    </button>
+                  )}
+                </div>
               </div>
+
+              {/* Create fixture form */}
+              {isCreating && currentUser?.role === 'Super Admin' && (
+                <form 
+                  onSubmit={handleCreateFixture}
+                  className="mb-6 p-5 rounded-2xl bg-white/[0.03] border border-primary/20 space-y-4 animate-in fade-in duration-200"
+                >
+                  <h4 className="text-xs font-black uppercase tracking-widest text-primary">
+                    Create New Tournament Match Fixture
+                  </h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="text-[10px] font-black uppercase text-white/40 block mb-1">Matchday</label>
+                      <select 
+                        value={newMatchday} 
+                        onChange={(e) => setNewMatchday(Number(e.target.value))}
+                        className="w-full bg-navy border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-primary/50"
+                      >
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(mw => (
+                          <option key={mw} value={mw} className="bg-navy">Matchday {mw}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-black uppercase text-white/40 block mb-1">Home Department</label>
+                      <select 
+                        value={newHomeTeam} 
+                        onChange={(e) => setNewHomeTeam(e.target.value)}
+                        className="w-full bg-navy border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-primary/50"
+                        required
+                      >
+                        <option value="" className="bg-navy">-- Select home team --</option>
+                        {teams.map(t => (
+                          <option key={t.id} value={t.name} className="bg-navy">{t.name}</option>
+                        ))}
+                        {teams.length === 0 && (
+                          <>
+                            <option value="Mechanical Engineering" className="bg-navy">Mechanical Engineering</option>
+                            <option value="Computer Science" className="bg-navy">Computer Science</option>
+                            <option value="Electrical Engineering" className="bg-navy">Electrical Engineering</option>
+                            <option value="Civil Engineering" className="bg-navy">Civil Engineering</option>
+                          </>
+                        )}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-black uppercase text-white/40 block mb-1">Away Department</label>
+                      <select 
+                        value={newAwayTeam} 
+                        onChange={(e) => setNewAwayTeam(e.target.value)}
+                        className="w-full bg-navy border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-primary/50"
+                        required
+                      >
+                        <option value="" className="bg-navy">-- Select away team --</option>
+                        {teams.map(t => (
+                          <option key={t.id} value={t.name} className="bg-navy">{t.name}</option>
+                        ))}
+                        {teams.length === 0 && (
+                          <>
+                            <option value="Mechanical Engineering" className="bg-navy">Mechanical Engineering</option>
+                            <option value="Computer Science" className="bg-navy">Computer Science</option>
+                            <option value="Electrical Engineering" className="bg-navy">Electrical Engineering</option>
+                            <option value="Civil Engineering" className="bg-navy">Civil Engineering</option>
+                          </>
+                        )}
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="text-[10px] font-black uppercase text-white/40 block mb-1">Kickoff Date</label>
+                      <input 
+                        type="text"
+                        value={newDate} 
+                        onChange={(e) => setNewDate(e.target.value)}
+                        className="w-full bg-navy border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-primary/50"
+                        placeholder="e.g. June 8, 2026"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-black uppercase text-white/40 block mb-1">Kickoff Time</label>
+                      <input 
+                        type="text"
+                        value={newTime} 
+                        onChange={(e) => setNewTime(e.target.value)}
+                        className="w-full bg-navy border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-primary/50"
+                        placeholder="e.g. 16:00"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-black uppercase text-white/40 block mb-1">Venue Venue</label>
+                      <input 
+                        type="text"
+                        value={newVenue} 
+                        onChange={(e) => setNewVenue(e.target.value)}
+                        className="w-full bg-navy border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-primary/50"
+                        placeholder="e.g. FUTA Sports Complex"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-2 pt-2 border-t border-white/5">
+                    <button 
+                      type="button" 
+                      onClick={() => setIsCreating(false)}
+                      className="px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 text-xs font-bold uppercase transition-all"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit" 
+                      className="px-5 py-2 bg-primary hover:bg-primary-hover text-dark text-xs font-black uppercase tracking-wider rounded-xl transition-all"
+                    >
+                      Schedule Fixture
+                    </button>
+                  </div>
+                </form>
+              )}
 
               {/* Match Table rows */}
               <div className="space-y-4">
@@ -223,6 +462,118 @@ export default function AdminDashboard() {
                     return <span className="px-2 py-0.5 rounded bg-white/5 text-white/40 border border-white/10 text-[8px] font-black uppercase tracking-widest">Upcoming</span>;
                   };
 
+                  // Inline Row Editing Layout
+                  if (editingMatchId === m.id) {
+                    return (
+                      <form 
+                        key={m.id} 
+                        onSubmit={handleSaveEditFixture}
+                        className="p-5 rounded-2xl bg-white/[0.03] border border-yellow-500/30 space-y-4 flex flex-col animate-in fade-in duration-200"
+                      >
+                        <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                          <span className="text-xs font-black text-yellow-400 uppercase tracking-wider">EDIT FIXTURE SETTINGS</span>
+                          <button 
+                            type="button" 
+                            onClick={() => setEditingMatchId(null)}
+                            className="text-white/40 hover:text-white text-xs font-bold uppercase"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div>
+                            <label className="text-[10px] font-black uppercase text-white/40 block mb-1">Matchday</label>
+                            <select 
+                              value={editMatchday} 
+                              onChange={(e) => setEditMatchday(Number(e.target.value))}
+                              className="w-full bg-navy border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-primary/50"
+                            >
+                              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(mw => (
+                                <option key={mw} value={mw} className="bg-navy">Matchday {mw}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-black uppercase text-white/40 block mb-1">Home Team</label>
+                            <select 
+                              value={editHomeTeam} 
+                              onChange={(e) => setEditHomeTeam(e.target.value)}
+                              className="w-full bg-navy border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none"
+                            >
+                              {teams.map(t => (
+                                <option key={t.id} value={t.name} className="bg-navy">{t.name}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-black uppercase text-white/40 block mb-1">Away Team</label>
+                            <select 
+                              value={editAwayTeam} 
+                              onChange={(e) => setEditAwayTeam(e.target.value)}
+                              className="w-full bg-navy border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none"
+                            >
+                              {teams.map(t => (
+                                <option key={t.id} value={t.name} className="bg-navy">{t.name}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div>
+                            <label className="text-[10px] font-black uppercase text-white/40 block mb-1">Kickoff Date</label>
+                            <input 
+                              type="text"
+                              value={editDate} 
+                              onChange={(e) => setEditDate(e.target.value)}
+                              placeholder="e.g. June 8, 2026"
+                              className="w-full bg-navy border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-black uppercase text-white/40 block mb-1">Kickoff Time</label>
+                            <input 
+                              type="text"
+                              value={editTime} 
+                              onChange={(e) => setEditTime(e.target.value)}
+                              placeholder="e.g. 15:45"
+                              className="w-full bg-navy border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-black uppercase text-white/40 block mb-1">Venue</label>
+                            <input 
+                              type="text"
+                              value={editVenue} 
+                              onChange={(e) => setEditVenue(e.target.value)}
+                              placeholder="Venue"
+                              className="w-full bg-navy border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex justify-end gap-2 pt-2 border-t border-white/5">
+                          <button 
+                            type="button" 
+                            onClick={() => setEditingMatchId(null)}
+                            className="px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 text-xs font-bold uppercase transition-all"
+                          >
+                            Cancel
+                          </button>
+                          <button 
+                            type="submit" 
+                            className="px-5 py-2 bg-yellow-500 hover:bg-yellow-600 text-dark text-xs font-black uppercase tracking-wider rounded-xl transition-all"
+                          >
+                            Save Changes
+                          </button>
+                        </div>
+                      </form>
+                    );
+                  }
+
                   return (
                     <div 
                       key={m.id} 
@@ -233,7 +584,7 @@ export default function AdminDashboard() {
                         <span>{m.time}</span>
                       </div>
 
-                      <div className="flex items-center justify-center space-x-6 flex-1 max-w-sm">
+                      <div className="flex items-center justify-center space-x-6 flex-1 max-w-sm w-full">
                         <div className="text-right flex-1 font-bold text-sm text-white truncate max-w-[120px]">{m.homeTeam}</div>
                         
                         <div className="flex items-center space-x-3 bg-navy-dark/90 px-4 py-1.5 rounded-xl border border-white/5 font-mono text-base font-black text-primary">
@@ -247,16 +598,45 @@ export default function AdminDashboard() {
                         <div className="text-left flex-1 font-bold text-sm text-white truncate max-w-[120px]">{m.awayTeam}</div>
                       </div>
 
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
                         {getStatusLabel(m.status)}
                         
-                        <Link
-                          to={`/admin/matches/${m.id}`}
-                          className="px-4 py-2 bg-primary hover:bg-primary-hover text-dark text-xs font-black uppercase tracking-widest rounded-xl shadow-md transition-all flex items-center gap-1 cursor-pointer"
-                        >
-                          <span>Manage Desk</span>
-                          <ArrowRight size={12} />
-                        </Link>
+                        <div className="flex gap-2">
+                          <Link
+                            to={`/admin/matches/${m.id}`}
+                            className="px-4 py-2 bg-primary hover:bg-primary-hover text-dark text-xs font-black uppercase tracking-widest rounded-xl shadow-md transition-all flex items-center gap-1 cursor-pointer"
+                          >
+                            <span>Manage Desk</span>
+                            <ArrowRight size={12} />
+                          </Link>
+
+                          {currentUser?.role === 'Super Admin' && (
+                            <>
+                              <button
+                                onClick={() => {
+                                  setEditingMatchId(m.id);
+                                  setEditMatchday(m.matchday);
+                                  setEditHomeTeam(m.homeTeam);
+                                  setEditAwayTeam(m.awayTeam);
+                                  setEditDate(m.date);
+                                  setEditTime(m.time);
+                                  setEditVenue(m.venue);
+                                }}
+                                className="px-3 py-2 bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 text-xs font-bold uppercase rounded-xl transition-all cursor-pointer"
+                                title="Edit Fixture Profile"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleDeleteFixture(m.id, `${m.homeTeam} vs ${m.awayTeam}`)}
+                                className="px-3 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 text-xs font-bold uppercase rounded-xl transition-all cursor-pointer"
+                                title="Delete Fixture"
+                              >
+                                Delete
+                              </button>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
                   );

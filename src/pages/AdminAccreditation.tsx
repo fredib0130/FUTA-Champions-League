@@ -103,7 +103,7 @@ export default function AdminAccreditation() {
   // Admin registers state
   const [adminUsername, setAdminUsername] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
-  const [adminRole, setAdminRole] = useState<'Super Admin' | 'Match Commissioner' | 'Media Officer'>('Match Commissioner');
+  const [adminRole, setAdminRole] = useState<'Super Admin' | 'Match Commissioner' | 'Media Officer' | 'Team Official'>('Match Commissioner');
   const [adminError, setAdminError] = useState('');
   const [adminSuccess, setAdminSuccess] = useState('');
   const [showAdminPassword, setShowAdminPassword] = useState(false);
@@ -821,6 +821,7 @@ export default function AdminAccreditation() {
                     >
                       <option value="Match Commissioner" className="bg-navy">Match Commissioner</option>
                       <option value="Media Officer" className="bg-navy">Media Officer</option>
+                      <option value="Team Official" className="bg-navy">Team Official</option>
                       <option value="Super Admin" className="bg-navy text-primary font-bold">Super Admin</option>
                     </select>
                   </div>

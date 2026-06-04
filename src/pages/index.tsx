@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Link, useParams } from 'react-router-dom';
-import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone, Image as ImageIcon, Twitter, ExternalLink, ShieldCheck, Clock, Medal } from 'lucide-react';
+import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone, Image as ImageIcon, Twitter, ExternalLink, ShieldCheck, Clock, Medal, BookOpen, ChevronRight } from 'lucide-react';
 import { Countdown } from '../components/Countdown';
 import { MatchCard } from '../components/MatchCard';
 import { PageHeader } from '../components/PageHeader';
@@ -963,103 +963,703 @@ export function Stats() {
   );
 }
 export function Media() {
-  const images = [
-    'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1000',
-    'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?q=80&w=1000',
-    'https://images.unsplash.com/photo-1510567198467-d78887b28c4a?q=80&w=1000',
-    'https://images.unsplash.com/photo-1551958219-acbc608c6377?q=80&w=1000',
-    'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
-    'https://images.unsplash.com/photo-1431324155629-1a6eda1eedfa?q=80&w=1000'
+  const { matchPhotos, reports, newsItems, articles, matches } = useMatchState();
+  
+  // Set tab based on URL param or default
+  const [activeSec, setActiveSec] = React.useState<'gallery' | 'reports' | 'news' | 'featured' | 'highlights'>('gallery');
+  
+  // Gallery states
+  const [photoFilter, setPhotoFilter] = React.useState<string>('All');
+  const [photoSearch, setPhotoSearch] = React.useState<string>('');
+  const [lightboxIndex, setLightboxIndex] = React.useState<number | null>(null);
+
+  // Detail view Modal states
+  const [readReportMatchId, setReadReportMatchId] = React.useState<string | null>(null);
+  const [readArticleId, setReadArticleId] = React.useState<string | null>(null);
+  const [readNewsId, setReadNewsId] = React.useState<string | null>(null);
+
+  // Live video modal
+  const [activeVideoUrl, setActiveVideoUrl] = React.useState<string | null>(null);
+
+  // Photo categorization list
+  const categories = [
+    'All', 'Match Action', 'Goal Celebration', 'Team Photo', 'Player Profile', 'Crowd', 'Man of the Match', 'Post-match Interview'
   ];
 
+  // Filter photos dynamically
+  const filteredPhotos = matchPhotos.filter(photo => {
+    const term = photoSearch.toLowerCase();
+    const relatedMatch = matches.find(m => m.id === photo.matchId);
+    const matchesSearch = !photoSearch || 
+      photo.category.toLowerCase().includes(term) || 
+      (photo.folderStage && photo.folderStage.toLowerCase().includes(term)) ||
+      (relatedMatch && (relatedMatch.homeTeam.toLowerCase().includes(term) || relatedMatch.awayTeam.toLowerCase().includes(term)));
+    
+    if (photoFilter === 'All') return matchesSearch;
+    return photo.category === photoFilter && matchesSearch;
+  });
+
   return (
-    <div>
+    <div className="space-y-16">
       <PageHeader 
-        title="Media Gallery" 
-        subtitle="Capture the intensity. Explore top moments, photo reels, and match highlights."
+        title="FCL Media Center" 
+        subtitle="Unifying the FUTA voice. Browse matchday visual galleries, news resolutions, and athletic features."
       />
-      
+
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {images.map((img, i) => (
-            <motion.div 
-              key={i}
-              whileHover={{ scale: 1.02 }}
-              className="aspect-video sm:aspect-square rounded-3xl overflow-hidden glass relative group"
+        {/* Sections Selection Buttons Bar */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 border-b border-white/5 pb-8 mb-12">
+          {[
+            { id: 'gallery', label: '📸 Match Gallery', desc: 'Realtime Photo Reels' },
+            { id: 'reports', label: '📝 Match Reports', desc: 'Tactical Game Essays' },
+            { id: 'news', label: '🏛️ News & Bulletins', desc: 'Resolution updates' },
+            { id: 'featured', label: '🌟 Featured Stories', desc: 'Athletes & Spotlights' },
+            { id: 'highlights', label: '🏆 Highlights', desc: 'Clips & matchdays reel' }
+          ].map(sec => (
+            <button
+              key={sec.id}
+              onClick={() => setActiveSec(sec.id as any)}
+              className={`p-5 rounded-2xl border text-left transition-all ${
+                activeSec === sec.id 
+                  ? 'bg-[#00e5ff] border-[#00e5ff] text-dark shadow-[0_4px_20px_rgba(0,229,255,0.15)]' 
+                  : 'bg-navy/40 border-white/5 text-white hover:border-white/20'
+              }`}
             >
-              <img src={img} className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Action" />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <ImageIcon className="text-white w-12 h-12" />
-              </div>
-            </motion.div>
+              <div className="font-black text-xs uppercase tracking-wider">{sec.label}</div>
+              <div className={`text-[9px] font-medium mt-1 ${activeSec === sec.id ? 'text-dark/70' : 'text-white/40'}`}>{sec.desc}</div>
+            </button>
           ))}
         </div>
 
-        <div className="mt-20">
-          <h2 className="text-2xl font-display mb-12 italic border-b border-white/10 pb-4">VIDEO HIGHLIGHTS</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {[1, 2].map((v) => (
-              <div key={v} className="glass rounded-[32px] overflow-hidden relative group aspect-video">
-                <img src={images[v]} className="w-full h-full object-cover opacity-50" alt="Video" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
-                    <Play className="fill-current text-dark ml-1" />
+        {/* 1. MATCH GALLERY SECTION */}
+        {activeSec === 'gallery' && (
+          <div className="space-y-8">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 border-b border-white/5">
+              <div>
+                <h3 className="text-xl font-display font-black tracking-tight uppercase italic text-white">REEL PHOTOGRAPHY ARCHIVES</h3>
+                <p className="text-xs text-white/45 mt-0.5">Capturing raw campus football history under modern compression optimization pipelines.</p>
+              </div>
+
+              {/* SEARCH */}
+              <div className="relative max-w-sm w-full">
+                <input
+                  type="text"
+                  placeholder="Query department or stage e.g. MST..."
+                  value={photoSearch}
+                  onChange={(e) => setPhotoSearch(e.target.value)}
+                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-2.5 text-xs font-bold text-white focus:outline-none focus:border-[#00e5ff]"
+                />
+              </div>
+            </div>
+
+            {/* CATEGORY RAIL */}
+            <div className="flex flex-wrap gap-2">
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setPhotoFilter(cat)}
+                  className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase transition-all ${
+                    photoFilter === cat 
+                      ? 'bg-[#00e5ff]/20 text-[#00e5ff] border border-[#00e5ff]/40' 
+                      : 'bg-white/5 hover:bg-white/10 text-white/50 border border-transparent'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* PHOTOS GRID */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {filteredPhotos.map((photo, index) => {
+                const matchInfo = matches.find(m => m.id === photo.matchId);
+                return (
+                  <motion.div
+                    key={photo.id}
+                    whileHover={{ scale: 1.02 }}
+                    onClick={() => setLightboxIndex(index)}
+                    className="group relative aspect-video md:aspect-square bg-navy/40 border border-white/10 rounded-3xl overflow-hidden cursor-pointer shadow-lg"
+                  >
+                    <img 
+                      src={photo.fileUrl} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                      alt="Game capture" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex flex-col justify-end">
+                      <span className="text-[8px] bg-[#00e5ff] text-dark font-black tracking-widest uppercase px-2 py-0.5 rounded self-start mb-2">{photo.category}</span>
+                      <h4 className="font-bold text-xs truncate">{matchInfo ? `${matchInfo.homeTeam} vs ${matchInfo.awayTeam}` : 'Tournament Action'}</h4>
+                      <div className="flex items-center justify-between text-[8px] text-white/50 font-mono mt-1">
+                        <span>BY {photo.uploadedBy.toUpperCase()}</span>
+                        <span>{photo.compressedSize || '2.1 MB'}</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+
+              {filteredPhotos.length === 0 && (
+                <div className="col-span-full py-20 text-center text-white/40 font-medium text-xs">No photos exist in the media vault for this selection.</div>
+              )}
+            </div>
+
+            {/* LIGHTBOX SLIDER OVERLAY */}
+            {lightboxIndex !== null && lightboxIndex >= 0 && lightboxIndex < filteredPhotos.length && (
+              <div 
+                className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-md"
+                onClick={() => setLightboxIndex(null)}
+              >
+                <button 
+                  className="absolute top-6 right-6 text-white text-3xl font-display hover:text-[#00e5ff] transition-colors"
+                  onClick={() => setLightboxIndex(null)}
+                >
+                  &times;
+                </button>
+
+                <div 
+                  className="max-w-4xl w-full max-h-[80vh] flex flex-col items-center justify-center space-y-4"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <img 
+                    src={filteredPhotos[lightboxIndex].fileUrl} 
+                    className="max-h-[70vh] max-w-full rounded-2xl object-contain border border-white/10 shadow-2xl" 
+                    alt="Lightbox showcase" 
+                  />
+                  <div className="text-center text-white space-y-1">
+                    <span className="px-3 py-1 bg-[#00e5ff]/20 text-[#00e5ff] border border-[#00e5ff]/30 rounded-full text-[9px] font-black uppercase tracking-widest">{filteredPhotos[lightboxIndex].category}</span>
+                    <h3 className="font-display font-black text-lg uppercase italic mt-1">
+                      {matches.find(m => m.id === filteredPhotos[lightboxIndex].matchId) 
+                        ? `${matches.find(m => m.id === filteredPhotos[lightboxIndex].matchId)?.homeTeam} vs ${matches.find(m => m.id === filteredPhotos[lightboxIndex].matchId)?.awayTeam}` 
+                        : 'FUTA Champions League Frame'}
+                    </h3>
+                    <p className="text-[10px] text-white/40 font-mono">
+                      UPLOADED BY: {filteredPhotos[lightboxIndex].uploadedBy.toUpperCase()} | STAGE: {filteredPhotos[lightboxIndex].folderStage || '2026/MD1'} | METRICS: {filteredPhotos[lightboxIndex].originalSize} DOWNSIZED TO {filteredPhotos[lightboxIndex].compressedSize} ({filteredPhotos[lightboxIndex].ratio} REDUCED)
+                    </p>
+                  </div>
+
+                  {/* Navigation Slider controls */}
+                  <div className="flex space-x-4 font-mono">
+                    <button 
+                      onClick={() => setLightboxIndex(prev => prev !== null && prev > 0 ? prev - 1 : filteredPhotos.length - 1)}
+                      className="px-4 py-2 bg-white/10 hover:bg-[#00e5ff] hover:text-dark rounded-xl font-bold text-xs cursor-pointer"
+                    >
+                      &larr; Prev
+                    </button>
+                    <button 
+                      onClick={() => setLightboxIndex(prev => prev !== null && prev < filteredPhotos.length - 1 ? prev + 1 : 0)}
+                      className="px-4 py-2 bg-white/10 hover:bg-[#00e5ff] hover:text-dark rounded-xl font-bold text-xs cursor-pointer"
+                    >
+                      Next &rarr;
+                    </button>
                   </div>
                 </div>
-                <div className="absolute bottom-6 left-6">
-                  <h4 className="font-bold text-lg">Matchday {v} Highlights</h4>
-                  <p className="text-white/40 text-sm">AGE vs AGP</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 2. MATCH REPORTS TAB */}
+        {activeSec === 'reports' && (
+          <div className="space-y-8">
+            <div className="pb-6 border-b border-white/5">
+              <h3 className="text-xl font-display font-black tracking-tight uppercase italic text-white">OFFICIAL TACTICAL GAME SUMMARIES</h3>
+              <p className="text-xs text-white/45 mt-0.5">Written matchday assessments detailing formations adjustments, scoring trends, and match analytics.</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {matches.map(m => {
+                const r = reports[m.id];
+                if (!r) return null;
+                return (
+                  <motion.article
+                    key={m.id}
+                    whileHover={{ y: -6 }}
+                    className="glass rounded-[32px] overflow-hidden border border-white/5 flex flex-col justify-between group"
+                  >
+                    <div>
+                      <div className="aspect-video relative overflow-hidden">
+                        <img src={r.featuredImage} className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-700" alt="" />
+                        <div className="absolute top-4 left-4 bg-dark/80 px-3 py-1.5 rounded-full border border-white/10 flex items-center space-x-1">
+                          <span className="text-[9px] font-black text-yellow-500 font-mono">&#9733; {r.excitementRating}/10</span>
+                          <span className="text-[8px] text-white/40 uppercase font-bold tracking-widest">EXCITEMENT</span>
+                        </div>
+                      </div>
+
+                      <div className="p-8">
+                        <div className="text-[10px] text-[#00e5ff] font-bold tracking-widest uppercase mb-2">Matchday {m.matchday} Analysis • {m.venue}</div>
+                        <h3 className="text-2xl font-display font-black italic tracking-tight line-clamp-2 leading-none group-hover:text-[#00e5ff] transition-colors mb-4">{r.title}</h3>
+                        <p className="text-xs leading-relaxed text-white/50 font-medium mb-6">{r.subtitle}</p>
+                      </div>
+                    </div>
+
+                    <div className="px-8 pb-8">
+                      <button 
+                        onClick={() => setReadReportMatchId(m.id)}
+                        className="w-full py-3 border border-[#00e5ff]/20 bg-[#00e5ff]/5 hover:bg-[#00e5ff] group-hover:text-dark text-[#00e5ff] text-[10px] font-black uppercase tracking-wider rounded-xl transition-all flex items-center justify-center space-x-2 cursor-pointer"
+                      >
+                        <BookOpen size={13} />
+                        <span>READ DETAILED ACTION REPORT</span>
+                      </button>
+                    </div>
+                  </motion.article>
+                );
+              })}
+
+              {Object.keys(reports).length === 0 && (
+                <div className="col-span-full py-20 text-center text-white/40 font-medium text-xs">No tactical match reports have been published yet.</div>
+              )}
+            </div>
+
+            {/* REPORT DETAIL MODAL */}
+            {readReportMatchId && (
+              <div 
+                className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-md overflow-y-auto"
+                onClick={() => setReadReportMatchId(null)}
+              >
+                <div 
+                  className="bg-navy border border-white/15 my-8 max-w-2xl w-full rounded-[32px] overflow-hidden shadow-2xl relative"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button 
+                    className="absolute top-6 right-6 text-white/50 hover:text-white text-2xl font-display z-10"
+                    onClick={() => setReadReportMatchId(null)}
+                  >
+                    &times;
+                  </button>
+
+                  <img src={reports[readReportMatchId]?.featuredImage} className="w-full h-56 object-cover" alt="" />
+                  
+                  <div className="p-8 sm:p-10 space-y-6">
+                    <div>
+                      <span className="px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-full text-[9px] font-black uppercase tracking-widest">TACTICAL REPORT</span>
+                      <h2 className="text-3xl font-display font-black italic uppercase text-white mt-3 leading-none">{reports[readReportMatchId]?.title}</h2>
+                      <p className="text-sm font-bold text-white/60 mt-2">{reports[readReportMatchId]?.subtitle}</p>
+                    </div>
+
+                    <div className="border-t border-b border-white/5 py-4 flex items-center justify-between text-xs font-mono text-white/40">
+                      <span>STADIUM EXCITEMENT RATING: {reports[readReportMatchId]?.excitementRating}/10</span>
+                      <span>VENUE: {matches.find(m => m.id === readReportMatchId)?.venue}</span>
+                    </div>
+
+                    <div className="text-sm leading-relaxed text-white/70 whitespace-pre-wrap font-medium font-sans">
+                      {reports[readReportMatchId]?.summary}
+                    </div>
+
+                    <div className="pt-4">
+                      <button 
+                        onClick={() => setReadReportMatchId(null)}
+                        className="w-full py-3.5 bg-white/5 hover:bg-white/10 text-white font-bold text-xs uppercase rounded-xl transition-all border border-white/10 cursor-pointer"
+                      >
+                        CLOSE ARTICLE
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            ))}
+            )}
           </div>
-        </div>
+        )}
+
+        {/* 3. NEWS & ANNOUNCEMENTS SECTION */}
+        {activeSec === 'news' && (
+          <div className="space-y-8">
+            <div className="pb-6 border-b border-white/5">
+              <h3 className="text-xl font-display font-black tracking-tight uppercase italic text-white">COMMITTEE RESOLUTIONS BOARD</h3>
+              <p className="text-xs text-white/45 mt-0.5">Latest official rulings, registrations, scheduling tables, and logistical extensions.</p>
+            </div>
+
+            <div className="space-y-6">
+              {newsItems.filter(item => item.isPublished).map(item => (
+                <motion.article 
+                  key={item.id}
+                  whileHover={{ x: 6 }}
+                  className="glass p-6 sm:p-8 rounded-[32px] border border-white/5 hover:border-[#00e5ff]/25 flex flex-col md:flex-row gap-6 items-start sm:items-center transition-all group cursor-pointer"
+                  onClick={() => setReadNewsId(item.id)}
+                >
+                  <img src={item.featuredImage} className="w-full md:w-32 h-24 object-cover rounded-2xl flex-shrink-0" alt="" />
+                  <div className="flex-grow space-y-2">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="px-2.5 py-1 bg-[#00e5ff]/10 text-[#00e5ff] border border-[#00e5ff]/20 rounded-md text-[8px] font-black uppercase tracking-wider">{item.category}</span>
+                      <span className="text-[9px] text-white/30 font-mono">{item.createdAt} BY {item.author.toUpperCase()}</span>
+                    </div>
+                    <h3 className="text-xl font-display font-bold italic text-white group-hover:text-primary transition-colors leading-tight">{item.title}</h3>
+                    <p className="text-xs text-white/50 line-clamp-2 leading-relaxed">{item.body}</p>
+                  </div>
+                  <ChevronRight className="text-white/20 group-hover:text-[#00e5ff] transition-colors self-center hidden md:block" />
+                </motion.article>
+              ))}
+
+              {newsItems.length === 0 && (
+                <div className="py-20 text-center text-white/40 font-medium text-xs">No committee announcements updated on the bulletin board.</div>
+              )}
+            </div>
+
+            {/* NEWS READ POPUP */}
+            {readNewsId && (
+              <div 
+                className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-md overflow-y-auto"
+                onClick={() => setReadNewsId(null)}
+              >
+                <div 
+                  className="bg-navy border border-white/15 my-8 max-w-xl w-full rounded-[32px] overflow-hidden shadow-2xl relative"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button 
+                    className="absolute top-6 right-6 text-white/50 hover:text-white text-2xl font-display z-10"
+                    onClick={() => setReadNewsId(null)}
+                  >
+                    &times;
+                  </button>
+
+                  <img src={newsItems.find(n => n.id === readNewsId)?.featuredImage} className="w-full h-48 object-cover" alt="" />
+                  
+                  <div className="p-8 sm:p-10 space-y-6">
+                    <div>
+                      <span className="px-2.5 py-1 bg-[#00e5ff]/10 text-[#00e5ff] border border-[#00e5ff]/20 rounded-md text-[8px] font-black uppercase tracking-wider">{newsItems.find(n => n.id === readNewsId)?.category}</span>
+                      <h2 className="text-2xl font-display font-black italic uppercase text-white mt-3 leading-none">{newsItems.find(n => n.id === readNewsId)?.title}</h2>
+                      <div className="text-[9px] text-white/40 font-mono mt-1">DRAFTED BY {newsItems.find(n => n.id === readNewsId)?.author} ON {newsItems.find(n => n.id === readNewsId)?.createdAt}</div>
+                    </div>
+
+                    <div className="text-sm leading-relaxed text-white/70 whitespace-pre-wrap font-medium">
+                      {newsItems.find(n => n.id === readNewsId)?.body}
+                    </div>
+
+                    {newsItems.find(n => n.id === readNewsId)?.tags && (
+                      <div className="flex flex-wrap gap-1">
+                        {newsItems.find(n => n.id === readNewsId)?.tags.map(t => (
+                          <span key={t} className="text-[8px] bg-white/5 text-white/40 px-2.5 py-1 rounded">#{t}</span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="pt-4">
+                      <button 
+                        onClick={() => setReadNewsId(null)}
+                        className="w-full py-3 bg-white/5 hover:bg-[#00e5ff] hover:text-dark text-white font-bold text-xs uppercase rounded-xl transition-all border border-white/10 cursor-pointer"
+                      >
+                        CLOSE BULLETIN
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 4. FEATURED STORIES / SPOTLIGHTS */}
+        {activeSec === 'featured' && (
+          <div className="space-y-8">
+            <div className="pb-6 border-b border-white/5">
+              <h3 className="text-xl font-display font-black tracking-tight uppercase italic text-white">FEATURE DOCUMENTARIES & ATHLETE SPOTLIGHTS</h3>
+              <p className="text-xs text-white/45 mt-0.5">Deep diving into the department qualifiers qualms, historic qualifiers records, and team previews.</p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-12">
+              {articles.filter(art => art.isPublished).map(art => (
+                <motion.article 
+                  key={art.id}
+                  whileHover={{ y: -8 }}
+                  className="glass rounded-[40px] overflow-hidden group border border-white/5 flex flex-col justify-between"
+                >
+                  <div className="aspect-[21/10] overflow-hidden relative">
+                    <img src={art.featuredImage} className="w-full h-full object-cover transition-transform group-hover:scale-103 duration-700" alt="" />
+                    <div className="absolute bottom-4 left-4">
+                      <span className="px-4 py-2 glass border border-white/10 rounded-full text-[9px] font-black tracking-widest uppercase text-primary">
+                        {art.category}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="p-8 sm:p-10 flex-grow flex flex-col justify-between">
+                    <div>
+                      <div className="text-white/30 text-[9px] font-bold mb-4 tracking-widest uppercase">
+                        {art.createdAt} BY {art.author.toUpperCase()}
+                      </div>
+                      <h2 className="text-2xl font-display mb-4 italic tracking-tight leading-tight group-hover:text-primary transition-colors">
+                        {art.title}
+                      </h2>
+                      <p className="text-xs text-white/50 mb-8 leading-relaxed font-semibold line-clamp-3">
+                        {art.body}
+                      </p>
+                    </div>
+                    
+                    <button 
+                      onClick={() => setReadArticleId(art.id)}
+                      className="flex items-center font-bold text-[10px] tracking-widest text-[#00e5ff] hover:translate-x-2 transition-transform uppercase cursor-pointer"
+                    >
+                      <span>READ FULL SPOTLIGHT</span>
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </button>
+                  </div>
+                </motion.article>
+              ))}
+
+              {articles.length === 0 && (
+                <div className="col-span-full py-20 text-center text-white/40 font-medium text-xs">No spotlight feature stories published yet.</div>
+              )}
+            </div>
+
+            {/* FEATURED STORY READ POPUP */}
+            {readArticleId && (
+              <div 
+                className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-md overflow-y-auto"
+                onClick={() => setReadArticleId(null)}
+              >
+                <div 
+                  className="bg-navy border border-white/15 my-8 max-w-2xl w-full rounded-[32px] overflow-hidden shadow-2xl relative"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button 
+                    className="absolute top-6 right-6 text-white/50 hover:text-white text-2xl font-display z-10"
+                    onClick={() => setReadArticleId(null)}
+                  >
+                    &times;
+                  </button>
+
+                  <img src={articles.find(a => a.id === readArticleId)?.featuredImage} className="w-full h-64 object-cover" alt="" />
+                  
+                  <div className="p-8 sm:p-10 space-y-6">
+                    <div>
+                      <span className="px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-full text-[9px] font-black uppercase tracking-widest">{articles.find(a => a.id === readArticleId)?.category}</span>
+                      <h2 className="text-3xl font-display font-black italic uppercase text-white mt-3 leading-none">{articles.find(a => a.id === readArticleId)?.title}</h2>
+                      <div className="text-[9px] text-white/40 font-mono mt-1">DRAFT REELED BY {articles.find(a => a.id === readArticleId)?.author} ON {articles.find(a => a.id === readArticleId)?.createdAt}</div>
+                    </div>
+
+                    <div className="text-sm leading-relaxed text-white/70 whitespace-pre-wrap font-medium">
+                      {articles.find(a => a.id === readArticleId)?.body}
+                    </div>
+
+                    {articles.find(a => a.id === readArticleId)?.tags && (
+                      <div className="flex flex-wrap gap-1">
+                        {articles.find(a => a.id === readArticleId)?.tags.map(t => (
+                          <span key={t} className="text-[8px] bg-white/5 text-white/40 px-2.5 py-1 rounded">#{t}</span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="pt-4">
+                      <button 
+                        onClick={() => setReadArticleId(null)}
+                        className="w-full py-3.5 bg-white/5 hover:bg-[#00e5ff] hover:text-dark text-white font-bold text-xs uppercase rounded-xl transition-all border border-white/10 cursor-pointer"
+                      >
+                        CLOSE ARTICLE
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 5. TOURNAMENT HIGHLIGHT REELS */}
+        {activeSec === 'highlights' && (
+          <div className="space-y-8">
+            <div className="pb-6 border-b border-white/5">
+              <h3 className="text-xl font-display font-black tracking-tight uppercase italic text-white">REELS & MATCHDAY PLAYBACKS</h3>
+              <p className="text-xs text-white/45 mt-0.5">Relive the goals, direct comments, and vocal stadiums from FCL 2026 Season openers.</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {[
+                { 
+                  id: 'high-1', 
+                  title: 'Tournament Matchday 1 Highlights | FCL 2026', 
+                  match: 'MST vs ICE', 
+                  thumbnail: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000' 
+                },
+                { 
+                  id: 'high-2', 
+                  title: 'Top 10 Qualifiers Goals Reel | Akure Sportscomplex', 
+                  match: 'Special Collection', 
+                  thumbnail: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?q=80&w=1000' 
+                }
+              ].map(v => (
+                <div 
+                  key={v.id} 
+                  onClick={() => setActiveVideoUrl('https://www.youtube.com/embed/dQw4w9WgXcQ')} // Standard high-contrast embed
+                  className="glass rounded-[32px] overflow-hidden border border-white/5 relative group aspect-video cursor-pointer"
+                >
+                  <img src={v.thumbnail} className="w-full h-full object-cover opacity-60 group-hover:scale-102 transition-transform" alt="" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+                      <Play className="fill-current text-dark ml-1 w-6 h-6" />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-6 left-6">
+                    <span className="text-[8px] bg-red-600 text-white font-black uppercase px-2 py-0.5 rounded tracking-widest inline-block mb-2">LIVE PLAYBACK</span>
+                    <h4 className="font-bold text-lg text-white">{v.title}</h4>
+                    <p className="text-white/40 text-xs font-mono">{v.match}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* VIDEO PLAYER POPUP */}
+            {activeVideoUrl && (
+              <div 
+                className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-md"
+                onClick={() => setActiveVideoUrl(null)}
+              >
+                <div 
+                  className="max-w-4xl w-full aspect-video rounded-3xl overflow-hidden bg-black border border-white/10 relative shadow-2xl"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button 
+                    className="absolute top-4 right-4 bg-dark/80 px-3 py-1.5 rounded-full text-white font-bold text-xs cursor-pointer"
+                    onClick={() => setActiveVideoUrl(null)}
+                  >
+                    CLOSE VIDEO
+                  </button>
+                  <iframe 
+                    src={activeVideoUrl} 
+                    className="w-full h-full" 
+                    title="Player" 
+                    allowFullScreen 
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </section>
     </div>
   );
 }
+
 export function News() {
+  // Public news announcements simply wraps the Unified Media Center preconfigured to the bulletins tab!
+  const { matchPhotos, reports, newsItems, articles, matches } = useMatchState();
+  const [readNewsId, setReadNewsId] = React.useState<string | null>(null);
+
   return (
-    <div>
+    <div className="space-y-16">
       <PageHeader 
-        title="Latest News" 
-        subtitle="Match reports, official statements, and behind-the-scenes stories from FCL 2026."
+        title="Bulletin Board" 
+        subtitle="Matchday announcements, official rulings, registration extensions, and press releases."
       />
-      
+
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
-        <div className="grid lg:grid-cols-2 gap-12">
-          {NEWS.map((post) => (
-            <motion.article 
-              key={post.id}
-              whileHover={{ y: -8 }}
-              className="glass rounded-[40px] overflow-hidden group"
-            >
-              <div className="aspect-[21/9] overflow-hidden relative">
-                <img src={post.image} className="w-full h-full object-cover transition-transform group-hover:scale-105" alt={post.title} />
-                <div className="absolute bottom-4 left-4">
-                  <span className="px-4 py-2 glass rounded-full text-[10px] font-bold tracking-widest uppercase text-primary">
-                    {post.category}
-                  </span>
-                </div>
+        <div className="grid lg:grid-cols-3 gap-8">
+          
+          {/* Main news announcements */}
+          <div className="lg:col-span-2 space-y-6">
+            <h3 className="text-xs font-black tracking-widest text-[#00e5ff] uppercase flex items-center space-x-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00e5ff] animate-ping" />
+              <span>COMMITTEE RELEASES BULLETIN</span>
+            </h3>
+
+            <div className="space-y-6">
+              {newsItems.filter(n => n.isPublished).map((item) => (
+                <motion.article 
+                  key={item.id}
+                  whileHover={{ y: -4 }}
+                  className="glass rounded-[32px] overflow-hidden group border border-white/5"
+                >
+                  <div className="aspect-[21/9] overflow-hidden relative">
+                    <img src={item.featuredImage} className="w-full h-full object-cover transition-transform group-hover:scale-102 duration-700" alt="" />
+                    <div className="absolute bottom-4 left-4">
+                      <span className="px-3 py-1.5 glass rounded-full text-[9px] font-black tracking-widest uppercase text-primary">
+                        {item.category}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-8 sm:p-10">
+                    <div className="text-white/30 text-xs font-mono mb-3 uppercase">
+                      {item.createdAt} BY {item.author.toUpperCase()}
+                    </div>
+                    <h2 className="text-2xl sm:text-3xl font-display mb-4 italic tracking-tight leading-none group-hover:text-primary transition-colors">
+                      {item.title}
+                    </h2>
+                    <p className="text-sm text-white/50 mb-8 leading-relaxed font-medium">
+                      {item.body}
+                    </p>
+                    <button 
+                      onClick={() => setReadNewsId(item.id)}
+                      className="flex items-center font-bold text-xs tracking-tight text-primary hover:translate-x-2 transition-transform cursor-pointer"
+                    >
+                      READ FULL BOARD ARTICLE <ArrowRight className="ml-2 w-4 h-4" />
+                    </button>
+                  </div>
+                </motion.article>
+              ))}
+
+              {newsItems.length === 0 && (
+                <div className="py-20 text-center text-white/40 font-medium text-xs">No bulletins populated on the board currently.</div>
+              )}
+            </div>
+          </div>
+
+          {/* Sidebar Highlights Highlights */}
+          <div className="space-y-8">
+            <div className="glass p-6 rounded-3xl border border-white/10 space-y-4">
+              <h4 className="text-xs font-black uppercase text-white tracking-widest border-b border-white/5 pb-2">MEDIA SPECIFICATION QUICKLINKS</h4>
+              <p className="text-[11px] text-white/40 leading-relaxed font-semibold">Only Match Commissioners, Super Admins, and Media Officers have credentials to publish notices onto the official boards.</p>
+              <div className="flex gap-2">
+                <Link to="/admin/login" className="px-4 py-2 border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] font-black uppercase cursor-pointer">Login to control</Link>
+                <Link to="/media" className="px-4 py-2 bg-[#00e5ff] text-dark rounded-xl text-[10px] font-black uppercase cursor-pointer">Go to Gallery</Link>
               </div>
-              <div className="p-8 sm:p-10">
-                <div className="text-white/30 text-xs font-bold mb-4 tracking-widest uppercase">
-                  {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-                </div>
-                <h2 className="text-3xl font-display mb-4 italic tracking-tight leading-tight group-hover:text-primary transition-colors">
-                  {post.title}
-                </h2>
-                <p className="text-white/50 mb-8 leading-relaxed">
-                  {post.excerpt}
-                </p>
-                <button className="flex items-center font-bold text-sm tracking-tight text-primary hover:translate-x-2 transition-transform">
-                  READ ARTICLE <ArrowRight className="ml-2 w-4 h-4" />
-                </button>
+            </div>
+
+            {/* Featured stories summary side listing */}
+            <div className="glass p-6 rounded-3xl border border-[#00e5ff]/20 bg-[#00e5ff]/5 space-y-4">
+              <h4 className="text-xs font-black uppercase text-[#00e5ff] tracking-widest">SPOTLIGHT FEATURE PREVIEWS</h4>
+              <div className="space-y-4">
+                {articles.slice(0, 3).map(art => (
+                  <div key={art.id} className="space-y-1">
+                    <span className="text-[8px] bg-white/5 text-[#00e5ff] border border-[#00e5ff]/20 px-2 py-0.5 rounded font-bold uppercase tracking-widest">{art.category}</span>
+                    <h5 className="font-bold text-xs text-white leading-tight mt-1">{art.title}</h5>
+                  </div>
+                ))}
               </div>
-            </motion.article>
-          ))}
+            </div>
+          </div>
+
         </div>
       </section>
+
+      {/* READING BULLETIN OVERLAY */}
+      {readNewsId && (
+        <div 
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-md overflow-y-auto"
+          onClick={() => setReadNewsId(null)}
+        >
+          <div 
+            className="bg-navy border border-white/15 my-8 max-w-xl w-full rounded-[32px] overflow-hidden shadow-2xl relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              className="absolute top-6 right-6 text-white/50 hover:text-white text-2xl font-display z-10"
+              onClick={() => setReadNewsId(null)}
+            >
+              &times;
+            </button>
+
+            <img src={newsItems.find(n => n.id === readNewsId)?.featuredImage} className="w-full h-52 object-cover" alt="" />
+            
+            <div className="p-8 sm:p-10 space-y-6">
+              <div>
+                <span className="px-2.5 py-1 bg-[#00e5ff]/10 text-[#00e5ff] border border-[#00e5ff]/20 rounded-md text-[8px] font-black uppercase tracking-wider">{newsItems.find(n => n.id === readNewsId)?.category}</span>
+                <h2 className="text-2xl font-display font-black italic uppercase text-white mt-3 leading-none">{newsItems.find(n => n.id === readNewsId)?.title}</h2>
+                <div className="text-[9px] text-white/40 font-mono mt-1">DRAFTED BY {newsItems.find(n => n.id === readNewsId)?.author} ON {newsItems.find(n => n.id === readNewsId)?.createdAt}</div>
+              </div>
+
+              <div className="text-sm leading-relaxed text-white/70 whitespace-pre-wrap font-medium">
+                {newsItems.find(n => n.id === readNewsId)?.body}
+              </div>
+
+              <div className="pt-4">
+                <button 
+                  onClick={() => setReadNewsId(null)}
+                  className="w-full py-3 bg-white/5 hover:bg-[#00e5ff] hover:text-dark text-white font-bold text-xs uppercase rounded-xl transition-all border border-white/10 cursor-pointer"
+                >
+                  CLOSE BULLETIN
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -29,6 +29,7 @@ import PublicMatchCenter from './pages/PublicMatchCenter';
 import PublicLiveScores from './pages/PublicLiveScores';
 import TeamRegisterPage from './pages/TeamRegisterPage';
 import TeamPortalPage from './pages/TeamPortalPage';
+import AdminMedia from './pages/AdminMedia';
 
 export default function App() {
   return (
@@ -63,6 +64,8 @@ export default function App() {
           <Route path="admin/dashboard" element={<AdminDashboard />} />
           <Route path="admin/accreditation" element={<AdminAccreditation />} />
           <Route path="admin/team-logos" element={<AdminLogoControlPage />} />
+          <Route path="admin/media" element={<AdminMedia />} />
+          <Route path="commissioner/media/upload" element={<AdminMedia defaultTab="photos" />} />
           <Route path="admin/matches/:matchId" element={<AdminMatchController />} />
         </Routes>
       </BrowserRouter>

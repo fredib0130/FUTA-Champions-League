@@ -2,5 +2,7 @@
   "name": "FUTA Champions League (FCL)",
   "description": "The premier student football tournament at the Federal University of Technology, Akure. Join the excitement, track scores, and support your favorite teams.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

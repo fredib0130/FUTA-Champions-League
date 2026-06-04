@@ -9,7 +9,7 @@ export default function AdminLogin() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<'Super Admin' | 'Match Commissioner' | 'Media Officer'>('Super Admin');
+  const [role, setRole] = useState<'Super Admin' | 'Match Commissioner' | 'Media Officer' | 'Team Official'>('Super Admin');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
@@ -129,8 +129,8 @@ export default function AdminLogin() {
               <label className="block text-[10px] font-black uppercase tracking-widest text-primary/80 mb-2">
                 Assigned Operational Role
               </label>
-              <div className="grid grid-cols-1 gap-2.5">
-                {(['Super Admin', 'Match Commissioner', 'Media Officer'] as const).map((r) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {(['Super Admin', 'Match Commissioner', 'Media Officer', 'Team Official'] as const).map((r) => (
                   <button
                     key={r}
                     type="button"

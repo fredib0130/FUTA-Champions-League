@@ -139,4 +139,40 @@ export function formatMinuteDisplay(minute: string | number): string {
   return `${mStr}'`;
 }
 
+export interface Article {
+  id: string;
+  title: string;
+  featuredImage: string;
+  author: string;
+  category: 'Match Preview' | 'Match Report' | 'Team Spotlight' | 'Player Spotlight' | 'Tournament Feature' | 'Opinion Article';
+  body: string;
+  tags: string[];
+  isPublished: boolean;
+  createdAt: string;
+  matchId?: string;
+}
 
+export interface NewsItem {
+  id: string;
+  title: string;
+  featuredImage: string;
+  author: string;
+  category: 'Tournament News' | 'Fixture Announcement' | 'Disciplinary Updates' | 'Registration Updates' | 'Competition Updates' | 'Committee Announcement' | 'Sponsor News';
+  body: string;
+  tags: string[];
+  isPublished: boolean;
+  createdAt: string;
+}
+
+export interface MatchPhoto {
+  id: string;
+  matchId: string;
+  fileUrl: string;
+  category: 'Match Action' | 'Team Photo' | 'Goal Celebration' | 'Crowd' | 'Match Officials' | 'Man of the Match' | 'Trophy Ceremony' | 'Press Conference' | 'Other';
+  uploadedAt: string;
+  uploadedBy: string;
+  originalSize: string;
+  compressedSize: string;
+  ratio: string;
+  folderStage: string;
+}

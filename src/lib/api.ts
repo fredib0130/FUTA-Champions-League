@@ -2,7 +2,7 @@
 
 export interface AdminUser {
   username: string;
-  role: 'Super Admin' | 'Match Commissioner' | 'Media Officer';
+  role: 'Super Admin' | 'Match Commissioner' | 'Media Officer' | 'Team Official';
 }
 
 export interface AuditLogItem {
@@ -170,6 +170,13 @@ export const fclApi = {
     return fetchApi(`/api/timers/${matchId}/control`, {
       method: 'POST',
       body: JSON.stringify({ action, ...body })
+    });
+  },
+
+  async uploadMediaFile(fileData: string, filename: string, bucket: 'match-photos' | 'article-images' | 'news-images' | 'committee-announcements', subfolder?: string): Promise<{ success: boolean; url: string; originalSize: string; compressedSize: string; ratio: string }> {
+    return fetchApi('/api/media/upload-file', {
+      method: 'POST',
+      body: JSON.stringify({ fileData, filename, bucket, subfolder })
     });
   }
 };
