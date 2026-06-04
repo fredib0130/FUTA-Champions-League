@@ -721,7 +721,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           });
         }
       } catch (err) {
-        console.error("Failed to sync timers from server", err);
+        console.warn("Failed to sync timers from server (this is normal during server boot/restart)", err);
       }
     };
 

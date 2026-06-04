@@ -314,8 +314,8 @@ export default function AdminAccreditation() {
       const teamMeta = TEAMS.find(t => t.id.toLowerCase() === tId.toLowerCase());
       if (!teamMeta) return;
 
-      if (reg.players) {
-        reg.players.forEach((p: any) => {
+       if (reg.players) {
+        reg.players.slice(0, 23).forEach((p: any) => {
           list.push({
             ...p,
             type: 'player',
@@ -327,7 +327,7 @@ export default function AdminAccreditation() {
       }
 
       if (reg.coaches) {
-        reg.coaches.forEach((c: any) => {
+        reg.coaches.slice(0, 2).forEach((c: any) => {
           list.push({
             ...c,
             type: 'coach',
@@ -1086,7 +1086,9 @@ export default function AdminAccreditation() {
                   <div className="w-full grid grid-cols-2 gap-3.5 border border-white/5 bg-white/[0.015] p-2.5 rounded-xl text-center relative overflow-hidden">
                     <div>
                       <span className="block text-[6.5px] text-white/30 uppercase font-mono tracking-widest font-black leading-none">ROLE GROUP</span>
-                      <span className="block text-[10.5px] font-black text-white uppercase tracking-tight mt-1 truncate leading-none">{mainRole}</span>
+                      <span className="block text-[10.5px] font-black text-white uppercase tracking-tight mt-1 truncate leading-none">
+                        {mainRole} {isPlayer && member.jerseyNumber ? `[#${member.jerseyNumber}]` : ''}
+                      </span>
                     </div>
                     <div className="border-l border-white/5">
                       <span className="block text-[6.5px] text-white/30 uppercase font-mono tracking-widest font-black leading-none">CHALLENGED</span>
@@ -1100,6 +1102,12 @@ export default function AdminAccreditation() {
                   <div className="text-left space-y-1">
                     <span className="text-[6.5px] text-white/30 uppercase font-mono tracking-widest block font-bold">ACCREDITATION CODE</span>
                     <span className="font-mono text-[9px] font-black text-[#00E5FF] block tracking-normal uppercase" style={{ color: teamColor.primary }}>{accId}</span>
+                    
+                    {isPlayer && member.dateOfBirth && (
+                      <span className="block font-mono text-[7px] text-white/40 tracking-wider font-bold mt-0.5 uppercase">
+                        DOB: {member.dateOfBirth}
+                      </span>
+                    )}
 
                     {/* Verified badge */}
                     <div className="flex items-center space-x-1 mt-1">

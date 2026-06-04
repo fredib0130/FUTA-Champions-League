@@ -29,6 +29,8 @@ interface PlayerRegistration {
   idCardData: string; // Base64 string for preview
   idCardStatus: 'pending' | 'approved' | 'rejected';
   idCardFeedback?: string;
+  jerseyNumber?: string;
+  dateOfBirth?: string;
 }
 
 interface CoachRegistration {
@@ -326,7 +328,7 @@ const AccreditationCard = ({ member, type, team, isApproved, id }: Accreditation
               textShadow: '0 0.5px 1px rgba(0,0,0,0.3)'
             }}
           >
-            {mainRole}
+            {mainRole} {isPlayer && member.jerseyNumber ? `[#${member.jerseyNumber}]` : ''}
           </span>
           <span 
             className="px-2.5 py-0.5 text-[7.5px] font-mono tracking-wider uppercase rounded inline-block transition-colors duration-300 text-white/90 bg-white/10 border border-white/10"
@@ -351,6 +353,11 @@ const AccreditationCard = ({ member, type, team, isApproved, id }: Accreditation
           <p className="font-mono text-[9px] tracking-widest font-black uppercase text-white/90" style={{ textShadow: '0 0 4px rgba(255,255,255,0.1)' }}>
             {isPlayer ? member.matricNumber : 'ACC_COACH_OFFICIAL'}
           </p>
+          {isPlayer && member.dateOfBirth && (
+            <p className="font-mono text-[7px] text-white/40 tracking-wider block font-bold mt-0.5">
+              DOB: {member.dateOfBirth}
+            </p>
+          )}
         </div>
       </div>
 
@@ -450,6 +457,8 @@ export default function RegistrationPortal() {
     idCardSize: '',
     idCardData: '',
     passportPath: '',
+    jerseyNumber: '',
+    dateOfBirth: ''
   });
   const [coachForm, setCoachForm] = useState({
     fullName: '',
@@ -574,7 +583,9 @@ export default function RegistrationPortal() {
       idCardName: playerForm.idCardName,
       idCardSize: playerForm.idCardSize,
       idCardData: playerForm.idCardData,
-      idCardStatus: 'pending'
+      idCardStatus: 'pending',
+      jerseyNumber: playerForm.jerseyNumber || '',
+      dateOfBirth: playerForm.dateOfBirth || ''
     };
 
     const updatedPlayers = [...activeReg.players, newPlayer];
@@ -602,7 +613,9 @@ export default function RegistrationPortal() {
       idCardName: '',
       idCardSize: '',
       idCardData: '',
-      passportPath: null
+      passportPath: '',
+      jerseyNumber: '',
+      dateOfBirth: ''
     });
     setUploadError('');
     setIsPlayerModalOpen(false);
@@ -1469,6 +1482,11 @@ export default function RegistrationPortal() {
                           <h4 className="font-display font-black tracking-tight text-white uppercase text-base truncate leading-tight">{player.fullName}</h4>
                           <p className="font-mono text-[10px] text-primary tracking-widest font-bold">{player.matricNumber}</p>
                           <p className="text-xs text-white/50">{player.department} • Lvl {player.level}</p>
+                          <div className="flex flex-wrap gap-x-1 items-center text-[9px] text-white/40 font-mono mt-0.5 font-semibold">
+                            {player.jerseyNumber && <span className="bg-white/5 px-1 py-0.5 rounded text-glow"># {player.jerseyNumber}</span>}
+                            {player.jerseyNumber && player.dateOfBirth && <span>•</span>}
+                            {player.dateOfBirth && <span>DOB: {player.dateOfBirth}</span>}
+                          </div>
                         </div>
                       </div>
 
@@ -3021,6 +3039,33 @@ export default function RegistrationPortal() {
                       disabled
                       value={activeTeam ? activeTeam.name.replace(/ \(\w+\)$/, '') : ''}
                       className="w-full px-4 py-3 bg-white/5 border border-white/5 cursor-not-allowed rounded-xl text-xs text-white/30 uppercase font-black"
+                    />
+                  </div>
+                </div>
+
+                {/* Jersey Number & Date of Birth (Optional) */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-1.5">Jersey Number</label>
+                    <input
+                      type="number"
+                      required
+                      min="1"
+                      max="99"
+                      value={playerForm.jerseyNumber}
+                      onChange={(e) => setPlayerForm(prev => ({ ...prev, jerseyNumber: e.target.value }))}
+                      placeholder="e.g. 10"
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-xs outline-none text-white focus:border-primary font-bold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-1.5">Date of Birth (Optional)</label>
+                    <input
+                      type="date"
+                      value={playerForm.dateOfBirth}
+                      onChange={(e) => setPlayerForm(prev => ({ ...prev, dateOfBirth: e.target.value }))}
+                      className="w-full px-4 py-3 bg-dark border border-white/10 rounded-xl text-xs outline-none text-white focus:border-primary font-bold"
                     />
                   </div>
                 </div>
