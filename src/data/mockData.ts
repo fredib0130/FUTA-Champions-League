@@ -40,7 +40,7 @@ export const TEAMS: Team[] = [
 ].map((abbr, i) => ({
   id: abbr.toLowerCase(),
   name: [
-    'Agricultural Engineering', 'Applied Geo-Physics', 'Anatomy', 'Animal Production and Health', 'Bio Chemistry',
+    'Agricultural and Environmental Engineering', 'Applied Geo-Physics', 'Anatomy', 'Animal Production and Health', 'Bio Chemistry',
     'Building Technology', 'Crop Soil and Pest Management', 'Cyber Security', 'Enterpreneurship', 'Forestry and Wood Technology',
     'Information and Communication Engineering', 'Industrial Design', 'Information Systems', 'Medicine and Surgery', 'Micro Biology',
     'Marine Science and Technology', 'Physiology', 'Physics', 'Securities and Investment Management Technology', 'Statistics'
@@ -77,7 +77,7 @@ export const PLAYERS: Player[] = Array.from({ length: 150 }, (_, i) => ({
 
 export const MATCHES: Match[] = [
   // --- MATCHDAY 1 (June 5 - 7) ---
-  { id: 'md1-1', homeTeam: 'MST', awayTeam: 'ICE', date: '2026-06-05', time: '15:30', venue: 'FUTA Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 }, // OPENING MATCH
+  { id: 'md1-1', homeTeam: 'MST', awayTeam: 'ICE', date: '2026-06-05', time: '17:00', venue: 'FUTA Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 }, // OPENING MATCH
   { id: 'md1-2', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-06', time: '08:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
   { id: 'md1-3', homeTeam: 'PHS', awayTeam: 'APH', date: '2026-06-06', time: '09:30', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
   { id: 'md1-4', homeTeam: 'CYS', awayTeam: 'ANA', date: '2026-06-06', time: '11:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
@@ -163,7 +163,7 @@ export const COEFFICIENTS: CoefficientRanking[] = [
   { rank: 20, teamId: 'ice', teamName: 'Information and Communication Engineering', points2026: 4.00, points2025: 0.00, totalCoefficient: 4.00, isActive: true },
   { rank: 21, teamId: 'phy', teamName: 'Physics', points2026: 4.00, points2025: 0.00, totalCoefficient: 4.00, isActive: true },
   { rank: 22, teamId: 'bmt', teamName: 'Bio Medical Technology', points2026: 0.00, points2025: 4.00, totalCoefficient: 4.00, isActive: false },
-  { rank: 23, teamId: 'age', teamName: 'Agricultural Engineering', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
+  { rank: 23, teamId: 'age', teamName: 'Agricultural and Environmental Engineering', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
   { rank: 24, teamId: 'agp', teamName: 'Applied Geo-Physics', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
   { rank: 25, teamId: 'ana', teamName: 'Anatomy', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },
   { rank: 26, teamId: 'bch', teamName: 'Bio Chemistry', points2026: 3.00, points2025: 0.00, totalCoefficient: 3.00, isActive: true },

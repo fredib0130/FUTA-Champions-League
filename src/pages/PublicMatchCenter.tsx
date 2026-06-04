@@ -315,7 +315,9 @@ export default function PublicMatchCenter() {
                     LIVE • {timer.liveMinute}
                   </span>
                 ) : match.status === 'Half Time' ? (
-                  <span className="text-yellow-400 font-mono font-bold">HT - HALF TIME</span>
+                  <span className="text-yellow-400 font-mono font-bold">
+                    HALF TIME • {timer.liveMinute && timer.liveMinute.startsWith('HT') ? timer.liveMinute.replace("HT ", "") : "10:00"}
+                  </span>
                 ) : match.status === 'Finished' ? (
                   <span className="text-white/40 font-mono font-bold">FT - FULL TIME</span>
                 ) : (

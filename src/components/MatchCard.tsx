@@ -160,7 +160,9 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
                 {liveMinute}
               </span>
             ) : match.status === 'Half Time' ? (
-              <span className="text-yellow-400 font-mono">HT</span>
+              <span className="text-yellow-400 font-mono">
+                {liveMinute && liveMinute.startsWith('HT') ? `HT • ${liveMinute.replace("HT ", "")}` : 'HALFTIME'}
+              </span>
             ) : match.status === 'Finished' ? (
               <span className="text-white/40 font-mono">FT</span>
             ) : (

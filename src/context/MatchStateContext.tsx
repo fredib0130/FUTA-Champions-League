@@ -520,170 +520,66 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     channel.postMessage({ type: 'FCL_STATE_UPDATE' });
   };
 
-  // Real-time ticking for Live Matches (auto increment minutes every 15s to simulate FUTA game progression)
+  // Real-time ticking synced with the node backend database timers
   useEffect(() => {
-    const interval = setInterval(() => {
-      let changed = false;
-      const updatedTimers = { ...activeMinAndStatus };
-      let updatedMatchesLocal: Match[] | undefined = undefined;
-      let updatedTeamsLocal: Team[] | undefined = undefined;
-      const comms = { ...commentaries };
+    const fetchTimers = async () => {
+      try {
+        const res = await fclApi.getTimers();
+        if (res && res.success && res.timers) {
+          setActiveMinAndStatus(prev => {
+            const updated: Record<string, { liveMinute: string; isPaused: boolean }> = {};
+            let localMatchesChanged = false;
+            let updatedMatchesLocal = [...matches];
 
-      matches.forEach(m => {
-        if (m.status === 'Live' && updatedTimers[m.id] && !updatedTimers[m.id].isPaused) {
-          const currentMinStr = updatedTimers[m.id].liveMinute;
-          const firstAdded = m.firstHalfAddedTime || 0;
-          const secondAdded = m.secondHalfAddedTime || 0;
-          
-          if (currentMinStr === 'HT' || currentMinStr === 'FT') {
-            return;
-          }
+            Object.keys(res.timers).forEach(matchId => {
+              const serverTimer = res.timers[matchId];
+              updated[matchId] = {
+                liveMinute: serverTimer.liveMinute,
+                isPaused: serverTimer.isPaused
+              };
 
-          if (currentMinStr.includes('+')) {
-            const parts = currentMinStr.replace("'", "").split('+');
-            const base = parseInt(parts[0]) || 0;
-            const added = parseInt(parts[1]) || 0;
-            
-            if (base === 30) {
-              if (added < firstAdded) {
-                updatedTimers[m.id] = { ...updatedTimers[m.id], liveMinute: `30+${added + 1}'` };
-                changed = true;
-              } else {
-                updatedTimers[m.id] = { liveMinute: 'HT', isPaused: true };
-                changed = true;
-                const matchComms = comms[m.id] || [];
-                comms[m.id] = [
-                  {
-                    id: `comm-ht-${Date.now()}`,
-                    matchId: m.id,
-                    minute: 'HT',
-                    text: `⏸️ HALF TIME! The referee blows the whistle for recess. Players proceed for their 10-minute break.`,
-                    timestamp: new Date().toLocaleTimeString(),
-                    type: 'system' as const
-                  },
-                  ...matchComms
-                ];
-              }
-            } else if (base === 60) {
-              if (added < secondAdded) {
-                updatedTimers[m.id] = { ...updatedTimers[m.id], liveMinute: `60+${added + 1}'` };
-                changed = true;
-              } else {
-                updatedTimers[m.id] = { liveMinute: 'FT', isPaused: true };
-                changed = true;
-                updatedMatchesLocal = (updatedMatchesLocal || matches).map(x => {
-                  if (x.id === m.id) return { ...x, status: 'Finished' as const };
-                  return x;
-                });
-                updatedTeamsLocal = recalculateStandingsFromMatches(teams, updatedMatchesLocal);
-                const matchComms = comms[m.id] || [];
-                comms[m.id] = [
-                  {
-                    id: `comm-ft-${Date.now()}`,
-                    matchId: m.id,
-                    minute: 'FT',
-                    text: `🛑 FULL TIME! The referee brings this 60-minute match to an end. Final scoreboard: ${m.homeTeam} ${m.homeScore} - ${m.awayScore} ${m.awayTeam}.`,
-                    timestamp: new Date().toLocaleTimeString(),
-                    type: 'system' as const
-                  },
-                  ...matchComms
-                ];
-              }
-            }
-          } else {
-            const currentMinNum = parseInt(currentMinStr.replace(/[^0-9]/g, '')) || 0;
-            if (currentMinNum < 30) {
-              const nextVal = currentMinNum + 1;
-              if (nextVal === 30) {
-                if (firstAdded > 0) {
-                  updatedTimers[m.id] = { ...updatedTimers[m.id], liveMinute: `30+1'` };
-                } else {
-                  updatedTimers[m.id] = { liveMinute: 'HT', isPaused: true };
-                  const matchComms = comms[m.id] || [];
-                  comms[m.id] = [
-                    {
-                      id: `comm-ht-${Date.now()}`,
-                      matchId: m.id,
-                      minute: 'HT',
-                      text: `⏸️ HALF TIME! The referee signals end of the first half at 30 minutes.`,
-                      timestamp: new Date().toLocaleTimeString(),
-                      type: 'system' as const
-                    },
-                    ...matchComms
-                  ];
+              const targetMatch = updatedMatchesLocal.find(m => m.id === matchId);
+              if (targetMatch) {
+                if (serverTimer.status === 'FirstHalf' || serverTimer.status === 'SecondHalf') {
+                  if (targetMatch.status !== 'Live') {
+                    targetMatch.status = 'Live';
+                    localMatchesChanged = true;
+                  }
+                } else if (serverTimer.status === 'HalfTime') {
+                  if (targetMatch.status !== 'Half Time') {
+                    targetMatch.status = 'Half Time';
+                    localMatchesChanged = true;
+                  }
+                } else if (serverTimer.status === 'Finished') {
+                  if (targetMatch.status !== 'Finished') {
+                    targetMatch.status = 'Finished';
+                    localMatchesChanged = true;
+                  }
                 }
-              } else {
-                updatedTimers[m.id] = { ...updatedTimers[m.id], liveMinute: `${nextVal}'` };
               }
-              changed = true;
-            } else if (currentMinNum >= 30 && currentMinNum < 60) {
-              const actualMin = Math.max(currentMinNum, 30);
-              const nextVal = actualMin + 1;
-              if (nextVal === 60) {
-                if (secondAdded > 0) {
-                  updatedTimers[m.id] = { ...updatedTimers[m.id], liveMinute: `60+1'` };
-                } else {
-                  updatedTimers[m.id] = { liveMinute: 'FT', isPaused: true };
-                  updatedMatchesLocal = (updatedMatchesLocal || matches).map(x => {
-                    if (x.id === m.id) return { ...x, status: 'Finished' as const };
-                    return x;
-                  });
-                  updatedTeamsLocal = recalculateStandingsFromMatches(teams, updatedMatchesLocal);
-                  const matchComms = comms[m.id] || [];
-                  comms[m.id] = [
-                    {
-                      id: `comm-ft-${Date.now()}`,
-                      matchId: m.id,
-                      minute: 'FT',
-                      text: `🛑 FULL TIME! The main whistle sounds. The referee brings this 60-minute regulation match to its conclusion.`,
-                      timestamp: new Date().toLocaleTimeString(),
-                      type: 'system' as const
-                    },
-                    ...matchComms
-                  ];
-                }
-              } else {
-                updatedTimers[m.id] = { ...updatedTimers[m.id], liveMinute: `${nextVal}'` };
-              }
-              changed = true;
-            } else {
-              // >= 60
-              if (secondAdded > 0) {
-                updatedTimers[m.id] = { ...updatedTimers[m.id], liveMinute: `60+1'` };
-                changed = true;
-              } else {
-                updatedTimers[m.id] = { liveMinute: 'FT', isPaused: true };
-                changed = true;
-                updatedMatchesLocal = (updatedMatchesLocal || matches).map(x => {
-                  if (x.id === m.id) return { ...x, status: 'Finished' as const };
-                  return x;
-                });
-                updatedTeamsLocal = recalculateStandingsFromMatches(teams, updatedMatchesLocal);
-              }
+            });
+
+            if (localMatchesChanged) {
+              setMatches(updatedMatchesLocal);
+              localStorage.setItem('fcl_admin_matches', JSON.stringify(updatedMatchesLocal));
+              const updatedTeamsLocal = recalculateStandingsFromMatches(teams, updatedMatchesLocal);
+              setTeams(updatedTeamsLocal);
+              localStorage.setItem('fcl_admin_teams', JSON.stringify(updatedTeamsLocal));
             }
-          }
+
+            localStorage.setItem('fcl_admin_timers', JSON.stringify(updated));
+            return updated;
+          });
         }
-      });
-
-      if (changed) {
-        saveAndBroadcast(
-          updatedMatchesLocal,
-          updatedTeamsLocal,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          Object.keys(comms).length > 0 ? comms : undefined,
-          undefined,
-          undefined,
-          undefined,
-          updatedTimers
-        );
+      } catch (err) {
+        console.error("Failed to sync timers from server", err);
       }
-    }, 15000); // Ticks every 15 seconds for realistic simulation
+    };
 
+    fetchTimers();
+    const interval = setInterval(fetchTimers, 1000);
     return () => clearInterval(interval);
-  }, [matches, activeMinAndStatus, commentaries, teams]);
+  }, [matches, teams]);
 
   // Auth Operations
   const login = async (username: string, passwordHashOrPlain: string, role: AdminUser['role']): Promise<boolean> => {
@@ -760,7 +656,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   };
 
   // Match Status Control
-  const startMatch = (matchId: string) => {
+  const startMatch = async (matchId: string) => {
+    try {
+      await fclApi.controlTimer(matchId, 'START');
+    } catch (err) {
+      console.error("Failed to start timer on server", err);
+    }
+
     const changedMatches = matches.map(m => {
       if (m.id === matchId) {
         return { ...m, status: 'Live' as const };
@@ -769,7 +671,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     });
 
     const timers = { ...activeMinAndStatus };
-    timers[matchId] = { liveMinute: '0\'', isPaused: false };
+    timers[matchId] = { liveMinute: '00:00', isPaused: false };
 
     // Post to commentary
     const comms = { ...commentaries };
@@ -778,7 +680,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       {
         id: `comm-start-${Date.now()}`,
         matchId,
-        minute: '0\'',
+        minute: '00:00',
         text: `🏁 Referee blows the whistle! Kickoff at the FUTA Sports Complex for the massive encounter. We are officially underway!`,
         timestamp: new Date().toLocaleTimeString(),
         type: 'general' as const
@@ -798,7 +700,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     saveAndBroadcast(changedMatches, undefined, undefined, undefined, undefined, undefined, comms, updatedLineups, undefined, undefined, timers);
   };
 
-  const pauseMatch = (matchId: string) => {
+  const pauseMatch = async (matchId: string) => {
+    try {
+      await fclApi.controlTimer(matchId, 'PAUSE');
+    } catch (err) {
+      console.error("Failed to pause timer on server", err);
+    }
     const timers = { ...activeMinAndStatus };
     if (timers[matchId]) {
       timers[matchId].isPaused = true;
@@ -807,7 +714,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     saveAndBroadcast(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, timers);
   };
 
-  const resumeMatch = (matchId: string) => {
+  const resumeMatch = async (matchId: string) => {
+    try {
+      await fclApi.controlTimer(matchId, 'RESUME');
+    } catch (err) {
+      console.error("Failed to resume timer on server", err);
+    }
     const timers = { ...activeMinAndStatus };
     if (timers[matchId]) {
       timers[matchId].isPaused = false;
@@ -816,7 +728,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     saveAndBroadcast(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, timers);
   };
 
-  const endMatch = (matchId: string) => {
+  const endMatch = async (matchId: string) => {
+    try {
+      await fclApi.controlTimer(matchId, 'END');
+    } catch (err) {
+      console.error("Failed to end timer on server", err);
+    }
     const matchToFinish = matches.find(m => m.id === matchId);
     if (!matchToFinish) return;
 
@@ -869,7 +786,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     saveAndBroadcast(changedMatches, teamsCopy, undefined, undefined, undefined, undefined, comms, undefined, undefined, undefined, timers);
   };
 
-  const updateMatchMinute = (matchId: string, minute: string) => {
+  const updateMatchMinute = async (matchId: string, minute: string) => {
+    try {
+      await fclApi.controlTimer(matchId, 'SET_MINUTE', { value: minute });
+    } catch (err) {
+      console.error("Failed to set timer minute on server", err);
+    }
     const timers = { ...activeMinAndStatus };
     timers[matchId] = { liveMinute: minute, isPaused: timers[matchId]?.isPaused ?? false };
     addAuditLog(`Updated match minute manually to ${minute}`, matchId);
@@ -1287,7 +1209,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     saveAndBroadcast(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, reportsObj);
   };
 
-  const updateMatchAddedTime = (matchId: string, firstHalf: number, secondHalf: number) => {
+  const updateMatchAddedTime = async (matchId: string, firstHalf: number, secondHalf: number) => {
+    try {
+      await fclApi.controlTimer(matchId, 'ADD_INJURY_TIME', { period: 'first', addedMinutes: firstHalf });
+      await fclApi.controlTimer(matchId, 'ADD_INJURY_TIME', { period: 'second', addedMinutes: secondHalf });
+    } catch (err) {
+      console.error("Failed to update added injury time on server", err);
+    }
     const changedMatches = matches.map(m => {
       if (m.id === matchId) {
         return { 

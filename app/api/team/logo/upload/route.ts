@@ -43,8 +43,81 @@ function saveAuditLogs(logs: any[]) {
   fs.writeFileSync(AUDITS_FILE, JSON.stringify(logs, null, 2), "utf8");
 }
 
+function validateDatabaseConnectivity(): { success: boolean; error?: string } {
+  try {
+    if (!fs.existsSync(DB_DIR)) {
+      fs.mkdirSync(DB_DIR, { recursive: true });
+    }
+    const testFile = path.join(DB_DIR, ".connection_test_fcl");
+    fs.writeFileSync(testFile, "test-connection-" + Date.now(), "utf8");
+    fs.readFileSync(testFile, "utf8");
+    fs.unlinkSync(testFile);
+    return { success: true };
+  } catch (err: any) {
+    console.error("Database (local files) connectivity check failed:", err);
+    return { success: false, error: err.message };
+  }
+}
+
+function validateStorageConnectivity(): { success: boolean; error?: string } {
+  try {
+    if (!fs.existsSync(UPLOADS_DIR)) {
+      fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    }
+    const testFile = path.join(UPLOADS_DIR, ".bucket_test_fcl");
+    fs.writeFileSync(testFile, "test-bucket-connection-" + Date.now(), "utf8");
+    fs.readFileSync(testFile, "utf8");
+    fs.unlinkSync(testFile);
+    return { success: true };
+  } catch (err: any) {
+    console.error("Storage folder connectivity check failed:", err);
+    return { success: false, error: err.message };
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    console.log("[API Route Log] GET request received at /api/team/logo/upload");
+    
+    // Validate backends connectivity
+    const dbStatus = validateDatabaseConnectivity();
+    const storageStatus = validateStorageConnectivity();
+    
+    return NextResponse.json({
+      success: true,
+      message: "FCL Team Logo Multipart-Upload endpoint is active and healthy.",
+      connections: {
+        database: dbStatus.success ? "Writable" : `Error: ${dbStatus.error}`,
+        storage: storageStatus.success ? "Writable" : `Error: ${storageStatus.error}`
+      }
+    });
+  } catch (error: any) {
+    console.error("[API Error] Failed GET team/logo/upload info:", error);
+    return NextResponse.json(
+      { error: error.message || "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
+    console.log("[API Route Log] POST request received at /api/team/logo/upload");
+
+    const dbStatus = validateDatabaseConnectivity();
+    const storageStatus = validateStorageConnectivity();
+
+    if (!dbStatus.success || !storageStatus.success) {
+      console.error("[Health Check Failed] Cannot upload file. Connectivity issues:", { dbStatus, storageStatus });
+      return NextResponse.json(
+        { 
+          error: "Storage/Database write authorization link is broken", 
+          details: { db: dbStatus.error, storage: storageStatus.error } 
+        },
+        { status: 507 }
+      );
+    }
+
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
     const team = formData.get("team") as string | null;

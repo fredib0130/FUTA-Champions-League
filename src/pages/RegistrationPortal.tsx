@@ -1605,9 +1605,23 @@ export default function RegistrationPortal() {
                       }}
                       className="px-4 py-2 bg-[#090D22] border border-white/10 rounded-xl text-xs text-white outline-none focus:border-primary font-bold"
                     >
-                      <option value="4-3-3">4-3-3 Attack</option>
-                      <option value="4-4-2">4-4-2 Classic</option>
-                      <option value="3-5-2">3-5-2 Wingbacks</option>
+                      <option value="3-1-4-2">3-1-4-2 </option>
+                      <option value="3-2-3-2">3-2-3-2 </option>
+                      <option value="3-2-4-1">3-2-4-1 </option>
+                      <option value="3-4-1-2">3-4-1-2 </option>
+                      <option value="3-4-2-1">3-4-2-1 </option>
+                      <option value="3-5-2">3-5-2 </option>
+                      <option value="4-1-2-3">4-1-2-3 </option>
+                      <option value="4-1-3-2">4-1-3-2 </option>
+                      <option value="4-1-4-1">4-1-4-1 </option>
+                      <option value="4-2-3-1">4-2-3-1 </option>
+                      <option value="4-3-2-1">4-3-2-1 </option>
+                      <option value="4-3-3">4-3-3 </option>
+                      <option value="4-4-2">4-4-2 </option>
+                      <option value="4-5-1">4-5-1 </option>
+                      <option value="5-2-3">5-2-3 </option>
+                      <option value="5-3-2">5-3-2 </option>
+                      <option value="5-4-1">5-4-1 </option>
                     </select>
                   </div>
 
@@ -1657,19 +1671,79 @@ export default function RegistrationPortal() {
                     {(() => {
                       const getSpots = () => {
                         const form = lineup.formation;
-                        if (form === '4-4-2') {
+                        if (form === '3-1-4-2') {
                           return [
                             { id: 'GK', label: 'GK', x: 50, y: 88 },
-                            { id: 'LB', label: 'LB', x: 18, y: 68 },
-                            { id: 'LCB', label: 'CB', x: 39, y: 72 },
-                            { id: 'RCB', label: 'CB', x: 61, y: 72 },
-                            { id: 'RB', label: 'RB', x: 82, y: 68 },
-                            { id: 'LM', label: 'LM', x: 18, y: 45 },
-                            { id: 'LCM', label: 'CM', x: 39, y: 48 },
-                            { id: 'RCM', label: 'CM', x: 61, y: 48 },
-                            { id: 'RM', label: 'RM', x: 82, y: 45 },
-                            { id: 'LS', label: 'CF', x: 35, y: 22 },
-                            { id: 'RS', label: 'CF', x: 65, y: 22 },
+                            { id: 'LCB', label: 'CB', x: 25, y: 71 },
+                            { id: 'CCB', label: 'CB', x: 50, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 75, y: 71 },
+                            { id: 'DM', label: 'DM', x: 50, y: 58 },
+                            { id: 'LM', label: 'LM', x: 15, y: 43 },
+                            { id: 'LCM', label: 'CM', x: 38, y: 47 },
+                            { id: 'RCM', label: 'CM', x: 62, y: 47 },
+                            { id: 'RM', label: 'RM', x: 85, y: 43 },
+                            { id: 'LS', label: 'CF', x: 38, y: 22 },
+                            { id: 'RS', label: 'CF', x: 62, y: 22 },
+                          ];
+                        }
+                        if (form === '3-2-3-2') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LCB', label: 'CB', x: 25, y: 71 },
+                            { id: 'CCB', label: 'CB', x: 50, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 75, y: 71 },
+                            { id: 'LDM', label: 'DM', x: 40, y: 58 },
+                            { id: 'RDM', label: 'DM', x: 60, y: 58 },
+                            { id: 'LAM', label: 'AM', x: 22, y: 40 },
+                            { id: 'CAM', label: 'AM', x: 50, y: 36 },
+                            { id: 'RAM', label: 'AM', x: 78, y: 40 },
+                            { id: 'LS', label: 'CF', x: 38, y: 20 },
+                            { id: 'RS', label: 'CF', x: 62, y: 20 },
+                          ];
+                        }
+                        if (form === '3-2-4-1') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LCB', label: 'CB', x: 25, y: 71 },
+                            { id: 'CCB', label: 'CB', x: 50, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 75, y: 71 },
+                            { id: 'LDM', label: 'DM', x: 40, y: 58 },
+                            { id: 'RDM', label: 'DM', x: 60, y: 58 },
+                            { id: 'LM', label: 'LM', x: 15, y: 42 },
+                            { id: 'LCM', label: 'CM', x: 38, y: 46 },
+                            { id: 'RCM', label: 'CM', x: 62, y: 46 },
+                            { id: 'RM', label: 'RM', x: 85, y: 42 },
+                            { id: 'ST', label: 'ST', x: 50, y: 20 },
+                          ];
+                        }
+                        if (form === '3-4-1-2') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LCB', label: 'CB', x: 25, y: 71 },
+                            { id: 'CCB', label: 'CB', x: 50, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 75, y: 71 },
+                            { id: 'LM', label: 'LM', x: 15, y: 47 },
+                            { id: 'LCM', label: 'CM', x: 38, y: 50 },
+                            { id: 'RCM', label: 'CM', x: 62, y: 50 },
+                            { id: 'RM', label: 'RM', x: 85, y: 47 },
+                            { id: 'CAM', label: 'AM', x: 50, y: 34 },
+                            { id: 'LS', label: 'CF', x: 38, y: 20 },
+                            { id: 'RS', label: 'CF', x: 62, y: 20 },
+                          ];
+                        }
+                        if (form === '3-4-2-1') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LCB', label: 'CB', x: 25, y: 71 },
+                            { id: 'CCB', label: 'CB', x: 50, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 75, y: 71 },
+                            { id: 'LM', label: 'LM', x: 15, y: 47 },
+                            { id: 'LCM', label: 'CM', x: 38, y: 50 },
+                            { id: 'RCM', label: 'CM', x: 62, y: 50 },
+                            { id: 'RM', label: 'RM', x: 85, y: 47 },
+                            { id: 'LAM', label: 'AM', x: 38, y: 32 },
+                            { id: 'RAM', label: 'AM', x: 62, y: 32 },
+                            { id: 'ST', label: 'ST', x: 50, y: 18 },
                           ];
                         }
                         if (form === '3-5-2') {
@@ -1687,19 +1761,169 @@ export default function RegistrationPortal() {
                             { id: 'RS', label: 'CF', x: 65, y: 22 },
                           ];
                         }
-                        // Default 4-3-3 Attack
+                        if (form === '4-1-2-3') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LB', label: 'LB', x: 15, y: 72 },
+                            { id: 'LCB', label: 'CB', x: 38, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 62, y: 74 },
+                            { id: 'RB', label: 'RB', x: 85, y: 72 },
+                            { id: 'DM', label: 'DM', x: 50, y: 58 },
+                            { id: 'LCM', label: 'CM', x: 38, y: 45 },
+                            { id: 'RCM', label: 'CM', x: 62, y: 45 },
+                            { id: 'LW', label: 'LW', x: 20, y: 22 },
+                            { id: 'ST', label: 'ST', x: 50, y: 18 },
+                            { id: 'RW', label: 'RW', x: 80, y: 22 },
+                          ];
+                        }
+                        if (form === '4-1-3-2') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LB', label: 'LB', x: 15, y: 72 },
+                            { id: 'LCB', label: 'CB', x: 38, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 62, y: 74 },
+                            { id: 'RB', label: 'RB', x: 85, y: 72 },
+                            { id: 'DM', label: 'DM', x: 50, y: 58 },
+                            { id: 'LM', label: 'LM', x: 20, y: 42 },
+                            { id: 'CAM', label: 'AM', x: 50, y: 38 },
+                            { id: 'RM', label: 'RM', x: 80, y: 42 },
+                            { id: 'LS', label: 'CF', x: 38, y: 20 },
+                            { id: 'RS', label: 'CF', x: 62, y: 20 },
+                          ];
+                        }
+                        if (form === '4-1-4-1') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LB', label: 'LB', x: 15, y: 72 },
+                            { id: 'LCB', label: 'CB', x: 38, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 62, y: 74 },
+                            { id: 'RB', label: 'RB', x: 85, y: 72 },
+                            { id: 'DM', label: 'DM', x: 50, y: 58 },
+                            { id: 'LM', label: 'LM', x: 15, y: 42 },
+                            { id: 'LCM', label: 'CM', x: 38, y: 46 },
+                            { id: 'RCM', label: 'CM', x: 62, y: 46 },
+                            { id: 'RM', label: 'RM', x: 85, y: 42 },
+                            { id: 'ST', label: 'ST', x: 50, y: 18 },
+                          ];
+                        }
+                        if (form === '4-2-3-1') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LB', label: 'LB', x: 15, y: 72 },
+                            { id: 'LCB', label: 'CB', x: 38, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 62, y: 74 },
+                            { id: 'RB', label: 'RB', x: 85, y: 72 },
+                            { id: 'LDM', label: 'DM', x: 40, y: 58 },
+                            { id: 'RDM', label: 'DM', x: 60, y: 58 },
+                            { id: 'LAM', label: 'AM', x: 22, y: 38 },
+                            { id: 'CAM', label: 'AM', x: 50, y: 34 },
+                            { id: 'RAM', label: 'AM', x: 78, y: 38 },
+                            { id: 'ST', label: 'ST', x: 50, y: 18 },
+                          ];
+                        }
+                        if (form === '4-3-2-1') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LB', label: 'LB', x: 15, y: 72 },
+                            { id: 'LCB', label: 'CB', x: 38, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 62, y: 74 },
+                            { id: 'RB', label: 'RB', x: 85, y: 72 },
+                            { id: 'LCM', label: 'CM', x: 35, y: 56 },
+                            { id: 'CM', label: 'CM', x: 50, y: 52 },
+                            { id: 'RCM', label: 'CM', x: 65, y: 56 },
+                            { id: 'LAM', label: 'AM', x: 38, y: 32 },
+                            { id: 'RAM', label: 'AM', x: 62, y: 32 },
+                            { id: 'ST', label: 'ST', x: 50, y: 18 },
+                          ];
+                        }
+                        if (form === '4-4-2') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LB', label: 'LB', x: 15, y: 72 },
+                            { id: 'LCB', label: 'CB', x: 38, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 62, y: 74 },
+                            { id: 'RB', label: 'RB', x: 85, y: 72 },
+                            { id: 'LM', label: 'LM', x: 15, y: 45 },
+                            { id: 'LCM', label: 'CM', x: 38, y: 48 },
+                            { id: 'RCM', label: 'CM', x: 62, y: 48 },
+                            { id: 'RM', label: 'RM', x: 85, y: 45 },
+                            { id: 'LS', label: 'CF', x: 38, y: 20 },
+                            { id: 'RS', label: 'CF', x: 62, y: 20 },
+                          ];
+                        }
+                        if (form === '4-5-1') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LB', label: 'LB', x: 15, y: 72 },
+                            { id: 'LCB', label: 'CB', x: 38, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 62, y: 74 },
+                            { id: 'RB', label: 'RB', x: 85, y: 72 },
+                            { id: 'LM', label: 'LM', x: 15, y: 45 },
+                            { id: 'LCM', label: 'CM', x: 34, y: 48 },
+                            { id: 'CM', label: 'CM', x: 50, y: 44 },
+                            { id: 'RCM', label: 'CM', x: 66, y: 48 },
+                            { id: 'RM', label: 'RM', x: 85, y: 45 },
+                            { id: 'ST', label: 'ST', x: 50, y: 18 },
+                          ];
+                        }
+                        if (form === '5-2-3') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LWB', label: 'LWB', x: 10, y: 66 },
+                            { id: 'LCB', label: 'CB', x: 28, y: 72 },
+                            { id: 'CB', label: 'CB', x: 50, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 72, y: 72 },
+                            { id: 'RWB', label: 'RWB', x: 90, y: 66 },
+                            { id: 'LCM', label: 'CM', x: 38, y: 50 },
+                            { id: 'RCM', label: 'CM', x: 62, y: 50 },
+                            { id: 'LW', label: 'LW', x: 20, y: 20 },
+                            { id: 'ST', label: 'ST', x: 50, y: 16 },
+                            { id: 'RW', label: 'RW', x: 80, y: 20 },
+                          ];
+                        }
+                        if (form === '5-3-2') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LWB', label: 'LWB', x: 10, y: 66 },
+                            { id: 'LCB', label: 'CB', x: 28, y: 72 },
+                            { id: 'CB', label: 'CB', x: 50, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 72, y: 72 },
+                            { id: 'RWB', label: 'RWB', x: 90, y: 66 },
+                            { id: 'LCM', label: 'CM', x: 35, y: 50 },
+                            { id: 'CM', label: 'CM', x: 50, y: 46 },
+                            { id: 'RCM', label: 'CM', x: 65, y: 50 },
+                            { id: 'LS', label: 'CF', x: 38, y: 20 },
+                            { id: 'RS', label: 'CF', x: 62, y: 20 },
+                          ];
+                        }
+                        if (form === '5-4-1') {
+                          return [
+                            { id: 'GK', label: 'GK', x: 50, y: 88 },
+                            { id: 'LWB', label: 'LWB', x: 10, y: 66 },
+                            { id: 'LCB', label: 'CB', x: 28, y: 72 },
+                            { id: 'CB', label: 'CB', x: 50, y: 74 },
+                            { id: 'RCB', label: 'CB', x: 72, y: 72 },
+                            { id: 'RWB', label: 'RWB', x: 90, y: 66 },
+                            { id: 'LM', label: 'LM', x: 15, y: 45 },
+                            { id: 'LCM', label: 'CM', x: 38, y: 48 },
+                            { id: 'RCM', label: 'CM', x: 62, y: 48 },
+                            { id: 'RM', label: 'RM', x: 85, y: 45 },
+                            { id: 'ST', label: 'ST', x: 50, y: 18 },
+                          ];
+                        }
+                        // Default 4-3-3
                         return [
                           { id: 'GK', label: 'GK', x: 50, y: 88 },
-                          { id: 'LB', label: 'LB', x: 18, y: 68 },
-                          { id: 'LCB', label: 'CB', x: 39, y: 72 },
-                          { id: 'RCB', label: 'CB', x: 61, y: 72 },
-                          { id: 'RB', label: 'RB', x: 82, y: 68 },
-                          { id: 'LCM', label: 'LCM', x: 30, y: 48 },
-                          { id: 'CM', label: 'CM', x: 50, y: 53 },
-                          { id: 'RCM', label: 'RCM', x: 70, y: 48 },
-                          { id: 'LW', label: 'LW', x: 22, y: 24 },
-                          { id: 'ST', label: 'CF', x: 50, y: 20 },
-                          { id: 'RW', label: 'RW', x: 78, y: 24 },
+                          { id: 'LB', label: 'LB', x: 15, y: 72 },
+                          { id: 'LCB', label: 'CB', x: 38, y: 74 },
+                          { id: 'RCB', label: 'CB', x: 62, y: 74 },
+                          { id: 'RB', label: 'RB', x: 85, y: 72 },
+                          { id: 'LCM', label: 'CM', x: 35, y: 52 },
+                          { id: 'CM', label: 'CM', x: 50, y: 48 },
+                          { id: 'RCM', label: 'CM', x: 65, y: 52 },
+                          { id: 'LW', label: 'LW', x: 20, y: 20 },
+                          { id: 'ST', label: 'CF', x: 50, y: 16 },
+                          { id: 'RW', label: 'RW', x: 80, y: 20 },
                         ];
                       };
 

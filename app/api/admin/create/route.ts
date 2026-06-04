@@ -56,13 +56,88 @@ function saveAuditLogs(logs: any[]) {
   fs.writeFileSync(AUDITS_FILE, JSON.stringify(logs, null, 2), "utf8");
 }
 
+function validateDatabaseConnectivity(): { success: boolean; error?: string } {
+  try {
+    if (!fs.existsSync(DB_DIR)) {
+      fs.mkdirSync(DB_DIR, { recursive: true });
+    }
+    const testFile = path.join(DB_DIR, ".connection_test_fcl");
+    fs.writeFileSync(testFile, "test-connection-" + Date.now(), "utf8");
+    fs.readFileSync(testFile, "utf8");
+    fs.unlinkSync(testFile);
+    return { success: true };
+  } catch (err: any) {
+    console.error("Database (local files) connectivity check failed:", err);
+    return { success: false, error: err.message };
+  }
+}
+
+function validateStorageConnectivity(): { success: boolean; error?: string } {
+  try {
+    const uploadDir = path.join(process.cwd(), "public", "uploads", "team-logos");
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    const testFile = path.join(uploadDir, ".bucket_test_fcl");
+    fs.writeFileSync(testFile, "test-bucket-connection-" + Date.now(), "utf8");
+    fs.readFileSync(testFile, "utf8");
+    fs.unlinkSync(testFile);
+    return { success: true };
+  } catch (err: any) {
+    console.error("Storage folder connectivity check failed:", err);
+    return { success: false, error: err.message };
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    console.log("[API Route Log] GET request received at /api/admin/create");
+    
+    // Validate backends connectivity
+    const dbStatus = validateDatabaseConnectivity();
+    const storageStatus = validateStorageConnectivity();
+    
+    const admins = getAdmins();
+    
+    return NextResponse.json({
+      success: true,
+      message: "FCL Tournament Administrator Bootstrap endpoint is ready.",
+      instruction: "Send a POST request with 'identifier' (or 'username'), 'password', and 'role' to create or update an administrator.",
+      connections: {
+        database: dbStatus.success ? "Connected (Writable)" : `Error: ${dbStatus.error}`,
+        storage: storageStatus.success ? "Connected (Writable)" : `Error: ${storageStatus.error}`
+      },
+      existingAdminsCount: admins.length
+    });
+  } catch (error: any) {
+    console.error("[API Error] Failed GET admin/create info:", error);
+    return NextResponse.json(
+      { error: error.message || "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
+    console.log("[API Route Log] POST request received at /api/admin/create");
+    
+    // Validate databases on entry
+    const dbStatus = validateDatabaseConnectivity();
+    if (!dbStatus.success) {
+      console.error("[Database Connection Error] cannot write persistent database: ", dbStatus.error);
+      return NextResponse.json(
+        { error: `Database persistent store link is broken: ${dbStatus.error}` },
+        { status: 500 }
+      );
+    }
+
     const body = await req.json();
     const { identifier, username, password, role } = body;
     const adminUsername = (identifier || username || "").trim();
 
     if (!adminUsername || !password || !role) {
+      console.warn("[API Validation Warning] Missing fields for administrator creation:", { adminUsername, hasPassword: !!password, role });
       return NextResponse.json(
         { error: "Fields identifier/username, password and role are required." },
         { status: 400 }
@@ -97,6 +172,7 @@ export async function POST(req: NextRequest) {
       });
       saveAuditLogs(audits);
 
+      console.log(`[API Log] Successfully updated administrator credit for: ${adminUsername}`);
       return NextResponse.json({
         success: true,
         message: "Administrator account updated successfully.",
@@ -127,6 +203,7 @@ export async function POST(req: NextRequest) {
     });
     saveAuditLogs(audits);
 
+    console.log(`[API Log] Successfully registered fresh administrator account: ${adminUsername}`);
     return NextResponse.json({
       success: true,
       user: {

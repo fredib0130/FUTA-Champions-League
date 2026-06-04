@@ -56,11 +56,13 @@ export const TeamLogo: React.FC<TeamLogoProps> = ({ logoUrl, teamId, className, 
     custom: 'border',
   }[size];
 
-  if (logoUrl && !hasError) {
+  const resolvedLogoUrl = logoUrl || `/logos/${initials}.jpg`;
+
+  if (resolvedLogoUrl && !hasError) {
     return (
       <img
-        src={logoUrl}
-        alt={teamId.toUpperCase()}
+        src={resolvedLogoUrl}
+        alt={initials}
         onError={() => setHasError(true)}
         className={cn(
           "object-contain bg-black/40 p-1 border border-white/10 shadow-md",

@@ -28,12 +28,31 @@ async function fetchApi(endpoint: string, options: RequestInit = {}): Promise<an
     headers
   });
 
+  const contentType = response.headers.get('content-type') || '';
+  const text = await response.text();
+
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error || `HTTP error ${response.status}`);
+    let errorMsg = `HTTP error ${response.status}`;
+    if (contentType.includes('application/json')) {
+      try {
+        const errorData = JSON.parse(text);
+        errorMsg = errorData.error || errorMsg;
+      } catch (e) {}
+    }
+    throw new Error(errorMsg);
   }
 
-  return response.json();
+  const isHtml = text.trim().startsWith('<!') || text.trim().startsWith('<html') || text.trim().startsWith('<doctype');
+
+  if (isHtml || (!contentType.includes('application/json') && !text.trim().startsWith('{') && !text.trim().startsWith('['))) {
+    throw new Error(`Expected JSON response, but received HTML or plain text (the server may be booting up or in maintenance)`);
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    throw new Error(`Failed to parse API JSON response`);
+  }
 }
 
 export const fclApi = {
@@ -135,6 +154,22 @@ export const fclApi = {
     return fetchApi('/api/audit-logs', {
       method: 'POST',
       body: JSON.stringify({ action, matchSummary })
+    });
+  },
+
+  // FCL Match Timers Endpoints
+  async getTimers(): Promise<{ success: boolean; timers: Record<string, any> }> {
+    return fetchApi('/api/timers');
+  },
+
+  async getTimerForMatch(matchId: string): Promise<{ success: boolean; timer: any }> {
+    return fetchApi(`/api/timers/${matchId}`);
+  },
+
+  async controlTimer(matchId: string, action: string, body: { period?: 'first' | 'second'; addedMinutes?: number; value?: string } = {}): Promise<any> {
+    return fetchApi(`/api/timers/${matchId}/control`, {
+      method: 'POST',
+      body: JSON.stringify({ action, ...body })
     });
   }
 };
