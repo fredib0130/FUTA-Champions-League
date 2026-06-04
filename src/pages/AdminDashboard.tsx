@@ -37,6 +37,10 @@ export default function AdminDashboard() {
   const totalCards = cards.length;
 
   const handleResetData = () => {
+    if (currentUser?.role !== 'Super Admin') {
+      alert('Violation Check: Only Super Administrators can clear and reset all tournament data settings!');
+      return;
+    }
     if (confirm('⚠️ WARNING: This will reset all scores, cards, commentaries, lineups and standing table recalculations back to default opening schedules. Are you absolutely sure?')) {
       resetAllData();
       alert('All matches and standings have been reset successfully!');
@@ -62,14 +66,16 @@ export default function AdminDashboard() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <button
-              onClick={handleResetData}
-              title="Reset All Live State to Default Seed Schedules"
-              className="px-3.5 py-1.5 rounded-lg border border-red-500/30 hover:border-red-500 bg-red-500/5 hover:bg-red-500/10 text-red-400 hover:text-red-300 text-[10px] font-bold uppercase transition-all flex items-center gap-1.5 cursor-pointer"
-            >
-              <RefreshCw size={11} />
-              <span>Full Reset</span>
-            </button>
+            {currentUser?.role === 'Super Admin' && (
+              <button
+                onClick={handleResetData}
+                title="Reset All Live State to Default Seed Schedules"
+                className="px-3.5 py-1.5 rounded-lg border border-red-500/30 hover:border-red-500 bg-red-500/5 hover:bg-red-500/10 text-red-400 hover:text-red-300 text-[10px] font-bold uppercase transition-all flex items-center gap-1.5 cursor-pointer"
+              >
+                <RefreshCw size={11} />
+                <span>Full Reset</span>
+              </button>
+            )}
             
             <button
               onClick={() => {

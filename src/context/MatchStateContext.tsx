@@ -102,6 +102,8 @@ interface MatchStateContextType {
   pauseMatch: (matchId: string) => void;
   resumeMatch: (matchId: string) => void;
   endMatch: (matchId: string) => void;
+  triggerHalfTime: (matchId: string) => void;
+  startSecondHalf: (matchId: string) => void;
   updateMatchMinute: (matchId: string, minute: string) => void;
   updateMatchStatusDirectly: (matchId: string, status: Match['status']) => void;
   updateMatchAddedTime: (matchId: string, firstHalf: number, secondHalf: number) => void;
@@ -786,6 +788,80 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     saveAndBroadcast(changedMatches, teamsCopy, undefined, undefined, undefined, undefined, comms, undefined, undefined, undefined, timers);
   };
 
+  const triggerHalfTime = async (matchId: string) => {
+    try {
+      await fclApi.controlTimer(matchId, 'HALF_TIME');
+    } catch (err) {
+      console.error("Failed to trigger halftime", err);
+    }
+    
+    const changedMatches = matches.map(m => {
+      if (m.id === matchId) {
+        return { ...m, status: 'Half Time' as const };
+      }
+      return m;
+    });
+
+    const timers = { ...activeMinAndStatus };
+    timers[matchId] = { liveMinute: 'HT 10:00', isPaused: false };
+
+    // Post commentary
+    const comms = { ...commentaries };
+    const matchComms = comms[matchId] || [];
+    const updatedMatchComms = [
+      {
+        id: `comm-ht-${Date.now()}`,
+        matchId,
+        minute: '30:00',
+        text: `⏸️ Referee blows the whistle for halftime! Players head down the tunnel for a 10-minute team break.`,
+        timestamp: new Date().toLocaleTimeString(),
+        type: 'general' as const
+      },
+      ...matchComms
+    ];
+    comms[matchId] = updatedMatchComms;
+
+    addAuditLog(`Triggered manually Half-Time break countdown`, matchId);
+    saveAndBroadcast(changedMatches, undefined, undefined, undefined, undefined, undefined, comms, undefined, undefined, undefined, timers);
+  };
+
+  const startSecondHalf = async (matchId: string) => {
+    try {
+      await fclApi.controlTimer(matchId, 'START_SECOND_HALF');
+    } catch (err) {
+      console.error("Failed to start second half on server", err);
+    }
+
+    const changedMatches = matches.map(m => {
+      if (m.id === matchId) {
+        return { ...m, status: 'Live' as const };
+      }
+      return m;
+    });
+
+    const timers = { ...activeMinAndStatus };
+    timers[matchId] = { liveMinute: '30:00', isPaused: false };
+
+    // Post second half kickoff commentary
+    const comms = { ...commentaries };
+    const matchComms = comms[matchId] || [];
+    const updatedMatchComms = [
+      {
+        id: `comm-sh-${Date.now()}`,
+        matchId,
+        minute: '30:00',
+        text: `▶️ Second half kicks off! The referee restarts play. Let's see who can break the deadlock.`,
+        timestamp: new Date().toLocaleTimeString(),
+        type: 'general' as const
+      },
+      ...matchComms
+    ];
+    comms[matchId] = updatedMatchComms;
+
+    addAuditLog(`Started Second Half match kickoff`, matchId);
+    saveAndBroadcast(changedMatches, undefined, undefined, undefined, undefined, undefined, comms, undefined, undefined, undefined, timers);
+  };
+
   const updateMatchMinute = async (matchId: string, minute: string) => {
     try {
       await fclApi.controlTimer(matchId, 'SET_MINUTE', { value: minute });
@@ -1290,6 +1366,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         pauseMatch,
         resumeMatch,
         endMatch,
+        triggerHalfTime,
+        startSecondHalf,
         updateMatchMinute,
         updateMatchStatusDirectly,
         updateMatchAddedTime,

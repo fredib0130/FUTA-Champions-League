@@ -15,7 +15,7 @@ export default function AdminMatchController() {
   const {
     currentUser, matches, teams, detailedStats, goalScorers, cards, subs, lineups,
     commentaries, reports, activeMinAndStatus, startMatch, pauseMatch, resumeMatch,
-    endMatch, updateMatchMinute, updateMatchStatusDirectly, incrementGoal, decrementGoal,
+    endMatch, triggerHalfTime, startSecondHalf, updateMatchMinute, updateMatchStatusDirectly, incrementGoal, decrementGoal,
     updateScoreManually, addGoalEvent, removeLastGoalEvent, addCardEvent, removeCardEvent,
     addSubEvent, removeSubEvent, updateMatchStats, approveLineup, rejectLineup, lockLineups,
     addCommentary, deleteCommentary, saveMatchReport, addAuditLog, updateMatchAddedTime, updateMatchPenalties
@@ -25,6 +25,9 @@ export default function AdminMatchController() {
   React.useEffect(() => {
     if (!currentUser) {
       navigate('/admin/login');
+    } else if (currentUser.role !== 'Super Admin' && currentUser.role !== 'Match Commissioner') {
+      alert('Security Denial: Matchday operations desk are locked to Super Admins and Match Commissioners!');
+      navigate('/admin/dashboard');
     }
   }, [currentUser, navigate]);
 
@@ -338,42 +341,71 @@ export default function AdminMatchController() {
                 <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-4">
                   <span className="text-[9px] font-black text-white/30 uppercase tracking-widest block">RUNNING MATCH TIMER CONTROL</span>
                   
-                  <div className="flex items-center gap-2">
+                  <div className="grid grid-cols-2 gap-3 pb-3">
+                    {/* 1. START MATCH */}
                     <button
+                      type="button"
                       onClick={() => startMatch(match.id)}
-                      disabled={match.status === 'Live'}
-                      className="flex-1 py-3 bg-green-500 hover:bg-green-600 disabled:opacity-30 disabled:pointer-events-none text-dark font-black text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1"
+                      disabled={match.status !== 'Upcoming'}
+                      className="py-3 px-3 bg-green-500 hover:bg-green-600 disabled:opacity-20 disabled:pointer-events-none text-dark font-black text-[9px] sm:text-[10px] uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1 shadow-md"
                     >
-                      <Play size={12} fill="currentColor" />
-                      <span>Start Kickoff</span>
+                      <Play size={10} fill="currentColor" />
+                      <span>START MATCH</span>
                     </button>
-                    
-                    {timer.isPaused ? (
-                      <button
-                        onClick={() => resumeMatch(match.id)}
-                        disabled={match.status !== 'Live' && match.status !== 'Half Time'}
-                        className="p-3 bg-primary hover:bg-primary-hover text-dark rounded-xl transition-all disabled:opacity-30 cursor-pointer"
-                        title="Resume Timer"
-                      >
-                        <Play size={13} fill="currentColor" />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => pauseMatch(match.id)}
-                        className="p-3 bg-yellow-500 hover:bg-yellow-600 text-dark rounded-xl transition-all cursor-pointer"
-                        title="Pause Timer"
-                      >
-                        <Pause size={13} />
-                      </button>
-                    )}
 
+                    {/* 2. PAUSE MATCH */}
                     <button
+                      type="button"
+                      onClick={() => pauseMatch(match.id)}
+                      disabled={match.status !== 'Live' || timer.isPaused}
+                      className="py-3 px-3 bg-yellow-500 hover:bg-yellow-600 disabled:opacity-20 disabled:pointer-events-none text-dark font-black text-[9px] sm:text-[10px] uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1 shadow-md"
+                    >
+                      <Pause size={10} />
+                      <span>PAUSE MATCH</span>
+                    </button>
+
+                    {/* 3. RESUME MATCH */}
+                    <button
+                      type="button"
+                      onClick={() => resumeMatch(match.id)}
+                      disabled={match.status !== 'Live' || !timer.isPaused}
+                      className="py-3 px-3 bg-sky-500 hover:bg-sky-600 disabled:opacity-20 disabled:pointer-events-none text-dark font-black text-[9px] sm:text-[10px] uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1 shadow-md"
+                    >
+                      <Play size={10} fill="currentColor" />
+                      <span>RESUME MATCH</span>
+                    </button>
+
+                    {/* 4. HALF TIME */}
+                    <button
+                      type="button"
+                      onClick={() => triggerHalfTime(match.id)}
+                      disabled={match.status !== 'Live'}
+                      className="py-3 px-3 bg-amber-500 hover:bg-amber-600 disabled:opacity-20 disabled:pointer-events-none text-dark font-black text-[9px] sm:text-[10px] uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1 shadow-md"
+                    >
+                      <Clock size={10} />
+                      <span>HALF TIME</span>
+                    </button>
+
+                    {/* 5. START SECOND HALF */}
+                    <button
+                      type="button"
+                      onClick={() => startSecondHalf(match.id)}
+                      disabled={match.status !== 'Half Time'}
+                      className="py-3 px-3 bg-fuchsia-500 hover:bg-fuchsia-600 disabled:opacity-20 disabled:pointer-events-none text-white font-black text-[9px] sm:text-[10px] uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1 shadow-md"
+                    >
+                      <Play size={10} fill="currentColor" />
+                      <span>START SECOND HALF</span>
+                    </button>
+
+                    {/* 6. FULL TIME */}
+                    <button
+                      type="button"
                       onClick={() => endMatch(match.id)}
                       disabled={match.status !== 'Live' && match.status !== 'Half Time'}
-                      className="flex-1 py-3 bg-red-500 hover:bg-red-600 disabled:opacity-30 disabled:pointer-events-none text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1"
+                      className="py-3 px-3 bg-red-500 hover:bg-red-600 disabled:opacity-20 disabled:pointer-events-none text-white font-black text-[9px] sm:text-[10px] uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1 shadow-md"
                     >
-                      <Square size={12} fill="currentColor" />
-                      <span>FT Full Time</span>
+                      <Square size={10} fill="currentColor" />
+                      <span>FULL TIME</span>
                     </button>
                   </div>
 
