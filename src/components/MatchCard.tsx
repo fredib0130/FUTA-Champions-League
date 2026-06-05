@@ -165,15 +165,19 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
               </span>
             ) : match.status === 'Finished' ? (
               <span className="text-white/40 font-mono">FT</span>
+            ) : match.status === 'Postponed' ? (
+              <span className="text-amber-500 font-bold tracking-wider animate-pulse text-[10px]">POSTPONED</span>
+            ) : match.status === 'Cancelled' ? (
+              <span className="text-red-500 font-bold tracking-wider text-[10px]">CANCELLED</span>
             ) : (
               <span className="text-white/40">{match.time}</span>
             )}
           </div>
           <div className={cn(
-            "font-display text-4xl font-bold px-4 tracking-tighter flex flex-col items-center",
-            match.status === 'Finished' ? "text-white" : "text-primary"
+             "font-display text-4xl font-bold px-4 tracking-tighter flex flex-col items-center",
+             match.status === 'Finished' ? "text-white" : "text-primary"
           )}>
-            <span>{match.status === 'Upcoming' ? 'VS' : `${match.homeScore} - ${match.awayScore}`}</span>
+            <span>{(match.status === 'Upcoming' || match.status === 'Postponed' || match.status === 'Cancelled') ? 'VS' : `${match.homeScore} - ${match.awayScore}`}</span>
             {(match.homePenalties !== undefined && match.awayPenalties !== undefined) && (
               <span className="text-[10px] text-amber-400 font-sans font-black tracking-widest uppercase mt-1 leading-none">
                 ({match.homePenalties}-{match.awayPenalties} pens)

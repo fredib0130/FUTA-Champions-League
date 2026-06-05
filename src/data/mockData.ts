@@ -77,7 +77,7 @@ export const PLAYERS: Player[] = Array.from({ length: 150 }, (_, i) => ({
 
 export const MATCHES: Match[] = [
   // --- MATCHDAY 1 (June 5 - 7) ---
-  { id: 'md1-1', homeTeam: 'MST', awayTeam: 'ICE', date: '2026-06-05', time: '17:00', venue: 'FUTA Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 }, // OPENING MATCH
+  { id: 'md1-1', homeTeam: 'MST', awayTeam: 'ICE', date: '2026-06-05', time: '17:00', venue: 'FUTA Main Pitch', status: 'Postponed', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 }, // OPENING MATCH
   { id: 'md1-2', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-06', time: '08:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
   { id: 'md1-3', homeTeam: 'PHS', awayTeam: 'APH', date: '2026-06-06', time: '09:30', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
   { id: 'md1-4', homeTeam: 'CYS', awayTeam: 'ANA', date: '2026-06-06', time: '11:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
@@ -114,6 +114,39 @@ export const MATCHES: Match[] = [
 ];
 
 export const NEWS: NewsPost[] = [
+  {
+    id: 'postponed-notice',
+    title: '🚨 OFFICIAL NOTICE OF POSTPONEMENT 🚨',
+    excerpt: 'The Opening Match of the 2026 FUTA Champions League (MST vs ICE) has been postponed until further notice due to adverse playing conditions.',
+    content: `Published: 5th June, 2026
+Time: 17:30
+
+The FUTA Champions League Committee regrets to inform all participating teams, officials, stakeholders, and supporters that the Opening Match of the 2026 FUTA Champions League has been postponed until further notice.
+
+Match Details
+🏆 FUTA Champions League 2026 – Opening Match
+⚔️ MST vs ICE
+📅 Friday, 5th June 2026
+🕔 Kick-off: 5:00 PM
+
+This decision was necessitated by the heavy rainfall experienced today and its adverse effect on the condition of the playing surface, making it unsafe and unsuitable for competitive football.
+
+The safety of players, officials, and spectators remains our utmost priority. As such, the Committee has deemed it necessary to postpone the fixture until conditions are favorable for play.
+
+Consequently, this postponement may result in adjustments to the 2026 FUTA Champions League calendar and match schedule. All participating teams and stakeholders will be duly informed of any changes as they become necessary.
+
+A new date and time for the fixture will be communicated in due course.
+
+The Committee appreciates the understanding, patience, and continued support of all teams, partners, and football enthusiasts.
+
+Thank you.
+
+FUTA Champions League Committee
+Building the Premier Inter-Departmental Football Competition in FUTA`,
+    image: 'https://images.unsplash.com/photo-1543087903-1ac2ec7aa8c5?q=80&w=1000',
+    date: '2026-06-05',
+    category: 'Committee Announcement'
+  },
   {
     id: '1',
     title: 'FCL 2026 Kickoff Announced',

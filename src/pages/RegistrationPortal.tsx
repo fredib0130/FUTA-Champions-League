@@ -30,7 +30,6 @@ interface PlayerRegistration {
   idCardStatus: 'pending' | 'approved' | 'rejected';
   idCardFeedback?: string;
   jerseyNumber?: string;
-  dateOfBirth?: string;
 }
 
 interface CoachRegistration {
@@ -457,8 +456,7 @@ export default function RegistrationPortal() {
     idCardSize: '',
     idCardData: '',
     passportPath: '',
-    jerseyNumber: '',
-    dateOfBirth: ''
+    jerseyNumber: ''
   });
   const [coachForm, setCoachForm] = useState({
     fullName: '',
@@ -584,8 +582,7 @@ export default function RegistrationPortal() {
       idCardSize: playerForm.idCardSize,
       idCardData: playerForm.idCardData,
       idCardStatus: 'pending',
-      jerseyNumber: playerForm.jerseyNumber || '',
-      dateOfBirth: playerForm.dateOfBirth || ''
+      jerseyNumber: playerForm.jerseyNumber || ''
     };
 
     const updatedPlayers = [...activeReg.players, newPlayer];
@@ -715,12 +712,17 @@ export default function RegistrationPortal() {
     if (!activeReg || !activeTeam) return;
 
     if (activeReg.players.length < 15) {
-      alert("Accreditation Rejection: To submit accreditation, FCL requires a minimum of 15 players registered (up to 23).");
+      alert("Minimum squad requirement is 15 players.");
       return;
     }
 
-    if (activeReg.coaches.length < 1) {
-      alert("Accreditation Rejection: FCL requires at least 1 registered official coach to submit team accreditation.");
+    if (activeReg.players.length > 23) {
+      alert("Maximum squad size is 23 players.");
+      return;
+    }
+
+    if (activeReg.coaches.length > 2) {
+      alert("Maximum of 2 coaches allowed.");
       return;
     }
 
@@ -1043,12 +1045,13 @@ export default function RegistrationPortal() {
                   <h2 className="text-2xl sm:text-3xl font-display font-black italic uppercase tracking-tight text-white">{activeTeam.name}</h2>
                   <span className={cn(
                     "px-3 py-1 text-[10px] font-black tracking-widest uppercase rounded-full border",
-                    activeReg.status === 'verified' && "bg-green-500/10 text-green-500 border-green-500/30",
-                    activeReg.status === 'submitted' && "bg-blue-500/10 text-blue-500 border-blue-500/30 animate-pulse",
-                    activeReg.status === 'incomplete' && "bg-amber-500/10 text-amber-500 border-amber-500/30",
-                    activeReg.status === 'pending' && "bg-white/10 text-white/50 border-white/10"
+                    activeReg.players.length >= 15 && activeReg.players.length <= 23 && activeReg.coaches.length <= 2
+                      ? "bg-green-500/10 text-green-500 border-green-500/30"
+                      : "bg-amber-500/10 text-amber-500 border-amber-500/30"
                   )}>
-                    ● {activeReg.status}
+                    ● {activeReg.players.length >= 15 && activeReg.players.length <= 23 && activeReg.coaches.length <= 2
+                      ? "Registration Complete"
+                      : "Registration Incomplete"}
                   </span>
                 </div>
                 <p className="text-xs text-white/40 mt-1 font-mono uppercase tracking-widest">Accreditation Access ID: {accessCodes[activeTeam.id.toUpperCase()]}</p>
@@ -1192,11 +1195,11 @@ export default function RegistrationPortal() {
               <div>
                 {activeReg.status !== 'verified' && activeReg.status !== 'submitted' ? (
                   <button
-                    disabled={activeReg.players.length < 15 || activeReg.coaches.length < 1}
+                    disabled={activeReg.players.length < 15 || activeReg.players.length > 23 || activeReg.coaches.length > 2}
                     onClick={handleSubmitAccreditation}
                     className={cn(
                       "w-full py-3 rounded-xl font-bold text-xs tracking-widest uppercase transition-all flex items-center justify-center space-x-2",
-                      activeReg.players.length >= 15 && activeReg.coaches.length >= 1
+                      activeReg.players.length >= 15 && activeReg.players.length <= 23 && activeReg.coaches.length <= 2
                         ? "sporty-gradient text-dark hover:scale-[1.02] shadow-[0_0_20px_rgba(0,229,255,0.2)]"
                         : "bg-white/5 text-white/20 cursor-not-allowed border border-white/5"
                     )}
@@ -1330,8 +1333,17 @@ export default function RegistrationPortal() {
                         <span className="text-xs font-mono font-bold text-white/80">JPG / JPEG</span>
                       </div>
                       <div className="flex justify-between items-center py-2.5 border-b border-white/5">
-                        <span className="text-xs text-white/50">Verification Status</span>
-                        <span className="text-xs font-mono font-bold uppercase tracking-wider text-glow text-primary">{activeReg.status}</span>
+                        <span className="text-xs text-white/50">Registration Status</span>
+                        <span className={cn(
+                          "text-xs font-mono font-bold uppercase tracking-wider text-glow",
+                          activeReg.players.length >= 15 && activeReg.players.length <= 23 && activeReg.coaches.length <= 2
+                            ? "text-green-500"
+                            : "text-amber-500"
+                        )}>
+                          {activeReg.players.length >= 15 && activeReg.players.length <= 23 && activeReg.coaches.length <= 2
+                            ? "Registration Complete"
+                            : "Registration Incomplete"}
+                        </span>
                       </div>
                     </div>
                   </div>

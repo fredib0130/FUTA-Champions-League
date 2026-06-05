@@ -199,8 +199,15 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         lineupSubmittedHome: m.lineupSubmittedHome ?? false,
         lineupSubmittedAway: m.lineupSubmittedAway ?? false
       }));
+    }
+
+    // Force postion/override to keep opening match as Postponed according to the official notice
+    const openingMatch = loadedMatches.find(m => m.id === 'md1-1');
+    if (openingMatch && openingMatch.status !== 'Postponed') {
+      openingMatch.status = 'Postponed';
       localStorage.setItem('fcl_admin_matches', JSON.stringify(loadedMatches));
     }
+
     setMatches(loadedMatches);
 
     // 2. Teams
@@ -434,8 +441,24 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           createdAt: '2026-06-04 15:45'
         }
       ];
+    }
+
+    // Force inject the official notice of postponement if not already present
+    if (!loadedNews.some(n => n.id === 'news-postponed')) {
+      loadedNews.unshift({
+        id: 'news-postponed',
+        title: '🚨 OFFICIAL NOTICE OF POSTPONEMENT 🚨',
+        featuredImage: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?q=80&w=1000',
+        author: 'FCL Committee',
+        category: 'Committee Announcement',
+        body: 'The FUTA Champions League Committee regrets to inform all participating teams, officials, stakeholders, and supporters that the Opening Match of the 2026 FUTA Champions League has been postponed until further notice due to heavy rainfall and unsafe pitch conditions.',
+        tags: ['Postponement', 'MST vs ICE', 'Official Announcement'],
+        isPublished: true,
+        createdAt: '2026-06-05 17:30'
+      });
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
+
     setNewsItems(loadedNews);
 
     // 14. Match Photos Load & Seed

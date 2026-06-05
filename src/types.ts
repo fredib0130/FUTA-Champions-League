@@ -44,7 +44,7 @@ export interface Match {
   date: string;
   time: string;
   venue: string;
-  status: 'Upcoming' | 'Live' | 'Finished';
+  status: 'Upcoming' | 'Live' | 'Finished' | 'Postponed' | 'Cancelled' | 'Half Time';
 
   homeScore: number;
   awayScore: number;

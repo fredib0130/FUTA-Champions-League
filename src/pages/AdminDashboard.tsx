@@ -6,6 +6,7 @@ import {
   Settings, Users, ClipboardList, Activity, ArrowRight, RefreshCw, AlertTriangle, ShieldCheck, Camera
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { fclApi } from '../lib/api';
 
 export default function AdminDashboard() {
   const { 
@@ -459,6 +460,8 @@ export default function AdminDashboard() {
                     if (status === 'Live') return <span className="px-2 py-0.5 rounded bg-red-500/20 text-red-500 border border-red-500/50 text-[8px] font-black uppercase tracking-widest animate-pulse">Live</span>;
                     if (status === 'Half Time') return <span className="px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-500 border border-yellow-500/50 text-[8px] font-black uppercase tracking-widest">HT</span>;
                     if (status === 'Finished') return <span className="px-2 py-0.5 rounded bg-green-500/20 text-green-500 border border-green-500/50 text-[8px] font-black uppercase tracking-widest">Finished</span>;
+                    if (status === 'Postponed') return <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-500 border border-amber-500/50 text-[8px] font-black uppercase tracking-widest animate-pulse">Postponed</span>;
+                    if (status === 'Cancelled') return <span className="px-2 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20 text-[8px] font-black uppercase tracking-widest">Cancelled</span>;
                     return <span className="px-2 py-0.5 rounded bg-white/5 text-white/40 border border-white/10 text-[8px] font-black uppercase tracking-widest">Upcoming</span>;
                   };
 
@@ -588,7 +591,7 @@ export default function AdminDashboard() {
                         <div className="text-right flex-1 font-bold text-sm text-white truncate max-w-[120px]">{m.homeTeam}</div>
                         
                         <div className="flex items-center space-x-3 bg-navy-dark/90 px-4 py-1.5 rounded-xl border border-white/5 font-mono text-base font-black text-primary">
-                          {m.status === 'Upcoming' ? (
+                          {(m.status === 'Upcoming' || m.status === 'Postponed' || m.status === 'Cancelled') ? (
                             <span className="text-white/20 text-xs">VS</span>
                           ) : (
                             <span>{m.homeScore} - {m.awayScore}</span>
