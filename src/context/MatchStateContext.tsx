@@ -190,6 +190,27 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     let loadedMatches: Match[] = [];
     if (storedMatches) {
       loadedMatches = JSON.parse(storedMatches);
+      // Auto-update Matchday 1 matches with newly scheduled official dates, times, and venues
+      let updated = false;
+      loadedMatches = loadedMatches.map(m => {
+        const official = MATCHES.find(o => o.id === m.id);
+        if (official && m.matchday === 1) {
+          if (m.date !== official.date || m.time !== official.time || m.venue !== official.venue || m.status !== official.status) {
+            updated = true;
+            return {
+              ...m,
+              date: official.date,
+              time: official.time,
+              venue: official.venue,
+              status: official.status
+            };
+          }
+        }
+        return m;
+      });
+      if (updated) {
+        localStorage.setItem('fcl_admin_matches', JSON.stringify(loadedMatches));
+      }
     } else {
       loadedMatches = MATCHES.map(m => ({
         ...m,
@@ -199,13 +220,6 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         lineupSubmittedHome: m.lineupSubmittedHome ?? false,
         lineupSubmittedAway: m.lineupSubmittedAway ?? false
       }));
-    }
-
-    // Force postion/override to keep opening match as Postponed according to the official notice
-    const openingMatch = loadedMatches.find(m => m.id === 'md1-1');
-    if (openingMatch && openingMatch.status !== 'Postponed') {
-      openingMatch.status = 'Postponed';
-      localStorage.setItem('fcl_admin_matches', JSON.stringify(loadedMatches));
     }
 
     setMatches(loadedMatches);
@@ -455,6 +469,22 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         tags: ['Postponement', 'MST vs ICE', 'Official Announcement'],
         isPublished: true,
         createdAt: '2026-06-05 17:30'
+      });
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    }
+
+    // Force inject the newly scheduled Matchday 1 fixtures announcement
+    if (!loadedNews.some(n => n.id === 'news-official-fixtures-md1')) {
+      loadedNews.unshift({
+        id: 'news-official-fixtures-md1',
+        title: '🏆 OFFICIAL MATCHDAY 1 FIXTURES ANNOUNCED',
+        featuredImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
+        author: 'FCL Committee',
+        category: 'Committee Announcement',
+        body: 'The FUTA Champions League Committee has officially announced the rescheduled fixtures for Matchday 1, starting Wednesday, 10th June 2026 with MST vs ICE at 3:30 PM on the Main Pitch, followed by full action on Saturday 13th June and Sunday 14th June.',
+        tags: ['Matchday 1', 'Fixtures', 'Rescheduled', 'Official Bulletins'],
+        isPublished: true,
+        createdAt: '2026-06-07 07:40'
       });
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }

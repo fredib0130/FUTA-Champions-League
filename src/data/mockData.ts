@@ -76,17 +76,17 @@ export const PLAYERS: Player[] = Array.from({ length: 150 }, (_, i) => ({
 }));
 
 export const MATCHES: Match[] = [
-  // --- MATCHDAY 1 (June 5 - 7) ---
-  { id: 'md1-1', homeTeam: 'MST', awayTeam: 'ICE', date: '2026-06-05', time: '17:00', venue: 'FUTA Main Pitch', status: 'Postponed', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 }, // OPENING MATCH
-  { id: 'md1-2', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-06', time: '08:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-3', homeTeam: 'PHS', awayTeam: 'APH', date: '2026-06-06', time: '09:30', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-4', homeTeam: 'CYS', awayTeam: 'ANA', date: '2026-06-06', time: '11:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-5', homeTeam: 'BDG', awayTeam: 'ENT', date: '2026-06-06', time: '12:30', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-6', homeTeam: 'FWT', awayTeam: 'IDD', date: '2026-06-07', time: '08:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-7', homeTeam: 'IFS', awayTeam: 'CSP', date: '2026-06-07', time: '09:30', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-8', homeTeam: 'AGP', awayTeam: 'BCH', date: '2026-06-07', time: '11:00', venue: 'FUTA Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-9', homeTeam: 'MCB', awayTeam: 'PHY', date: '2026-06-07', time: '12:30', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-10', homeTeam: 'MBBS', awayTeam: 'STA', date: '2026-06-07', time: '14:00', venue: 'FUTA Main Bowl', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  // --- MATCHDAY 1 (June 10 - 14) ---
+  { id: 'md1-1', homeTeam: 'MST', awayTeam: 'ICE', date: '2026-06-10', time: '15:30', venue: 'Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 }, // OPENING MATCH
+  { id: 'md1-2', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-13', time: '08:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-3', homeTeam: 'AGP', awayTeam: 'BCH', date: '2026-06-13', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-4', homeTeam: 'CYS', awayTeam: 'ANA', date: '2026-06-13', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-5', homeTeam: 'PHS', awayTeam: 'APH', date: '2026-06-13', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-6', homeTeam: 'BDG', awayTeam: 'ENT', date: '2026-06-13', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-7', homeTeam: 'IFS', awayTeam: 'CSP', date: '2026-06-13', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-6', homeTeam: 'FWT', awayTeam: 'IDD', date: '2026-06-13', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-9', homeTeam: 'MBBS', awayTeam: 'STA', date: '2026-06-14', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-10', homeTeam: 'MCB', awayTeam: 'PHY', date: '2026-06-14', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
 
   // --- MATCHDAY 2 (June 10 - 11) ---
   { id: 'md2-1', homeTeam: 'CSP', awayTeam: 'STA', date: '2026-06-10', time: '10:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
