@@ -190,24 +190,39 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     let loadedMatches: Match[] = [];
     if (storedMatches) {
       loadedMatches = JSON.parse(storedMatches);
-      // Auto-update Matchday 1 matches with newly scheduled official dates, times, and venues
+      // Auto-update matches with newly scheduled official dates, times, teams, and venues
       let updated = false;
-      loadedMatches = loadedMatches.map(m => {
-        const official = MATCHES.find(o => o.id === m.id);
-        if (official && m.matchday === 1) {
-          if (m.date !== official.date || m.time !== official.time || m.venue !== official.venue || m.status !== official.status) {
-            updated = true;
-            return {
+
+      // Ensure all official matches exist in local storage matching the official schema
+      MATCHES.forEach(official => {
+        const index = loadedMatches.findIndex(m => m.id === official.id);
+        if (index === -1) {
+          loadedMatches.push({ ...official });
+          updated = true;
+        } else {
+          const m = loadedMatches[index];
+          if (
+            m.homeTeam !== official.homeTeam ||
+            m.awayTeam !== official.awayTeam ||
+            m.date !== official.date ||
+            m.time !== official.time ||
+            m.venue !== official.venue ||
+            (official.matchday === 1 && m.status !== official.status) // Sync status specifically for matchday 1 reschedules
+          ) {
+            loadedMatches[index] = {
               ...m,
+              homeTeam: official.homeTeam,
+              awayTeam: official.awayTeam,
               date: official.date,
               time: official.time,
               venue: official.venue,
-              status: official.status
+              status: official.matchday === 1 ? official.status : m.status
             };
+            updated = true;
           }
         }
-        return m;
       });
+
       if (updated) {
         localStorage.setItem('fcl_admin_matches', JSON.stringify(loadedMatches));
       }
