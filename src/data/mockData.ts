@@ -88,29 +88,29 @@ export const MATCHES: Match[] = [
   { id: 'md1-9', homeTeam: 'MBBS', awayTeam: 'STA', date: '2026-06-14', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
   { id: 'md1-10', homeTeam: 'MCB', awayTeam: 'PHY', date: '2026-06-14', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
 
-  // --- MATCHDAY 2 (June 10 - 11) ---
-  { id: 'md2-1', homeTeam: 'CSP', awayTeam: 'STA', date: '2026-06-10', time: '10:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-2', homeTeam: 'PHS', awayTeam: 'AGP', date: '2026-06-10', time: '12:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-3', homeTeam: 'PHY', awayTeam: 'SIMT', date: '2026-06-10', time: '14:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-4', homeTeam: 'MST', awayTeam: 'CYS', date: '2026-06-10', time: '16:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-5', homeTeam: 'APH', awayTeam: 'IDD', date: '2026-06-11', time: '10:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-6', homeTeam: 'IFS', awayTeam: 'MBBS', date: '2026-06-11', time: '12:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-7', homeTeam: 'ENT', awayTeam: 'ANA', date: '2026-06-11', time: '14:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-8', homeTeam: 'MCB', awayTeam: 'AGE', date: '2026-06-11', time: '16:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-9', homeTeam: 'ICE', awayTeam: 'BCH', date: '2026-06-11', time: '17:30', venue: 'FUTA Main Bowl', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-10', homeTeam: 'BDG', awayTeam: 'FWT', date: '2026-06-11', time: '18:00', venue: 'FUTA Main Bowl', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  // --- MATCHDAY 2 (June 20 - 21) ---
+  { id: 'md2-1', homeTeam: 'CSP', awayTeam: 'STA', date: '2026-06-20', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-2', homeTeam: 'PHS', awayTeam: 'AGP', date: '2026-06-20', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-3', homeTeam: 'PHY', awayTeam: 'SIMT', date: '2026-06-20', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-4', homeTeam: 'MST', awayTeam: 'CYS', date: '2026-06-20', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-5', homeTeam: 'APH', awayTeam: 'IDD', date: '2026-06-20', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-6', homeTeam: 'IFS', awayTeam: 'MBBS', date: '2026-06-21', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-7', homeTeam: 'ENT', awayTeam: 'ANA', date: '2026-06-21', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-8', homeTeam: 'MCB', awayTeam: 'AGE', date: '2026-06-21', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-9', homeTeam: 'ICE', awayTeam: 'BCH', date: '2026-06-21', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-10', homeTeam: 'BDG', awayTeam: 'FWT', date: '2026-06-21', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
 
-  // --- MATCHDAY 3 (June 13 - 15) ---
-  { id: 'md3-1', homeTeam: 'MST', awayTeam: 'SIMT', date: '2026-06-13', time: '10:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-2', homeTeam: 'ENT', awayTeam: 'MBBS', date: '2026-06-13', time: '12:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-3', homeTeam: 'PHS', awayTeam: 'BCH', date: '2026-06-13', time: '14:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-4', homeTeam: 'ICE', awayTeam: 'FWT', date: '2026-06-13', time: '16:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-5', homeTeam: 'BDG', awayTeam: 'ANA', date: '2026-06-14', time: '10:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-6', homeTeam: 'CSP', awayTeam: 'CYS', date: '2026-06-14', time: '12:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-7', homeTeam: 'IFS', awayTeam: 'STA', date: '2026-06-14', time: '14:00', venue: 'Pitch A', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-8', homeTeam: 'PHY', awayTeam: 'AGP', date: '2026-06-14', time: '16:00', venue: 'Pitch B', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-9', homeTeam: 'MCB', awayTeam: 'IDD', date: '2026-06-15', time: '16:00', venue: 'FUTA Main Bowl', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-10', homeTeam: 'APH', awayTeam: 'AGE', date: '2026-06-15', time: '18:00', venue: 'FUTA Main Bowl', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  // --- MATCHDAY 3 (June 27 - 28) ---
+  { id: 'md3-1', homeTeam: 'MST', awayTeam: 'SIMT', date: '2026-06-27', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-2', homeTeam: 'ENT', awayTeam: 'MBBS', date: '2026-06-27', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-3', homeTeam: 'PHS', awayTeam: 'BCH', date: '2026-06-27', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-4', homeTeam: 'ICE', awayTeam: 'FWT', date: '2026-06-27', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-5', homeTeam: 'BDG', awayTeam: 'ANA', date: '2026-06-27', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-6', homeTeam: 'CSP', awayTeam: 'CYS', date: '2026-06-28', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-7', homeTeam: 'IFS', awayTeam: 'STA', date: '2026-06-28', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-8', homeTeam: 'PHY', awayTeam: 'AGP', date: '2026-06-28', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-9', homeTeam: 'MCB', awayTeam: 'IDD', date: '2026-06-28', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-10', homeTeam: 'APH', awayTeam: 'AGE', date: '2026-06-28', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
 ];
 
 export const NEWS: NewsPost[] = [
@@ -168,9 +168,13 @@ Building the Premier Inter-Departmental Football Competition in FUTA`,
 ];
 
 export const SPONSORS: Sponsor[] = [
-  { id: 's1', name: 'Alat by Wema', logo: 'https://seeklogo.com/images/A/alat-logo-9E7D4E7B7D-seeklogo.com.png', tier: 'GOLD', website: '#' },
-  { id: 's2', name: 'Pepsi', logo: 'https://seeklogo.com/images/P/pepsi-logo-BF1BD3C623-seeklogo.com.png', tier: 'GOLD', website: '#' },
-  { id: 's3', name: 'Bolt', logo: 'https://seeklogo.com/images/B/bolt-logo-4966779BC2-seeklogo.com.png', tier: 'SILVER', website: '#' }
+  { id: 's1', name: 'HUA Express', logo: 'public/logos/HUA Express.jpg', tier: 'GOLD', website: '#' },
+  { id: 's2', name: 'Sydtech', logo: 'public/logos/Sydtech.jpg', tier: 'SILVER', website: '#' },
+  { id: 's3', name: 'Chima Sports', logo: 'public/logos/Chima Sports.jpg', tier: 'SILVER', website: '#' },
+  { id: 's4', name: 'Favy Scentual', logo: 'public/logos/Favy Scentual.jpg', tier: 'SILVER', website: '#' },
+  { id: 's5', name: 'OYN', logo: 'public/logos/OYN.jpg', tier: 'SILVER', website: '#' },
+  { id: 's6', name: 'FUTA Bro', logo: 'public/logos/FUTA Bro.jpg', tier: 'BRONZE', website: '#' },
+  { id: 's7', name: 'FUTA Fabrizio', logo: 'public/logos/FUTA Fabrizio.jpg', tier: 'BRONZE', website: '#' }
 ];
 
 export const COEFFICIENTS: CoefficientRanking[] = [
