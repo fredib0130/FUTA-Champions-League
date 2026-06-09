@@ -78,13 +78,13 @@ export const PLAYERS: Player[] = Array.from({ length: 150 }, (_, i) => ({
 export const MATCHES: Match[] = [
   // --- MATCHDAY 1 (June 10 - 14) ---
   { id: 'md1-1', homeTeam: 'MST', awayTeam: 'ICE', date: '2026-06-10', time: '15:30', venue: 'Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 }, // OPENING MATCH
-  { id: 'md1-2', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-13', time: '08:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-3', homeTeam: 'AGP', awayTeam: 'BCH', date: '2026-06-13', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-4', homeTeam: 'CYS', awayTeam: 'ANA', date: '2026-06-13', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-5', homeTeam: 'PHS', awayTeam: 'APH', date: '2026-06-13', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-6', homeTeam: 'BDG', awayTeam: 'ENT', date: '2026-06-13', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-7', homeTeam: 'IFS', awayTeam: 'CSP', date: '2026-06-13', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
-  { id: 'md1-8', homeTeam: 'FWT', awayTeam: 'IDD', date: '2026-06-13', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-2', homeTeam: 'AGP', awayTeam: 'BCH', date: '2026-06-13', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-3', homeTeam: 'CYS', awayTeam: 'ANA', date: '2026-06-13', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-4', homeTeam: 'PHS', awayTeam: 'APH', date: '2026-06-13', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-5', homeTeam: 'BDG', awayTeam: 'ENT', date: '2026-06-13', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-6', homeTeam: 'IFS', awayTeam: 'CSP', date: '2026-06-13', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-7', homeTeam: 'FWT', awayTeam: 'IDD', date: '2026-06-13', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
+  { id: 'md1-8', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-14', time: '16:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
   { id: 'md1-9', homeTeam: 'MBBS', awayTeam: 'STA', date: '2026-06-14', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
   { id: 'md1-10', homeTeam: 'MCB', awayTeam: 'PHY', date: '2026-06-14', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
 
@@ -168,13 +168,13 @@ Building the Premier Inter-Departmental Football Competition in FUTA`,
 ];
 
 export const SPONSORS: Sponsor[] = [
-  { id: 's1', name: 'HUA Express', logo: 'public/logos/HUA Express.jpg', tier: 'GOLD', website: '#' },
-  { id: 's2', name: 'Sydtech', logo: 'public/logos/Sydtech.jpg', tier: 'SILVER', website: '#' },
-  { id: 's3', name: 'Chima Sports', logo: 'public/logos/Chima Sports.jpg', tier: 'SILVER', website: '#' },
-  { id: 's4', name: 'Favy Scentual', logo: 'public/logos/Favy Scentual.jpg', tier: 'SILVER', website: '#' },
-  { id: 's5', name: 'OYN', logo: 'public/logos/OYN.jpg', tier: 'SILVER', website: '#' },
-  { id: 's6', name: 'FUTA Bro', logo: 'public/logos/FUTA Bro.jpg', tier: 'BRONZE', website: '#' },
-  { id: 's7', name: 'FUTA Fabrizio', logo: 'public/logos/FUTA Fabrizio.jpg', tier: 'BRONZE', website: '#' }
+  { id: 'hua-express', name: 'HUA Express', logo: 'public/logos/HUA Express.jpg', logoUrl: 'https://www.huaexpress.delivery/', category: 'Sponsor', tier: 'GOLD', website: '#' },
+  { id: 'sydtech', name: 'Sydtech', logo: 'public/logos/Sydtech.jpg', logoUrl: null, category: 'Sponsor', tier: 'SILVER', website: '#' },
+  { id: 'chime-sports', name: 'Chime Sports', logo: 'public/logos/Chima Sports.jpg', logoUrl: null, category: 'Sponsor', tier: 'SILVER', website: '#' },
+  { id: 'favy-scentual', name: 'Favy Scentual', logo: 'public/logos/Favy Scentual.jpg', logoUrl: null, category: 'Sponsor', tier: 'SILVER', website: '#' },
+  { id: 'oyn', name: 'OYN', logo: 'public/logos/OYN.jpg', logoUrl: null, category: 'Sponsor', tier: 'SILVER', website: '#' },
+  { id: 'futa-bro', name: 'FUTA Bro', logo: 'public/logos/FUTA Bro.jpg', logoUrl: null, category: 'Media Partner', tier: 'BRONZE', website: '#' },
+  { id: 'futa-fabrizio', name: 'FUTA Fabrizio', logo: 'public/logos/FUTA Fabrizio.jpg', logoUrl: null, category: 'Media Partner', tier: 'BRONZE', website: '#' }
 ];
 
 export const COEFFICIENTS: CoefficientRanking[] = [

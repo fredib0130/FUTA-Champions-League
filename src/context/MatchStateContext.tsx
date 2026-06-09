@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Match, Team, GoalScorer, MatchStats, Article, NewsItem, MatchPhoto } from '../types';
+import { Match, Team, GoalScorer, MatchStats, Article, NewsItem, MatchPhoto, Sponsor } from '../types';
 import { MATCHES, TEAMS, MOCK_MATCH_STATS } from '../data/mockData';
 import { fclApi } from '../lib/api';
 
@@ -44,6 +44,8 @@ export interface DetailedMatchStats extends MatchStats {
   offsidesAway: number;
   savesHome: number;
   savesAway: number;
+  freeKicksHome: number;
+  freeKicksAway: number;
 }
 
 export interface CommentaryItem {
@@ -154,6 +156,12 @@ interface MatchStateContextType {
   createFixture: (newMatch: Omit<Match, 'id' | 'homeScore' | 'awayScore' | 'lineupSubmittedHome' | 'lineupSubmittedAway'>) => void;
   editFixture: (matchId: string, updatedFields: Partial<Match>) => void;
   deleteFixture: (matchId: string) => void;
+
+  // Sponsors & Partners
+  sponsors: Sponsor[];
+  saveSponsors: (sponsors: Sponsor[]) => Promise<void>;
+  resetSponsorsAll: () => Promise<void>;
+  uploadSponsorLogo: (id: string, logoData: string, filename: string) => Promise<void>;
 }
 
 const MatchStateContext = createContext<MatchStateContextType | undefined>(undefined);
@@ -182,6 +190,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   const [articles, setArticles] = useState<Article[]>([]);
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [matchPhotos, setMatchPhotos] = useState<MatchPhoto[]>([]);
+  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
 
   // Helper to load all state from localStorage or seed initial data
   const loadState = () => {
@@ -273,26 +282,56 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       loadedMatches.forEach(m => {
         const mockStat = MOCK_MATCH_STATS.find(s => s.matchId === m.id);
         const charSum = m.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        
+        const cornersH = mockStat?.cornersHome ?? 0;
+        const cornersA = mockStat?.cornersAway ?? 0;
+        const yellowH = mockStat?.yellowCardsHome ?? 0;
+        const yellowA = mockStat?.yellowCardsAway ?? 0;
+        const redH = mockStat?.redCardsHome ?? 0;
+        const redA = mockStat?.redCardsAway ?? 0;
+        const foulsH = 10 + (charSum % 8);
+        const foulsA = 11 + (charSum % 7);
+        const offsidesH = charSum % 4;
+        const offsidesA = charSum % 3;
+        const freeKicksH = 5 + (charSum % 5);
+        const freeKicksA = 4 + (charSum % 4);
+
         loadedStats[m.id] = {
           matchId: m.id,
-          cornersHome: mockStat?.cornersHome ?? 0,
-          cornersAway: mockStat?.cornersAway ?? 0,
-          yellowCardsHome: mockStat?.yellowCardsHome ?? 0,
-          yellowCardsAway: mockStat?.yellowCardsAway ?? 0,
-          redCardsHome: mockStat?.redCardsHome ?? 0,
-          redCardsAway: mockStat?.redCardsAway ?? 0,
+          cornersHome: cornersH,
+          cornersAway: cornersA,
+          yellowCardsHome: yellowH,
+          yellowCardsAway: yellowA,
+          redCardsHome: redH,
+          redCardsAway: redA,
           possessionHome: 50 + (charSum % 10) - 5,
           possessionAway: 50 - ((charSum % 10) - 5),
           shotsHome: 8 + (charSum % 6),
           shotsAway: 6 + (charSum % 5),
           shotsOnTargetHome: 3 + (charSum % 4),
           shotsOnTargetAway: 2 + (charSum % 3),
-          foulsHome: 10 + (charSum % 8),
-          foulsAway: 11 + (charSum % 7),
-          offsidesHome: charSum % 4,
-          offsidesAway: charSum % 3,
+          foulsHome: foulsH,
+          foulsAway: foulsA,
+          offsidesHome: offsidesH,
+          offsidesAway: offsidesA,
           savesHome: 2 + (charSum % 5),
-          savesAway: 3 + (charSum % 4)
+          savesAway: 3 + (charSum % 4),
+          freeKicksHome: freeKicksH,
+          freeKicksAway: freeKicksA,
+          
+          // Align with DB format compatibility
+          homeCorners: cornersH,
+          awayCorners: cornersA,
+          homeYellowCards: yellowH,
+          awayYellowCards: yellowA,
+          homeRedCards: redH,
+          awayRedCards: redA,
+          homeOffsides: offsidesH,
+          awayOffsides: offsidesA,
+          homeFouls: foulsH,
+          awayFouls: foulsA,
+          homeFreeKicks: freeKicksH,
+          awayFreeKicks: freeKicksA
         };
       });
       localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
@@ -661,10 +700,24 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       })
       .catch(err => console.error("Could not sync approved logos to context", err));
 
+    // Load Sponsors Initially
+    const fetchInitialSponsors = async () => {
+      try {
+        const res = await fclApi.getSponsors();
+        if (res && res.sponsors) {
+          setSponsors(res.sponsors);
+        }
+      } catch (err) {
+        console.error("Error loading sponsors on initialization", err);
+      }
+    };
+    fetchInitialSponsors();
+
     // Listen to real-time events published via BroadcastChannel
     const handleBroadcastMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'FCL_STATE_UPDATE') {
         loadState();
+        fetchInitialSponsors();
       }
     };
 
@@ -1386,12 +1439,89 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     const statsObj = { ...detailedStats };
     if (!statsObj[matchId]) return;
 
-    statsObj[matchId] = {
+    const updatedRecord = {
       ...statsObj[matchId],
       ...stats
     };
 
-    addAuditLog(`Updated match statistical ratios`, matchId);
+    // Ensure database matching fields are always synced & updated
+    if (stats.cornersHome !== undefined) updatedRecord.homeCorners = stats.cornersHome;
+    if (stats.cornersAway !== undefined) updatedRecord.awayCorners = stats.cornersAway;
+    if (stats.yellowCardsHome !== undefined) updatedRecord.homeYellowCards = stats.yellowCardsHome;
+    if (stats.yellowCardsAway !== undefined) updatedRecord.awayYellowCards = stats.yellowCardsAway;
+    if (stats.redCardsHome !== undefined) updatedRecord.homeRedCards = stats.redCardsHome;
+    if (stats.redCardsAway !== undefined) updatedRecord.awayRedCards = stats.redCardsAway;
+    if (stats.offsidesHome !== undefined) updatedRecord.homeOffsides = stats.offsidesHome;
+    if (stats.offsidesAway !== undefined) updatedRecord.awayOffsides = stats.offsidesAway;
+    if (stats.foulsHome !== undefined) updatedRecord.homeFouls = stats.foulsHome;
+    if (stats.foulsAway !== undefined) updatedRecord.awayFouls = stats.foulsAway;
+    if (stats.freeKicksHome !== undefined) updatedRecord.homeFreeKicks = stats.freeKicksHome;
+    if (stats.freeKicksAway !== undefined) updatedRecord.awayFreeKicks = stats.freeKicksAway;
+
+    // Conversely, sync database-style fields to frontend fields too!
+    if (stats.homeCorners !== undefined) updatedRecord.cornersHome = stats.homeCorners;
+    if (stats.awayCorners !== undefined) updatedRecord.cornersAway = stats.awayCorners;
+    if (stats.homeYellowCards !== undefined) updatedRecord.yellowCardsHome = stats.homeYellowCards;
+    if (stats.awayYellowCards !== undefined) updatedRecord.yellowCardsAway = stats.awayYellowCards;
+    if (stats.homeRedCards !== undefined) updatedRecord.redCardsHome = stats.homeRedCards;
+    if (stats.awayRedCards !== undefined) updatedRecord.redCardsAway = stats.awayRedCards;
+    if (stats.homeOffsides !== undefined) updatedRecord.offsidesHome = stats.homeOffsides;
+    if (stats.awayOffsides !== undefined) updatedRecord.offsidesAway = stats.awayOffsides;
+    if (stats.homeFouls !== undefined) updatedRecord.foulsHome = stats.homeFouls;
+    if (stats.awayFouls !== undefined) updatedRecord.foulsAway = stats.awayFouls;
+    if (stats.homeFreeKicks !== undefined) updatedRecord.freeKicksHome = stats.homeFreeKicks;
+    if (stats.awayFreeKicks !== undefined) updatedRecord.freeKicksAway = stats.awayFreeKicks;
+
+    updatedRecord.updatedAt = new Date().toISOString();
+    updatedRecord.updatedBy = currentUser?.username || 'Match Commissioner';
+
+    statsObj[matchId] = updatedRecord;
+
+    // Construct highly precise audit log descriptions targeting specific changes
+    const matchObj = matches.find(m => m.id === matchId);
+    const homeAbbr = matchObj?.homeTeam || 'Home';
+    const awayAbbr = matchObj?.awayTeam || 'Away';
+    const adminUser = currentUser?.username || 'Match Commissioner';
+
+    let actionMsg = `Updated match statistics`;
+    const previous = detailedStats[matchId];
+    if (previous) {
+      if (stats.cornersHome !== undefined && stats.cornersHome !== previous.cornersHome) {
+        if (stats.cornersHome > previous.cornersHome) actionMsg = `${adminUser} added Corner Kick to ${homeAbbr}`;
+        else actionMsg = `${adminUser} corrected Corner Kick count for ${homeAbbr}`;
+      } else if (stats.cornersAway !== undefined && stats.cornersAway !== previous.cornersAway) {
+        if (stats.cornersAway > previous.cornersAway) actionMsg = `${adminUser} added Corner Kick to ${awayAbbr}`;
+        else actionMsg = `${adminUser} corrected Corner Kick count for ${awayAbbr}`;
+      } else if (stats.offsidesHome !== undefined && stats.offsidesHome !== previous.offsidesHome) {
+        if (stats.offsidesHome > previous.offsidesHome) actionMsg = `${adminUser} added Offside to ${homeAbbr}`;
+        else actionMsg = `${adminUser} corrected Offside count for ${homeAbbr}`;
+      } else if (stats.offsidesAway !== undefined && stats.offsidesAway !== previous.offsidesAway) {
+        if (stats.offsidesAway > previous.offsidesAway) actionMsg = `${adminUser} added Offside to ${awayAbbr}`;
+        else actionMsg = `${adminUser} corrected Offside count for ${awayAbbr}`;
+      } else if (stats.foulsHome !== undefined && stats.foulsHome !== previous.foulsHome) {
+        if (stats.foulsHome > previous.foulsHome) actionMsg = `${adminUser} added Foul to ${homeAbbr}`;
+        else actionMsg = `${adminUser} corrected Foul count for ${homeAbbr}`;
+      } else if (stats.foulsAway !== undefined && stats.foulsAway !== previous.foulsAway) {
+        if (stats.foulsAway > previous.foulsAway) actionMsg = `${adminUser} added Foul to ${awayAbbr}`;
+        else actionMsg = `${adminUser} corrected Foul count for ${awayAbbr}`;
+      } else if (stats.freeKicksHome !== undefined && stats.freeKicksHome !== previous.freeKicksHome) {
+        if (stats.freeKicksHome > previous.freeKicksHome) actionMsg = `${adminUser} added Free Kick to ${homeAbbr}`;
+        else actionMsg = `${adminUser} corrected Free Kick count for ${homeAbbr}`;
+      } else if (stats.freeKicksAway !== undefined && stats.freeKicksAway !== previous.freeKicksAway) {
+        if (stats.freeKicksAway > previous.freeKicksAway) actionMsg = `${adminUser} added Free Kick to ${awayAbbr}`;
+        else actionMsg = `${adminUser} corrected Free Kick count for ${awayAbbr}`;
+      } else if (stats.yellowCardsHome !== undefined && stats.yellowCardsHome !== previous.yellowCardsHome) {
+        actionMsg = `${adminUser} updated Yellow Card statistics`;
+      } else if (stats.yellowCardsAway !== undefined && stats.yellowCardsAway !== previous.yellowCardsAway) {
+        actionMsg = `${adminUser} updated Yellow Card statistics`;
+      } else if (stats.redCardsHome !== undefined && stats.redCardsHome !== previous.redCardsHome) {
+        actionMsg = `${adminUser} updated Red Card statistics`;
+      } else if (stats.redCardsAway !== undefined && stats.redCardsAway !== previous.redCardsAway) {
+        actionMsg = `${adminUser} updated Red Card statistics`;
+      }
+    }
+
+    addAuditLog(actionMsg, matchId);
     saveAndBroadcast(undefined, undefined, statsObj);
   };
 
@@ -1600,6 +1730,44 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     saveAndBroadcast(updated);
   };
 
+  const saveSponsors = async (newSponsors: Sponsor[]) => {
+    try {
+      const res = await fclApi.saveSponsors(newSponsors);
+      if (res && res.success) {
+        setSponsors(res.sponsors);
+        channel.postMessage({ type: 'FCL_STATE_UPDATE' });
+      }
+    } catch (err) {
+      console.error("Error saving sponsors on server", err);
+      setSponsors(newSponsors);
+    }
+  };
+
+  const resetSponsorsAll = async () => {
+    try {
+      const res = await fclApi.resetSponsors();
+      if (res && res.success) {
+        setSponsors(res.sponsors);
+        channel.postMessage({ type: 'FCL_STATE_UPDATE' });
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error("Error resetting sponsors on server", err);
+    }
+  };
+
+  const uploadSponsorLogo = async (id: string, logoData: string, filename: string) => {
+    try {
+      const res = await fclApi.uploadSponsorLogo(id, logoData, filename);
+      if (res && res.success) {
+        setSponsors(res.sponsors);
+        channel.postMessage({ type: 'FCL_STATE_UPDATE' });
+      }
+    } catch (err) {
+      console.error("Error uploading sponsor logo", err);
+    }
+  };
+
   const saveArticle = (article: Article) => {
     const fresh = [...articles];
     const idx = fresh.findIndex(a => a.id === article.id);
@@ -1722,7 +1890,11 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         saveNewsItem,
         deleteNewsItem,
         saveMatchPhoto,
-        deleteMatchPhoto
+        deleteMatchPhoto,
+        sponsors,
+        saveSponsors,
+        resetSponsorsAll,
+        uploadSponsorLogo
       }}
     >
       {children}

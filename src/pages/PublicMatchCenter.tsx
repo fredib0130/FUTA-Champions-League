@@ -405,8 +405,10 @@ export default function PublicMatchCenter() {
                   { label: '🎯 SHOTS ON TARGET', home: stats.shotsOnTargetHome, away: stats.shotsOnTargetAway },
                   { label: '🚩 CORNER KICKS', home: stats.cornersHome, away: stats.cornersAway },
                   { label: '⚠️ SQUAD FOULS', home: stats.foulsHome, away: stats.foulsAway },
+                  { label: '🎙️ FREE KICKS AWARDED', home: stats.freeKicksHome ?? 0, away: stats.freeKicksAway ?? 0 },
                   { label: '🟨 YELLOW WARNINGS', home: stats.yellowCardsHome, away: stats.yellowCardsAway },
                   { label: '🟥 RED EXPULSIONS', home: stats.redCardsHome, away: stats.redCardsAway },
+                  { label: '🔭 OFFSIDE RULINGS', home: stats.offsidesHome ?? 0, away: stats.offsidesAway ?? 0 },
                   { label: '🧤 GOALKEEPER SAVES', home: stats.savesHome, away: stats.savesAway }
                 ] as const).map((statRow, idx) => {
                   const widths = getProgressWidths(statRow.home, statRow.away);
@@ -424,6 +426,50 @@ export default function PublicMatchCenter() {
                     </div>
                   );
                 })}
+
+                {/* Player Sanctions Section with explicit Yellow/Red card tracking log */}
+                <div className="mt-6 pt-6 border-t border-white/10 space-y-4">
+                  <h4 className="text-[10px] font-black uppercase tracking-wider text-white/40 flex items-center gap-1.5">
+                    <span>🎴 TOURNAMENT SANCTIONS BOOK</span>
+                  </h4>
+                  <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+                    <div>
+                      <span className="text-[9px] font-black uppercase tracking-widest text-yellow-500 block mb-2">
+                        🟨 Yellow Cards ({matchCards.filter(c => c.type === 'Yellow').length})
+                      </span>
+                      <div className="space-y-2 bg-white/[0.02] border border-white/5 p-3 rounded-2xl">
+                        {matchCards.filter(c => c.type === 'Yellow').length === 0 ? (
+                          <span className="text-[10px] text-white/30 italic block">No bookings active</span>
+                        ) : (
+                          matchCards.filter(c => c.type === 'Yellow').map((c, idx) => (
+                            <div key={idx} className="text-white/80 flex justify-between">
+                              <span>🟨 {c.playerName}</span>
+                              <span className="text-yellow-500 ml-1.5">— {formatMinuteDisplay(c.minute)}</span>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      <span className="text-[9px] font-black uppercase tracking-widest text-red-500 block mb-2">
+                        🟥 Red Cards ({matchCards.filter(c => c.type !== 'Yellow').length})
+                      </span>
+                      <div className="space-y-2 bg-white/[0.02] border border-white/5 p-3 rounded-2xl">
+                        {matchCards.filter(c => c.type !== 'Yellow').length === 0 ? (
+                          <span className="text-[10px] text-white/30 italic block">No red cards recorded</span>
+                        ) : (
+                          matchCards.filter(c => c.type !== 'Yellow').map((c, idx) => (
+                            <div key={idx} className="text-white/85 flex justify-between">
+                              <span>🟥 {c.playerName}</span>
+                              <span className="text-red-500 ml-1.5">— {formatMinuteDisplay(c.minute)}</span>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -564,6 +610,38 @@ export default function PublicMatchCenter() {
                       </ul>
                     </div>
                   )}
+
+                  {/* Official Match Statistics Table */}
+                  <div className="pt-4 border-t border-yellow-500/10">
+                    <h4 className="text-[10px] font-black uppercase tracking-wider text-yellow-500 mb-2">OFFICIAL FIXTURE STATISTICS (2026)</h4>
+                    <div className="overflow-hidden rounded-xl border border-white/10 bg-navy/40">
+                      <table className="w-full text-left text-xs font-mono">
+                        <thead>
+                          <tr className="bg-white/5 border-b border-white/5 text-[9px] font-black uppercase tracking-widest text-white/40">
+                            <th className="p-2 pl-3">STATISTIC NAME</th>
+                            <th className="p-2 text-center">{match.homeTeam}</th>
+                            <th className="p-2 text-center">{match.awayTeam}</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/5 text-white/80">
+                          {[
+                            { label: '🚩 Corner Kicks', h: stats.cornersHome, a: stats.cornersAway },
+                            { label: '🟨 Yellow Cards', h: stats.yellowCardsHome, a: stats.yellowCardsAway },
+                            { label: '🟥 Red Cards', h: stats.redCardsHome, a: stats.redCardsAway },
+                            { label: '🔭 Offside Rulings', h: stats.offsidesHome ?? 0, a: stats.offsidesAway ?? 0 },
+                            { label: '⚠️ Team Fouls', h: stats.foulsHome, a: stats.foulsAway },
+                            { label: '🎙️ Free Kicks Awarded', h: stats.freeKicksHome ?? 0, a: stats.freeKicksAway ?? 0 }
+                          ].map((row, rIdx) => (
+                            <tr key={rIdx} className="hover:bg-white/[0.02]">
+                              <td className="p-2 pl-3 font-sans font-bold text-[11px] text-white/60">{row.label}</td>
+                              <td className="p-2 text-center font-bold text-yellow-500">{row.h}</td>
+                              <td className="p-2 text-center font-bold text-yellow-500">{row.a}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

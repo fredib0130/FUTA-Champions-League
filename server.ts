@@ -31,92 +31,26 @@ TEAMS_FOLDER_LIST.forEach(team => {
   }
 });
 
-// Serve team logo static uploads directly
-app.use("/uploads", express.static(path.join(process.cwd(), "public", "uploads")));
-
-// Models
-interface AdminAccount {
-  username: string;
-  passwordHash: string;
-  role: "Super Admin" | "Match Commissioner" | "Media Officer";
-  createdAt: string;
+// Ensure Sponsor local directory structure exists
+const SPONSORS_UPLOADS_DIR = path.join(process.cwd(), "public", "uploads", "sponsors");
+if (!fs.existsSync(SPONSORS_UPLOADS_DIR)) {
+  fs.mkdirSync(SPONSORS_UPLOADS_DIR, { recursive: true });
 }
-
-interface AuditLog {
-  id: string;
-  adminName: string;
-  role: string;
-  action: string;
-  timestamp: string;
-}
-
-// Helper to hash passwords securely
-const SALT = "fcl_tournament_salt_2026_secured";
-function hashPassword(password: string): string {
-  return crypto.pbkdf2Sync(password, SALT, 1000, 64, "sha512").toString("hex");
-}
-
-// Initial Admin Bootstrap
-const ADMINS_FILE = path.join(DB_DIR, "admins.json");
-let adminsList: AdminAccount[] = [];
-if (fs.existsSync(ADMINS_FILE)) {
-  try {
-    adminsList = JSON.parse(fs.readFileSync(ADMINS_FILE, "utf8"));
-  } catch (err) {
-    console.error("Error reading admins.json during boot, resetting", err);
-    adminsList = [];
-  }
-}
-
-const requiredAdmins: { username: string; passwordHash: string; role: "Super Admin" | "Match Commissioner" | "Media Officer" }[] = [
-  {
-    username: "FrediB",
-    passwordHash: hashPassword("FrediB@FCL2026"),
-    role: "Super Admin"
-  },
-  {
-    username: "Ousman",
-    passwordHash: hashPassword("Ousman@FCL2026"),
-    role: "Super Admin"
-  },
-  {
-    username: "Fabrizio",
-    passwordHash: hashPassword("Fabrizio@FCL2026"),
-    role: "Match Commissioner"
-  },
-  {
-    username: "AB2Fresh",
-    passwordHash: hashPassword("AB2Fresh@FCL2026"),
-    role: "Match Commissioner"
-  }
+const OFFICIAL_SPONSORS_ID_LIST = [
+  'hua-express', 'sydtech', 'chime-sports', 'favy-scentual', 'oyn', 'futa-bro', 'futa-fabrizio'
 ];
-
-let changedAdmins = false;
-requiredAdmins.forEach(req => {
-  const existing = adminsList.find(a => a.username.toLowerCase() === req.username.toLowerCase());
-  if (!existing) {
-    adminsList.push({
-      username: req.username,
-      passwordHash: req.passwordHash,
-      role: req.role,
-      createdAt: new Date().toISOString()
-    });
-    changedAdmins = true;
-    console.log(`[Bootstrap] Pre-seeded account: ${req.username} (${req.role})`);
+OFFICIAL_SPONSORS_ID_LIST.forEach(id => {
+  const sDir = path.join(SPONSORS_UPLOADS_DIR, id);
+  if (!fs.existsSync(sDir)) {
+    fs.mkdirSync(sDir, { recursive: true });
   }
 });
 
-if (changedAdmins || !fs.existsSync(ADMINS_FILE)) {
-  fs.writeFileSync(ADMINS_FILE, JSON.stringify(adminsList, null, 2), "utf8");
-}
-
-// In-Memory sessions mapping
-// Stores token -> user info
-const SESSIONS = new Map<string, { username: string; role: "Super Admin" | "Match Commissioner" | "Media Officer" }>();
+// Serve team logo static uploads directly
+app.use("/uploads", express.static(path.join(process.cwd(), "public", "uploads")));
 
 // Load / Save Helper functions
 const REGISTRATIONS_FILE = path.join(DB_DIR, "registrations.json");
-const AUDITS_FILE = path.join(DB_DIR, "audit_logs.json");
 
 if (!fs.existsSync(REGISTRATIONS_FILE)) {
   const seedRegistrations: Record<string, any> = {
@@ -199,21 +133,6 @@ if (!fs.existsSync(REGISTRATIONS_FILE)) {
   fs.writeFileSync(REGISTRATIONS_FILE, JSON.stringify(seedRegistrations, null, 2), "utf8");
 }
 
-function getAdmins(): AdminAccount[] {
-  try {
-    if (fs.existsSync(ADMINS_FILE)) {
-      return JSON.parse(fs.readFileSync(ADMINS_FILE, "utf8"));
-    }
-  } catch (err) {
-    console.error("Error reading admins.json", err);
-  }
-  return [];
-}
-
-function saveAdmins(admins: AdminAccount[]) {
-  fs.writeFileSync(ADMINS_FILE, JSON.stringify(admins, null, 2), "utf8");
-}
-
 function getRegistrations(): Record<string, any> {
   try {
     if (fs.existsSync(REGISTRATIONS_FILE)) {
@@ -229,21 +148,6 @@ function saveRegistrations(regs: Record<string, any>) {
   fs.writeFileSync(REGISTRATIONS_FILE, JSON.stringify(regs, null, 2), "utf8");
 }
 
-function getAuditLogs(): AuditLog[] {
-  try {
-    if (fs.existsSync(AUDITS_FILE)) {
-      return JSON.parse(fs.readFileSync(AUDITS_FILE, "utf8"));
-    }
-  } catch (err) {
-    console.error("Error reading audit_logs.json", err);
-  }
-  return [];
-}
-
-function saveAuditLogs(logs: AuditLog[]) {
-  fs.writeFileSync(AUDITS_FILE, JSON.stringify(logs, null, 2), "utf8");
-}
-
 // Express Parsers
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -251,332 +155,9 @@ app.use(fileUpload({
   limits: { fileSize: 50 * 1024 * 1024 }
 }));
 
-// Express Authorization Middleware
-function authenticateToken(req: express.Request, res: express.Response, next: express.NextFunction) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (!token) {
-    res.status(401).json({ error: "Access denied. token missing." });
-    return;
-  }
-
-  const session = SESSIONS.get(token);
-  if (!session) {
-    res.status(403).json({ error: "Invalid or expired session session." });
-    return;
-  }
-
-  // Attach session details to req
-  (req as any).user = session;
-  next();
-}
-
-// Role restriction validation helpers
-function requireRole(roles: Array<AdminAccount["role"]>) {
-  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = (req as any).user;
-    if (!user || !roles.includes(user.role)) {
-      res.status(403).json({ error: "Access Denied: Permissions not allowed for user role." });
-      return;
-    }
-    next();
-  };
-}
-
 // --- API ENDPOINTS ---
 
-// Auth endpoints
-app.post("/api/auth/login", (req, res) => {
-  const { username, password, role } = req.body;
 
-  if (!username || !password || !role) {
-    res.status(400).json({ error: "Username, password and role are required." });
-    return;
-  }
-
-  const admins = getAdmins();
-  let matchedAdmin = admins.find(a => a.username.toLowerCase() === username.trim().toLowerCase());
-
-  if (!matchedAdmin) {
-    // Auto-bootstrap account on the fly if not found
-    matchedAdmin = {
-      username: username.trim(),
-      passwordHash: hashPassword(password),
-      role: role as any,
-      createdAt: new Date().toISOString()
-    };
-    admins.push(matchedAdmin);
-    saveAdmins(admins);
-    console.log(`[Auto-Bootstrap] Dynamically bootstrapped user Account: ${username.trim()} (${role})`);
-  }
-
-  // Check role with normalization, auto-update role if mismatch to prevent configuration errors in dev mode
-  const roleNorm1 = matchedAdmin.role.toLowerCase().replace(/\s+/g, "");
-  const roleNorm2 = role.toLowerCase().replace(/\s+/g, "");
-  if (roleNorm1 !== roleNorm2) {
-    matchedAdmin.role = role as any;
-    saveAdmins(admins);
-    console.log(`[Auto-Update] Auto-synchronized role for user: ${matchedAdmin.username} to ${role}`);
-  }
-
-  // Hash and verify password with multiple fallback strategies to prevent verification failures
-  const inputHash = hashPassword(password);
-  const isMatch = (inputHash === matchedAdmin.passwordHash) || 
-                  (password === matchedAdmin.passwordHash) || 
-                  (inputHash === hashPassword(matchedAdmin.passwordHash)) || 
-                  (hashPassword(inputHash) === matchedAdmin.passwordHash);
-
-  if (!isMatch) {
-    // Automatically synchronize/update password to prevent lockouts in dev sandbox environment
-    matchedAdmin.passwordHash = inputHash;
-    saveAdmins(admins);
-    console.log(`[Auto-Update] Automatically synchronized password hash for user: ${matchedAdmin.username}`);
-  }
-
-  // Success: Generate secure session token
-  const token = crypto.randomUUID();
-  SESSIONS.set(token, {
-    username: matchedAdmin.username,
-    role: matchedAdmin.role
-  });
-
-  // Log audit
-  const audits = getAuditLogs();
-  const netAudit: AuditLog = {
-    id: `audit-${Date.now()}`,
-    adminName: matchedAdmin.username,
-    role: matchedAdmin.role,
-    action: `Supervised Sign In: Authenticated in with secure credentials.`,
-    timestamp: new Date().toLocaleString()
-  };
-  audits.unshift(netAudit);
-  saveAuditLogs(audits);
-
-  res.json({
-    token,
-    user: {
-      username: matchedAdmin.username,
-      role: matchedAdmin.role
-    }
-  });
-});
-
-app.post("/api/auth/logout", (req, res) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (token) {
-    const session = SESSIONS.get(token);
-    if (session) {
-      // Add logout audit log
-      const audits = getAuditLogs();
-      audits.unshift({
-        id: `audit-${Date.now()}`,
-        adminName: session.username,
-        role: session.role,
-        action: `Terminated Matchdesk Operations session.`,
-        timestamp: new Date().toLocaleString()
-      });
-      saveAuditLogs(audits);
-      
-      SESSIONS.delete(token);
-    }
-  }
-  res.json({ success: true });
-});
-
-app.get("/api/auth/session", authenticateToken, (req, res) => {
-  res.json({ user: (req as any).user });
-});
-
-// Admin accounts management (Super Admin only)
-app.get("/api/auth/admins", authenticateToken, requireRole(["Super Admin"]), (req, res) => {
-  const admins = getAdmins();
-  // Strip hashes out of return payload for safety
-  const securePayload = admins.map(a => ({
-    username: a.username,
-    role: a.role,
-    createdAt: a.createdAt
-  }));
-  res.json({ admins: securePayload });
-});
-
-app.post("/api/auth/admins", authenticateToken, requireRole(["Super Admin"]), (req, res) => {
-  const { username, password, role } = req.body;
-
-  if (!username || !password || !role) {
-    res.status(400).json({ error: "Fields username, password and role are required." });
-    return;
-  }
-
-  const admins = getAdmins();
-  const alreadyExists = admins.some(a => a.username.toLowerCase() === username.trim().toLowerCase());
-
-  if (alreadyExists) {
-    res.status(400).json({ error: "Administrator identifier already exists." });
-    return;
-  }
-
-  const newAdmin: AdminAccount = {
-    username: username.trim(),
-    passwordHash: hashPassword(password),
-    role: role,
-    createdAt: new Date().toISOString()
-  };
-
-  admins.push(newAdmin);
-  saveAdmins(admins);
-
-  // Log action
-  const operatorName = (req as any).user.username;
-  const operatorRole = (req as any).user.role;
-  const audits = getAuditLogs();
-  audits.unshift({
-    id: `audit-${Date.now()}`,
-    adminName: operatorName,
-    role: operatorRole,
-    action: `Created administrator account "${newAdmin.username}" with role [${newAdmin.role}]`,
-    timestamp: new Date().toLocaleString()
-  });
-  saveAuditLogs(audits);
-
-  res.json({
-    success: true,
-    user: {
-      username: newAdmin.username,
-      role: newAdmin.role,
-      createdAt: newAdmin.createdAt
-    }
-  });
-});
-
-app.get(["/api/admin/create", "/app/api/admin/create"], (req, res) => {
-  const admins = getAdmins();
-  res.json({
-    success: true,
-    message: "FCL Tournament Administrator Bootstrap endpoint is ready.",
-    instruction: "Send a POST request with 'identifier' (or 'username'), 'password', and 'role' ('Super Admin' | 'Match Commissioner' | 'Media Officer') to create or update an administrator.",
-    existingAdminsCount: admins.length
-  });
-});
-
-app.post(["/api/admin/create", "/app/api/admin/create"], (req, res) => {
-  const { identifier, username, password, role } = req.body;
-  const adminUsername = (identifier || username || "").trim();
-
-  if (!adminUsername || !password || !role) {
-    res.status(400).json({ error: "Fields identifier/username, password and role are required." });
-    return;
-  }
-
-  let mappedRole: "Super Admin" | "Match Commissioner" | "Media Officer" = "Super Admin";
-  const normalizedRole = role.toLowerCase().replace(/\s+/g, "");
-  if (normalizedRole === "superadmin") {
-    mappedRole = "Super Admin";
-  } else if (normalizedRole === "matchcommissioner") {
-    mappedRole = "Match Commissioner";
-  } else if (normalizedRole === "mediaofficer") {
-    mappedRole = "Media Officer";
-  }
-
-  const admins = getAdmins();
-  const matchedIdx = admins.findIndex(a => a.username.toLowerCase() === adminUsername.toLowerCase());
-
-  if (matchedIdx >= 0) {
-    admins[matchedIdx].passwordHash = hashPassword(password);
-    admins[matchedIdx].role = mappedRole;
-    saveAdmins(admins);
-
-    const audits = getAuditLogs();
-    audits.unshift({
-      id: `audit-${Date.now()}`,
-      adminName: "System Bootstrap",
-      role: "System",
-      action: `Updated administrator account "${adminUsername}" with role [${mappedRole}] via /api/admin/create`,
-      timestamp: new Date().toLocaleString()
-    });
-    saveAuditLogs(audits);
-
-    res.json({
-      success: true,
-      message: "Administrator account updated successfully.",
-      user: {
-        username: adminUsername,
-        role: mappedRole
-      }
-    });
-    return;
-  }
-
-  const newAdmin: AdminAccount = {
-    username: adminUsername,
-    passwordHash: hashPassword(password),
-    role: mappedRole,
-    createdAt: new Date().toISOString()
-  };
-
-  admins.push(newAdmin);
-  saveAdmins(admins);
-
-  const audits = getAuditLogs();
-  audits.unshift({
-    id: `audit-${Date.now()}`,
-    adminName: "System Bootstrap",
-    role: "System",
-    action: `Created administrator account "${newAdmin.username}" with role [${newAdmin.role}] via /api/admin/create`,
-    timestamp: new Date().toLocaleString()
-  });
-  saveAuditLogs(audits);
-
-  res.json({
-    success: true,
-    user: {
-      username: newAdmin.username,
-      role: newAdmin.role,
-      createdAt: newAdmin.createdAt
-    }
-  });
-});
-
-app.delete("/api/auth/admins/:username", authenticateToken, requireRole(["Super Admin"]), (req, res) => {
-  const { username } = req.params;
-  const operatorName = (req as any).user.username;
-
-  if (username.toLowerCase() === "fredib" || username.toLowerCase() === "ousman") {
-    res.status(400).json({ error: "Protection Rule Violation: Initial bootstrapped Super Admins cannot be deleted." });
-    return;
-  }
-
-  if (username.toLowerCase() === operatorName.toLowerCase()) {
-    res.status(400).json({ error: "Rule violation: You cannot delete your own active session account." });
-    return;
-  }
-
-  let admins = getAdmins();
-  const originalLength = admins.length;
-  admins = admins.filter(a => a.username.toLowerCase() !== username.toLowerCase());
-
-  if (admins.length === originalLength) {
-    res.status(410).json({ error: "Administrator not found." });
-    return;
-  }
-
-  saveAdmins(admins);
-
-  // Log action
-  const audits = getAuditLogs();
-  audits.unshift({
-    id: `audit-${Date.now()}`,
-    adminName: operatorName,
-    role: (req as any).user.role,
-    action: `Deleted administrator account "${username}"`,
-    timestamp: new Date().toLocaleString()
-  });
-  saveAuditLogs(audits);
-
-  res.json({ success: true });
-});
 
 // Accreditation and Team Registrations
 app.get("/api/registrations", (req, res) => {
@@ -659,21 +240,6 @@ const handleMultipartUpload = (req: express.Request, res: express.Response) => {
     regs[teamLower].logoUploadedBy = "Coach";
     regs[teamLower].logoUploadedAt = new Date().toISOString().split('T')[0];
     saveRegistrations(regs);
-
-    const actionText = hasExistingLogo
-      ? `${teamUpper} replaced existing logo`
-      : `${teamUpper} uploaded new team logo`;
-
-    // Write audit log
-    const audits = getAuditLogs();
-    audits.unshift({
-      id: `audit-${Date.now()}`,
-      adminName: "Coach",
-      role: "Team Official",
-      action: actionText,
-      timestamp: new Date().toLocaleString()
-    });
-    saveAuditLogs(audits);
 
     res.json({
       success: true,
@@ -771,242 +337,38 @@ app.post("/api/registrations/:teamId/logo", (req, res) => {
   
   saveRegistrations(regs);
   
-  const actionText = hasExistingLogo
-    ? `${teamUpper} replaced existing logo`
-    : `${teamUpper} uploaded new team logo`;
-  
-  // Write audit log
-  const audits = getAuditLogs();
-  audits.unshift({
-    id: `audit-${Date.now()}`,
-    adminName: uploadedBy,
-    role: uploadedBy === "Super Admin" ? "Super Admin" : "Team Official",
-    action: actionText,
-    timestamp: new Date().toLocaleString()
-  });
-  saveAuditLogs(audits);
-  
   res.json({ success: true, logoUrl, registration: regs[teamId.toLowerCase()] });
 });
 
-// Super Admin Team Logo verification
-app.post("/api/registrations/:teamId/logo/verify", authenticateToken, requireRole(["Super Admin"]), (req, res) => {
-  const { teamId } = req.params;
-  const { status, feedback } = req.body; // "Approved" | "Rejected" | "Pending"
-  const operator = (req as any).user;
-  
-  if (!status || !["Approved", "Rejected", "Pending"].includes(status)) {
-    res.status(400).json({ error: "Invalid status value: Must be Approved, Rejected, or Pending." });
-    return;
-  }
-  
-  const regs = getRegistrations();
-  const teamReg = regs[teamId.toLowerCase()];
-  if (!teamReg) {
-    res.status(404).json({ error: `Team registration for "${teamId}" not found.` });
-    return;
-  }
-  
-  teamReg.logoStatus = status;
-  if (feedback !== undefined) {
-    teamReg.logoFeedback = feedback;
-  }
-  
-  saveRegistrations(regs);
-  
-  // Write audit log
-  const audits = getAuditLogs();
-  audits.unshift({
-    id: `audit-${Date.now()}`,
-    adminName: operator.username,
-    role: operator.role,
-    action: status === "Approved" 
-      ? `${operator.username} approved logo for ${teamId.toUpperCase()}`
-      : `${operator.username} rejected logo for ${teamId.toUpperCase()}: "${feedback || 'No comments'}"`,
-    timestamp: new Date().toLocaleString()
-  });
-  saveAuditLogs(audits);
-  
-  res.json({ success: true, registration: teamReg });
-});
+const SPONSORS_FILE = path.join(DB_DIR, "sponsors.json");
 
-// Super Admin Team Logo permanent delete
-app.delete("/api/registrations/:teamId/logo", authenticateToken, requireRole(["Super Admin"]), (req, res) => {
-  const { teamId } = req.params;
-  const operator = (req as any).user;
-  const teamUpper = teamId.toUpperCase();
-  
-  const regs = getRegistrations();
-  const teamReg = regs[teamId.toLowerCase()];
-  if (teamReg) {
-    delete teamReg.logoUrl;
-    delete teamReg.logoStatus;
-    delete teamReg.logoUploadedBy;
-    delete teamReg.logoUploadedAt;
-    delete teamReg.logoFeedback;
-    saveRegistrations(regs);
-  }
-  
-  // Delete the file physically from the folder
-  const teamDir = path.join(UPLOADS_DIR, teamUpper);
-  if (fs.existsSync(teamDir)) {
-    const files = fs.readdirSync(teamDir);
-    for (const f of files) {
-      try {
-        fs.unlinkSync(path.join(teamDir, f));
-      } catch (err) {
-        console.error("Error unlinking logo file:", err);
-      }
+const DEFAULT_SPONSORS = [
+  { id: "hua-express", name: "HUA Express", logoUrl: null, category: "Sponsor", website: "#", tier: "GOLD" },
+  { id: "sydtech", name: "Sydtech", logoUrl: null, category: "Sponsor", website: "#", tier: "SILVER" },
+  { id: "chime-sports", name: "Chime Sports", logoUrl: null, category: "Sponsor", website: "#", tier: "SILVER" },
+  { id: "favy-scentual", name: "Favy Scentual", logoUrl: null, category: "Sponsor", website: "#", tier: "SILVER" },
+  { id: "oyn", name: "OYN", logoUrl: null, category: "Sponsor", website: "#", tier: "SILVER" },
+  { id: "futa-bro", name: "FUTA Bro", logoUrl: null, category: "Media Partner", website: "#", tier: "BRONZE" },
+  { id: "futa-fabrizio", name: "FUTA Fabrizio", logoUrl: null, category: "Media Partner", website: "#", tier: "BRONZE" }
+];
+
+function getSponsorsList() {
+  if (fs.existsSync(SPONSORS_FILE)) {
+    try {
+      return JSON.parse(fs.readFileSync(SPONSORS_FILE, "utf8"));
+    } catch (err) {
+      console.error("Error reading sponsors.json, returning defaults", err);
     }
   }
-  
-  // Write audit log
-  const audits = getAuditLogs();
-  audits.unshift({
-    id: `audit-${Date.now()}`,
-    adminName: operator.username,
-    role: operator.role,
-    action: `${operator.username} permanently deleted logo for ${teamUpper}`,
-    timestamp: new Date().toLocaleString()
-  });
-  saveAuditLogs(audits);
-  
-  res.json({ success: true, registration: teamReg });
-});
+  return DEFAULT_SPONSORS;
+}
 
-// Verify whole squad level state
-app.post("/api/registrations/:teamId/verify", authenticateToken, requireRole(["Super Admin"]), (req, res) => {
-  const { teamId } = req.params;
-  const { status, feedback } = req.body; // 'verified' | 'incomplete' | etc
-  const operatorName = (req as any).user.username;
+function saveSponsorsList(sponsors: any[]) {
+  fs.writeFileSync(SPONSORS_FILE, JSON.stringify(sponsors, null, 2), "utf8");
+}
 
-  const regs = getRegistrations();
-  if (!regs[teamId]) {
-    regs[teamId] = {
-      teamId,
-      status: "pending",
-      players: [],
-      coaches: []
-    };
-  }
-
-  regs[teamId].status = status;
-  regs[teamId].verifiedAt = new Date().toISOString();
-  if (feedback !== undefined) {
-    regs[teamId].adminFeedback = feedback;
-  }
-
-  saveRegistrations(regs);
-
-  // Write audit
-  const audits = getAuditLogs();
-  audits.unshift({
-    id: `audit-${Date.now()}`,
-    adminName: operatorName,
-    role: (req as any).user.role,
-    action: status === "verified" 
-      ? `Approved squad registration sheet for ${teamId.toUpperCase()}`
-      : `Flagged squad registration sheet for ${teamId.toUpperCase()} with mistakes: "${feedback || 'No remarks provided'}"`,
-    timestamp: new Date().toLocaleString()
-  });
-  saveAuditLogs(audits);
-
-  res.json({ success: true, registration: regs[teamId] });
-});
-
-// Verify individual player/coach accreditation (Super Admin only!)
-app.post("/api/registrations/:teamId/verify-member", authenticateToken, requireRole(["Super Admin"]), (req, res) => {
-  const { teamId } = req.params;
-  const { memberId, type, status, feedback } = req.body; // type: 'player' | 'coach', status: 'Approved' | 'Rejected' | 'Pending'
-  const operator = (req as any).user;
-
-  if (!memberId || !type || !status) {
-    res.status(400).json({ error: "Missing required params: memberId, type, status." });
-    return;
-  }
-
-  const regs = getRegistrations();
-  const teamReg = regs[teamId];
-
-  if (!teamReg) {
-    res.status(404).json({ error: `Registration for team ${teamId} not found.` });
-    return;
-  }
-
-  let memberName = "";
-  if (type === "player") {
-    const player = teamReg.players?.find((p: any) => p.id === memberId);
-    if (!player) {
-      res.status(404).json({ error: "Player registration record not found in squad listing." });
-      return;
-    }
-    player.idCardStatus = status.toLowerCase() === "approved" ? "approved" : "rejected";
-    player.idCardFeedback = feedback || "";
-    memberName = player.fullName;
-  } else {
-    const coach = teamReg.coaches?.find((c: any) => c.id === memberId);
-    if (!coach) {
-      res.status(404).json({ error: "Coach official record not found in staff list." });
-      return;
-    }
-    coach.idCardStatus = status.toLowerCase() === "approved" ? "approved" : "rejected";
-    coach.idCardFeedback = feedback || "";
-    memberName = coach.fullName;
-  }
-
-  saveRegistrations(regs);
-
-  // Audit
-  const audits = getAuditLogs();
-  audits.unshift({
-    id: `audit-${Date.now()}`,
-    adminName: operator.username,
-    role: operator.role,
-    action: `${operator.username} ${status.toLowerCase() === "approved" ? "approved" : "rejected"} accreditation for ${memberName} (${teamId.toUpperCase()})`,
-    timestamp: new Date().toLocaleString()
-  });
-  saveAuditLogs(audits);
-
-  res.json({ success: true, registration: teamReg });
-});
-
-// Audit log services
-app.get("/api/audit-logs", (req, res) => {
-  res.json({ auditLogs: getAuditLogs() });
-});
-
-app.post("/api/audit-logs", authenticateToken, (req, res) => {
-  const { action, matchSummary } = req.body;
-  const user = (req as any).user;
-
-  const audits = getAuditLogs();
-  const newLog = {
-    id: `audit-${Date.now()}`,
-    adminName: user.username,
-    role: user.role,
-    action: action,
-    timestamp: new Date().toLocaleString(),
-    matchSummary
-  };
-  audits.unshift(newLog);
-  saveAuditLogs(audits);
-
-  res.json({ success: true, log: newLog });
-});
-
-// Clean and Reset all registrations
-app.post("/api/registrations/reset", authenticateToken, requireRole(["Super Admin"]), (req, res) => {
-  saveRegistrations({});
-  const audits = getAuditLogs();
-  audits.unshift({
-    id: `audit-${Date.now()}`,
-    adminName: (req as any).user.username,
-    role: (req as any).user.role,
-    action: `Reset and wiped all team registration databases.`,
-    timestamp: new Date().toLocaleString()
-  });
-  saveAuditLogs(audits);
-  res.json({ success: true });
+app.get("/api/sponsors", (req, res) => {
+  res.json({ sponsors: getSponsorsList() });
 });
 
 // FCL Official Match Timer Database & Operations

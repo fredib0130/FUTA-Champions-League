@@ -6,7 +6,7 @@ import { Countdown } from '../components/Countdown';
 import { MatchCard } from '../components/MatchCard';
 import { PageHeader } from '../components/PageHeader';
 import { NEWS, SPONSORS, PLAYERS, COEFFICIENTS, TEAMS } from '../data/mockData';
-import { Match } from '../types';
+import { Match, Sponsor } from '../types';
 import { cn } from '../lib/utils';
 import { useMatchState } from '../context/MatchStateContext';
 
@@ -15,10 +15,66 @@ import { CoefficientTable } from '../components/CoefficientTable';
 import { TeamLogo } from '../components/TeamLogo';
 
 export { Champions } from './Champions';
-export { default as RegistrationPortal } from './RegistrationPortal';
+
+const SponsorCard: React.FC<{ sponsor: Sponsor }> = ({ sponsor }) => {
+  const [showPlaceholder, setShowPlaceholder] = React.useState(!sponsor.logoUrl);
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map((word: string) => word[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase();
+  };
+
+  const initials = getInitials(sponsor.name);
+
+  return (
+    <a 
+      href={sponsor.website || '#'}
+      target={sponsor.website && sponsor.website !== '#' ? '_blank' : undefined}
+      rel="noopener noreferrer"
+      className="glass group p-4 rounded-2xl border border-white/5 hover:border-[#00e5ff]/30 hover:shadow-[0_0_20px_rgba(0,229,255,0.05)] transition-all duration-300 flex flex-col justify-between items-center text-center h-44 relative overflow-hidden"
+    >
+      <div className="absolute inset-0 bg-gradient-to-b from-[#00e5ff]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+      
+      {/* Category Label */}
+      <span className="text-[8px] font-black uppercase tracking-widest text-[#00e5ff] bg-[#00e5ff]/10 px-2.5 py-1 rounded-full mb-2 self-center border border-[#00e5ff]/15 z-10 font-mono">
+        {sponsor.category}
+      </span>
+
+      {/* Logo container */}
+      <div className="flex-1 flex items-center justify-center w-full min-h-[60px] mb-2 z-10">
+        {!showPlaceholder && sponsor.logoUrl ? (
+          <img 
+            src={sponsor.logoUrl} 
+            alt={sponsor.name} 
+            onError={() => setShowPlaceholder(true)}
+            className="max-h-16 max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+          />
+        ) : (
+          /* Custom FCL Sponsor Logo Placeholder Box */
+          <div className="h-16 w-16 rounded-xl bg-white/[0.03] border border-white/10 group-hover:border-[#00e5ff]/30 text-white/30 group-hover:text-[#00e5ff]/80 font-mono flex flex-col items-center justify-center transition-all">
+            <span className="text-xl font-bold tracking-tight">{initials}</span>
+            <span className="text-[7px] font-bold tracking-widest uppercase opacity-60 mt-0.5">FCL PARTNER</span>
+          </div>
+        )}
+      </div>
+
+      {/* Sponsor Name */}
+      <div className="z-10 w-full">
+        <h5 className="text-xs font-bold text-gray-200 group-hover:text-white transition-colors tracking-tight line-clamp-1">{sponsor.name}</h5>
+        <span className="text-[8px] font-mono text-gray-500 uppercase tracking-widest block transform group-hover:translate-x-1 transition-transform">
+          {sponsor.tier || 'SPONSOR'}
+        </span>
+      </div>
+    </a>
+  );
+}
 
 export function Home() {
-  const { matches } = useMatchState();
+  const { matches, sponsors } = useMatchState();
   const featuredMatch = matches.find(m => m.id === 'md1-1') || matches[0];
   const latestNews = NEWS.slice(0, 2);
   const topPlayers = PLAYERS.slice(0, 3);
@@ -327,12 +383,33 @@ export function Home() {
       </section>
 
       {/* Sponsors */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-white/5 pt-20">
-        <p className="text-center text-xs font-bold tracking-[0.3em] text-white/30 mb-12 uppercase">OFFICIAL SPONSORS & PARTNERS</p>
-        <div className="flex flex-wrap justify-center items-center gap-12 sm:gap-24 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
-          {SPONSORS.map((sponsor) => (
-            <img key={sponsor.id} src={sponsor.logo} alt={sponsor.name} className="h-10 sm:h-12 w-auto object-contain" />
-          ))}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-white/5 pt-20 pb-16">
+        <p className="text-center text-xs font-bold tracking-[0.3em] text-[#00e5ff] mb-16 uppercase">OFFICIAL SPONSORS & PARTNERS (2026)</p>
+        
+        {/* Sponsors Row */}
+        <div className="space-y-6 mb-16">
+          <h4 className="text-[10px] font-mono font-black uppercase tracking-[0.2em] text-white/40 text-center">OFFICIAL TOURNAMENT SPONSORS</h4>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-5xl mx-auto">
+            {(sponsors && sponsors.length > 0 ? sponsors : SPONSORS)
+              .filter(s => s.category === 'Sponsor')
+              .map((sponsor) => (
+                <SponsorCard key={sponsor.id} sponsor={sponsor} />
+              ))}
+          </div>
+        </div>
+
+        {/* Media Partners Row */}
+        <div className="space-y-6">
+          <h4 className="text-[10px] font-mono font-black uppercase tracking-[0.2em] text-white/40 text-center">OFFICIAL MEDIA PARTNERS</h4>
+          <div className="grid grid-cols-2 md:flex md:justify-center gap-6 max-w-3xl mx-auto">
+            {(sponsors && sponsors.length > 0 ? sponsors : SPONSORS)
+              .filter(s => s.category === 'Media Partner')
+              .map((sponsor) => (
+                <div key={sponsor.id} className="w-full md:w-60">
+                  <SponsorCard sponsor={sponsor} />
+                </div>
+              ))}
+          </div>
         </div>
       </section>
     </div>
@@ -890,74 +967,248 @@ export function Teams() {
   );
 }
 export function Stats() {
+  const { matches, detailedStats } = useMatchState();
+  const [activeTab, setActiveTab] = React.useState<'players' | 'teams'>('players');
+
   const scorers = [...PLAYERS].sort((a, b) => b.goals - a.goals);
   const assists = [...PLAYERS].sort((a, b) => b.assists - a.assists);
+
+  // Compute aggregated team stats for the FUTA Champions League
+  const teamStats = React.useMemo(() => {
+    const statsMap: Record<string, {
+      id: string;
+      name: string;
+      corners: number;
+      yellowCards: number;
+      redCards: number;
+      offsides: number;
+      fouls: number;
+      freeKicks: number;
+      played: number;
+    }> = {};
+
+    // Initialize with all tournament teams
+    TEAMS.forEach(t => {
+      statsMap[t.id] = {
+        id: t.id,
+        name: t.name,
+        corners: 0,
+        yellowCards: 0,
+        redCards: 0,
+        offsides: 0,
+        fouls: 0,
+        freeKicks: 0,
+        played: 0
+      };
+    });
+
+    // Populate and aggregate stats from finished / played fixtures
+    matches.forEach(m => {
+      if (m.status === 'Finished' || m.status === 'Full Time' || m.status === 'Live' || m.status === 'Half Time') {
+        const hId = m.homeTeam.toLowerCase();
+        const aId = m.awayTeam.toLowerCase();
+        const mStats = detailedStats[m.id];
+        if (mStats) {
+          if (statsMap[hId]) {
+            statsMap[hId].played += 1;
+            statsMap[hId].corners += mStats.cornersHome || mStats.homeCorners || 0;
+            statsMap[hId].yellowCards += mStats.yellowCardsHome || mStats.homeYellowCards || 0;
+            statsMap[hId].redCards += mStats.redCardsHome || mStats.homeRedCards || 0;
+            statsMap[hId].offsides += mStats.offsidesHome || mStats.homeOffsides || 0;
+            statsMap[hId].fouls += mStats.foulsHome || mStats.homeFouls || 0;
+            statsMap[hId].freeKicks += mStats.freeKicksHome || mStats.homeFreeKicks || 0;
+          }
+          if (statsMap[aId]) {
+            statsMap[aId].played += 1;
+            statsMap[aId].corners += mStats.cornersAway || mStats.awayCorners || 0;
+            statsMap[aId].yellowCards += mStats.yellowCardsAway || mStats.awayYellowCards || 0;
+            statsMap[aId].redCards += mStats.redCardsAway || mStats.awayRedCards || 0;
+            statsMap[aId].offsides += mStats.offsidesAway || mStats.awayOffsides || 0;
+            statsMap[aId].fouls += mStats.foulsAway || mStats.awayFouls || 0;
+            statsMap[aId].freeKicks += mStats.freeKicksAway || mStats.awayFreeKicks || 0;
+          }
+        }
+      }
+    });
+
+    return Object.values(statsMap);
+  }, [matches, detailedStats]);
+
+  const [teamSortField, setTeamSortField] = React.useState<'corners' | 'yellowCards' | 'redCards' | 'offsides' | 'fouls' | 'freeKicks'>('corners');
+
+  const sortedTeamStats = React.useMemo(() => {
+    return [...teamStats].sort((a, b) => b[teamSortField] - a[teamSortField]);
+  }, [teamStats, teamSortField]);
 
   return (
     <div>
       <PageHeader 
-        title="Player Stats" 
-        subtitle="Individual brilliance on display. Track the leaders in goals, assists, and clean sheets."
+        title="TOURNAMENT LEADERBOARDS" 
+        subtitle="Individual brilliances and official tactical team-by-team match stats ledger."
       />
       
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Top Scorers */}
-          <div className="space-y-8">
-            <div className="flex items-center justify-between border-b border-primary pb-4">
-              <h2 className="text-2xl font-display italic">TOP SCORERS</h2>
-              <TrendingUp className="text-primary" />
-            </div>
-            <div className="space-y-4">
-              {scorers.map((player, i) => (
-                <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
-                  <div className="flex items-center space-x-4">
-                    <span className="text-xl font-display font-bold text-white/20 w-8">{i + 1}</span>
-                    <img src={player.image} className="w-12 h-12 rounded-full border-2 border-white/10" alt={player.name} />
-                    <div>
-                      <h4 className="font-bold group-hover:text-primary transition-colors">{player.name}</h4>
-                      <p className="text-xs text-white/40 uppercase tracking-widest">
-                        {TEAMS.find(t => t.id === player.teamId)?.name}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-display font-bold text-primary">{player.goals}</div>
-                    <div className="text-[8px] font-bold text-white/20 uppercase tracking-widest">Goals</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Assists Leaderboard */}
-          <div className="space-y-8">
-            <div className="flex items-center justify-between border-b border-blue-500 pb-4">
-              <h2 className="text-2xl font-display italic">TOP ASSISTS</h2>
-              <Star className="text-blue-500" />
-            </div>
-            <div className="space-y-4">
-              {assists.map((player, i) => (
-                <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
-                  <div className="flex items-center space-x-4">
-                    <span className="text-xl font-display font-bold text-white/20 w-8">{i + 1}</span>
-                    <img src={player.image} className="w-12 h-12 rounded-full border-2 border-white/10" alt={player.name} />
-                    <div>
-                      <h4 className="font-bold group-hover:text-blue-500 transition-colors">{player.name}</h4>
-                      <p className="text-xs text-white/40 uppercase tracking-widest">
-                        {TEAMS.find(t => t.id === player.teamId)?.name}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-display font-bold text-blue-500">{player.assists}</div>
-                    <div className="text-[8px] font-bold text-white/20 uppercase tracking-widest">Assists</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+      {/* Sub page navigation tabs switcher */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-8 flex justify-center">
+        <div className="bg-navy-dark border border-white/10 p-1.5 rounded-2xl flex gap-3 shadow-xl w-full max-w-md">
+          <button
+            onClick={() => setActiveTab('players')}
+            className={`flex-1 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all cursor-pointer ${
+              activeTab === 'players'
+                ? 'bg-primary text-dark shadow-[0_0_15px_rgba(0,229,255,0.4)]'
+                : 'text-white/40 hover:text-white/80 hover:bg-white/[0.02]'
+            }`}
+          >
+            👤 PLAYER STATS
+          </button>
+          
+          <button
+            onClick={() => setActiveTab('teams')}
+            className={`flex-1 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all cursor-pointer ${
+              activeTab === 'teams'
+                ? 'bg-primary text-dark shadow-[0_0_15px_rgba(0,229,255,0.4)]'
+                : 'text-white/40 hover:text-white/80 hover:bg-white/[0.02]'
+            }`}
+          >
+            🛡️ TEAM STATS
+          </button>
         </div>
+      </div>
+
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
+        {activeTab === 'players' ? (
+          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Top Scorers */}
+            <div className="space-y-8">
+              <div className="flex items-center justify-between border-b border-primary pb-4">
+                <h2 className="text-2xl font-display italic">TOP SCORERS</h2>
+                <TrendingUp className="text-primary" />
+              </div>
+              <div className="space-y-4">
+                {scorers.map((player, i) => (
+                  <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
+                    <div className="flex items-center space-x-4">
+                      <span className="text-xl font-display font-bold text-white/20 w-8">{i + 1}</span>
+                      <img src={player.image} className="w-12 h-12 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
+                      <div>
+                        <h4 className="font-bold group-hover:text-primary transition-colors">{player.name}</h4>
+                        <p className="text-xs text-white/40 uppercase tracking-widest">
+                          {TEAMS.find(t => t.id === player.teamId)?.name}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-display font-bold text-primary">{player.goals}</div>
+                      <div className="text-[8px] font-bold text-white/20 uppercase tracking-widest">Goals</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Assists Leaderboard */}
+            <div className="space-y-8">
+              <div className="flex items-center justify-between border-b border-blue-500 pb-4">
+                <h2 className="text-2xl font-display italic">TOP ASSISTS</h2>
+                <Star className="text-blue-500" />
+              </div>
+              <div className="space-y-4">
+                {assists.map((player, i) => (
+                  <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
+                    <div className="flex items-center space-x-4">
+                      <span className="text-xl font-display font-bold text-white/20 w-8">{i + 1}</span>
+                      <img src={player.image} className="w-12 h-12 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
+                      <div>
+                        <h4 className="font-bold group-hover:text-blue-500 transition-colors">{player.name}</h4>
+                        <p className="text-xs text-white/40 uppercase tracking-widest">
+                          {TEAMS.find(t => t.id === player.teamId)?.name}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-display font-bold text-blue-500">{player.assists}</div>
+                      <div className="text-[8px] font-bold text-white/20 uppercase tracking-widest">Assists</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* FUTA Champions League Official Team Statistics Ledger */
+          <div className="space-y-8">
+            <div className="border-b border-white/10 pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-display italic uppercase tracking-wider text-white">MANDATORY FIXTURE STATISTICS</h2>
+                <p className="text-xs text-white/40 mt-1">Select any official FCL dynamic metrics category below to sort and discover the leading squads.</p>
+              </div>
+
+              {/* Dynamic statistic category selectors pill group */}
+              <div className="flex flex-wrap gap-2">
+                {([
+                  { field: 'corners', label: '🚩 Corner Kicks' },
+                  { field: 'yellowCards', label: '🟨 Yellow Warnings' },
+                  { field: 'redCards', label: '🟥 Red Expulsions' },
+                  { field: 'offsides', label: '🔭 Offsides' },
+                  { field: 'fouls', label: '⚠️ Team Fouls' },
+                  { field: 'freeKicks', label: '🎙️ Free Kicks Won' }
+                ] as const).map(pill => (
+                  <button
+                    key={pill.field}
+                    onClick={() => setTeamSortField(pill.field)}
+                    className={`px-3 py-1.5 rounded-xl border text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                      teamSortField === pill.field
+                        ? 'bg-primary/20 border-primary/50 text-primary shadow-[0_0_15px_rgba(0,229,255,0.15)]'
+                        : 'bg-white/5 border-white/5 text-white/40 hover:text-white/80 hover:bg-white/10'
+                    }`}
+                  >
+                    {pill.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="overflow-hidden rounded-[32px] border border-white/10 glass bg-navy/40">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs font-mono">
+                  <thead>
+                    <tr className="bg-white/5 border-b border-white/10 text-[10px] font-black uppercase tracking-widest text-white/40">
+                      <th className="p-4 pl-6 text-center w-16">RANK</th>
+                      <th className="p-4">DEPARTMENT SQUAD</th>
+                      <th className="p-4 text-center w-24">PLAYED</th>
+                      <th className="p-4 text-center w-28">🚩 CORNERS</th>
+                      <th className="p-4 text-center w-28">🟨 YELLOWS</th>
+                      <th className="p-4 text-center w-28">🟥 REDS</th>
+                      <th className="p-4 text-center w-28">🔭 OFFSIDES</th>
+                      <th className="p-4 text-center w-28">⚠️ FOULS</th>
+                      <th className="p-4 text-center w-28">🎙️ FREE KICKS</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 text-white/85">
+                    {sortedTeamStats.map((team, idx) => (
+                      <tr key={team.id} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="p-4 pl-6 text-center font-bold text-white/40">{idx + 1}</td>
+                        <td className="p-4 font-sans font-bold flex items-center gap-3">
+                          <TeamLogo teamId={team.id} logoUrl={TEAMS.find(t => t.id === team.id)?.logoUrl || null} size="sm" />
+                          <div>
+                            <span className="text-white text-sm block">{team.name}</span>
+                            <span className="text-[9px] font-mono text-white/40 uppercase tracking-widest">{team.id.toUpperCase()}</span>
+                          </div>
+                        </td>
+                        <td className="p-4 text-center font-bold text-white/60">{team.played}</td>
+                        <td className={`p-4 text-center font-bold font-mono ${teamSortField === 'corners' ? 'text-primary' : 'text-white/60'}`}>{team.corners}</td>
+                        <td className={`p-4 text-center font-bold font-mono ${teamSortField === 'yellowCards' ? 'text-yellow-500' : 'text-white/60'}`}>{team.yellowCards}</td>
+                        <td className={`p-4 text-center font-bold font-mono ${teamSortField === 'redCards' ? 'text-red-500' : 'text-white/60'}`}>{team.redCards}</td>
+                        <td className={`p-4 text-center font-bold font-mono ${teamSortField === 'offsides' ? 'text-blue-400' : 'text-white/60'}`}>{team.offsides}</td>
+                        <td className={`p-4 text-center font-bold font-mono ${teamSortField === 'fouls' ? 'text-purple-400' : 'text-white/60'}`}>{team.fouls}</td>
+                        <td className={`p-4 text-center font-bold font-mono ${teamSortField === 'freeKicks' ? 'text-green-400' : 'text-white/60'}`}>{team.freeKicks}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

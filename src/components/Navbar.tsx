@@ -9,7 +9,6 @@ const navItems = [
   { name: 'Live Scores 🔴', path: '/live', icon: Radio },
   { name: 'Fixtures', path: '/fixtures', icon: Calendar },
   { name: 'Standings', path: '/table', icon: BarChart3 },
-  { name: 'Accreditation', path: '/registration', icon: ShieldCheck },
   { name: 'Rankings', path: '/rankings', icon: Star },
   { name: 'Pots', path: '/pots', icon: Trophy },
   { name: 'Playoffs', path: '/playoffs', icon: Trophy },
@@ -68,22 +67,6 @@ export function Navbar() {
             >
               CONTACT US
             </Link>
-
-            {localStorage.getItem('fcl_admin_user') ? (
-              <Link 
-                to="/admin/dashboard" 
-                className="ml-3 px-5 py-2 border border-primary/40 bg-primary/10 hover:bg-primary text-primary hover:text-dark rounded-full font-bold text-sm transition-all"
-              >
-                ADMIN DESK
-              </Link>
-            ) : (
-              <Link 
-                to="/admin/login" 
-                className="ml-3 px-5 py-2 border border-white/20 bg-white/5 hover:bg-white/10 text-white rounded-full font-bold text-sm transition-all"
-              >
-                ADMIN DESK
-              </Link>
-            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -122,22 +105,6 @@ export function Navbar() {
               >
                 CONTACT US
               </Link>
-
-              {localStorage.getItem('fcl_admin_user') ? (
-                <Link 
-                  to="/admin/dashboard" 
-                  className="flex items-center justify-center w-full mt-2 py-4 border border-primary/30 bg-primary/10 text-primary rounded-xl font-bold uppercase transition-all"
-                >
-                  ⚙️ Admin Desk
-                </Link>
-              ) : (
-                <Link 
-                  to="/admin/login" 
-                  className="flex items-center justify-center w-full mt-2 py-3.5 border border-white/20 bg-white/5 text-white rounded-xl font-bold uppercase transition-all text-xs"
-                >
-                  ⚙️ Admin Desk Access
-                </Link>
-              )}
             </div>
           </motion.div>
         )}

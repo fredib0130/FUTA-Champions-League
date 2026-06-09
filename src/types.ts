@@ -84,6 +84,8 @@ export interface Sponsor {
   id: string;
   name: string;
   logo: string;
+  logoUrl?: string | null;
+  category?: 'Sponsor' | 'Media Partner';
   tier: 'GOLD' | 'SILVER' | 'BRONZE';
   website: string;
 }
@@ -99,6 +101,23 @@ export interface MatchStats {
 
   redCardsHome: number;
   redCardsAway: number;
+
+  // Database-style and optional fields
+  homeCorners?: number;
+  awayCorners?: number;
+  homeYellowCards?: number;
+  awayYellowCards?: number;
+  homeRedCards?: number;
+  awayRedCards?: number;
+  homeOffsides?: number;
+  awayOffsides?: number;
+  homeFouls?: number;
+  awayFouls?: number;
+  homeFreeKicks?: number;
+  awayFreeKicks?: number;
+  
+  updatedAt?: string;
+  updatedBy?: string;
 }
 
 export interface GoalScorer {

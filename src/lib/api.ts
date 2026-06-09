@@ -178,5 +178,30 @@ export const fclApi = {
       method: 'POST',
       body: JSON.stringify({ fileData, filename, bucket, subfolder })
     });
+  },
+
+  // Sponsors & Partners Admin Controls
+  async getSponsors(): Promise<{ sponsors: any[] }> {
+    return fetchApi('/api/sponsors');
+  },
+
+  async saveSponsors(sponsors: any[]): Promise<{ success: boolean; sponsors: any[] }> {
+    return fetchApi('/api/sponsors', {
+      method: 'POST',
+      body: JSON.stringify({ sponsors })
+    });
+  },
+
+  async resetSponsors(): Promise<{ success: boolean; sponsors: any[] }> {
+    return fetchApi('/api/sponsors/reset', {
+      method: 'POST'
+    });
+  },
+
+  async uploadSponsorLogo(id: string, logoData: string, filename: string): Promise<{ success: boolean; logoUrl: string; sponsors: any[] }> {
+    return fetchApi(`/api/sponsors/${id}/logo`, {
+      method: 'POST',
+      body: JSON.stringify({ logoData, filename })
+    });
   }
 };

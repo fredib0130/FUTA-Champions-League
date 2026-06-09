@@ -8,7 +8,7 @@ import { PageHeader } from '../components/PageHeader';
 import { TEAMS } from '../data/mockData';
 import { fclApi } from '../lib/api';
 import { cn } from '../lib/utils';
-import { accessCodes } from './RegistrationPortal';
+import { accessCodes } from '../constants';
 import { TeamLogo } from '../components/TeamLogo';
 
 const getTeamColor = (teamId: string) => {
