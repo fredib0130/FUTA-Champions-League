@@ -186,6 +186,12 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
           </div>
           <div className="text-[10px] font-bold text-white/20 mt-2 tracking-widest">{match.venue}</div>
           
+          {match.referee && (
+            <div className="mt-1.5 px-2 py-0.5 bg-primary/10 border border-primary/20 rounded-md text-[8px] font-black tracking-widest text-primary uppercase inline-block">
+              👮 Ref: {match.referee}
+            </div>
+          )}
+          
           <div className="mt-4 flex flex-col items-center space-y-2">
             {higherSeedAdvantage && (
               <div className="px-3 py-1 bg-primary/10 rounded-full border border-primary/20 animate-pulse">

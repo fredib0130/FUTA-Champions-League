@@ -77,7 +77,30 @@ export const PLAYERS: Player[] = Array.from({ length: 150 }, (_, i) => ({
 
 export const MATCHES: Match[] = [
   // --- MATCHDAY 1 (June 10 - 14) ---
-  { id: 'md1-1', homeTeam: 'MST', awayTeam: 'ICE', date: '2026-06-10', time: '15:30', venue: 'Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 }, // OPENING MATCH
+  { 
+    id: 'md1-1', 
+    homeTeam: 'MST', 
+    awayTeam: 'ICE', 
+    date: '2026-06-10', 
+    time: '15:30', 
+    venue: 'Main Pitch', 
+    status: 'Upcoming', 
+    homeScore: 0, 
+    awayScore: 0, 
+    lineupSubmittedHome: false, 
+    lineupSubmittedAway: false, 
+    matchday: 1,
+    referee: 'Adesiyan Victor',
+    refereeAssigned: true,
+    matchApproved: true,
+    officialsPanel: [
+      'Kickoff supervision',
+      'Foul adjudication',
+      'Card issuance (Yellow/Red)',
+      'Match timing control',
+      'Final match report validation'
+    ]
+  }, // OPENING MATCH
   { id: 'md1-2', homeTeam: 'AGP', awayTeam: 'BCH', date: '2026-06-13', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
   { id: 'md1-3', homeTeam: 'CYS', awayTeam: 'ANA', date: '2026-06-13', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
   { id: 'md1-4', homeTeam: 'PHS', awayTeam: 'APH', date: '2026-06-13', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
@@ -168,7 +191,7 @@ Building the Premier Inter-Departmental Football Competition in FUTA`,
 ];
 
 export const SPONSORS: Sponsor[] = [
-  { id: 'hua-express', name: 'HUA Express', logo: 'public/logos/HUA Express.jpg', logoUrl: 'https://www.huaexpress.delivery/', category: 'Sponsor', tier: 'GOLD', website: '#' },
+  { id: 'hua-express', name: 'HUA Express', logo: 'public/logos/HUA Express.jpg', logoUrl: 'public/logos/HUA Express.jpg', category: 'Sponsor', tier: 'GOLD', website: 'https://www.huaexpress.delivery/' },
   { id: 'sydtech', name: 'Sydtech', logo: 'public/logos/Sydtech.jpg', logoUrl: null, category: 'Sponsor', tier: 'SILVER', website: '#' },
   { id: 'chime-sports', name: 'Chime Sports', logo: 'public/logos/Chima Sports.jpg', logoUrl: null, category: 'Sponsor', tier: 'SILVER', website: '#' },
   { id: 'favy-scentual', name: 'Favy Scentual', logo: 'public/logos/Favy Scentual.jpg', logoUrl: null, category: 'Sponsor', tier: 'SILVER', website: '#' },

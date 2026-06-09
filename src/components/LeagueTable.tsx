@@ -33,6 +33,8 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
                 <th className="px-4 py-4 text-center">W</th>
                 <th className="px-4 py-4 text-center">D</th>
                 <th className="px-4 py-4 text-center">L</th>
+                <th className="px-4 py-4 text-center">GF</th>
+                <th className="px-4 py-4 text-center">GA</th>
                 <th className="px-4 py-4 text-center">GD</th>
               </>
             )}
@@ -96,6 +98,8 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
                     <td className="px-4 py-4 text-center font-mono text-sm text-gray-400">{team.won}</td>
                     <td className="px-4 py-4 text-center font-mono text-sm text-gray-400">{team.drawn}</td>
                     <td className="px-4 py-4 text-center font-mono text-sm text-gray-400">{team.lost}</td>
+                    <td className="px-4 py-4 text-center font-mono text-sm text-gray-400">{team.goalsFor}</td>
+                    <td className="px-4 py-4 text-center font-mono text-sm text-gray-400">{team.goalsAgainst}</td>
                     <td className="px-4 py-4 text-center font-mono text-sm text-gray-400">
                       <span className={team.goalDifference > 0 ? 'text-green-500' : team.goalDifference < 0 ? 'text-red-500' : ''}>
                         {team.goalDifference > 0 ? `+${team.goalDifference}` : team.goalDifference}

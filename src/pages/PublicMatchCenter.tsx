@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useMatchState } from '../context/MatchStateContext';
 import { parseMinuteToNumeric, formatMinuteDisplay } from '../types';
 import { 
-  ArrowLeft, Radio, Trophy, Calendar, Sparkles, Award, Shield, FileText, Send, Clock, List, Users, X
+  ArrowLeft, Radio, Trophy, Calendar, Sparkles, Award, Shield, FileText, Send, Clock, List, Users, X, ShieldCheck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -335,11 +335,16 @@ export default function PublicMatchCenter() {
                 </div>
               )}
 
-              <div className="text-xs text-white/40 font-bold uppercase mt-4 tracking-wider font-sans">
-                🏟️ Stadium: {match.venue}
+              <div className="text-xs text-white/40 font-bold uppercase mt-4 tracking-wider space-y-1 font-sans">
+                <div>🏟️ Stadium: {match.venue}</div>
+                {match.referee && (
+                  <div className="text-primary text-[10px] font-black tracking-widest uppercase mt-1">
+                    👮 Referee: {match.referee}
+                  </div>
+                )}
               </div>
 
-              <div className="text-[9px] text-white/20 uppercase font-bold tracking-widest mt-1 leading-normal">
+              <div className="text-[9px] text-white/20 uppercase font-bold tracking-widest mt-1.5 leading-normal">
                 Officially Administered Event
               </div>
             </div>
@@ -370,8 +375,9 @@ export default function PublicMatchCenter() {
         {/* THREE COLUMN GRID: STATS, TIMELINE & LINEUPS, COMMENTARY & REPORT */}
         <div className="grid lg:grid-cols-3 gap-8">
           
-          {/* COL 1: MATCH STATISTICS percentage bars */}
-          <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60">
+          {/* COL 1: MATCH STATISTICS & OFFICIATING DETAILS */}
+          <div className="space-y-8 lg:col-span-1">
+            <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60">
             <h3 className="text-sm font-display font-black uppercase tracking-wider text-white mb-6 flex items-center gap-2 pb-4 border-b border-b-white/5">
               <Award size={15} className="text-primary" />
               <span>MATCH DAY SCIENTIFIC METRICS</span>
@@ -469,6 +475,57 @@ export default function PublicMatchCenter() {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+            )}
+            </div>
+
+            {/* Official match referee & rules panel card */}
+            {match.referee && (
+              <div className="glass border border-[#00e5ff]/20 rounded-[32px] p-6 bg-[#00e5ff]/5 space-y-5 text-left">
+                <h3 className="text-sm font-display font-black uppercase tracking-wider text-white flex items-center gap-2 pb-4 border-b border-white/5">
+                  <ShieldCheck size={16} className="text-[#00e5ff]" />
+                  <span>OFFICIATING & SUPERVISION</span>
+                </h3>
+
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3.5">
+                  <div>
+                    <span className="text-[8px] text-[#00e5ff] font-bold tracking-widest uppercase block mb-1">OFFICIAL REFEREE</span>
+                    <p className="font-sans font-black text-white text-base">{match.referee}</p>
+                  </div>
+                  
+                  <div className="flex flex-col gap-2 pt-1 border-t border-white/5">
+                    {match.refereeAssigned && (
+                      <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
+                        <span className="text-emerald-400">✔</span>
+                        <span>Referee Assigned</span>
+                      </div>
+                    )}
+                    {match.matchApproved && (
+                      <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
+                        <span className="text-emerald-400">✔</span>
+                        <span>Match Approved for Officiating</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {match.officialsPanel && match.officialsPanel.length > 0 && (
+                  <div className="space-y-2.5">
+                    <span className="text-[9px] text-white/50 font-bold tracking-widest uppercase block">MATCH OFFICIALS PANEL</span>
+                    <ul className="space-y-2">
+                      {match.officialsPanel.map((std, index) => (
+                        <li key={index} className="flex gap-2.5 text-[11px] font-semibold text-white/70 leading-relaxed font-sans">
+                          <span className="text-[#00e5ff] font-bold">•</span>
+                          <span>{std}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                <div className="pt-2 border-t border-white/5 text-[9px] text-white/30 font-semibold uppercase tracking-wider">
+                  STATUS: ✔ REFEREE ASSIGNED | ✔ MATCH APPROVED
                 </div>
               </div>
             )}

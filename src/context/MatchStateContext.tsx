@@ -216,6 +216,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.date !== official.date ||
             m.time !== official.time ||
             m.venue !== official.venue ||
+            m.referee !== official.referee ||
+            m.refereeAssigned !== official.refereeAssigned ||
+            m.matchApproved !== official.matchApproved ||
+            JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
             (official.matchday === 1 && m.status !== official.status) // Sync status specifically for matchday 1 reschedules
           ) {
             loadedMatches[index] = {
@@ -225,6 +229,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               date: official.date,
               time: official.time,
               venue: official.venue,
+              referee: official.referee,
+              refereeAssigned: official.refereeAssigned,
+              matchApproved: official.matchApproved,
+              officialsPanel: official.officialsPanel,
               status: official.matchday === 1 ? official.status : m.status
             };
             updated = true;
@@ -667,6 +675,22 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   };
 
   useEffect(() => {
+    const hasReset = localStorage.getItem('fcl_reset_2026_prekickoff_v3_main');
+    if (!hasReset) {
+      localStorage.removeItem('fcl_admin_matches');
+      localStorage.removeItem('fcl_admin_teams');
+      localStorage.removeItem('fcl_admin_stats');
+      localStorage.removeItem('fcl_admin_goals');
+      localStorage.removeItem('fcl_admin_cards');
+      localStorage.removeItem('fcl_admin_subs');
+      localStorage.removeItem('fcl_admin_audit_logs');
+      localStorage.removeItem('fcl_admin_lineups');
+      localStorage.removeItem('fcl_admin_commentaries');
+      localStorage.removeItem('fcl_admin_reports');
+      localStorage.removeItem('fcl_admin_timers');
+      localStorage.setItem('fcl_reset_2026_prekickoff_v3_main', 'true');
+    }
+
     loadState();
 
     // Fetch and apply approved/registered custom logos from database

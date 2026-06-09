@@ -58,6 +58,11 @@ export interface Match {
   secondHalfAddedTime?: number;
   homePenalties?: number;
   awayPenalties?: number;
+
+  referee?: string;
+  refereeAssigned?: boolean;
+  matchApproved?: boolean;
+  officialsPanel?: string[];
 }
 
 export interface NewsPost {
