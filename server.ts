@@ -60,45 +60,212 @@ if (!fs.existsSync(REGISTRATIONS_FILE)) {
       players: [
         {
           id: "p-mst-1",
-          fullName: "Bertram Martial",
-          matricNumber: "MST/2021/1054",
-          department: "Marine Science",
-          level: "300",
+          fullName: "Ogundeji Feyitunmise Hezekiah",
+          matricNumber: "MST/20/5287",
+          department: "Marine Science and Technology",
+          level: "500",
           position: "GK",
-          passportPath: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&q=80",
-          idCardStatus: "pending"
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p1",
+          idCardStatus: "approved",
+          jerseyNumber: "1"
         },
         {
           id: "p-mst-2",
-          fullName: "Chidi Williams",
-          matricNumber: "MST/2021/1012",
-          department: "Marine Science",
-          level: "400",
-          position: "MID",
-          passportPath: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80",
-          idCardStatus: "approved"
+          fullName: "Adeyemi Adedayo Ibrahim",
+          matricNumber: "MST/20/5251",
+          department: "Marine Science and Technology",
+          level: "500",
+          position: "DEF",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p2",
+          idCardStatus: "approved",
+          jerseyNumber: "8"
         },
         {
           id: "p-mst-3",
-          fullName: "Kelechi Nnamdi",
-          matricNumber: "MST/2021/1231",
-          department: "Marine Science",
+          fullName: "Akinnayajo Irewale",
+          matricNumber: "MST/20/5259",
+          department: "Marine Science and Technology",
+          level: "500",
+          position: "DEF",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p3",
+          idCardStatus: "approved",
+          jerseyNumber: "N/A"
+        },
+        {
+          id: "p-mst-4",
+          fullName: "Ojoisimi Bright Agbomizi",
+          matricNumber: "MST/23/4393",
+          department: "Marine Science and Technology",
+          level: "300",
+          position: "DEF",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p4",
+          idCardStatus: "approved",
+          jerseyNumber: "N/A"
+        },
+        {
+          id: "p-mst-5",
+          fullName: "Bernard Augustine Obioma",
+          matricNumber: "MST/24/9615",
+          department: "Marine Science and Technology",
+          level: "200",
+          position: "DEF",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p5",
+          idCardStatus: "approved",
+          jerseyNumber: "16"
+        },
+        {
+          id: "p-mst-6",
+          fullName: "Philip Believe Oluwashina",
+          matricNumber: "MST/20/5302",
+          department: "Marine Science and Technology",
+          level: "500",
+          position: "DEF",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p6",
+          idCardStatus: "approved",
+          jerseyNumber: "N/A"
+        },
+        {
+          id: "p-mst-7",
+          fullName: "Adeniyi Ademola Daniel",
+          matricNumber: "MST/22/9519",
+          department: "Marine Science and Technology",
+          level: "400",
+          position: "DEF",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p7",
+          idCardStatus: "approved",
+          jerseyNumber: "2"
+        },
+        {
+          id: "p-mst-8",
+          fullName: "Ademisoye Segun",
+          matricNumber: "MST/23/4356",
+          department: "Marine Science and Technology",
+          level: "300",
+          position: "DEF",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p8",
+          idCardStatus: "approved",
+          jerseyNumber: "N/A"
+        },
+        {
+          id: "p-mst-9",
+          fullName: "Adediran Olanrewaju Abeeb",
+          matricNumber: "MST/23/4355",
+          department: "Marine Science and Technology",
+          level: "300",
+          position: "MID",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p9",
+          idCardStatus: "approved",
+          jerseyNumber: "4"
+        },
+        {
+          id: "p-mst-10",
+          fullName: "Iyare Praise",
+          matricNumber: "MST/20/5281",
+          department: "Marine Science and Technology",
+          level: "500",
+          position: "MID",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p10",
+          idCardStatus: "approved",
+          jerseyNumber: "55"
+        },
+        {
+          id: "p-mst-11",
+          fullName: "Akinyo Boluwatife Precious",
+          matricNumber: "MST/25/7760",
+          department: "Marine Science and Technology",
+          level: "100",
+          position: "MID",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p11",
+          idCardStatus: "approved",
+          jerseyNumber: "N/A"
+        },
+        {
+          id: "p-mst-12",
+          fullName: "Adekunle Ayomide Mubarak",
+          matricNumber: "MST/24/9603",
+          department: "Marine Science and Technology",
+          level: "200",
+          position: "MID",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p12",
+          idCardStatus: "approved",
+          jerseyNumber: "N/A"
+        },
+        {
+          id: "p-mst-13",
+          fullName: "Olagunju Moses Temitope",
+          matricNumber: "MST/19/0958",
+          department: "Marine Science and Technology",
+          level: "500",
+          position: "MID",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p13",
+          idCardStatus: "approved",
+          jerseyNumber: "N/A"
+        },
+        {
+          id: "p-mst-14",
+          fullName: "Nkemjika Sydney",
+          matricNumber: "MST/22/9560",
+          department: "Marine Science and Technology",
+          level: "400",
+          position: "FWD",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p14",
+          idCardStatus: "approved",
+          jerseyNumber: "9"
+        },
+        {
+          id: "p-mst-15",
+          fullName: "Shomuyiwa Lateef Babatunde",
+          matricNumber: "MST/24/9656",
+          department: "Marine Science and Technology",
+          level: "200",
+          position: "FWD",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p15",
+          idCardStatus: "approved",
+          jerseyNumber: "N/A"
+        },
+        {
+          id: "p-mst-16",
+          fullName: "Boyede Joseph Ayomide",
+          matricNumber: "MST/23/4376",
+          department: "Marine Science and Technology",
+          level: "300",
+          position: "FWD",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p16",
+          idCardStatus: "approved",
+          jerseyNumber: "10"
+        },
+        {
+          id: "p-mst-17",
+          fullName: "Fabusuyi Daniel Oluwafisayo",
+          matricNumber: "MST/20/5277",
+          department: "Marine Science and Technology",
           level: "500",
           position: "FWD",
-          passportPath: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&q=80",
-          idCardStatus: "rejected",
-          idCardFeedback: "Worn photo ID card scanned. Please re-upload a clear photograph."
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p17",
+          idCardStatus: "approved",
+          jerseyNumber: "N/A"
+        },
+        {
+          id: "p-mst-18",
+          fullName: "Akintunde Ayomide Oluwaseyifunmi",
+          matricNumber: "MST/25/7758",
+          department: "Marine Science and Technology",
+          level: "100",
+          position: "FWD",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-p18",
+          idCardStatus: "approved",
+          jerseyNumber: "30"
         }
       ],
       coaches: [
         {
           id: "c-mst-1",
-          fullName: "Coach Bertram Thompson",
+          fullName: "Esezobor Isaac Eromosele (Eazzie)",
           role: "Head Coach",
-          phone: "08012345678",
-          email: "thompson@futa.edu.ng",
-          passportPath: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=500&q=80",
-          idCardStatus: "pending"
+          phone: "+234 (0) 8107366950",
+          email: "eazzie@futa.edu.ng",
+          passportPath: "https://api.dicebear.com/7.x/avataaars/svg?seed=mst-coach-1",
+          idCardStatus: "approved"
         }
       ]
     },
@@ -146,6 +313,32 @@ function getRegistrations(): Record<string, any> {
 
 function saveRegistrations(regs: Record<string, any>) {
   fs.writeFileSync(REGISTRATIONS_FILE, JSON.stringify(regs, null, 2), "utf8");
+}
+
+// Inquiries Load/Save Helpers
+const INQUIRIES_FILE = path.join(DB_DIR, "inquiries.json");
+
+if (!fs.existsSync(INQUIRIES_FILE)) {
+  fs.writeFileSync(INQUIRIES_FILE, JSON.stringify([], null, 2), "utf8");
+}
+
+function getInquiries(): any[] {
+  try {
+    if (fs.existsSync(INQUIRIES_FILE)) {
+      return JSON.parse(fs.readFileSync(INQUIRIES_FILE, "utf8"));
+    }
+  } catch (err) {
+    console.error("Error reading inquiries.json", err);
+  }
+  return [];
+}
+
+function saveInquiries(inquiries: any[]) {
+  try {
+    fs.writeFileSync(INQUIRIES_FILE, JSON.stringify(inquiries, null, 2), "utf8");
+  } catch (err) {
+    console.error("Error writing inquiries.json", err);
+  }
 }
 
 // Express Parsers
@@ -899,6 +1092,146 @@ app.delete("/api/media/match-photos/:id", (req, res) => {
   const filtered = list.filter((x: any) => x.id !== req.params.id);
   saveMatchPhotos(filtered);
   res.json({ success: true });
+});
+
+// --- INQUIRIES & COMMUNICATIONS ---
+app.post("/api/inquiries", (req, res) => {
+  try {
+    let { name, email, phone, category, subject, message } = req.body;
+
+    // Validate presence of required fields
+    if (!name || !email || !category || !subject || !message) {
+      return res.status(400).json({ error: "All fields except phone number are required." });
+    }
+
+    // Clean inputs and restrict types
+    name = String(name).trim();
+    email = String(email).trim();
+    phone = phone ? String(phone).trim() : "";
+    category = String(category).trim();
+    subject = String(subject).trim();
+    message = String(message).trim();
+
+    // Check email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: "Invalid email format. Please provide a valid address." });
+    }
+
+    // Validate message length
+    if (message.length < 20) {
+      return res.status(400).json({ error: "Message must be at least 20 characters long." });
+    }
+
+    // Sanitize to prevent HTML injection / XSS
+    const sanitizeHTML = (str: string) => {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#x27;");
+    };
+
+    // Sanitize specifically to prevent email injection attacks (no carriage return or newline characters in headers)
+    const sanitizeHeader = (str: string) => {
+      return str.replace(/[\r\n]/g, "").trim();
+    };
+
+    const cleanName = sanitizeHeader(name);
+    const cleanEmail = sanitizeHeader(email);
+    const cleanPhone = sanitizeHeader(phone);
+    const cleanCategory = sanitizeHeader(category);
+    const cleanSubject = sanitizeHeader(subject);
+    const cleanMessage = sanitizeHTML(message);
+
+    const timestamp = new Date().toISOString();
+    const id = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 15);
+
+    const newInquiry = {
+      id,
+      name: cleanName,
+      email: cleanEmail,
+      phone: cleanPhone,
+      category: cleanCategory,
+      subject: cleanSubject,
+      message: cleanMessage,
+      timestamp,
+      status: "Unread"
+    };
+
+    // Store in DB
+    const inquiries = getInquiries();
+    inquiries.push(newInquiry);
+    saveInquiries(inquiries);
+
+    // Simulate Email Dispatch to futa.cl@yahoo.com
+    console.log("==========================================");
+    console.log("[FCL EMAIL SENDER SIMULATION] - OUTGOING MAIL DISPATCH");
+    console.log("TO: futa.cl@yahoo.com");
+    console.log(`SUBJECT: [FCL Inquiry] - ${cleanSubject}`);
+    console.log("------------------------------------------");
+    console.log(`Dear FCL Committee,`);
+    console.log(`A new inquiry has been submitted via the official contact web portal:`);
+    console.log(`- From: ${cleanName} (${cleanEmail})`);
+    if (cleanPhone) console.log(`- Phone: ${cleanPhone}`);
+    console.log(`- Category: ${cleanCategory}`);
+    console.log(`- Submitted At: ${timestamp}`);
+    console.log(`\nMessage Content:\n${cleanMessage}`);
+    console.log("==========================================");
+
+    return res.json({
+      success: true,
+      message: "Your message has been successfully sent to the FUTA Champions League Committee. We will respond shortly."
+    });
+  } catch (err: any) {
+    console.error("Failed to submit inquiry:", err);
+    return res.status(500).json({ error: "Message could not be delivered. Please try again or contact us directly via email." });
+  }
+});
+
+app.get("/api/inquiries", (req, res) => {
+  try {
+    const inquiries = getInquiries();
+    res.json({ success: true, inquiries });
+  } catch (err: any) {
+    res.status(500).json({ error: "Failed to retrieve inquiries." });
+  }
+});
+
+app.patch("/api/inquiries/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    
+    if (!["Unread", "Read", "Responded"].includes(status)) {
+      return res.status(400).json({ error: "Invalid status value." });
+    }
+
+    const inquiries = getInquiries();
+    const idx = inquiries.findIndex(iq => iq.id === id);
+    if (idx !== -1) {
+      inquiries[idx].status = status;
+      saveInquiries(inquiries);
+      return res.json({ success: true, inquiry: inquiries[idx] });
+    } else {
+      return res.status(404).json({ error: "Inquiry not found." });
+    }
+  } catch (err: any) {
+    res.status(500).json({ error: "Failed to update inquiry status." });
+  }
+});
+
+app.delete("/api/inquiries/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    const inquiries = getInquiries();
+    const filtered = inquiries.filter(iq => iq.id !== id);
+    saveInquiries(filtered);
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: "Failed to delete inquiry." });
+  }
 });
 
 // Main upload route for media buckets with automatic compression and metadata generation

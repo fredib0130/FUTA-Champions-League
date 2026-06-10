@@ -63,6 +63,7 @@ export interface Match {
   refereeAssigned?: boolean;
   matchApproved?: boolean;
   officialsPanel?: string[];
+  manOfTheMatch?: string;
 }
 
 export interface NewsPost {
@@ -93,6 +94,7 @@ export interface Sponsor {
   category?: 'Sponsor' | 'Media Partner';
   tier: 'GOLD' | 'SILVER' | 'BRONZE';
   website: string;
+  email?: string;
 }
 
 export interface MatchStats {

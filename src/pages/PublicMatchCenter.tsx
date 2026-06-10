@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useMatchState } from '../context/MatchStateContext';
 import { parseMinuteToNumeric, formatMinuteDisplay } from '../types';
+import { PLAYERS } from '../data/mockData';
 import { 
   ArrowLeft, Radio, Trophy, Calendar, Sparkles, Award, Shield, FileText, Send, Clock, List, Users, X, ShieldCheck
 } from 'lucide-react';
@@ -19,7 +20,7 @@ interface Toast {
 export default function PublicMatchCenter() {
   const { matchId } = useParams<{ matchId: string }>();
   const { 
-    matches, teams, detailedStats, goalScorers, cards, subs, commentaries, reports, activeMinAndStatus 
+    matches, teams, detailedStats, goalScorers, cards, subs, commentaries, reports, activeMinAndStatus, lineups
   } = useMatchState();
 
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -342,6 +343,11 @@ export default function PublicMatchCenter() {
                     👮 Referee: {match.referee}
                   </div>
                 )}
+                {match.manOfTheMatch && (
+                  <div className="mt-2 inline-flex items-center gap-1.5 px-3.5 py-1 bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 font-black text-[9px] uppercase tracking-widest rounded-full shadow-sm">
+                    🏅 MOTM: {match.manOfTheMatch}
+                  </div>
+                )}
               </div>
 
               <div className="text-[9px] text-white/20 uppercase font-bold tracking-widest mt-1.5 leading-normal">
@@ -564,38 +570,148 @@ export default function PublicMatchCenter() {
 
             {/* Lineups displays */}
             <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60 space-y-6">
-              <h3 className="text-sm font-display font-black uppercase tracking-wider text-white flex items-center gap-2 pb-4 border-b border-b-white/5">
-                <Users size={15} className="text-primary" />
-                <span>COMBAT SQUAD SATELLITE</span>
+              <h3 className="text-sm font-display font-black uppercase tracking-wider text-white flex items-center justify-between pb-4 border-b border-b-white/5">
+                <div className="flex items-center gap-2">
+                  <Users size={15} className="text-primary" />
+                  <span>COMBAT SQUAD SATELLITE</span>
+                </div>
+                {lineups[match.id] && (
+                  <span className="text-[9px] font-black tracking-widest font-mono bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full uppercase">
+                    ACTIVE ROSTER
+                  </span>
+                )}
               </h3>
 
-              <div className="grid grid-cols-2 gap-4">
-                {/* Home starting */}
-                <div className="space-y-2">
-                  <span className="text-[9px] font-black tracking-widest uppercase text-primary font-display">{match.homeTeam} XI</span>
-                  <div className="space-y-1">
-                    {['GK', 'LB', 'CB1', 'CB2', 'RB', 'LW', 'ST', 'RW'].map(s => (
-                      <div key={s} className="bg-white/5 p-1 px-2 rounded font-mono text-[10px] text-white/70 truncate border border-white/5">
-                        <span className="text-primary font-bold mr-1.5">{s}</span>
-                        Player {s === 'GK' ? '1' : s === 'LB' ? '2' : s === 'CB1' ? '3' : '4'}
+              {lineups[match.id] ? (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-2 gap-6">
+                    {/* Home starting */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black tracking-widest uppercase text-primary font-display">
+                          {match.homeTeam} XI
+                        </span>
+                        <span className="text-[8px] font-mono font-bold text-white/30">
+                          {lineups[match.id].home.formation}
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                      <div className="space-y-1.5 font-sans">
+                        {Object.entries(lineups[match.id].home.players).map(([pos, pid]) => {
+                          const playerObj = PLAYERS.find(p => p.id === pid);
+                          const isCaptain = lineups[match.id].home.captainId === pid;
+                          return (
+                            <div key={pos} className="bg-white/[0.02] hover:bg-white/[0.04] p-1.5 px-3 rounded-xl text-[10px] text-white/80 flex items-center justify-between gap-2 border border-white/5 transition-all">
+                              <div className="flex items-center gap-2 min-w-0 truncate font-sans">
+                                <span className="text-primary font-mono font-bold tracking-wider shrink-0">{pos}</span>
+                                <span className="truncate font-medium text-white/90">
+                                  {playerObj ? playerObj.name : pid}
+                                </span>
+                              </div>
+                              {isCaptain && (
+                                <span className="text-[7px] font-black bg-yellow-500/20 text-yellow-400 border border-yellow-500/35 px-1 py-0.2 rounded font-mono uppercase tracking-widest shrink-0 animate-pulse">
+                                  C
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
 
-                {/* Away starting */}
-                <div className="space-y-2">
-                  <span className="text-[9px] font-black tracking-widest uppercase text-yellow-400 font-display">{match.awayTeam} XI</span>
-                  <div className="space-y-1">
-                    {['GK', 'LB', 'CB1', 'CB2', 'RB', 'LM', 'CM1', 'RM', 'ST1'].map(s => (
-                      <div key={s} className="bg-white/5 p-1 px-2 rounded font-mono text-[10px] text-white/70 truncate border border-white/5">
-                        <span className="text-yellow-400 font-bold mr-1.5">{s}</span>
-                        Player {s === 'GK' ? '12' : s === 'LB' ? '13' : '14'}
+                    {/* Away starting */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black tracking-widest uppercase text-yellow-400 font-display">
+                          {match.awayTeam} XI
+                        </span>
+                        <span className="text-[8px] font-mono font-bold text-white/30">
+                          {lineups[match.id].away.formation}
+                        </span>
                       </div>
-                    ))}
+                      <div className="space-y-1.5 font-sans">
+                        {Object.entries(lineups[match.id].away.players).map(([pos, pid]) => {
+                          const playerObj = PLAYERS.find(p => p.id === pid);
+                          const isCaptain = lineups[match.id].away.captainId === pid;
+                          return (
+                            <div key={pos} className="bg-white/[0.02] hover:bg-white/[0.04] p-1.5 px-3 rounded-xl text-[10px] text-white/80 flex items-center justify-between gap-2 border border-white/5 transition-all">
+                              <div className="flex items-center gap-2 min-w-0 truncate font-sans">
+                                <span className="text-yellow-400 font-mono font-bold tracking-wider shrink-0">{pos}</span>
+                                <span className="truncate font-medium text-white/90">
+                                  {playerObj ? playerObj.name : pid}
+                                </span>
+                              </div>
+                              {isCaptain && (
+                                <span className="text-[7px] font-black bg-yellow-500/20 text-yellow-400 border border-yellow-500/35 px-1 py-0.2 rounded font-mono uppercase tracking-widest shrink-0 animate-pulse">
+                                  C
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bench Roster */}
+                  <div className="pt-4 border-t border-white/5 grid grid-cols-2 gap-4 text-[9px] font-sans">
+                    <div className="space-y-1.5">
+                      <span className="font-bold tracking-wider text-white/40 block pb-1 uppercase font-display">SUBS / BENCH</span>
+                      <div className="flex flex-wrap gap-1 leading-normal">
+                        {lineups[match.id].home.bench.map((benchPlayer, idx) => {
+                          const resolvedName = PLAYERS.find(p => p.id === benchPlayer)?.name || benchPlayer;
+                          return (
+                            <span key={idx} className="bg-white/[0.02] border border-white/5 text-white/60 px-2 py-1 rounded-sm text-[9px]">
+                              {resolvedName}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <span className="font-bold tracking-wider text-white/40 block pb-1 uppercase font-display">SUBS / BENCH</span>
+                      <div className="flex flex-wrap gap-1 leading-normal">
+                        {lineups[match.id].away.bench.map((benchPlayer, idx) => {
+                          const resolvedName = PLAYERS.find(p => p.id === benchPlayer)?.name || benchPlayer;
+                          return (
+                            <span key={idx} className="bg-white/[0.02] border border-white/5 text-white/60 px-2 py-1 rounded-sm text-[9px]">
+                              {resolvedName}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Home starting */}
+                  <div className="space-y-2">
+                    <span className="text-[9px] font-black tracking-widest uppercase text-primary font-display">{match.homeTeam} XI</span>
+                    <div className="space-y-1">
+                      {['GK', 'LB', 'CB1', 'CB2', 'RB', 'LW', 'ST', 'RW'].map(s => (
+                        <div key={s} className="bg-white/5 p-1 px-2 rounded font-mono text-[10px] text-white/70 truncate border border-white/5">
+                          <span className="text-primary font-bold mr-1.5">{s}</span>
+                          Player {s === 'GK' ? '1' : s === 'LB' ? '2' : s === 'CB1' ? '3' : '4'}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Away starting */}
+                  <div className="space-y-2">
+                    <span className="text-[9px] font-black tracking-widest uppercase text-yellow-400 font-display">{match.awayTeam} XI</span>
+                    <div className="space-y-1">
+                      {['GK', 'LB', 'CB1', 'CB2', 'RB', 'LM', 'CM1', 'RM', 'ST1'].map(s => (
+                        <div key={s} className="bg-white/5 p-1 px-2 rounded font-mono text-[10px] text-white/70 truncate border border-white/5">
+                          <span className="text-yellow-400 font-bold mr-1.5">{s}</span>
+                          Player {s === 'GK' ? '12' : s === 'LB' ? '13' : '14'}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
           </div>

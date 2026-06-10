@@ -1,7 +1,7 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Link, useParams } from 'react-router-dom';
-import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone, Image as ImageIcon, Twitter, ExternalLink, ShieldCheck, Clock, Medal, BookOpen, ChevronRight } from 'lucide-react';
+import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone, Image as ImageIcon, Twitter, ExternalLink, ShieldCheck, Clock, Medal, BookOpen, ChevronRight, Search, Edit2, AlertCircle, Inbox, Trash2, Filter, Check, CheckCheck } from 'lucide-react';
 import { Countdown } from '../components/Countdown';
 import { MatchCard } from '../components/MatchCard';
 import { PageHeader } from '../components/PageHeader';
@@ -9,6 +9,7 @@ import { NEWS, SPONSORS, PLAYERS, COEFFICIENTS, TEAMS } from '../data/mockData';
 import { Match, Sponsor } from '../types';
 import { cn } from '../lib/utils';
 import { useMatchState } from '../context/MatchStateContext';
+import { fclApi } from '../lib/api';
 
 import { LeagueTable } from '../components/LeagueTable';
 import { CoefficientTable } from '../components/CoefficientTable';
@@ -16,7 +17,249 @@ import { TeamLogo } from '../components/TeamLogo';
 
 export { Champions } from './Champions';
 
-const SponsorCard: React.FC<{ sponsor: Sponsor }> = ({ sponsor }) => {
+interface SponsorContactModalProps {
+  sponsor: Sponsor;
+  onClose: () => void;
+  onSubmitSuccess?: () => void;
+}
+
+export const SponsorContactModal: React.FC<SponsorContactModalProps> = ({ sponsor, onClose, onSubmitSuccess }) => {
+  const [name, setName] = React.useState('');
+  const [organization, setOrganization] = React.useState('');
+  const [intent, setIntent] = React.useState('Partnership');
+  const [message, setMessage] = React.useState('');
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const [successMessage, setSuccessMessage] = React.useState('');
+
+  const [captchaAnswer, setCaptchaAnswer] = React.useState('');
+  const [captchaInput, setCaptchaInput] = React.useState('');
+  const [captchaCode, setCaptchaCode] = React.useState('');
+
+  // Generate CAPTCHA
+  React.useEffect(() => {
+    generateNewCaptcha();
+  }, [sponsor]);
+
+  const generateNewCaptcha = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let result = '';
+    for (let i = 0; i < 4; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setCaptchaCode(result);
+    setCaptchaInput('');
+  };
+
+  const handleConnect = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    if (!name.trim()) {
+      setErrorMessage('Sender Name is required.');
+      return;
+    }
+    if (!message.trim() || message.trim().length < 20) {
+      setErrorMessage('Message must be at least 20 characters.');
+      return;
+    }
+    if (captchaInput.trim().toUpperCase() !== captchaCode) {
+      setErrorMessage('Verification code is incorrect.');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // First, log the inquiry to our backend database
+      await fclApi.submitInquiry({
+        name: name.trim(),
+        email: sponsor.email || 'futa.cl@yahoo.com',
+        phone: '',
+        category: 'Sponsorship Proposal',
+        subject: `Sponsorship Proposal for ${sponsor.name}`,
+        message: `Intent: ${intent}\nOrganization: ${organization || 'N/A'}\nMessage: ${message}`
+      });
+
+      // Construct Mailto Link
+      const toEmail = sponsor.email || 'futa.cl@yahoo.com';
+      const subject = encodeURIComponent(`[FCL Sponsorship Inquiry] - ${sponsor.name}`);
+      const body = encodeURIComponent(
+        `Dear ${sponsor.name} Team,\n\nI am reaching out regarding a sponsorship partnership opportunity through the official FUTA Champions League 2026 platform.\n\n` +
+        `* SENDER DETAILS *\n` +
+        `- Name: ${name.trim()}\n` +
+        `- Organization: ${organization.trim() || 'N/A'}\n` +
+        `- Intent: ${intent}\n\n` +
+        `* MESSAGE *\n` +
+        `${message}\n\n` +
+        `--------------------\n` +
+        `Sent via FCL 2026 Partner Portal | Timestamp: ${new Date().toLocaleString()}`
+      );
+
+      // Open mail client
+      window.location.href = `mailto:${toEmail}?subject=${subject}&body=${body}`;
+
+      setSuccessMessage('Your sponsorship inquiry message has been successfully generated & saved.');
+      setTimeout(() => {
+        if (onSubmitSuccess) onSubmitSuccess();
+        onClose();
+      }, 3000);
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage('Failed to register inquiry on server, but you can still contact them via email: ' + (sponsor.email || 'futa.cl@yahoo.com'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark/85 backdrop-blur-md">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="w-full max-w-lg bg-[#0e1626] border border-[#00e5ff]/20 rounded-[32px] p-6 sm:p-8 shadow-2xl relative space-y-6 text-left"
+      >
+        <button 
+          className="absolute top-6 right-6 text-white/40 hover:text-white text-2xl font-display cursor-pointer transition-colors"
+          onClick={onClose}
+        >
+          &times;
+        </button>
+
+        <div>
+          <span className="text-[9px] bg-[#00e5ff]/10 text-[#00e5ff] border border-[#00e5ff]/20 px-3 py-1 rounded-full font-black uppercase tracking-widest font-mono">
+            Sponsor Connect
+          </span>
+          <h3 className="text-2xl font-display font-black uppercase text-white mt-3 italic tracking-tight">
+            CONNECT WITH {sponsor.name}
+          </h3>
+          <p className="text-xs text-white/50 leading-relaxed mt-1">
+            Fill out your partnership intent. On submission, this registers with the FCL Admin and opens your local email client configured for <span className="text-[#00e5ff] font-mono">{sponsor.email || 'futa.cl@yahoo.com'}</span>.
+          </p>
+        </div>
+
+        {errorMessage && (
+          <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl text-xs text-red-400 font-bold leading-relaxed flex items-start gap-2">
+            <span>⚠️</span>
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="bg-emerald-500/10 border border-emerald-500/25 p-4 rounded-xl text-xs text-emerald-400 font-black leading-relaxed flex items-start gap-2 animate-bounce">
+            <span>✔</span>
+            <span>{successMessage}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleConnect} className="space-y-4">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-[10px] text-white/40 font-bold uppercase tracking-widest block">Sender Name <span className="text-red-500">*</span></label>
+              <input 
+                type="text" 
+                required 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="John Doe"
+                className="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-white focus:border-[#00e5ff] outline-none"
+              />
+            </div>
+            
+            <div className="space-y-1.5">
+              <label className="text-[10px] text-white/40 font-bold uppercase tracking-widest block">Organization (Optional)</label>
+              <input 
+                type="text" 
+                value={organization}
+                onChange={(e) => setOrganization(e.target.value)}
+                placeholder="Apex Brands Ltd"
+                className="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-white focus:border-[#00e5ff] outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-[10px] text-[#00e5ff] font-bold uppercase tracking-widest block">Intent Category <span className="text-red-500">*</span></label>
+            <select 
+              value={intent}
+              onChange={(e) => setIntent(e.target.value)}
+              className="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-white focus:border-[#00e5ff] outline-none cursor-pointer"
+            >
+              <option value="Partnership">Partnership</option>
+              <option value="Advertising">Advertising</option>
+              <option value="Media Collaboration">Media Collaboration</option>
+            </select>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-[10px] text-white/40 font-bold uppercase tracking-widest block">Inquiry Message (Min 20 Chars) <span className="text-red-500">*</span></label>
+            <textarea 
+              rows={4} 
+              required
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Detail your request for collaboration, premium branding slots, event activations, or promotional campaigns..." 
+              className="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-xs font-medium text-white/90 focus:border-[#00e5ff] outline-none resize-none leading-relaxed"
+            />
+          </div>
+
+          {/* CAPTCHA */}
+          <div className="bg-white/[0.02] border border-white/5 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-4 justify-between">
+            <div className="flex items-center gap-3">
+              <div className="bg-[#0e1626] px-4 py-2 rounded-lg font-mono font-black border border-white/10 text-white text-sm select-none tracking-widest italic line-through shadow-inner">
+                {captchaCode}
+              </div>
+              <button 
+                type="button" 
+                onClick={generateNewCaptcha} 
+                className="text-[10px] text-[#00e5ff] font-black uppercase tracking-wider hover:underline"
+              >
+                Refresh
+              </button>
+            </div>
+            
+            <div className="w-full sm:w-auto">
+              <input 
+                type="text" 
+                required
+                value={captchaInput}
+                onChange={(e) => setCaptchaInput(e.target.value)}
+                placeholder="Verification code"
+                className="w-full bg-[#1e293b] border border-white/10 rounded-lg px-3 py-2 text-xs font-black uppercase text-white tracking-widest text-center focus:border-[#00e5ff] outline-none placeholder-white/30"
+              />
+            </div>
+          </div>
+
+          <div className="pt-2 flex justify-end gap-3">
+            <button 
+              type="button" 
+              onClick={onClose} 
+              className="px-5 py-3 border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-black uppercase tracking-wider cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="px-6 py-3 bg-[#00e5ff] hover:bg-[#00e5ff]/85 text-dark font-black rounded-xl text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer shadow-lg shadow-[#00e5ff]/10 disabled:opacity-50"
+            >
+              {isSubmitting ? 'Processing...' : 'Construct Email & Connect'}
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </div>
+  );
+};
+
+interface SponsorCardProps {
+  sponsor: Sponsor;
+  onContactClick?: (sponsor: Sponsor) => void;
+}
+
+const SponsorCard: React.FC<SponsorCardProps> = ({ sponsor, onContactClick }) => {
   const [showPlaceholder, setShowPlaceholder] = React.useState(!sponsor.logoUrl);
 
   const getInitials = (name: string) => {
@@ -31,21 +274,29 @@ const SponsorCard: React.FC<{ sponsor: Sponsor }> = ({ sponsor }) => {
   const initials = getInitials(sponsor.name);
 
   return (
-    <a 
-      href={sponsor.website || '#'}
-      target={sponsor.website && sponsor.website !== '#' ? '_blank' : undefined}
-      rel="noopener noreferrer"
-      className="glass group p-4 rounded-2xl border border-white/5 hover:border-[#00e5ff]/30 hover:shadow-[0_0_20px_rgba(0,229,255,0.05)] transition-all duration-300 flex flex-col justify-between items-center text-center h-44 relative overflow-hidden"
+    <div 
+      className="glass group p-6 rounded-3xl border border-white/5 hover:border-[#00e5ff]/30 hover:shadow-[0_0_20px_rgba(0,229,255,0.05)] transition-all duration-300 flex flex-col justify-between items-center text-center relative overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-[#00e5ff]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#00e5ff]/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
       
       {/* Category Label */}
-      <span className="text-[8px] font-black uppercase tracking-widest text-[#00e5ff] bg-[#00e5ff]/10 px-2.5 py-1 rounded-full mb-2 self-center border border-[#00e5ff]/15 z-10 font-mono">
-        {sponsor.category}
+      <span className="text-[8px] font-black uppercase tracking-widest text-[#00e5ff] bg-[#00e5ff]/10 px-2.5 py-1 rounded-full mb-3 self-center border border-[#00e5ff]/15 z-10 font-mono">
+        {sponsor.category || 'Sponsor'}
       </span>
 
       {/* Logo container */}
-      <div className="flex-1 flex items-center justify-center w-full min-h-[60px] mb-2 z-10">
+      <div 
+        onClick={() => {
+          if (sponsor.website && sponsor.website !== '#') {
+            window.open(sponsor.website, '_blank', 'noopener,noreferrer');
+          }
+        }}
+        className={cn(
+          "flex-1 flex items-center justify-center w-full min-h-[64px] mb-4 z-10",
+          sponsor.website && sponsor.website !== '#' ? 'cursor-pointer' : ''
+        )}
+        title={sponsor.website && sponsor.website !== '#' ? `Visit ${sponsor.name} website` : undefined}
+      >
         {!showPlaceholder && sponsor.logoUrl ? (
           <img 
             src={sponsor.logoUrl} 
@@ -55,26 +306,40 @@ const SponsorCard: React.FC<{ sponsor: Sponsor }> = ({ sponsor }) => {
           />
         ) : (
           /* Custom FCL Sponsor Logo Placeholder Box */
-          <div className="h-16 w-16 rounded-xl bg-white/[0.03] border border-white/10 group-hover:border-[#00e5ff]/30 text-white/30 group-hover:text-[#00e5ff]/80 font-mono flex flex-col items-center justify-center transition-all">
+          <div className="h-16 w-16 rounded-2xl bg-white/[0.03] border border-white/10 group-hover:border-[#00e5ff]/30 text-white/30 group-hover:text-[#00e5ff]/80 font-mono flex flex-col items-center justify-center transition-all">
             <span className="text-xl font-bold tracking-tight">{initials}</span>
             <span className="text-[7px] font-bold tracking-widest uppercase opacity-60 mt-0.5">FCL PARTNER</span>
           </div>
         )}
       </div>
 
-      {/* Sponsor Name */}
-      <div className="z-10 w-full">
-        <h5 className="text-xs font-bold text-gray-200 group-hover:text-white transition-colors tracking-tight line-clamp-1">{sponsor.name}</h5>
-        <span className="text-[8px] font-mono text-gray-500 uppercase tracking-widest block transform group-hover:translate-x-1 transition-transform">
-          {sponsor.tier || 'SPONSOR'}
+      {/* Sponsor Name & Details */}
+      <div className="z-10 w-full mb-4">
+        <h5 className="text-[13px] font-black text-gray-200 group-hover:text-white transition-colors tracking-tight line-clamp-1">{sponsor.name}</h5>
+        <span className="text-[8px] font-mono text-gray-500 uppercase tracking-widest block transform group-hover:translate-x-1 transition-transform mt-0.5 font-semibold">
+          {sponsor.tier || 'SPONSOR'} PARTNER
         </span>
       </div>
-    </a>
+
+      {/* Contact Button */}
+      {onContactClick && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onContactClick(sponsor);
+          }}
+          className="w-full py-2.5 bg-white/5 hover:bg-[#00e5ff] text-white hover:text-dark border border-white/10 hover:border-[#00e5ff] rounded-xl font-black text-[9px] uppercase tracking-widest transition-all z-10 cursor-pointer"
+        >
+          Contact Sponsor
+        </button>
+      )}
+    </div>
   );
 }
 
 export function Home() {
   const { matches, sponsors } = useMatchState();
+  const [contactSponsor, setContactSponsor] = React.useState<Sponsor | null>(null);
   const featuredMatch = matches.find(m => m.id === 'md1-1') || matches[0];
   const latestNews = NEWS.slice(0, 2);
   const topPlayers = PLAYERS.slice(0, 3);
@@ -393,7 +658,7 @@ export function Home() {
             {(sponsors && sponsors.length > 0 ? sponsors : SPONSORS)
               .filter(s => s.category === 'Sponsor')
               .map((sponsor) => (
-                <SponsorCard key={sponsor.id} sponsor={sponsor} />
+                <SponsorCard key={sponsor.id} sponsor={sponsor} onContactClick={setContactSponsor} />
               ))}
           </div>
         </div>
@@ -406,22 +671,114 @@ export function Home() {
               .filter(s => s.category === 'Media Partner')
               .map((sponsor) => (
                 <div key={sponsor.id} className="w-full md:w-60">
-                  <SponsorCard sponsor={sponsor} />
+                  <SponsorCard sponsor={sponsor} onContactClick={setContactSponsor} />
                 </div>
               ))}
           </div>
         </div>
       </section>
+
+      {contactSponsor && (
+        <SponsorContactModal 
+          sponsor={contactSponsor} 
+          onClose={() => setContactSponsor(null)} 
+        />
+      )}
     </div>
   );
 }
 export function Fixtures() {
-  const { matches } = useMatchState();
+  const { matches, editFixture, teams } = useMatchState();
   const [activeMW, setActiveMW] = React.useState(1);
+  const [viewTab, setViewTab] = React.useState<'fixtures' | 'referees'>('fixtures');
+  
+  // Referees search & filtering state
+  const [refereeSearch, setRefereeSearch] = React.useState('');
+  const [refFilterMW, setRefFilterMW] = React.useState<number | 'all'>('all');
+  const [refFilterStatus, setRefFilterStatus] = React.useState<'all' | 'assigned' | 'pending'>('all');
+
+  // Referee editing modal state
+  const [editingMatchId, setEditingMatchId] = React.useState<string | null>(null);
+  const [editRefName, setEditRefName] = React.useState('');
+  const [editRefAssigned, setEditRefAssigned] = React.useState(false);
+  const [editMatchApproved, setEditMatchApproved] = React.useState(false);
+  const [editPanelText, setEditPanelText] = React.useState('');
+
   const matchWeeks = [1, 2, 3]; 
 
   const filteredMatches = matches.filter(m => m.matchday === activeMW);
   const matchdayOpeningLabel = activeMW === 1 ? 'Season Opener & Week 1 (June 5-7)' : activeMW === 2 ? 'Mid-Season Clash (June 10-11)' : 'Final League Push (June 13-15)';
+
+  const isAdmin = !!localStorage.getItem('fcl_admin_user');
+
+  // Find team logo helper
+  const getTeamLogoUrl = (teamAbbr: string) => {
+    const t = teams.find(team => team.id.toLowerCase() === teamAbbr.toLowerCase());
+    return t?.logo || `https://api.dicebear.com/7.x/initials/svg?seed=${teamAbbr}`;
+  };
+
+  const getTeamName = (teamAbbr: string) => {
+    const t = teams.find(team => team.id.toLowerCase() === teamAbbr.toLowerCase());
+    return t?.name || teamAbbr;
+  };
+
+  // Open Referee Editor Dialog
+  const openRefereeEditor = (match: Match) => {
+    setEditingMatchId(match.id);
+    setEditRefName(match.referee || '');
+    setEditRefAssigned(!!match.refereeAssigned);
+    setEditMatchApproved(!!match.matchApproved);
+    setEditPanelText(match.officialsPanel ? match.officialsPanel.join('\n') : '');
+  };
+
+  // Save Referee Settings
+  const saveRefereeData = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingMatchId) return;
+
+    const panelList = editPanelText
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
+
+    const defaultPanel = panelList.length > 0 ? panelList : [
+      'Kickoff supervision',
+      'Foul adjudication',
+      'Card issuance (Yellow/Red)',
+      'Match timing control',
+      'Final match report validation'
+    ];
+
+    editFixture(editingMatchId, {
+      referee: editRefName.trim() || undefined,
+      refereeAssigned: editRefName.trim().length > 0 ? editRefAssigned : false,
+      matchApproved: editMatchApproved,
+      officialsPanel: editRefName.trim().length > 0 ? defaultPanel : []
+    });
+
+    setEditingMatchId(null);
+  };
+
+  // Filter referees schedule list
+  const filteredRefereesList = matches.filter(match => {
+    const searchLower = refereeSearch.toLowerCase();
+    const refereeMatched = match.referee?.toLowerCase().includes(searchLower);
+    const homeMatched = match.homeTeam.toLowerCase().includes(searchLower) || getTeamName(match.homeTeam).toLowerCase().includes(searchLower);
+    const awayMatched = match.awayTeam.toLowerCase().includes(searchLower) || getTeamName(match.awayTeam).toLowerCase().includes(searchLower);
+    const venueMatched = match.venue.toLowerCase().includes(searchLower);
+    
+    const matchesSearch = refereeSearch === '' || refereeMatched || (homeMatched || awayMatched || venueMatched);
+    const matchesMW = refFilterMW === 'all' || match.matchday === refFilterMW;
+    
+    let matchesStatus = true;
+    if (refFilterStatus === 'assigned') {
+      matchesStatus = !!match.referee;
+    } else if (refFilterStatus === 'pending') {
+      matchesStatus = !match.referee;
+    }
+
+    return matchesSearch && matchesMW && matchesStatus;
+  });
 
   return (
     <div>
@@ -431,48 +788,383 @@ export function Fixtures() {
       />
       
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
-        {/* Matchweek Selector */}
-        <div className="flex overflow-x-auto space-x-4 mb-4 py-4 no-scrollbar">
-          {matchWeeks.map((mw) => (
+        
+        {/* Tab Selection */}
+        <div className="flex justify-center mb-10">
+          <div className="bg-navy-dark border border-white/10 rounded-2xl p-1.5 flex gap-2 w-full max-w-md shadow-2xl">
             <button
-              key={mw}
-              onClick={() => setActiveMW(mw)}
+              onClick={() => setViewTab('fixtures')}
               className={cn(
-                "px-8 py-4 rounded-2xl font-black text-xs tracking-widest flex-shrink-0 transition-all border uppercase",
-                activeMW === mw 
-                  ? "bg-primary text-dark border-primary shadow-[0_0_20px_rgba(0,229,255,0.3)]" 
-                  : "bg-white/5 text-white/50 border-white/10 hover:bg-white/10"
+                "flex-1 py-3 rounded-xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer",
+                viewTab === 'fixtures'
+                  ? 'bg-primary text-dark shadow-[0_0_15px_rgba(0,229,255,0.35)]'
+                  : 'text-white/40 hover:text-white/80 hover:bg-white/[0.02]'
               )}
             >
-              MATCHDAY {mw < 10 ? `0${mw}` : mw}
+              <Trophy size={13} />
+              <span>Fixtures Roster</span>
             </button>
-          ))}
+            <button
+              onClick={() => setViewTab('referees')}
+              className={cn(
+                "flex-1 py-3 rounded-xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer",
+                viewTab === 'referees'
+                  ? 'bg-[#00e5ff] text-dark shadow-[0_0_15px_rgba(0,229,255,0.35)]'
+                  : 'text-white/40 hover:text-white/80 hover:bg-white/[0.02]'
+              )}
+            >
+              <ShieldCheck size={13} />
+              <span>Officiating Schedule</span>
+            </button>
+          </div>
         </div>
 
-        <div className="mb-12 text-center py-6 glass rounded-3xl border border-white/5 bg-white/[0.02]">
-          <h3 className="text-xl font-display italic uppercase text-primary tracking-tighter">{matchdayOpeningLabel}</h3>
-        </div>
-
-        <div className="space-y-12">
-          {filteredMatches.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredMatches.map((match: Match) => (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  key={match.id}
+        {viewTab === 'fixtures' ? (
+          <>
+            {/* Matchweek Selector */}
+            <div className="flex overflow-x-auto space-x-4 mb-4 py-4 no-scrollbar">
+              {matchWeeks.map((mw) => (
+                <button
+                  key={mw}
+                  onClick={() => setActiveMW(mw)}
+                  className={cn(
+                    "px-8 py-4 rounded-2xl font-black text-xs tracking-widest flex-shrink-0 transition-all border uppercase",
+                    activeMW === mw 
+                      ? "bg-primary text-dark border-primary shadow-[0_0_20px_rgba(0,229,255,0.3)]" 
+                      : "bg-white/5 text-white/50 border-white/10 hover:bg-white/10"
+                  )}
                 >
-                  <MatchCard match={match} />
-                </motion.div>
+                  MATCHDAY {mw < 10 ? `0${mw}` : mw}
+                </button>
               ))}
             </div>
-          ) : (
-            <div className="text-center py-20 glass rounded-[40px]">
-              <p className="text-white/30 font-display italic text-2xl uppercase tracking-widest">No fixtures scheduled yet for MW{activeMW}</p>
+
+            <div className="mb-12 text-center py-6 glass rounded-3xl border border-white/5 bg-white/[0.02]">
+              <h3 className="text-xl font-display italic uppercase text-primary tracking-tighter">{matchdayOpeningLabel}</h3>
             </div>
-          )}
-        </div>
+
+            <div className="space-y-12">
+              {filteredMatches.length > 0 ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredMatches.map((match: Match) => (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      key={match.id}
+                    >
+                      <MatchCard match={match} />
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-20 glass rounded-[40px]">
+                  <p className="text-white/30 font-display italic text-2xl uppercase tracking-widest">No fixtures scheduled yet for MW{activeMW}</p>
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
+          <div className="space-y-8">
+            {/* Advanced Filters & Search Bar */}
+            <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60 space-y-4">
+              <div className="flex flex-col md:flex-row gap-4 items-center">
+                
+                {/* Search */}
+                <div className="relative w-full md:flex-1">
+                  <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
+                  <input
+                    type="text"
+                    value={refereeSearch}
+                    onChange={(e) => setRefereeSearch(e.target.value)}
+                    placeholder="Search by referee name, team name, venue or details..."
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl pl-11 pr-5 py-4 text-xs font-bold font-sans tracking-wide focus:border-[#00e5ff] outline-none text-white placeholder-white/30"
+                  />
+                </div>
+
+                {/* Matchday filter */}
+                <div className="flex gap-2 w-full md:w-auto">
+                  <span className="text-[10px] text-white/40 font-black uppercase tracking-wider self-center hidden lg:inline">Matchday:</span>
+                  <select
+                    value={refFilterMW}
+                    onChange={(e) => setRefFilterMW(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+                    className="bg-navy border border-white/10 rounded-2xl px-5 py-4 text-xs font-bold uppercase tracking-wider text-white focus:border-[#00e5ff] outline-none cursor-pointer flex-1 md:flex-none"
+                  >
+                    <option value="all">ALL MATCHDAYS</option>
+                    <option value="1">MATCHDAY 1</option>
+                    <option value="2">MATCHDAY 2</option>
+                    <option value="3">MATCHDAY 3</option>
+                  </select>
+                </div>
+
+                {/* Status filter */}
+                <div className="flex gap-2 w-full md:w-auto">
+                  <span className="text-[10px] text-white/40 font-black uppercase tracking-wider self-center hidden lg:inline">Status:</span>
+                  <select
+                    value={refFilterStatus}
+                    onChange={(e) => setRefFilterStatus(e.target.value as any)}
+                    className="bg-navy border border-white/10 rounded-2xl px-5 py-4 text-xs font-bold uppercase tracking-wider text-white focus:border-[#00e5ff] outline-none cursor-pointer flex-1 md:flex-none"
+                  >
+                    <option value="all">ALL STATUSES</option>
+                    <option value="assigned">ASSIGNED REFEREE</option>
+                    <option value="pending">PENDING ASSIGNMENT</option>
+                  </select>
+                </div>
+
+              </div>
+
+              {/* Quick Info Bar */}
+              <div className="pt-4 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center text-[10px] text-white/40 font-bold uppercase tracking-wider gap-2">
+                <div>
+                  💡 Total matches scheduled: <span className="text-[#00e5ff] font-black">{matches.length} matches</span> (showing {filteredRefereesList.length})
+                </div>
+                {isAdmin && (
+                  <div className="text-emerald-400 font-extrabold flex items-center gap-1">
+                    <span>👑 Admin Privileges Active</span>
+                    <span className="text-white/20">| Click match Edit buttons to assign referee settings</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Officiating Cards List */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredRefereesList.map((matchObj: Match) => {
+                const isAssigned = !!matchObj.referee;
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    key={matchObj.id}
+                    className={cn(
+                      "glass border rounded-[32px] p-6 bg-navy/40 flex flex-col justify-between space-y-4 text-left transition-all hover:scale-[1.01]",
+                      isAssigned ? "border-white/10" : "border-amber-500/20 bg-amber-500/5"
+                    )}
+                  >
+                    {/* Header: Match details */}
+                    <div>
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-[9px] bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-[#00e5ff] font-semibold tracking-widest uppercase">
+                          Matchday 0{matchObj.matchday}
+                        </span>
+                        
+                        {isAssigned ? (
+                          <span className="text-[9px] text-emerald-400 font-bold uppercase tracking-wide flex items-center gap-1 bg-emerald-400/10 px-2 py-0.5 rounded-md border border-emerald-400/20">
+                            ✔ Assigned
+                          </span>
+                        ) : (
+                          <span className="text-[9px] text-amber-500 font-bold uppercase tracking-wide flex items-center gap-1 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/30">
+                            ⏳ Pending
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Teams display */}
+                      <div className="flex items-center justify-between py-3 border-b border-white/5">
+                        <div className="flex items-center gap-2">
+                          <TeamLogo src={getTeamLogoUrl(matchObj.homeTeam)} size={28} className="border border-white/10 p-0.5 rounded-md" />
+                          <span className="font-sans font-bold text-sm tracking-tight text-white">{matchObj.homeTeam}</span>
+                        </div>
+                        <span className="text-[10px] text-white/30 lowercase font-mono">vs</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-sans font-bold text-sm tracking-tight text-white">{matchObj.awayTeam}</span>
+                          <TeamLogo src={getTeamLogoUrl(matchObj.awayTeam)} size={28} className="border border-white/10 p-0.5 rounded-md" />
+                        </div>
+                      </div>
+
+                      {/* Venue / Timing details */}
+                      <div className="pt-2 text-[10px] space-y-1 font-mono text-white/40">
+                        <p>📅 Date: <span className="text-white/60 font-semibold">{matchObj.date}</span></p>
+                        <p>⏰ Time: <span className="text-white/60 font-semibold">{matchObj.time}</span></p>
+                        <p>🏟 Venue: <span className="text-white/60 font-semibold">{matchObj.venue}</span></p>
+                      </div>
+
+                      {/* Official Referee Area */}
+                      <div className="mt-4 pt-3 border-t border-white/5 space-y-3">
+                        <span className="text-[9px] text-white/30 font-bold tracking-widest uppercase block">OFFICIAL REFEREE</span>
+                        {isAssigned ? (
+                          <div className="flex items-center justify-between">
+                            <span className="font-sans font-black text-white text-base flex items-center gap-2">
+                              <span>👮</span> {matchObj.referee}
+                            </span>
+                            
+                            {isAdmin && (
+                              <button
+                                onClick={() => openRefereeEditor(matchObj)}
+                                className="p-1.5 bg-[#00e5ff]/10 hover:bg-[#00e5ff] text-[#00e5ff] hover:text-dark rounded-lg transition-colors border border-[#00e5ff]/20 cursor-pointer"
+                                title="Edit Referee"
+                              >
+                                <Edit2 size={11} />
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-between">
+                            <span className="text-amber-500/80 font-bold text-xs italic">Awaiting Commission Assignment</span>
+                            {isAdmin ? (
+                              <button
+                                onClick={() => openRefereeEditor(matchObj)}
+                                className="px-3 py-1 bg-[#00e5ff] hover:bg-[#00e5ff]/80 text-dark font-black text-[9px] rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1 cursor-pointer"
+                              >
+                                <Edit2 size={10} /> Assign
+                              </button>
+                            ) : null}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Officials Panel sub-items */}
+                      {isAssigned && matchObj.officialsPanel && matchObj.officialsPanel.length > 0 && (
+                        <div className="mt-4 space-y-2">
+                          <span className="text-[8px] text-white/40 font-mono tracking-widest uppercase block">OFFICIALS PANEL CHECKS</span>
+                          <ul className="space-y-1 border border-white/5 rounded-xl p-3 bg-white/[0.02]">
+                            {matchObj.officialsPanel.map((chk, i) => (
+                              <li key={i} className="text-[10px] text-white/50 leading-relaxed font-semibold flex gap-1.5 items-start">
+                                <span className="text-[#00e5ff] font-bold">•</span>
+                                <span>{chk}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Footer approval actions */}
+                    {isAssigned && (
+                      <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[10px] font-bold tracking-wider">
+                        <span className={cn(
+                          "uppercase",
+                          matchObj.matchApproved ? "text-emerald-400" : "text-amber-400"
+                        )}>
+                          Status: {matchObj.matchApproved ? "✔ Match Approved for Officiating" : "⏳ Pending Match Approval"}
+                        </span>
+                        
+                        {!matchObj.matchApproved && isAdmin && (
+                          <button
+                            onClick={() => {
+                              editFixture(matchObj.id, { matchApproved: true });
+                            }}
+                            className="text-[9px] bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold uppercase px-2 py-0.5 rounded-md cursor-pointer"
+                          >
+                            Approve
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
+
+              {filteredRefereesList.length === 0 && (
+                <div className="col-span-full text-center py-24 glass rounded-[40px] border border-white/10 space-y-3">
+                  <AlertCircle className="text-white/20 mx-auto w-10 h-10" />
+                  <p className="text-lg font-display font-black text-white/40 uppercase tracking-widest italic">No match referees found</p>
+                  <p className="text-xs text-white/25">
+                    No schedules match your specified keywords or search queries. Try clearing some filters.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
       </section>
+
+      {/* ADMIN EDIT MODAL / SCREEN OVERLAY */}
+      {editingMatchId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark/80 backdrop-blur-md">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full max-w-lg bg-navy-dark border border-white/10 rounded-[32px] p-6 shadow-2xl relative space-y-6 text-left"
+          >
+            {/* Modal Heading */}
+            <div className="pb-4 border-b border-white/5">
+              <h3 className="text-lg font-display font-black uppercase text-white tracking-widest">⚙️ OFFICIATING PANEL ASSIGNMENT</h3>
+              <p className="text-xs text-white/40 mt-1">
+                FCL Commissioner console. Set the head referee & compliance supervision checklist.
+              </p>
+            </div>
+
+            <form onSubmit={saveRefereeData} className="space-y-4">
+              {/* Referee Name */}
+              <div className="space-y-2">
+                <label className="text-[10px] text-[#00e5ff] font-bold tracking-widest uppercase block">REFEREE NAME</label>
+                <input
+                  type="text"
+                  required
+                  value={editRefName}
+                  onChange={(e) => setEditRefName(e.target.value)}
+                  placeholder="Enter Full Name (e.g. Adesiyan Victor)"
+                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-xs font-bold focus:border-[#00e5ff] outline-none text-white font-sans"
+                />
+              </div>
+
+              {/* Toggles */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-1">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editRefAssigned}
+                      onChange={(e) => setEditRefAssigned(e.target.checked)}
+                      className="w-4 h-4 rounded text-[#00e5ff]"
+                    />
+                    <span className="text-[10px] text-white font-black uppercase tracking-wider">REF ASSIGNED</span>
+                  </label>
+                  <p className="text-[9px] text-white/40 leading-normal">Referee officially confirmed and delegated to fixture</p>
+                </div>
+
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-1">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editMatchApproved}
+                      onChange={(e) => setEditMatchApproved(e.target.checked)}
+                      className="w-4 h-4 rounded text-[#00e5ff]"
+                    />
+                    <span className="text-[10px] text-white font-black uppercase tracking-wider">MATCH APPROVED</span>
+                  </label>
+                  <p className="text-[9px] text-white/40 leading-normal">FCL committee authorizes match to kickoff under standards</p>
+                </div>
+              </div>
+
+              {/* Officials Panel */}
+              <div className="space-y-2">
+                <label className="text-[10px] text-[#00e5ff] font-bold tracking-widest uppercase block">
+                  OFFICIALS PANEL / COMPLIANCE RULES (One per line)
+                </label>
+                <textarea
+                  value={editPanelText}
+                  onChange={(e) => setEditPanelText(e.target.value)}
+                  placeholder="Kickoff supervision&#13;Foul adjudication&#13;Card issuance (Yellow/Red)&#13;Match timing control&#13;Final match report validation"
+                  rows={4}
+                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-xs font-medium focus:border-[#00e5ff] outline-none text-white/80 font-mono whitespace-pre leading-relaxed"
+                />
+                <span className="text-[9px] text-white/30 block">
+                  Leave blank to apply standard FCL tournament panel checks automatically on save.
+                </span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-4 border-t border-white/5 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setEditingMatchId(null)}
+                  className="px-5 py-3 border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-3 bg-[#00e5ff] hover:bg-[#00e5ff]/80 text-dark font-black rounded-xl text-xs uppercase tracking-wider transition-all cursor-pointer"
+                >
+                  Save settings
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1915,6 +2607,7 @@ export function News() {
   );
 }
 export function Sponsorship() {
+  const [contactSponsor, setContactSponsor] = React.useState<Sponsor | null>(null);
   const tiers = [
     {
       name: 'GOLDEN PARTNER',
@@ -2037,7 +2730,39 @@ export function Sponsorship() {
             </div>
           ))}
         </div>
+
+        {/* Active Partners & Sponsors Showcase */}
+        <div className="mt-32 pt-20 border-t border-white/5 space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-4">
+            <span className="text-[10px] text-[#00e5ff] bg-[#00e5ff]/10 px-4 py-1.5 rounded-full font-black uppercase tracking-widest font-mono border border-[#00e5ff]/20">
+              OFFICIAL PARTNERS NETWORK
+            </span>
+            <h2 className="text-4xl font-display italic uppercase tracking-tighter leading-none text-white mt-1">
+              OUR 2026 SPONSOR & MEDIA COALITION
+            </h2>
+            <p className="text-white/40 text-xs sm:text-sm leading-relaxed font-sans">
+              Explore our current partners supporting the FUTA Champions League. Click the contact button on any partner card to initiate a direct sponsorship or media communication pathway.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            {SPONSORS.map((sponsor) => (
+              <SponsorCard 
+                key={sponsor.id} 
+                sponsor={sponsor} 
+                onContactClick={setContactSponsor} 
+              />
+            ))}
+          </div>
+        </div>
       </section>
+
+      {contactSponsor && (
+        <SponsorContactModal 
+          sponsor={contactSponsor} 
+          onClose={() => setContactSponsor(null)} 
+        />
+      )}
     </div>
   );
 }
@@ -2087,6 +2812,207 @@ export function About() {
   );
 }
 export function Contact() {
+  const { currentUser } = useMatchState();
+  const [activeTab, setActiveTab] = React.useState<'form' | 'admin'>('form');
+
+  // Inquiry Form Fields
+  const [fullName, setFullName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [phone, setPhone] = React.useState('');
+  const [category, setCategory] = React.useState('General Inquiry');
+  const [subject, setSubject] = React.useState('');
+  const [message, setMessage] = React.useState('');
+
+  // Submit Status
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [infoMessage, setInfoMessage] = React.useState('');
+  const [successMessage, setSuccessMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState('');
+
+  // CAPTCHA State
+  const [captchaCode, setCaptchaCode] = React.useState('');
+  const [captchaInput, setCaptchaInput] = React.useState('');
+
+  // Admin View Inquiries Database
+  const [inquiries, setInquiries] = React.useState<any[]>([]);
+  const [isAdminLoading, setIsAdminLoading] = React.useState(false);
+  const [adminSearch, setAdminSearch] = React.useState('');
+  const [adminCategoryFilter, setAdminCategoryFilter] = React.useState('All');
+  const [adminStatusFilter, setAdminStatusFilter] = React.useState('All');
+  const [expandedInquiryId, setExpandedInquiryId] = React.useState<string | null>(null);
+
+  // Generate a random visual CAPTCHA code
+  const generateCaptcha = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = '';
+    for (let i = 0; i < 4; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setCaptchaCode(code);
+    setCaptchaInput('');
+  };
+
+  React.useEffect(() => {
+    generateCaptcha();
+  }, []);
+
+  // Fetch inquiries for administrators
+  const fetchInquiries = async () => {
+    if (!currentUser) return;
+    setIsAdminLoading(true);
+    try {
+      const response = await fclApi.getInquiries();
+      if (response && response.success) {
+        setInquiries(response.inquiries || []);
+      }
+    } catch (err) {
+      console.error('Failed to load admin inquiries:', err);
+    } finally {
+      setIsAdminLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    if (activeTab === 'admin' && currentUser) {
+      fetchInquiries();
+    }
+  }, [activeTab, currentUser]);
+
+  const handleStatusUpdate = async (id: string, currentStatus: string) => {
+    let nextStatus: 'Unread' | 'Read' | 'Responded' = 'Read';
+    if (currentStatus === 'Unread') nextStatus = 'Read';
+    else if (currentStatus === 'Read') nextStatus = 'Responded';
+    else nextStatus = 'Unread';
+
+    try {
+      const resp = await fclApi.updateInquiryStatus(id, nextStatus);
+      if (resp && resp.success) {
+        setInquiries(prev => prev.map(item => item.id === id ? { ...item, status: nextStatus } : item));
+      }
+    } catch (err) {
+      console.error('Failed to update inquiry status:', err);
+    }
+  };
+
+  const handleDeleteInquiry = async (id: string) => {
+    if (!window.confirm('Are you sure you want to permanently delete this inquiry?')) return;
+    try {
+      const resp = await fclApi.deleteInquiry(id);
+      if (resp && resp.success) {
+        setInquiries(prev => prev.filter(item => item.id !== id));
+        if (expandedInquiryId === id) setExpandedInquiryId(null);
+      }
+    } catch (err) {
+      console.error('Failed to delete inquiry:', err);
+    }
+  };
+
+  // Submit Inquiry Form
+  const handleSubmitInquiry = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage('');
+    setSuccessMessage('');
+    setInfoMessage('');
+
+    // Primary Validation Rules
+    if (!fullName.trim()) {
+      setErrorMessage('Full Name is required.');
+      return;
+    }
+    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setErrorMessage('Please enter a valid email address.');
+      return;
+    }
+    const officialCategories = [
+      'General Inquiry',
+      'Fixture Information',
+      'Ticketing / Attendance',
+      'Media & Press',
+      'Technical Support',
+      'Complaint',
+      'Sponsorship Proposal'
+    ];
+    if (!officialCategories.includes(category)) {
+      setErrorMessage('Please select a valid message classification category.');
+      return;
+    }
+    if (!subject.trim()) {
+      setErrorMessage('Subject is required.');
+      return;
+    }
+    if (!message.trim() || message.trim().length < 20) {
+      setErrorMessage('Message must contain at least 20 characters.');
+      return;
+    }
+
+    // CAPTCHA verification
+    if (captchaInput.trim().toUpperCase() !== captchaCode) {
+      setErrorMessage('Verification code is incorrect. Please check and try again.');
+      return;
+    }
+
+    // 30-Seconds Rate limiting anti-spam check
+    const now = Date.now();
+    const lastSubmit = localStorage.getItem('fcl_last_contact_submit');
+    if (lastSubmit) {
+      const elapsed = now - parseInt(lastSubmit);
+      if (elapsed < 30000) {
+        const remaining = Math.ceil((30000 - elapsed) / 1000);
+        setErrorMessage(`Security Lock: Please wait ${remaining} seconds before submitting another inquiry.`);
+        return;
+      }
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fclApi.submitInquiry({
+        name: fullName.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        category,
+        subject: subject.trim(),
+        message: message.trim()
+      });
+
+      if (response && response.success) {
+        // Log submission timestamp for client side protection
+        localStorage.setItem('fcl_last_contact_submit', String(now));
+        
+        setSuccessMessage('Your message has been successfully sent to the FUTA Champions League Committee. We will respond shortly.');
+        
+        // Reset inputs
+        setFullName('');
+        setEmail('');
+        setPhone('');
+        setCategory('General Inquiry');
+        setSubject('');
+        setMessage('');
+        generateCaptcha();
+      } else {
+        setErrorMessage('Message could not be delivered. Please try again or contact us directly via email.');
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMessage('Message could not be delivered. Please try again or contact us directly via email.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Filter inquiries
+  const filteredInquiries = inquiries.filter(item => {
+    const matchesSearch = 
+      item.name.toLowerCase().includes(adminSearch.toLowerCase()) ||
+      item.subject.toLowerCase().includes(adminSearch.toLowerCase()) ||
+      item.message.toLowerCase().includes(adminSearch.toLowerCase());
+    
+    const matchesCategory = adminCategoryFilter === 'All' || item.category === adminCategoryFilter;
+    const matchesStatus = adminStatusFilter === 'All' || item.status === adminStatusFilter;
+
+    return matchesSearch && matchesCategory && matchesStatus;
+  });
+
   return (
     <div>
       <PageHeader 
@@ -2095,131 +3021,440 @@ export function Contact() {
       />
       
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
-        <div className="grid lg:grid-cols-2 gap-16">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="glass rounded-[40px] p-8 sm:p-12 relative overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl -mr-16 -mt-16" />
-            
-            <div className="flex items-center space-x-3 mb-8">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <ShieldCheck className="text-primary w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-bold text-primary uppercase tracking-[0.3em]">Official Inquiry Form</span>
-            </div>
-
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid sm:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-2">Full Name</label>
-                  <input type="text" className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 focus:border-primary outline-none transition-all" placeholder="John Doe" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-2">Email Address</label>
-                  <input type="email" className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 focus:border-primary outline-none transition-all" placeholder="john@example.com" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-2">Subject (Optional)</label>
-                <select className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 focus:border-primary outline-none appearance-none cursor-pointer">
-                  <option>General Inquiry</option>
-                  <option>Sponsorship & Partnership</option>
-                  <option>Media & Press</option>
-                  <option>Complaints & Feedback</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-2">Message</label>
-                <textarea rows={5} className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 focus:border-primary outline-none transition-all resize-none" placeholder="How can we help the FCL organizers today?" />
-              </div>
-              
-              <div className="flex items-center space-x-3 py-2">
-                <Clock className="text-white/20 w-4 h-4" />
-                <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest italic">Response Expectation: 24–48 hours</span>
-              </div>
-
-              <button className="w-full py-5 sporty-gradient rounded-2xl font-black tracking-widest uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-primary/20">
-                SEND OFFICIAL MESSAGE
+        {/* Toggle Admin Feed if administrative role is detected */}
+        {currentUser && (
+          <div className="flex justify-center mb-12">
+            <div className="bg-navy border border-white/10 p-1.5 rounded-full flex gap-2">
+              <button
+                onClick={() => setActiveTab('form')}
+                className={cn(
+                  "px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all cursor-pointer",
+                  activeTab === 'form' 
+                    ? "bg-[#00e5ff] text-dark shadow-md" 
+                    : "text-white/60 hover:text-white hover:bg-white/5"
+                )}
+              >
+                Inquiry Form
               </button>
-            </form>
-          </motion.div>
-
-          <div className="flex flex-col justify-between space-y-12">
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="space-y-8"
-            >
-              <div>
-                <h3 className="text-2xl font-display mb-8 italic uppercase tracking-tighter">Official Channels</h3>
-                <div className="space-y-4">
-                  <a href="mailto:futa.cl@yahoo.com" className="flex items-center space-x-6 glass p-6 rounded-3xl border border-white/10 hover:border-primary/40 transition-all group">
-                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform"><Mail size={28} /></div>
-                    <div>
-                      <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Email us at</div>
-                      <div className="text-xl font-bold font-mono tracking-tight">futa.cl@yahoo.com</div>
-                    </div>
-                  </a>
-
-                  <a href="tel:+2348027479363" className="flex items-center space-x-6 glass p-6 rounded-3xl border border-white/10 hover:border-primary/40 transition-all group">
-                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform"><Phone size={28} /></div>
-                    <div>
-                      <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Call for inquiries</div>
-                      <div className="text-xl font-bold font-mono tracking-tight">+234 802 747 9363</div>
-                    </div>
-                  </a>
-
-                  <a href="https://x.com/FUTA_CL" target="_blank" rel="noreferrer" className="flex items-center space-x-6 glass p-6 rounded-3xl border border-white/10 hover:border-blue-400/40 transition-all group">
-                    <div className="w-14 h-14 rounded-2xl bg-blue-400/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform"><Twitter size={28} /></div>
-                    <div>
-                      <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Follow on X/Twitter</div>
-                      <div className="text-xl font-bold font-mono tracking-tight">@FUTA_CL</div>
-                    </div>
-                  </a>
-                </div>
-              </div>
-
-              <div className="relative group">
-                <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-0 group-hover:scale-100 transition-transform duration-700" />
-                <div className="relative glass rounded-[40px] p-10 border border-primary/20 text-center flex flex-col items-center">
-                  <Trophy className="text-primary w-12 h-12 mb-6 animate-pulse" />
-                  <h4 className="text-xl font-display italic uppercase mb-2 tracking-tighter">Grow Your Brand with FCL</h4>
-                  <p className="text-xs text-white/50 mb-8 leading-relaxed max-w-xs">
-                    Join our elite network of partners and connect with 25,000+ passionate students and fans.
-                  </p>
-                  <Link 
-                    to="/sponsorship" 
-                    className="w-full py-4 glass border border-white/10 rounded-2xl text-xs font-bold tracking-widest hover:bg-white/10 transition-all flex items-center justify-center uppercase"
-                  >
-                    Become a Sponsor
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div 
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ delay: 0.4 }}
-               className="p-8 glass rounded-[40px] border border-white/5 bg-white/[0.01] relative"
-            >
-              <div className="flex items-start space-x-4">
-                <div className="mt-1"><ShieldCheck className="text-primary w-5 h-5" /></div>
-                <div>
-                  <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-2">Trust Statement</h4>
-                  <p className="text-xs text-white/40 leading-relaxed italic">
-                    “Official communication channel for FUTA Champions League organizers. All data shared via this form is handled securely according to FCL privacy standards.”
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+              <button
+                onClick={() => setActiveTab('admin')}
+                className={cn(
+                  "px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all cursor-pointer flex items-center gap-2",
+                  activeTab === 'admin' 
+                    ? "bg-[#00e5ff] text-dark shadow-md" 
+                    : "text-white/70 hover:text-white hover:bg-white/5"
+                )}
+              >
+                <Inbox size={14} className="animate-pulse text-[#00e5ff] group-hover:text-dark" />
+                Inquiry Feed ({inquiries.length})
+              </button>
+            </div>
           </div>
-        </div>
+        )}
+
+        <AnimatePresence mode="wait">
+          {activeTab === 'form' ? (
+            <div className="grid lg:grid-cols-2 gap-16">
+              <motion.div 
+                key="form-container"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                className="glass rounded-[40px] p-8 sm:p-12 relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl -mr-16 -mt-16" />
+                
+                <div className="flex items-center space-x-3 mb-8">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <ShieldCheck className="text-primary w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em]">Official Inquiry Form</span>
+                </div>
+
+                {errorMessage && (
+                  <div className="bg-red-500/15 border border-red-500/25 p-4 rounded-2xl text-xs text-red-400 font-bold mb-6 flex items-start gap-3">
+                    <span className="mt-0.5">⚠️</span>
+                    <span className="leading-relaxed">{errorMessage}</span>
+                  </div>
+                )}
+
+                {successMessage && (
+                  <div className="bg-emerald-500/15 border border-emerald-500/25 p-4 rounded-2xl text-xs text-emerald-400 font-extrabold mb-6 flex items-start gap-3 animate-pulse">
+                    <span className="mt-0.5">✔</span>
+                    <span className="leading-relaxed">{successMessage}</span>
+                  </div>
+                )}
+
+                <form className="space-y-5" onSubmit={handleSubmitInquiry}>
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Full Name <span className="text-[#00e5ff]">*</span></label>
+                      <input 
+                        type="text" 
+                        required
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        className="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white focus:border-[#00e5ff] outline-none transition-all text-xs font-bold" 
+                        placeholder="John Doe" 
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Email address <span className="text-[#00e5ff]">*</span></label>
+                      <input 
+                        type="email" 
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white focus:border-[#00e5ff] outline-none transition-all text-xs font-bold" 
+                        placeholder="john@example.com" 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Category <span className="text-[#00e5ff]">*</span></label>
+                      <select 
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        className="w-full px-5 py-4 rounded-2xl bg-[#0b1329] border border-white/10 text-white focus:border-[#00e5ff] outline-none cursor-pointer text-xs font-bold appearance-none"
+                      >
+                        <option value="General Inquiry">General Inquiry</option>
+                        <option value="Fixture Information">Fixture Information</option>
+                        <option value="Ticketing / Attendance">Ticketing / Attendance</option>
+                        <option value="Media & Press">Media & Press</option>
+                        <option value="Technical Support">Technical Support</option>
+                        <option value="Complaint">Complaint</option>
+                        <option value="Sponsorship Proposal">Sponsorship Proposal</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Phone Number (Optional)</label>
+                      <input 
+                        type="tel" 
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white focus:border-[#00e5ff] outline-none transition-all text-xs font-bold" 
+                        placeholder="+234..." 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Subject <span className="text-[#00e5ff]">*</span></label>
+                    <input 
+                      type="text" 
+                      required
+                      value={subject}
+                      onChange={(e) => setSubject(e.target.value)}
+                      className="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white focus:border-[#00e5ff] outline-none transition-all text-xs font-bold" 
+                      placeholder="e.g. Media pass request / Sponsor inquiry" 
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Message (Min 20 Characters) <span className="text-[#00e5ff]">*</span></label>
+                    <textarea 
+                      rows={4} 
+                      required
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      className="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white focus:border-[#00e5ff] outline-none transition-all text-xs resize-none font-medium leading-relaxed" 
+                      placeholder="Write your detailed inquiry here..." 
+                    />
+                  </div>
+
+                  {/* Verification CAPTCHA widget */}
+                  <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4 justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-navy px-4 py-2 rounded-lg font-mono font-black border border-white/10 text-white text-base select-none tracking-widest skew-x-3 italic line-through decoration-dotted decoration-primary shadow-inner">
+                        {captchaCode}
+                      </div>
+                      <button 
+                        type="button" 
+                        onClick={generateCaptcha} 
+                        className="text-[10px] text-[#00e5ff] font-black uppercase tracking-wider hover:underline"
+                      >
+                        Change Code
+                      </button>
+                    </div>
+                    
+                    <div className="w-full sm:w-auto">
+                      <input 
+                        type="text" 
+                        required
+                        value={captchaInput}
+                        onChange={(e) => setCaptchaInput(e.target.value)}
+                        placeholder="Enter Captcha Code"
+                        className="w-full bg-[#111827] border border-white/10 rounded-xl px-4 py-3 text-xs font-black uppercase text-white tracking-widest text-center focus:border-[#00e5ff] outline-none placeholder-white/30"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-3 py-1">
+                    <Clock className="text-white/20 w-4 h-4" />
+                    <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest italic">Response Expectation: 24–48 hours</span>
+                  </div>
+
+                  <button 
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full py-5 sporty-gradient rounded-[20px] font-black tracking-widest text-dark text-xs uppercase hover:scale-[1.01] active:scale-95 transition-all shadow-lg shadow-primary/15 disabled:opacity-50 cursor-pointer"
+                  >
+                    {isSubmitting ? 'DELIVERING MESSAGE...' : 'SEND OFFICIAL INQUIRY'}
+                  </button>
+                </form>
+              </motion.div>
+
+              <div className="flex flex-col justify-between space-y-12">
+                <motion.div 
+                  key="channels-info"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="space-y-8"
+                >
+                  <div>
+                    <h3 className="text-2xl font-display mb-8 italic uppercase tracking-tighter text-white font-black">Official Channels</h3>
+                    <div className="space-y-4">
+                      <a href="mailto:futa.cl@yahoo.com" className="flex items-center space-x-6 glass p-6 rounded-3xl border border-white/10 hover:border-[#00e5ff]/40 transition-all group">
+                        <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-[#00e5ff] group-hover:scale-110 transition-transform"><Mail size={28} /></div>
+                        <div>
+                          <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Email us at</div>
+                          <div className="text-xl font-bold font-mono tracking-tight text-white select-all">futa.cl@yahoo.com</div>
+                        </div>
+                      </a>
+
+                      <a href="tel:+2348027479363" className="flex items-center space-x-6 glass p-6 rounded-3xl border border-white/10 hover:border-[#00e5ff]/40 transition-all group">
+                        <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-[#00e5ff] group-hover:scale-110 transition-transform"><Phone size={28} /></div>
+                        <div>
+                          <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Call for inquiries</div>
+                          <div className="text-xl font-bold font-mono tracking-tight text-white select-all">+{'(0)'}8027479363</div>
+                        </div>
+                      </a>
+
+                      <a href="https://x.com/FUTA_CL" target="_blank" rel="noreferrer" className="flex items-center space-x-6 glass p-6 rounded-3xl border border-white/10 hover:border-[#00e5ff]/40 transition-all group">
+                        <div className="w-14 h-14 rounded-2xl bg-blue-400/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform"><Twitter size={28} /></div>
+                        <div>
+                          <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Follow on X/Twitter</div>
+                          <div className="text-xl font-bold font-mono tracking-tight text-white">@FUTA_CL</div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-[#00e5ff]/10 blur-3xl rounded-full scale-0 group-hover:scale-100 transition-transform duration-700" />
+                    <div className="relative glass rounded-[40px] p-10 border border-[#00e5ff]/25 text-center flex flex-col items-center">
+                      <Trophy className="text-[#00e5ff] w-12 h-12 mb-6 animate-pulse" />
+                      <h4 className="text-xl font-display italic uppercase mb-2 tracking-tighter text-white font-black">Grow Your Brand with FCL</h4>
+                      <p className="text-xs text-white/50 mb-8 leading-relaxed max-w-xs font-sans">
+                        Join our elite network of partners and connect with 25,000+ passionate students, faculty, and local fans.
+                      </p>
+                      <Link 
+                        to="/sponsorship" 
+                        className="w-full py-4 glass border border-white/10 hover:border-[#00e5ff]/30 rounded-2xl text-xs font-bold tracking-widest hover:bg-white/10 transition-all flex items-center justify-center uppercase text-white"
+                      >
+                        Become a Sponsor
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </Link>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div 
+                  key="trust-box"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-8 glass rounded-[40px] border border-white/5 bg-white/[0.01] relative"
+                >
+                  <div className="flex items-start space-x-4">
+                    <div className="mt-1"><ShieldCheck className="text-[#00e5ff] w-5 h-5" /></div>
+                    <div>
+                      <h4 className="text-xs font-black text-white uppercase tracking-widest mb-2">Trust Statement</h4>
+                      <p className="text-xs text-white/40 leading-relaxed italic font-sans font-medium">
+                        “Official communication channel for FUTA Champions League organizers. All data shared via this form is handled securely according to FCL privacy standards.”
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          ) : (
+            // Admin View inquiries panel
+            <motion.div
+              key="admin-container"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              className="glass rounded-[40px] p-6 sm:p-10 relative overflow-hidden"
+            >
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8 border-b border-white/5 pb-6">
+                <div>
+                  <h3 className="text-2xl font-display uppercase italic text-white font-black">Inquiry Feed Panel</h3>
+                  <p className="text-xs text-white/40">Real-time coordinator list of messages received through the FUTA Champions League platform.</p>
+                </div>
+                
+                <button
+                  onClick={fetchInquiries}
+                  className="px-4 py-2.5 bg-white/5 border border-white/10 hover:border-[#00e5ff] hover:text-[#00e5ff] transition-all rounded-xl text-[10px] font-black uppercase tracking-widest cursor-pointer"
+                >
+                  Refresh Data
+                </button>
+              </div>
+
+              {/* Filtering Controls */}
+              <div className="grid sm:grid-cols-3 gap-4 mb-8">
+                {/* Search Bar */}
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-4 flex items-center text-white/30"><Search size={14} /></span>
+                  <input
+                    type="text"
+                    placeholder="Search by name, subject, body..."
+                    value={adminSearch}
+                    onChange={(e) => setAdminSearch(e.target.value)}
+                    className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 focus:border-[#00e5ff] rounded-2xl text-xs text-white outline-none font-medium"
+                  />
+                </div>
+
+                {/* Categories Dropdown Filter */}
+                <div className="relative">
+                  <select
+                    value={adminCategoryFilter}
+                    onChange={(e) => setAdminCategoryFilter(e.target.value)}
+                    className="w-full px-4 py-3 bg-[#0d1527] border border-white/10 text-white focus:border-[#00e5ff] rounded-2xl text-xs font-bold appearance-none cursor-pointer outline-none"
+                  >
+                    <option value="All">All Categories</option>
+                    <option value="General Inquiry">General Inquiry</option>
+                    <option value="Fixture Information">Fixture Information</option>
+                    <option value="Ticketing / Attendance">Ticketing / Attendance</option>
+                    <option value="Media & Press">Media & Press</option>
+                    <option value="Technical Support">Technical Support</option>
+                    <option value="Complaint">Complaint</option>
+                    <option value="Sponsorship Proposal">Sponsorship Proposal</option>
+                  </select>
+                </div>
+
+                {/* Status Dropdown Filter */}
+                <div className="relative">
+                  <select
+                    value={adminStatusFilter}
+                    onChange={(e) => setAdminStatusFilter(e.target.value)}
+                    className="w-full px-4 py-3 bg-[#0d1527] border border-white/10 text-white focus:border-[#00e5ff] rounded-2xl text-xs font-bold appearance-none cursor-pointer outline-none"
+                  >
+                    <option value="All">All Statuses</option>
+                    <option value="Unread">Unread</option>
+                    <option value="Read">Read</option>
+                    <option value="Responded">Responded</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Inquiries list feed container */}
+              {isAdminLoading ? (
+                <div className="flex flex-col items-center justify-center py-20">
+                  <div className="w-10 h-10 border-2 border-[#00e5ff] border-t-transparent animate-spin rounded-full mb-4"></div>
+                  <p className="text-xs text-white/40 tracking-widest uppercase font-black">Syncing records...</p>
+                </div>
+              ) : filteredInquiries.length === 0 ? (
+                <div className="text-center py-24 bg-white/[0.01] border border-dashed border-white/5 rounded-3xl">
+                  <p className="text-xs text-white/30 tracking-widest uppercase font-mono mb-2">No Records Found</p>
+                  <p className="text-xs text-white/50">Your criteria did not match any stored inquiry.</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {filteredInquiries.map((item) => {
+                    const isExpanded = expandedInquiryId === item.id;
+                    const dateFormatted = new Date(item.timestamp).toLocaleString();
+                    return (
+                      <div 
+                        key={item.id}
+                        className={cn(
+                          "border rounded-3xl p-5 hover:bg-white/[0.02] transition-all relative overflow-hidden",
+                          isExpanded ? "bg-white/[0.015] border-white/10 shadow-lg" : "border-white/5"
+                        )}
+                      >
+                        {/* Status bar marker */}
+                        <div className={cn(
+                          "absolute top-0 bottom-0 left-0 w-1",
+                          item.status === 'Unread' ? 'bg-red-500' : item.status === 'Read' ? 'bg-[#00e5ff]' : 'bg-emerald-500'
+                        )} />
+
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                          <div className="space-y-1">
+                            <div className="flex flex-wrap items-center gap-3">
+                              <h4 className="text-sm font-black text-white">{item.name}</h4>
+                              <span className="text-[9px] text-[#00e5ff] font-mono tracking-widest font-black uppercase bg-[#00e5ff]/10 px-2.5 py-1 rounded-full border border-[#00e5ff]/15">
+                                {item.category}
+                              </span>
+                              <span className={cn(
+                                "text-[9px] font-mono font-black uppercase px-2.5 py-1 rounded-full border",
+                                item.status === 'Unread' 
+                                  ? 'text-red-400 bg-red-500/10 border-red-500/20' 
+                                  : item.status === 'Read' 
+                                    ? 'text-[#00e5ff] bg-[#00e5ff]/10 border-[#00e5ff]/20' 
+                                    : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20'
+                              )}>
+                                {item.status || 'Unread'}
+                              </span>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] text-white/40 font-bold">
+                              <span>📧 {item.email}</span>
+                              {item.phone && <span>📞 {item.phone}</span>}
+                              <span>🕒 {dateFormatted}</span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => setExpandedInquiryId(isExpanded ? null : item.id)}
+                              className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-white text-[10px] uppercase font-black tracking-wider rounded-xl cursor-pointer"
+                            >
+                              {isExpanded ? 'Collapse' : 'Expand Message'}
+                            </button>
+                            <button
+                              onClick={() => handleStatusUpdate(item.id, item.status)}
+                              className="px-3 py-1.5 bg-[#00e5ff]/10 hover:bg-[#00e5ff]/25 text-[#00e5ff] text-[10px] uppercase font-black tracking-wider rounded-xl cursor-pointer border border-[#00e5ff]/20"
+                              title="Toggle status badge between Unread, Read, and Responded"
+                            >
+                              Cycle Status
+                            </button>
+                            <button
+                              onClick={() => handleDeleteInquiry(item.id)}
+                              className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/25 text-red-400 text-[10px] uppercase font-black rounded-xl cursor-pointer border border-red-500/20"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Expandable detailed view of the inquiry */}
+                        {isExpanded && (
+                          <motion.div 
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            className="mt-4 pt-4 border-t border-white/5 space-y-3 block"
+                          >
+                            <div>
+                              <span className="text-[10px] text-white/30 uppercase font-black tracking-wider block mb-1">Subject</span>
+                              <h5 className="text-xs text-white font-black">{item.subject}</h5>
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-white/30 uppercase font-black tracking-wider block mb-1">Message Content</span>
+                              <p className="text-xs text-white/80 leading-relaxed font-sans font-medium whitespace-pre-wrap bg-[#111827] border border-white/5 p-4 rounded-2xl">
+                                {item.message}
+                              </p>
+                            </div>
+                          </motion.div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </section>
     </div>
   );

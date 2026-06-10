@@ -203,5 +203,30 @@ export const fclApi = {
       method: 'POST',
       body: JSON.stringify({ logoData, filename })
     });
+  },
+
+  // Inquiries and message systems
+  async submitInquiry(data: { name: string; email: string; phone?: string; category: string; subject: string; message: string }): Promise<{ success: boolean; message: string }> {
+    return fetchApi('/api/inquiries', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async getInquiries(): Promise<{ success: boolean; inquiries: any[] }> {
+    return fetchApi('/api/inquiries');
+  },
+
+  async updateInquiryStatus(id: string, status: 'Unread' | 'Read' | 'Responded'): Promise<{ success: boolean; inquiry: any }> {
+    return fetchApi(`/api/inquiries/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    });
+  },
+
+  async deleteInquiry(id: string): Promise<{ success: boolean }> {
+    return fetchApi(`/api/inquiries/${id}`, {
+      method: 'DELETE'
+    });
   }
 };

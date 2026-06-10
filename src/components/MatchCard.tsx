@@ -290,6 +290,21 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
         </motion.div>
       )}
 
+      {match.manOfTheMatch && (
+        <div className="mt-4 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-yellow-500/10 via-[#00e5ff]/10 to-yellow-500/10 border border-yellow-500/20 flex items-center justify-between gap-2 shadow-inner">
+          <div className="flex items-center gap-2">
+            <span className="text-[14px]">🏅</span>
+            <div>
+              <span className="text-[7px] font-black text-yellow-400 uppercase tracking-widest block">MAN OF THE MATCH (MOTM)</span>
+              <span className="text-xs font-black text-white">{match.manOfTheMatch}</span>
+            </div>
+          </div>
+          <span className="text-[8px] font-bold text-white/55 font-mono bg-yellow-500/20 px-2.5 py-0.5 rounded-full border border-yellow-500/20 animate-pulse uppercase tracking-widest">
+            MVP
+          </span>
+        </div>
+      )}
+
       <div className="mt-6 pt-4 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex gap-3">
           <Link

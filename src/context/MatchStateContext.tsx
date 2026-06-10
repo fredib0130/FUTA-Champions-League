@@ -38,10 +38,16 @@ export interface DetailedMatchStats extends MatchStats {
   shotsAway: number;
   shotsOnTargetHome: number;
   shotsOnTargetAway: number;
-  foulsHome: number;
-  foulsAway: number;
+  cornerKicksHome?: number;
+  cornerKicksAway?: number;
+  yellowCardsHome: number;
+  yellowCardsAway: number;
+  redCardsHome: number;
+  redCardsAway: number;
   offsidesHome: number;
   offsidesAway: number;
+  foulsHome: number;
+  foulsAway: number;
   savesHome: number;
   savesAway: number;
   freeKicksHome: number;
@@ -385,7 +391,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             matchId: m.id,
             teamAbbr: m.homeTeam,
             formation: '4-3-3',
-            captainId: 'p-1',
+            captainId: 'player-1',
             players: {
               'GK': 'player-1', 'LB': 'player-2', 'CB1': 'player-3', 'CB2': 'player-4', 'RB': 'player-5',
               'DM': 'player-6', 'CM1': 'player-7', 'CM2': 'player-8', 'LW': 'player-9', 'ST': 'player-10', 'RW': 'player-11'
@@ -407,8 +413,54 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           }
         };
       });
-      localStorage.setItem('fcl_admin_lineups', JSON.stringify(loadedLineups));
     }
+
+    // Force/overlay MST official Matchday 1 lineup specifically for md1-1 (MST vs ICE)
+    loadedLineups['md1-1'] = {
+      home: {
+        matchId: 'md1-1',
+        teamAbbr: 'MST',
+        formation: '4-3-3',
+        captainId: 'player-mst-2', // Adeyemi Adedayo Ibrahim (Captain)
+        players: {
+          'GK': 'player-mst-1',  // Ogundeji Feyitunmise Hezekiah
+          'LB': 'player-mst-6',  // Philip Believe Oluwashina
+          'LCB': 'player-mst-5', // Bernard Augustine Obioma
+          'RCB': 'player-mst-2', // Adeyemi Adedayo Ibrahim (Captain)
+          'RB': 'player-mst-3',  // Akinnayajo Irewale
+          'LCM': 'player-mst-9', // Adediran Olanrewaju Abeeb
+          'CM': 'player-mst-10', // Iyare Praise
+          'RCM': 'player-mst-12',// Adekunle Ayomide Mubarak
+          'LW': 'player-mst-18', // Akintunde Ayomide Oluwaseyifunmi
+          'CF': 'player-mst-14', // Nkemjika Sydney
+          'RW': 'player-mst-17'  // Fabusuyi Daniel Oluwafisayo
+        },
+        bench: [
+          'Ojoisimi Bright Agbomizi',
+          'Adeniyi Ademola Daniel',
+          'Ademisoye Segun',
+          'Akinyo Boluwatife Precious',
+          'Olagunju Moses Temitope',
+          'Shomuyiwa Lateef Babatunde',
+          'Boyede Joseph Ayomide'
+        ],
+        status: 'Approved'
+      },
+      away: loadedLineups['md1-1']?.away || {
+        matchId: 'md1-1',
+        teamAbbr: 'ICE',
+        formation: '4-4-2',
+        captainId: 'player-12',
+        players: {
+          'GK': 'player-12', 'LB': 'player-13', 'CB1': 'player-14', 'CB2': 'player-15', 'RB': 'player-16',
+          'LM': 'player-17', 'CM1': 'player-18', 'CM2': 'player-19', 'RM': 'player-20', 'ST1': 'player-21', 'ST2': 'player-22'
+        },
+        bench: ['Tunde Williams', 'David Alaba', 'Davido', 'Asake', 'Rema'],
+        status: 'Pending'
+      }
+    };
+
+    localStorage.setItem('fcl_admin_lineups', JSON.stringify(loadedLineups));
     setLineups(loadedLineups);
 
     // 9. Commentary

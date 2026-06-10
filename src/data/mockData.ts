@@ -64,16 +64,55 @@ export const TEAMS: Team[] = [
   squad: []
 })).sort((a, b) => a.name.localeCompare(b.name));
 
-export const PLAYERS: Player[] = Array.from({ length: 150 }, (_, i) => ({
-  id: `player-${i + 1}`,
-  name: ['John Doe', 'Samuel Ade', 'Tunde Williams', 'Chidi Okafor', 'Victor Moses', 'David Alaba', 'Olamide Baddo', 'Femi Kuti', 'Burna Boy', 'Wiz Kid', 'Davido', 'Rema', 'Asake', 'Tiwa Savage', 'Yemi Alade'][i % 15] + ` ${i + 1}`,
-  position: ['FWD', 'MID', 'DEF', 'GK'][i % 4] as any,
-  goals: 0, // Reset to 0 for tournament launch
-  assists: 0,
-  cleanSheets: 0,
-  teamId: TEAMS[i % 20].id,
-  image: `https://api.dicebear.com/7.x/avataaars/svg?seed=player-${i + 1}`
-}));
+export const PLAYERS: Player[] = [
+  // Official MST Squad List
+  ...[
+    { name: "Ogundeji Feyitunmise Hezekiah", position: "GK" as const },
+    { name: "Adeyemi Adedayo Ibrahim", position: "DEF" as const },
+    { name: "Akinnayajo Irewale", position: "DEF" as const },
+    { name: "Ojoisimi Bright Agbomizi", position: "DEF" as const },
+    { name: "Bernard Augustine Obioma", position: "DEF" as const },
+    { name: "Philip Believe Oluwashina", position: "DEF" as const },
+    { name: "Adeniyi Ademola Daniel", position: "DEF" as const },
+    { name: "Ademisoye Segun", position: "DEF" as const },
+    { name: "Adediran Olanrewaju Abeeb", position: "MID" as const },
+    { name: "Iyare Praise", position: "MID" as const },
+    { name: "Akinyo Boluwatife Precious", position: "MID" as const },
+    { name: "Adekunle Ayomide Mubarak", position: "MID" as const },
+    { name: "Olagunju Moses Temitope", position: "MID" as const },
+    { name: "Nkemjika Sydney", position: "FWD" as const },
+    { name: "Shomuyiwa Lateef Babatunde", position: "FWD" as const },
+    { name: "Boyede Joseph Ayomide", position: "FWD" as const },
+    { name: "Fabusuyi Daniel Oluwafisayo", position: "FWD" as const },
+    { name: "Akintunde Ayomide Oluwaseyifunmi", position: "FWD" as const }
+  ].map((p, idx) => ({
+    id: `player-mst-${idx + 1}`,
+    name: p.name,
+    position: p.position,
+    goals: 0,
+    assists: 0,
+    cleanSheets: 0,
+    teamId: 'mst',
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=mst-player-${idx + 1}`
+  })),
+  // Auto-generate helper players for other teams to keep rosters occupied
+  ...Array.from({ length: 150 }, (_, i) => {
+    const team = TEAMS[i % TEAMS.length];
+    if (team.id === 'mst') {
+      return null;
+    }
+    return {
+      id: `player-${i + 1}`,
+      name: ['John Doe', 'Samuel Ade', 'Tunde Williams', 'Chidi Okafor', 'Victor Moses', 'David Alaba', 'Olamide Baddo', 'Femi Kuti', 'Burna Boy', 'Wiz Kid', 'Davido', 'Rema', 'Asake', 'Tiwa Savage', 'Yemi Alade'][i % 15] + ` ${i + 1}`,
+      position: ['FWD', 'MID', 'DEF', 'GK'][i % 4] as any,
+      goals: 0,
+      assists: 0,
+      cleanSheets: 0,
+      teamId: team.id,
+      image: `https://api.dicebear.com/7.x/avataaars/svg?seed=player-${i + 1}`
+    };
+  }).filter((p): p is any => p !== null) as Player[]
+];
 
 export const MATCHES: Match[] = [
   // --- MATCHDAY 1 (June 10 - 14) ---
@@ -93,6 +132,7 @@ export const MATCHES: Match[] = [
     referee: 'Adesiyan Victor',
     refereeAssigned: true,
     matchApproved: true,
+    manOfTheMatch: '',
     officialsPanel: [
       'Kickoff supervision',
       'Foul adjudication',
@@ -191,8 +231,8 @@ Building the Premier Inter-Departmental Football Competition in FUTA`,
 ];
 
 export const SPONSORS: Sponsor[] = [
-  { id: 'hua-express', name: 'HUA Express', logo: 'public/logos/HUA Express.jpg', logoUrl: 'public/logos/HUA Express.jpg', category: 'Sponsor', tier: 'GOLD', website: 'https://www.huaexpress.delivery/' },
-  { id: 'sydtech', name: 'Sydtech', logo: 'public/logos/Sydtech.jpg', logoUrl: null, category: 'Sponsor', tier: 'SILVER', website: '#' },
+  { id: 'hua-express', name: 'HUA Express', logo: 'public/logos/HUA Express.jpg', logoUrl: 'public/logos/HUA Express.jpg', category: 'Sponsor', tier: 'GOLD', website: 'https://www.huaexpress.delivery/', email: 'huaexpress@business.com' },
+  { id: 'sydtech', name: 'Sydtech', logo: 'public/logos/Sydtech.jpg', logoUrl: null, category: 'Sponsor', tier: 'SILVER', website: '#', email: 'contact@sydtech.com' },
   { id: 'chime-sports', name: 'Chime Sports', logo: 'public/logos/Chima Sports.jpg', logoUrl: null, category: 'Sponsor', tier: 'SILVER', website: '#' },
   { id: 'favy-scentual', name: 'Favy Scentual', logo: 'public/logos/Favy Scentual.jpg', logoUrl: null, category: 'Sponsor', tier: 'SILVER', website: '#' },
   { id: 'oyn', name: 'OYN', logo: 'public/logos/OYN.jpg', logoUrl: null, category: 'Sponsor', tier: 'SILVER', website: '#' },
