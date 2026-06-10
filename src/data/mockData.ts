@@ -115,13 +115,13 @@ export const PLAYERS: Player[] = [
 ];
 
 export const MATCHES: Match[] = [
-  // --- MATCHDAY 1 (June 10 - 14) ---
+  // --- MATCHDAY 1 (June 11 - 14) ---
   { 
     id: 'md1-1', 
     homeTeam: 'MST', 
     awayTeam: 'ICE', 
-    date: '2026-06-10', 
-    time: '16:00', 
+    date: '2026-06-11', 
+    time: '12:00', 
     venue: 'Main Pitch', 
     status: 'Upcoming', 
     homeScore: 0, 
