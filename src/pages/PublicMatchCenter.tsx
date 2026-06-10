@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useMatchState } from '../context/MatchStateContext';
 import { parseMinuteToNumeric, formatMinuteDisplay } from '../types';
 import { PLAYERS } from '../data/mockData';
+import { TeamLogo } from '../components/TeamLogo';
 import { 
   ArrowLeft, Radio, Trophy, Calendar, Sparkles, Award, Shield, FileText, Send, Clock, List, Users, X, ShieldCheck
 } from 'lucide-react';
@@ -304,7 +305,7 @@ export default function PublicMatchCenter() {
                   </div>
                 )}
               </div>
-              <img src={homeTeam.logo} alt={homeTeam.name} className="w-20 h-20 object-contain flex-shrink-0" />
+              <TeamLogo teamId={match.homeTeam} logoUrl={homeTeam.logoUrl} size="lg" className="w-20 h-20 object-contain flex-shrink-0" />
             </div>
 
             {/* Main center score block */}
@@ -357,7 +358,7 @@ export default function PublicMatchCenter() {
 
             {/* Away Team */}
             <div className="flex flex-col md:flex-row-reverse items-center gap-4 text-center md:text-left flex-1 justify-start">
-              <img src={awayTeam.logo} alt={awayTeam.name} className="w-20 h-20 object-contain flex-shrink-0" />
+              <TeamLogo teamId={match.awayTeam} logoUrl={awayTeam.logoUrl} size="lg" className="w-20 h-20 object-contain flex-shrink-0" />
               <div>
                 <h2 className="text-2xl font-display font-black leading-tight uppercase">{awayTeam.name}</h2>
                 <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mt-1">Status: Registered</p>

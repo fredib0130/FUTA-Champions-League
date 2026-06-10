@@ -592,18 +592,20 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     if (!existingOfficialFixtures) {
       loadedNews.unshift({
         id: 'news-official-fixtures-md1',
-        title: '🏆 OFFICIAL MATCHDAY 1 FIXTURES ANNOUNCED',
+        title: '🚨 RESCHEDULING OF OPENING MATCH FIXTURE 🚨',
         featuredImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
         author: 'FCL Committee',
         category: 'Committee Announcement',
-        body: 'The FUTA Champions League Committee has officially announced the rescheduled fixtures for Matchday 1, starting Thursday, 11th June 2026 with MST vs ICE at 12:00 PM on the Main Pitch, followed by full action on Saturday 13th June and Sunday 14th June.',
+        body: 'The Organizing Committee of the FUTA Champions League (FCL) wishes to inform all stakeholders that the Opening Match of the 2026 FUTA Champions League has been further rescheduled. This follows an earlier adjustment set for Wednesday, 10th June, 2026 (3:30 PM – 4:00 PM), which could not be sustained due to unforeseen weather conditions. The heavy rainfall experienced on Wednesday, 10th June, 2026 at about 2:00 PM significantly affected the playing surface, rendering it unfit for safe and competitive football. NEW DETAILS: Thursday, 11th June, 2026 at 12:00 Noon on the FUTA Football Pitch (MST vs ICE). Player safety and match quality remain our top priority.',
         tags: ['Matchday 1', 'Fixtures', 'Rescheduled', 'Official Bulletins'],
         isPublished: true,
-        createdAt: '2026-06-07 07:40'
+        createdAt: '2026-06-10 16:00'
       });
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     } else {
-      existingOfficialFixtures.body = 'The FUTA Champions League Committee has officially announced the rescheduled fixtures for Matchday 1, starting Thursday, 11th June 2026 with MST vs ICE at 12:00 PM on the Main Pitch, followed by full action on Saturday 13th June and Sunday 14th June.';
+      existingOfficialFixtures.title = '🚨 RESCHEDULING OF OPENING MATCH FIXTURE 🚨';
+      existingOfficialFixtures.body = 'The Organizing Committee of the FUTA Champions League (FCL) wishes to inform all stakeholders that the Opening Match of the 2026 FUTA Champions League has been further rescheduled. This follows an earlier adjustment set for Wednesday, 10th June, 2026 (3:30 PM – 4:00 PM), which could not be sustained due to unforeseen weather conditions. The heavy rainfall experienced on Wednesday, 10th June, 2026 at about 2:00 PM significantly affected the playing surface, rendering it unfit for safe and competitive football. NEW DETAILS: Thursday, 11th June, 2026 at 12:00 Noon on the FUTA Football Pitch (MST vs ICE). Player safety and match quality remain our top priority.';
+      existingOfficialFixtures.createdAt = '2026-06-10 16:00';
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
 

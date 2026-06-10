@@ -714,7 +714,7 @@ export function Fixtures() {
   // Find team logo helper
   const getTeamLogoUrl = (teamAbbr: string) => {
     const t = teams.find(team => team.id.toLowerCase() === teamAbbr.toLowerCase());
-    return t?.logo || `https://api.dicebear.com/7.x/initials/svg?seed=${teamAbbr}`;
+    return t?.logoUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${teamAbbr}`;
   };
 
   const getTeamName = (teamAbbr: string) => {
@@ -961,13 +961,13 @@ export function Fixtures() {
                       {/* Teams display */}
                       <div className="flex items-center justify-between py-3 border-b border-white/5">
                         <div className="flex items-center gap-2">
-                          <TeamLogo src={getTeamLogoUrl(matchObj.homeTeam)} size={28} className="border border-white/10 p-0.5 rounded-md" />
+                          <TeamLogo teamId={matchObj.homeTeam} logoUrl={getTeamLogoUrl(matchObj.homeTeam)} size="custom" className="w-7 h-7 border border-white/10 p-0.5 rounded-md" />
                           <span className="font-sans font-bold text-sm tracking-tight text-white">{matchObj.homeTeam}</span>
                         </div>
                         <span className="text-[10px] text-white/30 lowercase font-mono">vs</span>
                         <div className="flex items-center gap-2">
                           <span className="font-sans font-bold text-sm tracking-tight text-white">{matchObj.awayTeam}</span>
-                          <TeamLogo src={getTeamLogoUrl(matchObj.awayTeam)} size={28} className="border border-white/10 p-0.5 rounded-md" />
+                          <TeamLogo teamId={matchObj.awayTeam} logoUrl={getTeamLogoUrl(matchObj.awayTeam)} size="custom" className="w-7 h-7 border border-white/10 p-0.5 rounded-md" />
                         </div>
                       </div>
 
@@ -2169,7 +2169,7 @@ export function Media() {
                     &times;
                   </button>
 
-                  <img src={reports[readReportMatchId]?.featuredImage} className="w-full h-56 object-cover" alt="" />
+                  <img src={reports[readReportMatchId]?.featuredImage || null} className="w-full h-56 object-cover" alt="" />
                   
                   <div className="p-8 sm:p-10 space-y-6">
                     <div>
@@ -2253,7 +2253,7 @@ export function Media() {
                     &times;
                   </button>
 
-                  <img src={newsItems.find(n => n.id === readNewsId)?.featuredImage} className="w-full h-48 object-cover" alt="" />
+                  <img src={newsItems.find(n => n.id === readNewsId)?.featuredImage || null} className="w-full h-48 object-cover" alt="" />
                   
                   <div className="p-8 sm:p-10 space-y-6">
                     <div>
@@ -2359,7 +2359,7 @@ export function Media() {
                     &times;
                   </button>
 
-                  <img src={articles.find(a => a.id === readArticleId)?.featuredImage} className="w-full h-64 object-cover" alt="" />
+                  <img src={articles.find(a => a.id === readArticleId)?.featuredImage || null} className="w-full h-64 object-cover" alt="" />
                   
                   <div className="p-8 sm:p-10 space-y-6">
                     <div>
@@ -2578,7 +2578,7 @@ export function News() {
               &times;
             </button>
 
-            <img src={newsItems.find(n => n.id === readNewsId)?.featuredImage} className="w-full h-52 object-cover" alt="" />
+            <img src={newsItems.find(n => n.id === readNewsId)?.featuredImage || null} className="w-full h-52 object-cover" alt="" />
             
             <div className="p-8 sm:p-10 space-y-6">
               <div>
