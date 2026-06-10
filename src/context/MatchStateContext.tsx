@@ -587,19 +587,23 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
 
-    // Force inject the newly scheduled Matchday 1 fixtures announcement
-    if (!loadedNews.some(n => n.id === 'news-official-fixtures-md1')) {
+    // Force inject/update the newly scheduled Matchday 1 fixtures announcement
+    const existingOfficialFixtures = loadedNews.find(n => n.id === 'news-official-fixtures-md1');
+    if (!existingOfficialFixtures) {
       loadedNews.unshift({
         id: 'news-official-fixtures-md1',
         title: '🏆 OFFICIAL MATCHDAY 1 FIXTURES ANNOUNCED',
         featuredImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
         author: 'FCL Committee',
         category: 'Committee Announcement',
-        body: 'The FUTA Champions League Committee has officially announced the rescheduled fixtures for Matchday 1, starting Wednesday, 10th June 2026 with MST vs ICE at 3:30 PM on the Main Pitch, followed by full action on Saturday 13th June and Sunday 14th June.',
+        body: 'The FUTA Champions League Committee has officially announced the rescheduled fixtures for Matchday 1, starting Wednesday, 10th June 2026 with MST vs ICE at 4:00 PM on the Main Pitch, followed by full action on Saturday 13th June and Sunday 14th June.',
         tags: ['Matchday 1', 'Fixtures', 'Rescheduled', 'Official Bulletins'],
         isPublished: true,
         createdAt: '2026-06-07 07:40'
       });
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    } else {
+      existingOfficialFixtures.body = 'The FUTA Champions League Committee has officially announced the rescheduled fixtures for Matchday 1, starting Wednesday, 10th June 2026 with MST vs ICE at 4:00 PM on the Main Pitch, followed by full action on Saturday 13th June and Sunday 14th June.';
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
 

@@ -121,7 +121,7 @@ export const MATCHES: Match[] = [
     homeTeam: 'MST', 
     awayTeam: 'ICE', 
     date: '2026-06-10', 
-    time: '15:30', 
+    time: '16:00', 
     venue: 'Main Pitch', 
     status: 'Upcoming', 
     homeScore: 0, 
