@@ -123,7 +123,7 @@ export const MATCHES: Match[] = [
     date: '2026-06-11', 
     time: '13:30', 
     venue: 'FUTA Football Pitch', 
-    status: 'Live', 
+    status: 'Finished', 
     homeScore: 0, 
     awayScore: 0, 
     lineupSubmittedHome: true, 
@@ -132,7 +132,7 @@ export const MATCHES: Match[] = [
     referee: 'Adesiyan Victor',
     refereeAssigned: true,
     matchApproved: true,
-    manOfTheMatch: '',
+    manOfTheMatch: 'Faleye Aduragbemi',
     officialsPanel: [
       'Kickoff supervision',
       'Foul adjudication',

@@ -361,42 +361,42 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
     }
 
-    // Ensure md1-1 stats are populated with official first half statistics
+    // Ensure md1-1 stats are populated with official full match statistics
     if (loadedStats['md1-1']) {
       loadedStats['md1-1'] = {
         ...loadedStats['md1-1'],
-        cornersHome: 2,
-        cornersAway: 2,
+        cornersHome: 6,
+        cornersAway: 3,
         yellowCardsHome: 0,
         yellowCardsAway: 1,
         redCardsHome: 0,
         redCardsAway: 0,
-        possessionHome: 52, // Balanced first half possession split
-        possessionAway: 48,
-        shotsHome: 3,
-        shotsAway: 2,
-        shotsOnTargetHome: 1,
-        shotsOnTargetAway: 1,
-        foulsHome: 4,      // MST 4 fouls committed
-        foulsAway: 4,      // ICE 4 fouls committed
-        offsidesHome: 0,
+        possessionHome: 54, // Balanced full match possession split
+        possessionAway: 46,
+        shotsHome: 9,
+        shotsAway: 5,
+        shotsOnTargetHome: 3,
+        shotsOnTargetAway: 2,
+        foulsHome: 6,      // MST committed 6 fouls
+        foulsAway: 16,     // ICE committed 16 fouls
+        offsidesHome: 1,   // MST 1 offside (Nkemjika Sydney)
         offsidesAway: 0,
-        savesHome: 1,
-        savesAway: 1,
-        freeKicksHome: 10, // MST 10 free kicks awarded
-        freeKicksAway: 4,  // ICE 4 free kicks awarded
-        homeCorners: 2,
-        awayCorners: 2,
+        savesHome: 2,
+        savesAway: 3,
+        freeKicksHome: 16, // MST 16 free kicks awarded (ICE 16 fouls)
+        freeKicksAway: 6,  // ICE 6 free kicks awarded (MST 6 fouls)
+        homeCorners: 6,
+        awayCorners: 3,
         homeYellowCards: 0,
         awayYellowCards: 1,
         homeRedCards: 0,
         awayRedCards: 0,
-        homeOffsides: 0,
+        homeOffsides: 1,
         awayOffsides: 0,
-        homeFouls: 4,
-        awayFouls: 4,
-        homeFreeKicks: 10,
-        awayFreeKicks: 4
+        homeFouls: 6,
+        awayFouls: 16,
+        homeFreeKicks: 16,
+        awayFreeKicks: 6
       };
       localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
     }
@@ -417,30 +417,48 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     // 5. Cards & Subs
     const storedCards = localStorage.getItem('fcl_admin_cards');
     let loadedCards: CardEvent[] = storedCards ? JSON.parse(storedCards) : [];
-    if (!loadedCards.some(c => c.matchId === 'md1-1' && c.playerName === 'Aduragbemi')) {
+    if (!loadedCards.some(c => c.matchId === 'md1-1' && (c.playerName === 'Faleye Aduragbemi' || c.playerName === 'Aduragbemi'))) {
       loadedCards.unshift({
         id: 'card-ice-aduragbemi',
         matchId: 'md1-1',
-        playerName: 'Aduragbemi',
+        playerName: 'Faleye Aduragbemi',
         teamAbbr: 'ICE',
         minute: '30+3',
         type: 'Yellow'
       });
       localStorage.setItem('fcl_admin_cards', JSON.stringify(loadedCards));
+    } else {
+      // Keep name synchronized exactly with standard
+      const index = loadedCards.findIndex(c => c.matchId === 'md1-1' && c.playerName === 'Aduragbemi');
+      if (index !== -1) {
+        loadedCards[index].playerName = 'Faleye Aduragbemi';
+        localStorage.setItem('fcl_admin_cards', JSON.stringify(loadedCards));
+      }
     }
     setCards(loadedCards);
 
     const storedSubs = localStorage.getItem('fcl_admin_subs');
     let loadedSubs: SubEvent[] = storedSubs ? JSON.parse(storedSubs) : [];
-    if (!loadedSubs.some(s => s.matchId === 'md1-1' && s.playerOut === 'Olayiwola Samson')) {
-      loadedSubs.unshift({
-        id: 'sub-ice-samson-usman',
-        matchId: 'md1-1',
-        teamAbbr: 'ICE',
-        playerOut: 'Olayiwola Samson',
-        playerIn: 'Bamidele Usman',
-        minute: 28
-      });
+    
+    const officialSubs: SubEvent[] = [
+      { id: 'sub-ice-samson-usman', matchId: 'md1-1', teamAbbr: 'ICE', playerOut: 'Olayiwola Samson', playerIn: 'Bamidele Usman', minute: 28 },
+      { id: 'sub-mst-bel-dan', matchId: 'md1-1', teamAbbr: 'MST', playerOut: 'Philip Believe Oluwashina', playerIn: 'Adeniyi Ademola Daniel', minute: 43 },
+      { id: 'sub-mst-fab-boy', matchId: 'md1-1', teamAbbr: 'MST', playerOut: 'Fabusuyi Daniel Oluwafisayo', playerIn: 'Boyede Joseph Ayomide', minute: 43 },
+      { id: 'sub-ice-sam-iyin', matchId: 'md1-1', teamAbbr: 'ICE', playerOut: 'Ayeni Samuel', playerIn: 'Iyinbor Michael', minute: 43 },
+      { id: 'sub-mst-ade-sho', matchId: 'md1-1', teamAbbr: 'MST', playerOut: 'Adekunle Ayomide Mubarak', playerIn: 'Shomuyiwa Lateef Babatunde', minute: 52 },
+      { id: 'sub-ice-quad-dam', matchId: 'md1-1', teamAbbr: 'ICE', playerOut: 'Olayinka Quadri', playerIn: 'Adeyemi Damola', minute: 53 },
+      { id: 'sub-mst-ake-for', matchId: 'md1-1', teamAbbr: 'MST', playerOut: 'Akintunde Ayomide Oluwaseyifunmi', playerIn: 'Ekwe Fortune', minute: 60 }
+    ];
+
+    let subsUpdated = false;
+    officialSubs.forEach(s => {
+      if (!loadedSubs.some(existing => existing.id === s.id)) {
+        loadedSubs.unshift(s);
+        subsUpdated = true;
+      }
+    });
+
+    if (subsUpdated) {
       localStorage.setItem('fcl_admin_subs', JSON.stringify(loadedSubs));
     }
     setSubs(loadedSubs);
@@ -558,15 +576,175 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       });
     }
 
-    // Force/overprint md1-1 commentaries with the official first half timeline and second half kickoff
-    if (!loadedCommentary['md1-1'] || loadedCommentary['md1-1'].length <= 2 || !loadedCommentary['md1-1'].some(c => c.id === 'comm-sh-kickoff')) {
+    // Force/overprint md1-1 commentaries with the official first half and second half timeline
+    if (!loadedCommentary['md1-1'] || loadedCommentary['md1-1'].length <= 10 || !loadedCommentary['md1-1'].some(c => c.id === 'comm-ft-whistle')) {
       loadedCommentary['md1-1'] = [
         {
-          id: 'comm-sh-kickoff',
+          id: 'comm-ft-whistle',
           matchId: 'md1-1',
-          minute: "40'",
-          text: "🟢 SECOND HALF KICK-OFF: The referee Adesiyan Victor blows the whistle to start the second half of this intensely contested opening match! MST 0 - 0 ICE. Both teams emerge with maximum determination.",
-          timestamp: "2:16 PM",
+          minute: "60+7'",
+          text: "🏁 FULL-TIME! Adesiyan Victor blows his final whistle to conclude an intensely hard-fought Opening Match of the FUTA Champions League 2026! MST 0 - 0 ICE. Both teams claim their first point with a gritty defensive display and a first clean sheet of the season!",
+          timestamp: "2:47 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-mst-6',
+          matchId: 'md1-1',
+          minute: "60+6'",
+          text: "Corner kick awarded to MST. Played into a crowded penalty box, but cleared safely by the ICE defense.",
+          timestamp: "2:46 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mst-16',
+          matchId: 'md1-1',
+          minute: "60+3'",
+          text: "MST wins a foul deep in the opponent's half. Free kick awarded to MST.",
+          timestamp: "2:43 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-mst-5',
+          matchId: 'md1-1',
+          minute: "60+2'",
+          text: "Corner kick awarded to MST. A swinging cross cleared by ICE.",
+          timestamp: "2:42 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sub-mst-fortune',
+          matchId: 'md1-1',
+          minute: "60'",
+          text: "🔄 Substitution (MST): Ekwe Fortune comes IN, replacing Akintunde Ayomide Oluwaseyifunmi.",
+          timestamp: "2:40 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-sh-additional-time',
+          matchId: 'md1-1',
+          minute: "59'",
+          text: "📋 5 minutes of additional time indicated by the fourth official.",
+          timestamp: "2:39 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mst-14',
+          matchId: 'md1-1',
+          minute: "56'",
+          text: "MST wins a foul. Free kick awarded to MST.",
+          timestamp: "2:36 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-ice-3',
+          matchId: 'md1-1',
+          minute: "54'",
+          text: "Corner kick awarded to ICE.",
+          timestamp: "2:34 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sub-ice-damola',
+          matchId: 'md1-1',
+          minute: "53'",
+          text: "🔄 Substitution (ICE): Adeyemi Damola comes IN, replacing Olayinka Quadri.",
+          timestamp: "2:33 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-sub-mst-lateef',
+          matchId: 'md1-1',
+          minute: "52'",
+          text: "🔄 Substitution (MST): Shomuyiwa Lateef Babatunde comes IN, replacing Adekunle Ayomide Mubarak.",
+          timestamp: "2:32 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-foul-ice-6',
+          matchId: 'md1-1',
+          minute: "48'",
+          text: "ICE wins a foul. Free kick awarded to ICE.",
+          timestamp: "2:28 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sh-resume',
+          matchId: 'md1-1',
+          minute: "47'",
+          text: "Play resumes at the FUTA Football Pitch as the referee signals.",
+          timestamp: "2:27 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sh-water-break',
+          matchId: 'md1-1',
+          minute: "44'",
+          text: "🥤 Water break called by referee Adesiyan Victor due to afternoon heat index.",
+          timestamp: "2:24 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-subs-block-43',
+          matchId: 'md1-1',
+          minute: "43'",
+          text: "🔄 Multiple tactical substitutions executed:\nMST: Adeniyi Ademola Daniel IN / Philip Believe Oluwashina OUT\nMST: Boyede Joseph Ayomide IN / Fabusuyi Daniel Oluwafisayo OUT\nICE: Iyinbor Michael IN / Ayeni Samuel OUT",
+          timestamp: "2:23 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-offside-sydney',
+          matchId: 'md1-1',
+          minute: "42'",
+          text: "🚩 Offside! Nkemjika Sydney (MST) caught offside.",
+          timestamp: "2:22 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mst-12',
+          matchId: 'md1-1',
+          minute: "39'",
+          text: "MST wins a foul. Free kick awarded to MST.",
+          timestamp: "2:19 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mst-11',
+          matchId: 'md1-1',
+          minute: "35'",
+          text: "MST wins a foul. Free kick awarded to MST.",
+          timestamp: "2:15 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-ice-6-f',
+          matchId: 'md1-1',
+          minute: "33'",
+          text: "ICE wins a foul. Free kick awarded to ICE.",
+          timestamp: "2:13 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mst-10-f',
+          matchId: 'md1-1',
+          minute: "33'",
+          text: "MST wins a foul. Free kick awarded to MST.",
+          timestamp: "2:13 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sh-corner-mst-3',
+          matchId: 'md1-1',
+          minute: "32'",
+          text: "Corner kick awarded to MST. A targeted ball into the center is cleared by the interior defense.",
+          timestamp: "2:12 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sh-begins',
+          matchId: 'md1-1',
+          minute: "31'",
+          text: "🟢 Second Half Begins! Score level at 0-0. Players re-enter with high intensity.",
+          timestamp: "2:11 PM",
           type: 'general'
         },
         {
@@ -581,7 +759,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           id: 'comm-card-aduragbemi',
           matchId: 'md1-1',
           minute: "30+3'",
-          text: "🟨 Yellow Card: Aduragbemi (ICE) receives a yellow card for a hard tactical challenge.",
+          text: "🟨 Yellow Card: Faleye Aduragbemi (ICE) receives a yellow card for a hard tactical challenge.",
           timestamp: "2:03 PM",
           type: 'card'
         },
@@ -773,8 +951,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     // 11. Timer Cache
     const storedTimers = localStorage.getItem('fcl_admin_timers');
     let loadedTimers: Record<string, { liveMinute: string; isPaused: boolean }> = storedTimers ? JSON.parse(storedTimers) : {};
-    if (!loadedTimers['md1-1'] || loadedTimers['md1-1'].liveMinute !== "40'") {
-      loadedTimers['md1-1'] = { liveMinute: "40'", isPaused: false };
+    if (!loadedTimers['md1-1'] || loadedTimers['md1-1'].liveMinute !== "FT") {
+      loadedTimers['md1-1'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     setActiveMinAndStatus(loadedTimers);
@@ -1019,7 +1197,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   };
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_secondhalf_v1');
+    const hasReset = localStorage.getItem('fcl_reset_2026_fulltime_v1');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -1032,7 +1210,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_secondhalf_v1', 'true');
+      localStorage.setItem('fcl_reset_2026_fulltime_v1', 'true');
     }
 
     loadState();
