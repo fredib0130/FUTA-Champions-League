@@ -366,7 +366,7 @@ export function Home() {
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="inline-flex items-center space-x-3 px-4 py-2 rounded-full glass border border-primary/20">
                   <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
-                  <span className="text-[10px] font-bold tracking-[0.3em] text-primary uppercase">Opening Match • June 11 • 12:00 PM</span>
+                  <span className="text-[10px] font-bold tracking-[0.3em] text-primary uppercase">Opening Match • June 11 • 1:30 PM</span>
                 </div>
                 <Link to="/champions" className="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass border border-yellow-500/30 bg-yellow-500/5 group/champ hover:bg-yellow-500/10 transition-colors">
                   <Trophy size={14} className="text-yellow-500" />
@@ -412,7 +412,7 @@ export function Home() {
                   <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-transparent to-transparent flex flex-col justify-end p-8">
                     <div className="glass p-6 rounded-3xl backdrop-blur-md">
                       <p className="text-[10px] font-bold text-primary tracking-[0.2em] mb-3 uppercase">Season Opener • Starts In</p>
-                      <Countdown targetDate="2026-06-11T12:00:00" />
+                      <Countdown targetDate="2026-06-11T13:30:00" />
                     </div>
                   </div>
                 </div>

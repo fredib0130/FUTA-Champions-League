@@ -225,6 +225,11 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.referee !== official.referee ||
             m.refereeAssigned !== official.refereeAssigned ||
             m.matchApproved !== official.matchApproved ||
+            m.manOfTheMatch !== official.manOfTheMatch ||
+            m.lineupSubmittedHome !== official.lineupSubmittedHome ||
+            m.lineupSubmittedAway !== official.lineupSubmittedAway ||
+            (official.id === 'md1-1' && m.homeScore !== official.homeScore) ||
+            (official.id === 'md1-1' && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
             (official.matchday === 1 && m.status !== official.status) // Sync status specifically for matchday 1 reschedules
           ) {
@@ -239,7 +244,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               refereeAssigned: official.refereeAssigned,
               matchApproved: official.matchApproved,
               officialsPanel: official.officialsPanel,
-              status: official.matchday === 1 ? official.status : m.status
+              status: official.matchday === 1 ? official.status : m.status,
+              lineupSubmittedHome: official.lineupSubmittedHome,
+              lineupSubmittedAway: official.lineupSubmittedAway,
+              manOfTheMatch: official.manOfTheMatch || m.manOfTheMatch,
+              homeScore: official.id === 'md1-1' ? official.homeScore : m.homeScore,
+              awayScore: official.id === 'md1-1' ? official.awayScore : m.awayScore
             };
             updated = true;
           }
@@ -350,6 +360,47 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       });
       localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
     }
+
+    // Ensure md1-1 stats are zeroed out as requested for the live kickoff
+    if (loadedStats['md1-1']) {
+      loadedStats['md1-1'] = {
+        ...loadedStats['md1-1'],
+        cornersHome: 0,
+        cornersAway: 0,
+        yellowCardsHome: 0,
+        yellowCardsAway: 0,
+        redCardsHome: 0,
+        redCardsAway: 0,
+        possessionHome: 50,
+        possessionAway: 50,
+        shotsHome: 0,
+        shotsAway: 0,
+        shotsOnTargetHome: 0,
+        shotsOnTargetAway: 0,
+        foulsHome: 0,
+        foulsAway: 0,
+        offsidesHome: 0,
+        offsidesAway: 0,
+        savesHome: 0,
+        savesAway: 0,
+        freeKicksHome: 0,
+        freeKicksAway: 0,
+        homeCorners: 0,
+        awayCorners: 0,
+        homeYellowCards: 0,
+        awayYellowCards: 0,
+        homeRedCards: 0,
+        awayRedCards: 0,
+        homeOffsides: 0,
+        awayOffsides: 0,
+        homeFouls: 0,
+        awayFouls: 0,
+        homeFreeKicks: 0,
+        awayFreeKicks: 0
+      };
+      localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
+    }
+
     setDetailedStats(loadedStats);
 
     // 4. Goal events
@@ -596,7 +647,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         featuredImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
         author: 'FCL Committee',
         category: 'Committee Announcement',
-        body: 'The Organizing Committee of the FUTA Champions League (FCL) wishes to inform all stakeholders that the Opening Match of the 2026 FUTA Champions League has been further rescheduled. This follows an earlier adjustment set for Wednesday, 10th June, 2026 (3:30 PM – 4:00 PM), which could not be sustained due to unforeseen weather conditions. The heavy rainfall experienced on Wednesday, 10th June, 2026 at about 2:00 PM significantly affected the playing surface, rendering it unfit for safe and competitive football. NEW DETAILS: Thursday, 11th June, 2026 at 12:00 Noon on the FUTA Football Pitch (MST vs ICE). Player safety and match quality remain our top priority.',
+        body: 'The Organizing Committee of the FUTA Champions League (FCL) wishes to inform all stakeholders that the Opening Match of the 2026 FUTA Champions League has been further rescheduled. This follows an earlier adjustment set for Wednesday, 10th June, 2026 (3:30 PM – 4:00 PM), which could not be sustained due to unforeseen weather conditions. The heavy rainfall experienced on Wednesday, 10th June, 2026 at about 2:00 PM significantly affected the playing surface, rendering it unfit for safe and competitive football. NEW DETAILS: Thursday, 11th June, 2026 at 1:30 PM on the FUTA Football Pitch (MST vs ICE). Player safety and match quality remain our top priority.',
         tags: ['Matchday 1', 'Fixtures', 'Rescheduled', 'Official Bulletins'],
         isPublished: true,
         createdAt: '2026-06-10 16:00'
@@ -604,7 +655,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     } else {
       existingOfficialFixtures.title = '🚨 RESCHEDULING OF OPENING MATCH FIXTURE 🚨';
-      existingOfficialFixtures.body = 'The Organizing Committee of the FUTA Champions League (FCL) wishes to inform all stakeholders that the Opening Match of the 2026 FUTA Champions League has been further rescheduled. This follows an earlier adjustment set for Wednesday, 10th June, 2026 (3:30 PM – 4:00 PM), which could not be sustained due to unforeseen weather conditions. The heavy rainfall experienced on Wednesday, 10th June, 2026 at about 2:00 PM significantly affected the playing surface, rendering it unfit for safe and competitive football. NEW DETAILS: Thursday, 11th June, 2026 at 12:00 Noon on the FUTA Football Pitch (MST vs ICE). Player safety and match quality remain our top priority.';
+      existingOfficialFixtures.body = 'The Organizing Committee of the FUTA Champions League (FCL) wishes to inform all stakeholders that the Opening Match of the 2026 FUTA Champions League has been further rescheduled. This follows an earlier adjustment set for Wednesday, 10th June, 2026 (3:30 PM – 4:00 PM), which could not be sustained due to unforeseen weather conditions. The heavy rainfall experienced on Wednesday, 10th June, 2026 at about 2:00 PM significantly affected the playing surface, rendering it unfit for safe and competitive football. NEW DETAILS: Thursday, 11th June, 2026 at 1:30 PM on the FUTA Football Pitch (MST vs ICE). Player safety and match quality remain our top priority.';
       existingOfficialFixtures.createdAt = '2026-06-10 16:00';
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }

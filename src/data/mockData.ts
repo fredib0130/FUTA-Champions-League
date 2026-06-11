@@ -121,18 +121,18 @@ export const MATCHES: Match[] = [
     homeTeam: 'MST', 
     awayTeam: 'ICE', 
     date: '2026-06-11', 
-    time: '12:00', 
-    venue: 'Main Pitch', 
-    status: 'Upcoming', 
+    time: '13:30', 
+    venue: 'FUTA Football Pitch', 
+    status: 'Live', 
     homeScore: 0, 
     awayScore: 0, 
-    lineupSubmittedHome: false, 
-    lineupSubmittedAway: false, 
+    lineupSubmittedHome: true, 
+    lineupSubmittedAway: true, 
     matchday: 1,
     referee: 'Adesiyan Victor',
     refereeAssigned: true,
     matchApproved: true,
-    manOfTheMatch: '',
+    manOfTheMatch: 'Adesiyan Victor',
     officialsPanel: [
       'Kickoff supervision',
       'Foul adjudication',
@@ -275,6 +275,29 @@ export const COEFFICIENTS: CoefficientRanking[] = [
 ];
 
 export const MOCK_MATCH_STATS: MatchStats[] = MATCHES.map((match) => {
+  if (match.id === 'md1-1') {
+    return {
+      matchId: match.id,
+      cornersHome: 0,
+      cornersAway: 0,
+      yellowCardsHome: 0,
+      yellowCardsAway: 0,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      homeCorners: 0,
+      awayCorners: 0,
+      homeYellowCards: 0,
+      awayYellowCards: 0,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 0,
+      awayOffsides: 0,
+      homeFouls: 0,
+      awayFouls: 0,
+      homeFreeKicks: 0,
+      awayFreeKicks: 0
+    };
+  }
   const charSum = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   return {
     matchId: match.id,

@@ -536,6 +536,61 @@ export default function PublicMatchCenter() {
                 </div>
               </div>
             )}
+
+            {/* MATCH CLOCK CONFIGURATION & EXPECTED TIMELINE CARD */}
+            <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60 space-y-5 text-left">
+              <h3 className="text-sm font-display font-black uppercase tracking-wider text-white flex items-center gap-2 pb-4 border-b border-white/5">
+                <Clock size={16} className="text-primary" />
+                <span>OFFICIAL CLOCK CONFIGURATION</span>
+              </h3>
+
+              <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4 space-y-3.5">
+                <span className="text-[9px] text-primary font-bold tracking-widest uppercase block border-b border-white/5 pb-1">MATCH SCHEDULING RULESET</span>
+                <div className="grid grid-cols-2 gap-3 text-[10px] font-mono leading-relaxed text-white/50">
+                  <div>
+                    <span className="text-white font-bold block">First Half Kick-off</span>
+                    <span className="text-primary text-xs font-black">1:30 PM</span>
+                  </div>
+                  <div>
+                    <span className="text-white font-bold block">First Half Duration</span>
+                    <span className="text-primary text-xs font-black">30 Minutes</span>
+                  </div>
+                  <div>
+                    <span className="text-white font-bold block">Half-Time Break</span>
+                    <span className="text-primary text-xs font-black">10 Minutes</span>
+                  </div>
+                  <div>
+                    <span className="text-white font-bold block">Second Half Duration</span>
+                    <span className="text-primary text-xs font-black">30 Minutes</span>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-white/5 text-[9px] text-[#00e5ff] font-bold uppercase tracking-wider leading-relaxed">
+                  👮 Additional Time and breaks determined solely by the Match Commissioner / Referee panel as necessary.
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-2xl p-4 space-y-3 mb-1">
+                <span className="text-[9px] text-primary font-bold tracking-widest uppercase block border-b border-primary/10 pb-1">EXPECTED LIVE TIMELINE</span>
+                <div className="space-y-2 text-[11px] font-sans">
+                  <div className="flex justify-between items-center bg-white/[0.03] p-1.5 px-2.5 rounded-lg">
+                    <span className="text-white/60 font-medium">🕒 First Half</span>
+                    <span className="font-mono font-black text-white">1:30 PM – 2:00 PM</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-white/[0.01] p-1.5 px-2.5 rounded-lg border border-dashed border-white/5">
+                    <span className="text-white/40 font-medium">☕ Half-Time Break</span>
+                    <span className="font-mono font-bold text-white/50">2:00 PM – 2:10 PM</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-white/[0.03] p-1.5 px-2.5 rounded-lg">
+                    <span className="text-white/60 font-medium">🕒 Second Half</span>
+                    <span className="font-mono font-black text-white">2:10 PM – 2:40 PM</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-white/[0.01] p-1.5 px-2.5 rounded-lg border border-dashed border-white/5">
+                    <span className="text-white/40 font-medium">✨ Additional Time</span>
+                    <span className="font-mono font-bold text-yellow-500 text-[9px] uppercase tracking-wider">Pending Decision</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* COL 2: TIMELINE SYSTEM & SQUAD LINEUPS */}
