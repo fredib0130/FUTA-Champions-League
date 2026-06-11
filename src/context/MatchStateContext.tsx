@@ -361,42 +361,42 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
     }
 
-    // Ensure md1-1 stats are zeroed out as requested for the live kickoff
+    // Ensure md1-1 stats are populated with official first half statistics
     if (loadedStats['md1-1']) {
       loadedStats['md1-1'] = {
         ...loadedStats['md1-1'],
-        cornersHome: 0,
-        cornersAway: 0,
+        cornersHome: 2,
+        cornersAway: 2,
         yellowCardsHome: 0,
-        yellowCardsAway: 0,
+        yellowCardsAway: 1,
         redCardsHome: 0,
         redCardsAway: 0,
-        possessionHome: 50,
-        possessionAway: 50,
-        shotsHome: 0,
-        shotsAway: 0,
-        shotsOnTargetHome: 0,
-        shotsOnTargetAway: 0,
-        foulsHome: 0,
-        foulsAway: 0,
+        possessionHome: 52, // Balanced first half possession split
+        possessionAway: 48,
+        shotsHome: 3,
+        shotsAway: 2,
+        shotsOnTargetHome: 1,
+        shotsOnTargetAway: 1,
+        foulsHome: 4,      // MST 4 fouls committed
+        foulsAway: 4,      // ICE 4 fouls committed
         offsidesHome: 0,
         offsidesAway: 0,
-        savesHome: 0,
-        savesAway: 0,
-        freeKicksHome: 0,
-        freeKicksAway: 0,
-        homeCorners: 0,
-        awayCorners: 0,
+        savesHome: 1,
+        savesAway: 1,
+        freeKicksHome: 10, // MST 10 free kicks awarded
+        freeKicksAway: 4,  // ICE 4 free kicks awarded
+        homeCorners: 2,
+        awayCorners: 2,
         homeYellowCards: 0,
-        awayYellowCards: 0,
+        awayYellowCards: 1,
         homeRedCards: 0,
         awayRedCards: 0,
         homeOffsides: 0,
         awayOffsides: 0,
-        homeFouls: 0,
-        awayFouls: 0,
-        homeFreeKicks: 0,
-        awayFreeKicks: 0
+        homeFouls: 4,
+        awayFouls: 4,
+        homeFreeKicks: 10,
+        awayFreeKicks: 4
       };
       localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
     }
@@ -416,10 +416,34 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
     // 5. Cards & Subs
     const storedCards = localStorage.getItem('fcl_admin_cards');
-    setCards(storedCards ? JSON.parse(storedCards) : []);
+    let loadedCards: CardEvent[] = storedCards ? JSON.parse(storedCards) : [];
+    if (!loadedCards.some(c => c.matchId === 'md1-1' && c.playerName === 'Aduragbemi')) {
+      loadedCards.unshift({
+        id: 'card-ice-aduragbemi',
+        matchId: 'md1-1',
+        playerName: 'Aduragbemi',
+        teamAbbr: 'ICE',
+        minute: '30+3',
+        type: 'Yellow'
+      });
+      localStorage.setItem('fcl_admin_cards', JSON.stringify(loadedCards));
+    }
+    setCards(loadedCards);
 
     const storedSubs = localStorage.getItem('fcl_admin_subs');
-    setSubs(storedSubs ? JSON.parse(storedSubs) : []);
+    let loadedSubs: SubEvent[] = storedSubs ? JSON.parse(storedSubs) : [];
+    if (!loadedSubs.some(s => s.matchId === 'md1-1' && s.playerOut === 'Olayiwola Samson')) {
+      loadedSubs.unshift({
+        id: 'sub-ice-samson-usman',
+        matchId: 'md1-1',
+        teamAbbr: 'ICE',
+        playerOut: 'Olayiwola Samson',
+        playerIn: 'Bamidele Usman',
+        minute: 28
+      });
+      localStorage.setItem('fcl_admin_subs', JSON.stringify(loadedSubs));
+    }
+    setSubs(loadedSubs);
 
     // 6. User Auth
     const storedUser = localStorage.getItem('fcl_admin_user');
@@ -532,6 +556,204 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           }
         ];
       });
+    }
+
+    // Force/overprint md1-1 commentaries with the official first half timeline
+    if (!loadedCommentary['md1-1'] || loadedCommentary['md1-1'].length <= 2) {
+      loadedCommentary['md1-1'] = [
+        {
+          id: 'comm-ht-whistle',
+          matchId: 'md1-1',
+          minute: "30+6'",
+          text: "⏸️ Half-Time: The referee blows the whistle to signal the end of a highly contentious and physical first half! Score remains gridlocked at 0-0. Both squads head to the dressing rooms.",
+          timestamp: "2:06 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-card-aduragbemi',
+          matchId: 'md1-1',
+          minute: "30+3'",
+          text: "🟨 Yellow Card: Aduragbemi (ICE) receives a yellow card for a hard tactical challenge.",
+          timestamp: "2:03 PM",
+          type: 'card'
+        },
+        {
+          id: 'comm-foul-mst-10',
+          matchId: 'md1-1',
+          minute: "30+3'",
+          text: "MST wins a foul in the final third. Free kick awarded to MST.",
+          timestamp: "2:03 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-mst-2',
+          matchId: 'md1-1',
+          minute: "30+2'",
+          text: "Corner kick awarded to MST. A sweeping opportunity, but the defense clears it.",
+          timestamp: "2:02 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-add-time',
+          matchId: 'md1-1',
+          minute: "30+2'",
+          text: "📋 Match Commissioner / Fourth Official signals 4 minutes of additional time to be played.",
+          timestamp: "2:02 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mst-9',
+          matchId: 'md1-1',
+          minute: "30+1'",
+          text: "MST wins a foul in midfield. Free kick awarded to MST.",
+          timestamp: "2:01 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-ice-5',
+          matchId: 'md1-1',
+          minute: "29'",
+          text: "ICE wins a foul. Free kick awarded to ICE.",
+          timestamp: "1:59 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sub-ice',
+          matchId: 'md1-1',
+          minute: "28'",
+          text: "🔄 Substitution (ICE): Bamidele Usman enters the pitch, replacing Olayiwola Samson, who is forced off due to an unfortunate injury.",
+          timestamp: "1:58 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-resume',
+          matchId: 'md1-1',
+          minute: "28'",
+          text: "Play resumes as the referee signals a restart.",
+          timestamp: "1:58 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-water-break',
+          matchId: 'md1-1',
+          minute: "25'",
+          text: "🥤 Water break! The referee calls a brief hydration break for both teams due to high heat index.",
+          timestamp: "1:55 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-injury-samson',
+          matchId: 'md1-1',
+          minute: "24'",
+          text: "🩹 Olayiwola Samson (ICE) receives medical attention on the pitch after an injury concern.",
+          timestamp: "1:54 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-mst-1',
+          matchId: 'md1-1',
+          minute: "18'",
+          text: "Corner kick awarded to MST. Played short, but easily intercepted.",
+          timestamp: "1:48 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-ice-4',
+          matchId: 'md1-1',
+          minute: "16'",
+          text: "ICE wins a foul. Free kick awarded to ICE.",
+          timestamp: "1:46 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mst-8',
+          matchId: 'md1-1',
+          minute: "16'",
+          text: "MST wins a foul. Free kick awarded to MST.",
+          timestamp: "1:46 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mst-7',
+          matchId: 'md1-1',
+          minute: "15'",
+          text: "MST wins a foul. Free kick awarded to MST.",
+          timestamp: "1:45 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-ice-2',
+          matchId: 'md1-1',
+          minute: "12'",
+          text: "Corner kick awarded to ICE. Standard outward cross, cleared by MST defense.",
+          timestamp: "1:42 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mst-6',
+          matchId: 'md1-1',
+          minute: "10'",
+          text: "MST wins a foul. Free kick awarded to MST.",
+          timestamp: "1:40 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-ice-3',
+          matchId: 'md1-1',
+          minute: "7'",
+          text: "ICE wins a foul. Free kick awarded to ICE.",
+          timestamp: "1:37 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-ice-1',
+          matchId: 'md1-1',
+          minute: "6'",
+          text: "Corner kick awarded to ICE. Swept toward the front post, of no consequence.",
+          timestamp: "1:36 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mst-5',
+          matchId: 'md1-1',
+          minute: "5'",
+          text: "MST wins a foul. Free kick awarded to MST.",
+          timestamp: "1:35 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-ice-1',
+          matchId: 'md1-1',
+          minute: "3'",
+          text: "ICE wins a foul. Free kick awarded to ICE.",
+          timestamp: "1:33 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mst-2',
+          matchId: 'md1-1',
+          minute: "3'",
+          text: "MST wins a foul. Free kick awarded to MST.",
+          timestamp: "1:33 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mst-1',
+          matchId: 'md1-1',
+          minute: "1'",
+          text: "MST wins a foul. Free kick awarded to MST.",
+          timestamp: "1:31 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-kickoff',
+          matchId: 'md1-1',
+          minute: "0'",
+          text: "🏁 KICKOFF! The referee Adesiyan Victor blows the opening whistle to signify kickoff between MST and ICE at the FUTA Football Pitch! Game is officially LIVE.",
+          timestamp: "1:30 PM",
+          type: 'general'
+        }
+      ];
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
     setCommentaries(loadedCommentary);
@@ -542,7 +764,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
     // 11. Timer Cache
     const storedTimers = localStorage.getItem('fcl_admin_timers');
-    setActiveMinAndStatus(storedTimers ? JSON.parse(storedTimers) : {});
+    let loadedTimers: Record<string, { liveMinute: string; isPaused: boolean }> = storedTimers ? JSON.parse(storedTimers) : {};
+    if (!loadedTimers['md1-1'] || loadedTimers['md1-1'].liveMinute !== 'HT') {
+      loadedTimers['md1-1'] = { liveMinute: 'HT', isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    setActiveMinAndStatus(loadedTimers);
 
     // 12. Articles Load & Seed
     const storedArticles = localStorage.getItem('fcl_admin_articles');
@@ -784,7 +1011,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   };
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_prekickoff_v3_main');
+    const hasReset = localStorage.getItem('fcl_reset_2026_firsthalf_v1');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -797,7 +1024,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_prekickoff_v3_main', 'true');
+      localStorage.setItem('fcl_reset_2026_firsthalf_v1', 'true');
     }
 
     loadState();
