@@ -132,7 +132,7 @@ export const MATCHES: Match[] = [
     referee: 'Adesiyan Victor',
     refereeAssigned: true,
     matchApproved: true,
-    manOfTheMatch: 'Adesiyan Victor',
+    manOfTheMatch: '',
     officialsPanel: [
       'Kickoff supervision',
       'Foul adjudication',
