@@ -123,7 +123,7 @@ export const MATCHES: Match[] = [
     date: '2026-06-11', 
     time: '13:30', 
     venue: 'FUTA Football Pitch', 
-    status: 'Half Time', 
+    status: 'Live', 
     homeScore: 0, 
     awayScore: 0, 
     lineupSubmittedHome: true, 

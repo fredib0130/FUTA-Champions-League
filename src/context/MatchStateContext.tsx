@@ -247,7 +247,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               status: official.matchday === 1 ? official.status : m.status,
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
-              manOfTheMatch: official.manOfTheMatch || m.manOfTheMatch,
+              manOfTheMatch: official.manOfTheMatch,
               homeScore: official.id === 'md1-1' ? official.homeScore : m.homeScore,
               awayScore: official.id === 'md1-1' ? official.awayScore : m.awayScore
             };
@@ -558,9 +558,17 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       });
     }
 
-    // Force/overprint md1-1 commentaries with the official first half timeline
-    if (!loadedCommentary['md1-1'] || loadedCommentary['md1-1'].length <= 2) {
+    // Force/overprint md1-1 commentaries with the official first half timeline and second half kickoff
+    if (!loadedCommentary['md1-1'] || loadedCommentary['md1-1'].length <= 2 || !loadedCommentary['md1-1'].some(c => c.id === 'comm-sh-kickoff')) {
       loadedCommentary['md1-1'] = [
+        {
+          id: 'comm-sh-kickoff',
+          matchId: 'md1-1',
+          minute: "40'",
+          text: "🟢 SECOND HALF KICK-OFF: The referee Adesiyan Victor blows the whistle to start the second half of this intensely contested opening match! MST 0 - 0 ICE. Both teams emerge with maximum determination.",
+          timestamp: "2:16 PM",
+          type: 'general'
+        },
         {
           id: 'comm-ht-whistle',
           matchId: 'md1-1',
@@ -765,8 +773,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     // 11. Timer Cache
     const storedTimers = localStorage.getItem('fcl_admin_timers');
     let loadedTimers: Record<string, { liveMinute: string; isPaused: boolean }> = storedTimers ? JSON.parse(storedTimers) : {};
-    if (!loadedTimers['md1-1'] || loadedTimers['md1-1'].liveMinute !== 'HT') {
-      loadedTimers['md1-1'] = { liveMinute: 'HT', isPaused: true };
+    if (!loadedTimers['md1-1'] || loadedTimers['md1-1'].liveMinute !== "40'") {
+      loadedTimers['md1-1'] = { liveMinute: "40'", isPaused: false };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     setActiveMinAndStatus(loadedTimers);
@@ -1011,7 +1019,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   };
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_firsthalf_v1');
+    const hasReset = localStorage.getItem('fcl_reset_2026_secondhalf_v1');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -1024,7 +1032,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_firsthalf_v1', 'true');
+      localStorage.setItem('fcl_reset_2026_secondhalf_v1', 'true');
     }
 
     loadState();
