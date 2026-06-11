@@ -137,15 +137,12 @@ export default function PublicMatchCenter() {
 
   // Stats
   const stats = detailedStats[match.id] || {
-    possessionHome: 50, possessionAway: 50,
-    shotsHome: 0, shotsAway: 0,
-    shotsOnTargetHome: 0, shotsOnTargetAway: 0,
     cornersHome: 0, cornersAway: 0,
     foulsHome: 0, foulsAway: 0,
     yellowCardsHome: 0, yellowCardsAway: 0,
     redCardsHome: 0, redCardsAway: 0,
     offsidesHome: 0, offsidesAway: 0,
-    savesHome: 0, savesAway: 0
+    freeKicksHome: 0, freeKicksAway: 0
   };
 
   const matchGoals = goalScorers.filter(g => g.matchId === match.id);
@@ -399,30 +396,14 @@ export default function PublicMatchCenter() {
             ) : (
               <div className="space-y-6">
                 
-                {/* Possession Percentage Bar */}
-                <div className="space-y-2">
-                  <div className="flex justify-between font-mono text-xs font-black text-white/80">
-                    <span>{stats.possessionHome}%</span>
-                    <span className="text-[10px] font-sans font-bold text-white/40 uppercase tracking-widest">BALL POSSESSION</span>
-                    <span>{stats.possessionAway}%</span>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-white/5 flex overflow-hidden">
-                    <div style={{ width: `${stats.possessionHome}%` }} className="bg-primary h-full transition-all duration-500" />
-                    <div style={{ width: `${stats.possessionAway}%` }} className="bg-yellow-400 h-full transition-all duration-500" />
-                  </div>
-                </div>
-
                 {/* Shorthand Stat Bars */}
                 {([
-                  { label: '🔥 SHOOT SUMMARY', home: stats.shotsHome, away: stats.shotsAway },
-                  { label: '🎯 SHOTS ON TARGET', home: stats.shotsOnTargetHome, away: stats.shotsOnTargetAway },
                   { label: '🚩 CORNER KICKS', home: stats.cornersHome, away: stats.cornersAway },
-                  { label: '⚠️ SQUAD FOULS', home: stats.foulsHome, away: stats.foulsAway },
-                  { label: '🎙️ FREE KICKS AWARDED', home: stats.freeKicksHome ?? 0, away: stats.freeKicksAway ?? 0 },
                   { label: '🟨 YELLOW WARNINGS', home: stats.yellowCardsHome, away: stats.yellowCardsAway },
                   { label: '🟥 RED EXPULSIONS', home: stats.redCardsHome, away: stats.redCardsAway },
                   { label: '🔭 OFFSIDE RULINGS', home: stats.offsidesHome ?? 0, away: stats.offsidesAway ?? 0 },
-                  { label: '🧤 GOALKEEPER SAVES', home: stats.savesHome, away: stats.savesAway }
+                  { label: '⚠️ SQUAD FOULS', home: stats.foulsHome, away: stats.foulsAway },
+                  { label: '🎙️ FREE KICKS AWARDED', home: stats.freeKicksHome ?? 0, away: stats.freeKicksAway ?? 0 }
                 ] as const).map((statRow, idx) => {
                   const widths = getProgressWidths(statRow.home, statRow.away);
                   return (

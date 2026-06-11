@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Match, Team, GoalScorer, MatchStats, Article, NewsItem, MatchPhoto, Sponsor } from '../types';
-import { MATCHES, TEAMS, MOCK_MATCH_STATS } from '../data/mockData';
+import { Match, Team, GoalScorer, MatchStats, Article, NewsItem, MatchPhoto, Sponsor, Player } from '../types';
+import { MATCHES, TEAMS, MOCK_MATCH_STATS, PLAYERS } from '../data/mockData';
 import { fclApi } from '../lib/api';
 
 export interface CardEvent {
@@ -32,12 +32,23 @@ export interface MatchLineup {
 }
 
 export interface DetailedMatchStats extends MatchStats {
-  possessionHome: number;
-  possessionAway: number;
-  shotsHome: number;
-  shotsAway: number;
-  shotsOnTargetHome: number;
-  shotsOnTargetAway: number;
+  /** @deprecated Removed from official FCL 2026 categories */
+  possessionHome?: number;
+  /** @deprecated Removed from official FCL 2026 categories */
+  possessionAway?: number;
+  /** @deprecated Removed from official FCL 2026 categories */
+  shotsHome?: number;
+  /** @deprecated Removed from official FCL 2026 categories */
+  shotsAway?: number;
+  /** @deprecated Removed from official FCL 2026 categories */
+  shotsOnTargetHome?: number;
+  /** @deprecated Removed from official FCL 2026 categories */
+  shotsOnTargetAway?: number;
+  /** @deprecated Removed from official FCL 2026 categories */
+  savesHome?: number;
+  /** @deprecated Removed from official FCL 2026 categories */
+  savesAway?: number;
+
   cornerKicksHome?: number;
   cornerKicksAway?: number;
   yellowCardsHome: number;
@@ -48,8 +59,6 @@ export interface DetailedMatchStats extends MatchStats {
   offsidesAway: number;
   foulsHome: number;
   foulsAway: number;
-  savesHome: number;
-  savesAway: number;
   freeKicksHome: number;
   freeKicksAway: number;
 }
@@ -90,6 +99,7 @@ export interface AdminUser {
 interface MatchStateContextType {
   matches: Match[];
   teams: Team[];
+  players: Player[];
   detailedStats: Record<string, DetailedMatchStats>;
   goalScorers: GoalScorer[];
   cards: CardEvent[];
@@ -197,6 +207,185 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [matchPhotos, setMatchPhotos] = useState<MatchPhoto[]>([]);
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+
+  // 1b. Dynamic Player and Team Recalculation Engine
+  const players = React.useMemo(() => {
+    // Start with the base list of PLAYERS
+    const basePlayers: Player[] = PLAYERS.map(p => ({
+      ...p,
+      goals: 0,
+      played: 0,
+      matchesPlayed: 0,
+      yellowCards: 0,
+      yellow_cards: 0,
+      redCards: 0,
+      red_cards: 0,
+      cleanSheets: 0,
+      clean_sheets: 0,
+      goalsConceded: 0,
+      goals_conceded: 0,
+    }));
+
+    // Find all finished matches
+    const finishedMatches = matches.filter(m => {
+      const s = m.status.trim().toUpperCase();
+      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED';
+    });
+
+    // 1. Calculate Goals
+    goalScorers.forEach(g => {
+      if (g.type !== 'Own Goal') {
+        const finishedAndMatchExists = finishedMatches.some(m => m.id === g.matchId);
+        if (finishedAndMatchExists) {
+          const playerObj = basePlayers.find(p => p.id === g.playerName || p.name.toLowerCase() === g.playerName.toLowerCase());
+          if (playerObj) {
+            playerObj.goals += 1;
+          }
+        }
+      }
+    });
+
+    // 2. Calculate Cards (Yellow/Red)
+    cards.forEach(c => {
+      const finishedAndMatchExists = finishedMatches.some(m => m.id === c.matchId);
+      if (finishedAndMatchExists) {
+        const playerObj = basePlayers.find(p => p.id === c.playerName || p.name.toLowerCase() === c.playerName.toLowerCase());
+        if (playerObj) {
+          if (c.type === 'Yellow') {
+            playerObj.yellowCards = (playerObj.yellowCards || 0) + 1;
+            playerObj.yellow_cards = playerObj.yellowCards;
+          } else if (c.type === 'Red' || c.type === 'Second Yellow') {
+            playerObj.redCards = (playerObj.redCards || 0) + 1;
+            playerObj.red_cards = playerObj.redCards;
+          }
+        }
+      }
+    });
+
+    // 3. Calculate Matches Played
+    finishedMatches.forEach(m => {
+      // Look at lineups
+      const matchLineup = lineups[m.id];
+      const hasLineup = !!matchLineup;
+      
+      const involvedPlayerIds = new Set<string>();
+      
+      if (hasLineup) {
+        // Home starting players
+        if (matchLineup.home && matchLineup.home.players) {
+          Object.values(matchLineup.home.players).forEach(pid => involvedPlayerIds.add(String(pid)));
+        }
+        // Away starting players
+        if (matchLineup.away && matchLineup.away.players) {
+          Object.values(matchLineup.away.players).forEach(pid => involvedPlayerIds.add(String(pid)));
+        }
+      }
+      
+      // Look at substitution events for this finished match
+      const matchSubs = subs.filter(s => s.matchId === m.id);
+      matchSubs.forEach(s => {
+        const pInObj = basePlayers.find(p => p.id === s.playerIn || p.name.toLowerCase() === s.playerIn.toLowerCase());
+        if (pInObj) {
+          involvedPlayerIds.add(pInObj.id);
+        }
+      });
+      
+      // If we have lineup involved player IDs, mark them
+      if (involvedPlayerIds.size > 0) {
+        involvedPlayerIds.forEach(pid => {
+          const pObj = basePlayers.find(p => p.id === pid);
+          if (pObj) {
+            pObj.played += 1;
+            pObj.matchesPlayed = pObj.played;
+          }
+        });
+      } else {
+        // Fallback: If no lineup was created for a finished match, we count matches based on goals or cards
+        const goalsFromMatch = goalScorers.filter(g => g.matchId === m.id && g.type !== 'Own Goal');
+        const cardsFromMatch = cards.filter(c => c.matchId === m.id);
+        const activeIds = new Set<string>();
+        
+        goalsFromMatch.forEach(g => {
+          const pObj = basePlayers.find(p => p.id === g.playerName || p.name.toLowerCase() === g.playerName.toLowerCase());
+          if (pObj) activeIds.add(pObj.id);
+        });
+        cardsFromMatch.forEach(c => {
+          const pObj = basePlayers.find(p => p.id === c.playerName || p.name.toLowerCase() === c.playerName.toLowerCase());
+          if (pObj) activeIds.add(pObj.id);
+        });
+        
+        activeIds.forEach(pid => {
+          const pObj = basePlayers.find(p => p.id === pid);
+          if (pObj) {
+            pObj.played += 1;
+            pObj.matchesPlayed = pObj.played;
+          }
+        });
+      }
+    });
+
+    // 4. Calculate Goalkeeper Clean Sheets and Goals Conceded
+    finishedMatches.forEach(m => {
+      const homeConceded = m.awayScore;
+      const awayConceded = m.homeScore;
+      
+      const matchLineup = lineups[m.id];
+      let homeGk: Player | undefined;
+      if (matchLineup && matchLineup.home && matchLineup.home.players && matchLineup.home.players['GK']) {
+        const gkId = matchLineup.home.players['GK'];
+        homeGk = basePlayers.find(p => p.id === gkId);
+      }
+      if (!homeGk) {
+        // Fallback: first GK of home team
+        homeGk = basePlayers.find(p => p.teamId.toLowerCase() === m.homeTeam.toLowerCase() && p.position === 'GK');
+      }
+      if (homeGk) {
+        homeGk.goalsConceded = (homeGk.goalsConceded || 0) + homeConceded;
+        homeGk.goals_conceded = homeGk.goalsConceded;
+        if (homeConceded === 0) {
+          homeGk.cleanSheets += 1;
+          homeGk.clean_sheets = homeGk.cleanSheets;
+        }
+        // Ensure they are also tracked as played
+        if (homeGk.played === 0) {
+          homeGk.played = 1;
+          homeGk.matchesPlayed = 1;
+        }
+      }
+      
+      let awayGk: Player | undefined;
+      if (matchLineup && matchLineup.away && matchLineup.away.players && matchLineup.away.players['GK']) {
+        const gkId = matchLineup.away.players['GK'];
+        awayGk = basePlayers.find(p => p.id === gkId);
+      }
+      if (!awayGk) {
+        // Fallback: first GK of away team
+        awayGk = basePlayers.find(p => p.teamId.toLowerCase() === m.awayTeam.toLowerCase() && p.position === 'GK');
+      }
+      if (awayGk) {
+        awayGk.goalsConceded = (awayGk.goalsConceded || 0) + awayConceded;
+        awayGk.goals_conceded = awayGk.goalsConceded;
+        if (awayConceded === 0) {
+          awayGk.cleanSheets += 1;
+          awayGk.clean_sheets = awayGk.cleanSheets;
+        }
+        // Ensure they are also tracked as played
+        if (awayGk.played === 0) {
+          awayGk.played = 1;
+          awayGk.matchesPlayed = 1;
+        }
+      }
+    });
+
+    return basePlayers;
+  }, [matches, goalScorers, cards, subs, lineups]);
+
+  const computedTeams = React.useMemo(() => {
+    return teams.map(t => ({
+      ...t,
+      squad: players.filter(p => p.teamId.toLowerCase() === t.id.toLowerCase())
+    }));
+  }, [teams, players]);
 
   // Helper to load all state from localStorage or seed initial data
   const loadState = () => {
@@ -328,18 +517,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           yellowCardsAway: yellowA,
           redCardsHome: redH,
           redCardsAway: redA,
-          possessionHome: 50 + (charSum % 10) - 5,
-          possessionAway: 50 - ((charSum % 10) - 5),
-          shotsHome: 8 + (charSum % 6),
-          shotsAway: 6 + (charSum % 5),
-          shotsOnTargetHome: 3 + (charSum % 4),
-          shotsOnTargetAway: 2 + (charSum % 3),
           foulsHome: foulsH,
           foulsAway: foulsA,
           offsidesHome: offsidesH,
           offsidesAway: offsidesA,
-          savesHome: 2 + (charSum % 5),
-          savesAway: 3 + (charSum % 4),
           freeKicksHome: freeKicksH,
           freeKicksAway: freeKicksA,
           
@@ -371,18 +552,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         yellowCardsAway: 1,
         redCardsHome: 0,
         redCardsAway: 0,
-        possessionHome: 54, // Balanced full match possession split
-        possessionAway: 46,
-        shotsHome: 9,
-        shotsAway: 5,
-        shotsOnTargetHome: 3,
-        shotsOnTargetAway: 2,
         foulsHome: 6,      // MST committed 6 fouls
         foulsAway: 16,     // ICE committed 16 fouls
         offsidesHome: 1,   // MST 1 offside (Nkemjika Sydney)
         offsidesAway: 0,
-        savesHome: 2,
-        savesAway: 3,
         freeKicksHome: 16, // MST 16 free kicks awarded (ICE 16 fouls)
         freeKicksAway: 6,  // ICE 6 free kicks awarded (MST 6 fouls)
         homeCorners: 6,
@@ -1137,11 +1310,51 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       goalsAgainst: 0,
       goalDifference: 0,
       points: 0,
-      form: [] as ('W' | 'D' | 'L')[]
+      form: [] as ('W' | 'D' | 'L')[],
+      yellowCards: 0,
+      yellow_cards: 0,
+      redCards: 0,
+      red_cards: 0,
+      wins: 0,
+      draws: 0,
+      losses: 0,
+      goals_for: 0,
+      goals_against: 0,
+      goal_difference: 0
     }));
 
+    // Load current stats for card aggregation
+    const storedStats = localStorage.getItem('fcl_admin_stats');
+    const statsRecord: Record<string, DetailedMatchStats> = storedStats ? JSON.parse(storedStats) : {};
+
+    const getMatchStats = (matchId: string) => {
+      const ms = statsRecord[matchId];
+      if (ms) {
+        return {
+          yellowHome: ms.yellowCardsHome ?? ms.homeYellowCards ?? 0,
+          yellowAway: ms.yellowCardsAway ?? ms.awayYellowCards ?? 0,
+          redHome: ms.redCardsHome ?? ms.homeRedCards ?? 0,
+          redAway: ms.redCardsAway ?? ms.awayRedCards ?? 0
+        };
+      }
+      // Fallback to MOCK_MATCH_STATS
+      const mockMs = MOCK_MATCH_STATS.find(s => s.matchId === matchId);
+      if (mockMs) {
+        return {
+          yellowHome: mockMs.yellowCardsHome ?? mockMs.homeYellowCards ?? 0,
+          yellowAway: mockMs.yellowCardsAway ?? mockMs.awayYellowCards ?? 0,
+          redHome: mockMs.redCardsHome ?? mockMs.homeRedCards ?? 0,
+          redAway: mockMs.redCardsAway ?? mockMs.awayRedCards ?? 0
+        };
+      }
+      return { yellowHome: 0, yellowAway: 0, redHome: 0, redAway: 0 };
+    };
+
     // Find all matches finished
-    const finishedMatches = allMatches.filter(m => m.status === 'Finished');
+    const finishedMatches = allMatches.filter(m => {
+      const s = m.status.trim().toUpperCase();
+      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED';
+    });
 
     finishedMatches.forEach(match => {
       const homeTeamObj = calculatedTeams.find(t => t.id === match.homeTeam.toLowerCase());
@@ -1190,7 +1403,82 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         // GD
         homeTeamObj.goalDifference = homeTeamObj.goalsFor - homeTeamObj.goalsAgainst;
         awayTeamObj.goalDifference = awayTeamObj.goalsFor - awayTeamObj.goalsAgainst;
+
+        // Cards aggregation
+        const mStats = getMatchStats(match.id);
+        
+        homeTeamObj.yellowCards += mStats.yellowHome;
+        homeTeamObj.yellow_cards = homeTeamObj.yellowCards;
+        homeTeamObj.redCards += mStats.redHome;
+        homeTeamObj.red_cards = homeTeamObj.redCards;
+
+        awayTeamObj.yellowCards += mStats.yellowAway;
+        awayTeamObj.yellow_cards = awayTeamObj.yellowCards;
+        awayTeamObj.redCards += mStats.redAway;
+        awayTeamObj.red_cards = awayTeamObj.redCards;
       }
+    });
+
+    // Make sure all calculated fields are synced with database names on every team object
+    calculatedTeams.forEach(team => {
+      team.wins = team.won;
+      team.draws = team.drawn;
+      team.losses = team.lost;
+      team.goals_for = team.goalsFor;
+      team.goals_against = team.goalsAgainst;
+      team.goal_difference = team.goalDifference;
+    });
+
+    // Sort according to FCL Official tiebreaker ranking order
+    calculatedTeams.sort((a, b) => {
+      // 1. points DESC
+      if ((b.points || 0) !== (a.points || 0)) {
+        return (b.points || 0) - (a.points || 0);
+      }
+      // 2. goal_difference DESC
+      const gdA = a.goalDifference !== undefined ? a.goalDifference : (a.goalsFor - a.goalsAgainst);
+      const gdB = b.goalDifference !== undefined ? b.goalDifference : (b.goalsFor - b.goalsAgainst);
+      if (gdB !== gdA) {
+        return gdB - gdA;
+      }
+      // 3. goals_for DESC
+      if ((b.goalsFor || 0) !== (a.goalsFor || 0)) {
+        return (b.goalsFor || 0) - (a.goalsFor || 0);
+      }
+      // 4. goals_against ASC
+      if ((a.goalsAgainst || 0) !== (b.goalsAgainst || 0)) {
+        return (a.goalsAgainst || 0) - (b.goalsAgainst || 0);
+      }
+      // 5. played ASC
+      if ((a.played || 0) !== (b.played || 0)) {
+        return (a.played || 0) - (b.played || 0);
+      }
+      // 6. wins DESC
+      if ((b.won || 0) !== (a.won || 0)) {
+        return (b.won || 0) - (a.won || 0);
+      }
+      // 7. draws DESC
+      if ((b.drawn || 0) !== (a.drawn || 0)) {
+        return (b.drawn || 0) - (a.drawn || 0);
+      }
+      // 8. losses ASC
+      if ((a.lost || 0) !== (b.lost || 0)) {
+        return (a.lost || 0) - (b.lost || 0);
+      }
+      // 9. yellow_cards ASC
+      const yc_a = a.yellowCards || 0;
+      const yc_b = b.yellowCards || 0;
+      if (yc_a !== yc_b) {
+        return yc_a - yc_b;
+      }
+      // 10. red_cards ASC
+      const rc_a = a.redCards || 0;
+      const rc_b = b.redCards || 0;
+      if (rc_a !== rc_b) {
+        return rc_a - rc_b;
+      }
+      // 11. Final Fallback: Sort alphabetically by team abbreviation/id
+      return a.id.localeCompare(b.id);
     });
 
     return calculatedTeams;
@@ -1699,13 +1987,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
     // Special handling for Half Time / Postpones
     const timers = { ...activeMinAndStatus };
-    if (status === 'Half Time') {
+    const statUpper = status.toUpperCase();
+    if (statUpper === 'HALF TIME' || statUpper === 'HALF-TIME') {
       timers[matchId] = { liveMinute: 'HT', isPaused: true };
-    } else if (status === 'Finished') {
+    } else if (statUpper === 'FINISHED' || statUpper === 'FULL-TIME' || statUpper === 'FULL TIME' || statUpper === 'COMPLETED') {
       timers[matchId] = { liveMinute: 'FT', isPaused: true };
-    } else if (status === 'Postponed') {
+    } else if (statUpper === 'POSTPONED') {
       timers[matchId] = { liveMinute: 'PPD', isPaused: true };
-    } else if (status === 'Cancelled') {
+    } else if (statUpper === 'CANCELLED') {
       timers[matchId] = { liveMinute: 'CAN', isPaused: true };
     }
 
@@ -1727,7 +2016,9 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
     // standigs update if finished
     let updatedTeams = teams;
-    if (status === 'Finished') {
+    const normalizedStatus = status.trim().toUpperCase();
+    const isNowFinished = normalizedStatus === 'FINISHED' || normalizedStatus === 'FULL-TIME' || normalizedStatus === 'FULL TIME' || normalizedStatus === 'COMPLETED';
+    if (isNowFinished) {
       updatedTeams = recalculateStandingsFromMatches(teams, changedMatches);
     }
 
@@ -2384,7 +2675,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     <MatchStateContext.Provider
       value={{
         matches,
-        teams,
+        teams: computedTeams,
+        players,
         detailedStats,
         goalScorers,
         cards,

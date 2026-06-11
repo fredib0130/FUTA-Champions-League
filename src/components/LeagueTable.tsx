@@ -12,10 +12,54 @@ interface LeagueTableProps {
 export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
   const { teams } = useMatchState();
   const sortedTeams = [...teams].sort((a, b) => {
-    if (b.points !== a.points) return b.points - a.points;
-    if (b.goalDifference !== a.goalDifference) return b.goalDifference - a.goalDifference;
-    if (b.goalsFor !== a.goalsFor) return b.goalsFor - a.goalsFor;
-    return a.name.localeCompare(b.name);
+    // 1. points DESC
+    if ((b.points || 0) !== (a.points || 0)) {
+      return (b.points || 0) - (a.points || 0);
+    }
+    // 2. goal_difference DESC
+    const gdA = a.goalDifference !== undefined ? a.goalDifference : (a.goalsFor - a.goalsAgainst);
+    const gdB = b.goalDifference !== undefined ? b.goalDifference : (b.goalsFor - b.goalsAgainst);
+    if (gdB !== gdA) {
+      return gdB - gdA;
+    }
+    // 3. goals_for DESC
+    if ((b.goalsFor || 0) !== (a.goalsFor || 0)) {
+      return (b.goalsFor || 0) - (a.goalsFor || 0);
+    }
+    // 4. goals_against ASC
+    if ((a.goalsAgainst || 0) !== (b.goalsAgainst || 0)) {
+      return (a.goalsAgainst || 0) - (b.goalsAgainst || 0);
+    }
+    // 5. played ASC
+    if ((a.played || 0) !== (b.played || 0)) {
+      return (a.played || 0) - (b.played || 0);
+    }
+    // 6. wins DESC
+    if ((b.won || 0) !== (a.won || 0)) {
+      return (b.won || 0) - (a.won || 0);
+    }
+    // 7. draws DESC
+    if ((b.drawn || 0) !== (a.drawn || 0)) {
+      return (b.drawn || 0) - (a.drawn || 0);
+    }
+    // 8. losses ASC
+    if ((a.lost || 0) !== (b.lost || 0)) {
+      return (a.lost || 0) - (b.lost || 0);
+    }
+    // 9. yellow_cards ASC
+    const yc_a = a.yellowCards || 0;
+    const yc_b = b.yellowCards || 0;
+    if (yc_a !== yc_b) {
+      return yc_a - yc_b;
+    }
+    // 10. red_cards ASC
+    const rc_a = a.redCards || 0;
+    const rc_b = b.redCards || 0;
+    if (rc_a !== rc_b) {
+      return rc_a - rc_b;
+    }
+    // 11. team_name ASC (alphabetical by team abbreviation/id)
+    return a.id.localeCompare(b.id);
   });
 
   const displayTeams = limit ? sortedTeams.slice(0, limit) : sortedTeams;
@@ -36,6 +80,8 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
                 <th className="px-4 py-4 text-center">GF</th>
                 <th className="px-4 py-4 text-center">GA</th>
                 <th className="px-4 py-4 text-center">GD</th>
+                <th className="px-4 py-4 text-center text-yellow-500 font-bold">YC</th>
+                <th className="px-4 py-4 text-center text-red-500 font-bold">RC</th>
               </>
             )}
             <th className="px-4 py-4 text-center font-bold text-white">PTS</th>
@@ -105,6 +151,8 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
                         {team.goalDifference > 0 ? `+${team.goalDifference}` : team.goalDifference}
                       </span>
                     </td>
+                    <td className="px-4 py-4 text-center font-mono text-sm text-yellow-500 font-bold">{team.yellowCards || 0}</td>
+                    <td className="px-4 py-4 text-center font-mono text-sm text-red-500 font-bold">{team.redCards || 0}</td>
                   </>
                 )}
                 <td className="px-4 py-4 text-center font-mono font-bold text-white">{team.points}</td>

@@ -90,7 +90,7 @@ export const PLAYERS: Player[] = [
     name: p.name,
     position: p.position,
     goals: 0,
-    assists: 0,
+    played: 0,
     cleanSheets: 0,
     teamId: 'mst',
     image: `https://api.dicebear.com/7.x/avataaars/svg?seed=mst-player-${idx + 1}`
@@ -106,7 +106,7 @@ export const PLAYERS: Player[] = [
       name: ['John Doe', 'Samuel Ade', 'Tunde Williams', 'Chidi Okafor', 'Victor Moses', 'David Alaba', 'Olamide Baddo', 'Femi Kuti', 'Burna Boy', 'Wiz Kid', 'Davido', 'Rema', 'Asake', 'Tiwa Savage', 'Yemi Alade'][i % 15] + ` ${i + 1}`,
       position: ['FWD', 'MID', 'DEF', 'GK'][i % 4] as any,
       goals: 0,
-      assists: 0,
+      played: 0,
       cleanSheets: 0,
       teamId: team.id,
       image: `https://api.dicebear.com/7.x/avataaars/svg?seed=player-${i + 1}`

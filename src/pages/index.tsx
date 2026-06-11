@@ -338,11 +338,33 @@ const SponsorCard: React.FC<SponsorCardProps> = ({ sponsor, onContactClick }) =>
 }
 
 export function Home() {
-  const { matches, sponsors } = useMatchState();
+  const { matches, sponsors, players } = useMatchState();
   const [contactSponsor, setContactSponsor] = React.useState<Sponsor | null>(null);
+  
+  const completedMatches = React.useMemo(() => {
+    return matches.filter(m => {
+      const s = m.status.trim().toUpperCase();
+      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED';
+    });
+  }, [matches]);
+
+  const upcomingFixtures = React.useMemo(() => {
+    return matches.filter(m => {
+      const s = m.status.trim().toUpperCase();
+      return s === 'UPCOMING' || s === 'SCHEDULED' || s === 'POSTPONED' || s === 'LIVE' || s === 'HALF TIME' || s === 'HALF-TIME' || s === 'DELAYED';
+    });
+  }, [matches]);
+
   const featuredMatch = matches.find(m => m.id === 'md1-1') || matches[0];
   const latestNews = NEWS.slice(0, 2);
-  const topPlayers = PLAYERS.slice(0, 3);
+  const topPlayers = React.useMemo(() => {
+    return [...players]
+      .sort((a, b) => {
+        if (b.goals !== a.goals) return b.goals - a.goals;
+        return a.name.localeCompare(b.name);
+      })
+      .slice(0, 3);
+  }, [players]);
   const topTeamsTable = <LeagueTable limit={5} />;
   const topCoefficients = COEFFICIENTS.slice(0, 3);
 
@@ -449,24 +471,53 @@ export function Home() {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-12 items-start">
-          <div className="lg:col-span-2 space-y-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <h2 className="text-3xl font-display italic uppercase tracking-tighter">OPENING FIXTURE</h2>
-                <div className="px-3 py-1 bg-primary/20 border border-primary/40 rounded-full text-[10px] font-black text-primary uppercase tracking-widest animate-pulse">Live from Main Bowl</div>
-              </div>
-              <Link to="/fixtures" className="text-primary font-bold text-sm hover:underline">VIEW ALL</Link>
-            </div>
-            <div className="relative p-1 bg-gradient-to-r from-primary/50 to-blue-500/50 rounded-[42px] group">
-              <div className="absolute -inset-1 bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <MatchCard match={featuredMatch} />
-            </div>
-            <div className="grid sm:grid-cols-2 gap-6">
-              {matches.filter(m => m.id !== featuredMatch.id).slice(0, 2).map(m => (
-                <div key={m.id}>
-                  <MatchCard match={m} />
+          <div className="lg:col-span-2 space-y-12">
+            {/* Next Fixtures (Only Upcoming/Scheduled/Postponed Matches in Fixtures status) */}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <h2 className="text-3xl font-display italic uppercase tracking-tighter">NEXT FIXTURES</h2>
+                  <div className="px-3 py-1 bg-primary/20 border border-primary/40 rounded-full text-[10px] font-black text-primary uppercase tracking-widest animate-pulse">Upcoming Matches</div>
                 </div>
-              ))}
+                <Link to="/fixtures" className="text-primary font-bold text-sm hover:underline">VIEW ALL</Link>
+              </div>
+              {upcomingFixtures.length > 0 ? (
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {upcomingFixtures.slice(0, 4).map(m => (
+                    <div key={m.id}>
+                      <MatchCard match={m} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-8 text-center glass border border-white/5 rounded-3xl text-white/40 font-bold uppercase tracking-widest text-xs">
+                  No upcoming fixtures scheduled!
+                </div>
+              )}
+            </div>
+
+            {/* Latest Results (Only Completed/Finished Matches) */}
+            <div className="space-y-6 pt-6 border-t border-white/5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <h2 className="text-3xl font-display italic uppercase tracking-tighter">LATEST RESULTS</h2>
+                  <div className="px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 rounded-full text-[10px] font-black text-emerald-400 uppercase tracking-widest">Full-Time Archive</div>
+                </div>
+                <Link to="/fixtures" className="text-primary font-bold text-sm hover:underline">VIEW ALL</Link>
+              </div>
+              {completedMatches.length > 0 ? (
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {completedMatches.slice(0, 4).map(m => (
+                    <div key={m.id}>
+                      <MatchCard match={m} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-8 text-center glass border border-white/5 rounded-3xl text-white/40 font-bold uppercase tracking-widest text-xs">
+                  No completed results yet!
+                </div>
+              )}
             </div>
           </div>
           
@@ -526,8 +577,10 @@ export function Home() {
                   </div>
                   <div className="w-px h-8 bg-white/10" />
                   <div>
-                    <div className="text-3xl font-display font-black text-white/60 leading-none">{player.assists}</div>
-                    <div className="text-[8px] font-bold text-white/20 uppercase tracking-widest mt-1">Assists</div>
+                    <div className="text-3xl font-display font-black text-white/60 leading-none">
+                      {player.position === 'GK' ? player.cleanSheets : 'N/A'}
+                    </div>
+                    <div className="text-[8px] font-bold text-white/20 uppercase tracking-widest mt-1">Clean Sheets</div>
                   </div>
                 </div>
               </motion.div>
@@ -691,6 +744,7 @@ export function Fixtures() {
   const { matches, editFixture, teams } = useMatchState();
   const [activeMW, setActiveMW] = React.useState(1);
   const [viewTab, setViewTab] = React.useState<'fixtures' | 'referees'>('fixtures');
+  const [fixtureType, setFixtureType] = React.useState<'fixtures' | 'results'>('fixtures');
   
   // Referees search & filtering state
   const [refereeSearch, setRefereeSearch] = React.useState('');
@@ -706,7 +760,16 @@ export function Fixtures() {
 
   const matchWeeks = [1, 2, 3]; 
 
-  const filteredMatches = matches.filter(m => m.matchday === activeMW);
+  const filteredMatches = matches.filter(m => {
+    if (m.matchday !== activeMW) return false;
+    const s = m.status.trim().toUpperCase();
+    if (fixtureType === 'fixtures') {
+      return s === 'UPCOMING' || s === 'SCHEDULED' || s === 'POSTPONED' || s === 'LIVE' || s === 'HALF TIME' || s === 'HALF-TIME' || s === 'DELAYED';
+    } else {
+      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED';
+    }
+  });
+
   const matchdayOpeningLabel = activeMW === 1 ? 'Season Opener & Week 1 (June 5-7)' : activeMW === 2 ? 'Mid-Season Clash (June 10-11)' : 'Final League Push (June 13-15)';
 
   const isAdmin = !!localStorage.getItem('fcl_admin_user');
@@ -839,6 +902,36 @@ export function Fixtures() {
               ))}
             </div>
 
+            {/* Fixtures vs Results sub-toggle */}
+            <div className="flex justify-center mb-8">
+              <div className="bg-navy/40 border border-white/5 rounded-xl p-1 flex gap-2 w-full max-w-sm">
+                <button
+                  type="button"
+                  onClick={() => setFixtureType('fixtures')}
+                  className={cn(
+                    "flex-1 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+                    fixtureType === 'fixtures'
+                      ? 'bg-[#00e5ff]/20 text-[#00e5ff] border border-[#00e5ff]/30 shadow-[0_0_10px_rgba(0,229,255,0.1)]'
+                      : 'text-white/40 hover:text-white/85'
+                  )}
+                >
+                  <span>Upcoming Fixtures</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFixtureType('results')}
+                  className={cn(
+                    "flex-1 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+                    fixtureType === 'results'
+                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                      : 'text-white/40 hover:text-white/85'
+                  )}
+                >
+                  <span>Completed Results</span>
+                </button>
+              </div>
+            </div>
+
             <div className="mb-12 text-center py-6 glass rounded-3xl border border-white/5 bg-white/[0.02]">
               <h3 className="text-xl font-display italic uppercase text-primary tracking-tighter">{matchdayOpeningLabel}</h3>
             </div>
@@ -858,7 +951,12 @@ export function Fixtures() {
                 </div>
               ) : (
                 <div className="text-center py-20 glass rounded-[40px]">
-                  <p className="text-white/30 font-display italic text-2xl uppercase tracking-widest">No fixtures scheduled yet for MW{activeMW}</p>
+                  <p className="text-white/30 font-display italic text-2xl uppercase tracking-widest">
+                    {fixtureType === 'fixtures' 
+                      ? `No upcoming fixtures for MW${activeMW}` 
+                      : `No completed results for MW${activeMW}`
+                    }
+                  </p>
                 </div>
               )}
             </div>
@@ -1316,14 +1414,10 @@ export const knockoutStructure = {
 };
 
 export function Playoffs() {
+  const { teams } = useMatchState();
   const [activeStage, setActiveStage] = React.useState<keyof typeof knockoutStructure>('playoffs');
 
-  const sortedTeams = [...TEAMS].sort((a, b) => {
-    if (b.points !== a.points) return b.points - a.points;
-    if (b.goalDifference !== a.goalDifference) return b.goalDifference - a.goalDifference;
-    if (b.goalsFor !== a.goalsFor) return b.goalsFor - a.goalsFor;
-    return a.name.localeCompare(b.name);
-  });
+  const sortedTeams = teams;
 
   interface DisplayEntity {
     name: string;
@@ -1659,11 +1753,52 @@ export function Teams() {
   );
 }
 export function Stats() {
-  const { matches, detailedStats } = useMatchState();
+  const { matches, detailedStats, players } = useMatchState();
   const [activeTab, setActiveTab] = React.useState<'players' | 'teams'>('players');
 
-  const scorers = [...PLAYERS].sort((a, b) => b.goals - a.goals);
-  const assists = [...PLAYERS].sort((a, b) => b.assists - a.assists);
+  const scorers = React.useMemo(() => {
+    return [...players]
+      .filter(p => p.goals > 0)
+      .sort((a, b) => {
+        // 1. Goals (Highest to Lowest)
+        if (b.goals !== a.goals) {
+          return b.goals - a.goals;
+        }
+        // 2. Matches Played (Lowest to Highest)
+        const playedA = a.played ?? 0;
+        const playedB = b.played ?? 0;
+        if (playedA !== playedB) {
+          return playedA - playedB;
+        }
+        // 3. Alphabetical Order
+        return a.name.localeCompare(b.name);
+      });
+  }, [players]);
+
+  const cleanSheetRankings = React.useMemo(() => {
+    return [...players]
+      .filter(p => p.position === 'GK')
+      .sort((a, b) => {
+        // 1. Clean Sheets (Highest)
+        if (b.cleanSheets !== a.cleanSheets) {
+          return b.cleanSheets - a.cleanSheets;
+        }
+        // 2. Matches Played (Lowest)
+        const playedA = a.played ?? 0;
+        const playedB = b.played ?? 0;
+        if (playedA !== playedB) {
+          return playedA - playedB;
+        }
+        // 3. Goals Conceded (Lowest)
+        const concededA = a.goalsConceded ?? 0;
+        const concededB = b.goalsConceded ?? 0;
+        if (concededA !== concededB) {
+          return concededA - concededB;
+        }
+        // 4. Alphabetical Order
+        return a.name.localeCompare(b.name);
+      });
+  }, [players]);
 
   // Compute aggregated team stats for the FUTA Champions League
   const teamStats = React.useMemo(() => {
@@ -1797,31 +1932,36 @@ export function Stats() {
               </div>
             </div>
 
-            {/* Assists Leaderboard */}
+            {/* Goalkeeper Clean Sheets Leaderboard */}
             <div className="space-y-8">
-              <div className="flex items-center justify-between border-b border-blue-500 pb-4">
-                <h2 className="text-2xl font-display italic">TOP ASSISTS</h2>
-                <Star className="text-blue-500" />
+              <div className="flex items-center justify-between border-b border-emerald-500 pb-4">
+                <h2 className="text-2xl font-display italic">GK CLEAN SHEETS</h2>
+                <ShieldCheck className="text-emerald-500" />
               </div>
               <div className="space-y-4">
-                {assists.map((player, i) => (
+                {cleanSheetRankings.map((player, i) => (
                   <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
                     <div className="flex items-center space-x-4">
                       <span className="text-xl font-display font-bold text-white/20 w-8">{i + 1}</span>
                       <img src={player.image} className="w-12 h-12 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
                       <div>
-                        <h4 className="font-bold group-hover:text-blue-500 transition-colors">{player.name}</h4>
-                        <p className="text-xs text-white/40 uppercase tracking-widest">
-                          {TEAMS.find(t => t.id === player.teamId)?.name}
-                        </p>
+                        <h4 className="font-bold group-hover:text-emerald-500 transition-colors">{player.name}</h4>
+                        <div className="text-xs text-white/40 uppercase tracking-widest flex items-center gap-2">
+                          <span>{TEAMS.find(t => t.id === player.teamId)?.name}</span>
+                          <span className="text-white/20">•</span>
+                          <span>{player.played ?? 0} {player.played === 1 ? 'Match' : 'Matches'}</span>
+                        </div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-display font-bold text-blue-500">{player.assists}</div>
-                      <div className="text-[8px] font-bold text-white/20 uppercase tracking-widest">Assists</div>
+                      <div className="text-2xl font-display font-bold text-emerald-500">{player.cleanSheets}</div>
+                      <div className="text-[8px] font-bold text-white/20 uppercase tracking-widest">Clean Sheets</div>
                     </div>
                   </div>
                 ))}
+                {cleanSheetRankings.length === 0 && (
+                  <div className="text-center text-white/40 py-8">No goalkeeper clean sheet data available.</div>
+                )}
               </div>
             </div>
           </div>
@@ -3461,8 +3601,9 @@ export function Contact() {
 }
 export function TeamProfile() {
   const { id } = useParams();
+  const { players } = useMatchState();
   const team = TEAMS.find(t => t.id === id);
-  const teamPlayers = PLAYERS.filter(p => p.teamId === id);
+  const teamPlayers = players.filter(p => p.teamId === id);
   const teamCoefficient = COEFFICIENTS.find(c => c.teamId === id);
 
   if (!team) return <div>Team not found</div>;
@@ -3540,11 +3681,41 @@ export function TeamProfile() {
               <h2 className="text-2xl font-display italic mb-8 border-b border-white/10 pb-4 uppercase">THE SQUAD</h2>
               <div className="grid sm:grid-cols-2 gap-4">
                 {teamPlayers.map((player) => (
-                  <div key={player.id} className="glass p-4 rounded-2xl flex items-center space-x-4">
-                    <img src={player.image} alt={player.name} className="w-12 h-12 rounded-xl" />
-                    <div>
-                      <h4 className="font-bold">{player.name}</h4>
-                      <p className="text-[10px] font-bold text-primary uppercase italic">{player.position}</p>
+                  <div key={player.id} className="glass p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center space-x-4">
+                      <img src={player.image} alt={player.name} className="w-12 h-12 rounded-xl object-cover bg-white/5" />
+                      <div>
+                        <h4 className="font-bold">{player.name}</h4>
+                        <p className="text-[10px] font-bold text-primary uppercase italic">{player.position}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 justify-end bg-navy-dark/40 px-3 py-1.5 rounded-xl border border-white/5">
+                      <div className="text-center px-1">
+                        <div className="text-xs font-bold text-white/80">{player.played ?? 0}</div>
+                        <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">Apps</div>
+                      </div>
+                      <div className="w-px h-5 bg-white/10" />
+                      {player.position === 'GK' ? (
+                        <div className="text-center px-1">
+                          <div className="text-xs font-bold text-emerald-500">{player.cleanSheets ?? 0}</div>
+                          <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">CS</div>
+                        </div>
+                      ) : (
+                        <div className="text-center px-1">
+                          <div className="text-xs font-bold text-primary">{player.goals ?? 0}</div>
+                          <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">Goals</div>
+                        </div>
+                      )}
+                      <div className="w-px h-5 bg-white/10" />
+                      <div className="text-center px-1">
+                        <div className="text-xs font-bold text-yellow-500">{player.yellowCards ?? 0}</div>
+                        <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">YC</div>
+                      </div>
+                      <div className="w-px h-5 bg-white/10" />
+                      <div className="text-center px-1">
+                        <div className="text-xs font-bold text-red-500">{player.redCards ?? 0}</div>
+                        <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">RC</div>
+                      </div>
                     </div>
                   </div>
                 ))}

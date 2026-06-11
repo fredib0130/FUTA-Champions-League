@@ -24,6 +24,20 @@ export interface Team {
   form: ('W' | 'D' | 'L')[];
   description: string;
   squad: Player[];
+  
+  // FCL 2026 Standing Rules
+  yellowCards?: number;
+  yellow_cards?: number;
+  redCards?: number;
+  red_cards?: number;
+  
+  // Database-style property aliases for standings compatibility
+  wins?: number;
+  draws?: number;
+  losses?: number;
+  goals_for?: number;
+  goals_against?: number;
+  goal_difference?: number;
 }
 
 export interface Player {
@@ -31,8 +45,16 @@ export interface Player {
   name: string;
   position: 'GK' | 'DEF' | 'MID' | 'FWD';
   goals: number;
-  assists: number;
-  cleanSheets?: number;
+  played: number;
+  matchesPlayed?: number;
+  yellowCards?: number;
+  yellow_cards?: number;
+  redCards?: number;
+  red_cards?: number;
+  cleanSheets: number;
+  clean_sheets?: number;
+  goalsConceded?: number;
+  goals_conceded?: number;
   teamId: string;
   image: string;
 }
