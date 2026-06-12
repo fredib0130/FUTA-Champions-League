@@ -3601,8 +3601,8 @@ export function Contact() {
 }
 export function TeamProfile() {
   const { id } = useParams();
-  const { players } = useMatchState();
-  const team = TEAMS.find(t => t.id === id);
+  const { players, teams } = useMatchState();
+  const team = teams.find(t => t.id === id) || TEAMS.find(t => t.id === id);
   const teamPlayers = players.filter(p => p.teamId === id);
   const teamCoefficient = COEFFICIENTS.find(c => c.teamId === id);
 
@@ -3726,9 +3726,35 @@ export function TeamProfile() {
           <div className="space-y-8">
             <div className="glass p-8 rounded-[40px]">
               <h3 className="text-lg font-bold mb-4 italic uppercase">TEAM BIO</h3>
-              <p className="text-white/50 leading-relaxed text-sm">
+              <p className="text-white/50 leading-relaxed text-sm mb-6">
                 {team.description}
               </p>
+              
+              <div className="border-t border-white/5 pt-6">
+                <h4 className="text-xs font-black uppercase text-primary tracking-[0.2em] mb-4">Current Tournament Record</h4>
+                <div className="grid grid-cols-5 gap-2 bg-slate-950/40 p-4 rounded-2xl border border-white/5">
+                  <div className="text-center">
+                    <div className="text-[10px] text-white/40 font-bold font-mono">Pl</div>
+                    <div className="text-lg font-display font-black text-white mt-1">{team.played}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-[10px] text-white/40 font-bold font-mono">W</div>
+                    <div className="text-lg font-display font-black text-emerald-400 mt-1">{team.won}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-[10px] text-white/40 font-bold font-mono">D</div>
+                    <div className="text-lg font-display font-black text-indigo-400 mt-1">{team.drawn}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-[10px] text-white/40 font-bold font-mono">L</div>
+                    <div className="text-lg font-display font-black text-rose-500 mt-1">{team.lost}</div>
+                  </div>
+                  <div className="text-center bg-primary/10 rounded-xl border border-primary/20 py-1">
+                    <div className="text-[10px] text-primary font-black font-mono">Pts</div>
+                    <div className="text-lg font-display font-black text-primary mt-0.5">{team.points}</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -4003,3 +4029,5 @@ export function Pots() {
     </div>
   );
 }
+
+export { Appearances } from './Appearances';

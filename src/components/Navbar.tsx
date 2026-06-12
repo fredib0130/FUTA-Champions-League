@@ -15,6 +15,7 @@ const navItems = [
   { name: 'Champions', path: '/champions', icon: Medal },
   { name: 'Teams', path: '/teams', icon: Users },
   { name: 'Stats', path: '/stats', icon: BarChart3 },
+  { name: 'Appearances', path: '/appearances', icon: Users },
   { name: 'Media', path: '/media', icon: ImageIcon },
   { name: 'News', path: '/news', icon: Newspaper },
   { name: 'Sponsorship', path: '/sponsorship', icon: Star },

@@ -1887,6 +1887,59 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     });
 
     addAuditLog(`Ended match (completed full time and recalculated stands)`, matchId);
+
+    // Auto-trigger appearances tracker server collection
+    try {
+      const matchLineup = lineups[matchId];
+      const matchSubs = subs.filter(s => s.matchId === matchId);
+      
+      const starterNames: string[] = [];
+      const subInNames: string[] = [];
+      
+      if (matchLineup) {
+        if (matchLineup.home && matchLineup.home.players) {
+          Object.values(matchLineup.home.players).forEach(pid => {
+            const p = PLAYERS.find(pl => pl.id === pid || pl.name.toLowerCase() === String(pid).toLowerCase());
+            if (p) starterNames.push(p.name);
+            else starterNames.push(String(pid));
+          });
+        }
+        if (matchLineup.away && matchLineup.away.players) {
+          Object.values(matchLineup.away.players).forEach(pid => {
+            const p = PLAYERS.find(pl => pl.id === pid || pl.name.toLowerCase() === String(pid).toLowerCase());
+            if (p) starterNames.push(p.name);
+            else starterNames.push(String(pid));
+          });
+        }
+      }
+      
+      matchSubs.forEach(s => {
+        const p = PLAYERS.find(pl => pl.id === s.playerIn || pl.name.toLowerCase() === s.playerIn.toLowerCase());
+        if (p) subInNames.push(p.name);
+        else subInNames.push(s.playerIn);
+      });
+
+      if (starterNames.length > 0) {
+        fetch('/api/match/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            matchId,
+            status: 'Finished',
+            starters: starterNames,
+            substitutes: subInNames,
+            homeTeam: matchLineup?.home?.teamAbbr || '',
+            awayTeam: matchLineup?.away?.teamAbbr || ''
+          })
+        })
+        .then(res => res.json())
+        .then(data => console.log('[Appearances API Sync] Saved player appearances to server-side DB:', data))
+        .catch(e => console.error('[Appearances API Sync] Network error updating appearances:', e));
+      }
+    } catch (e) {
+      console.error('[Appearances API Sync] Lineup calculation failure:', e);
+    }
+
     saveAndBroadcast(changedMatches, teamsCopy, undefined, undefined, undefined, undefined, comms, undefined, undefined, undefined, timers);
   };
 
@@ -2020,6 +2073,58 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     const isNowFinished = normalizedStatus === 'FINISHED' || normalizedStatus === 'FULL-TIME' || normalizedStatus === 'FULL TIME' || normalizedStatus === 'COMPLETED';
     if (isNowFinished) {
       updatedTeams = recalculateStandingsFromMatches(teams, changedMatches);
+      
+      // Auto-trigger appearances tracker server collection
+      try {
+        const matchLineup = lineups[matchId];
+        const matchSubs = subs.filter(s => s.matchId === matchId);
+        
+        const starterNames: string[] = [];
+        const subInNames: string[] = [];
+        
+        if (matchLineup) {
+          if (matchLineup.home && matchLineup.home.players) {
+            Object.values(matchLineup.home.players).forEach(pid => {
+              const p = PLAYERS.find(pl => pl.id === pid || pl.name.toLowerCase() === String(pid).toLowerCase());
+              if (p) starterNames.push(p.name);
+              else starterNames.push(String(pid));
+            });
+          }
+          if (matchLineup.away && matchLineup.away.players) {
+            Object.values(matchLineup.away.players).forEach(pid => {
+              const p = PLAYERS.find(pl => pl.id === pid || pl.name.toLowerCase() === String(pid).toLowerCase());
+              if (p) starterNames.push(p.name);
+              else starterNames.push(String(pid));
+            });
+          }
+        }
+        
+        matchSubs.forEach(s => {
+          const p = PLAYERS.find(pl => pl.id === s.playerIn || pl.name.toLowerCase() === s.playerIn.toLowerCase());
+          if (p) subInNames.push(p.name);
+          else subInNames.push(s.playerIn);
+        });
+
+        if (starterNames.length > 0) {
+          fetch('/api/match/complete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              matchId,
+              status: 'Finished',
+              starters: starterNames,
+              substitutes: subInNames,
+              homeTeam: matchLineup?.home?.teamAbbr || '',
+              awayTeam: matchLineup?.away?.teamAbbr || ''
+            })
+          })
+          .then(res => res.json())
+          .then(data => console.log('[Appearances API Sync] Saved player appearances to server-side DB:', data))
+          .catch(e => console.error('[Appearances API Sync] Network error updating appearances:', e));
+        }
+      } catch (e) {
+        console.error('[Appearances API Sync] Lineup calculation failure:', e);
+      }
     }
 
     addAuditLog(`Updated match status manually to ${status}`, matchId);

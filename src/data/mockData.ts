@@ -80,11 +80,13 @@ export const PLAYERS: Player[] = [
     { name: "Akinyo Boluwatife Precious", position: "MID" as const },
     { name: "Adekunle Ayomide Mubarak", position: "MID" as const },
     { name: "Olagunju Moses Temitope", position: "MID" as const },
+    { name: "Ayeni Ayobami", position: "MID" as const },
     { name: "Nkemjika Sydney", position: "FWD" as const },
     { name: "Shomuyiwa Lateef Babatunde", position: "FWD" as const },
     { name: "Boyede Joseph Ayomide", position: "FWD" as const },
     { name: "Fabusuyi Daniel Oluwafisayo", position: "FWD" as const },
-    { name: "Akintunde Ayomide Oluwaseyifunmi", position: "FWD" as const }
+    { name: "Akintunde Ayomide Oluwaseyifunmi", position: "FWD" as const },
+    { name: "Ekwe Fortune", position: "FWD" as const }
   ].map((p, idx) => ({
     id: `player-mst-${idx + 1}`,
     name: p.name,

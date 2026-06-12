@@ -4,6 +4,7 @@ import fs from "fs";
 import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import fileUpload from "express-fileupload";
+import { PLAYERS } from "./src/data/mockData";
 
 const app = express();
 const PORT = 3000;
@@ -1231,6 +1232,312 @@ app.delete("/api/inquiries/:id", (req, res) => {
     res.json({ success: true });
   } catch (err: any) {
     res.status(500).json({ error: "Failed to delete inquiry." });
+  }
+});
+
+// --- APPEARANCES TRACKER DATABASE SECTION (AUTO-UPDATED) ---
+const PLAYERS_FILE = path.join(DB_DIR, "players.json");
+const APPEARANCES_FILE = path.join(DB_DIR, "match_appearances.json");
+
+export interface DBPlayer {
+  id: number;
+  name: string;
+  team: string;
+  position: string;
+  matric_number: string;
+  appearances: number;
+}
+
+export interface MatchAppearance {
+  id: number;
+  match_id: string;
+  player_name: string;
+  team: string;
+  is_starting: boolean;
+  minutes_played: number;
+}
+
+// Determine team upper key for dynamic players
+function determineTeamForPlayer(name: string, homeTeam: string, awayTeam: string): string {
+  if (fs.existsSync(REGISTRATIONS_FILE)) {
+    try {
+      const regs = JSON.parse(fs.readFileSync(REGISTRATIONS_FILE, "utf-8"));
+      for (const [teamKey, teamReg] of Object.entries(regs)) {
+        if (teamReg && Array.isArray((teamReg as any).players)) {
+          const found = (teamReg as any).players.some((p: any) => p && p.fullName && p.fullName.trim().toLowerCase() === name.toLowerCase());
+          if (found) return teamKey.toUpperCase();
+        }
+      }
+    } catch(e) {}
+  }
+  return homeTeam || "MST";
+}
+
+// Global seed function
+function seedAppearancesDB() {
+  let dbPlayers: DBPlayer[] = [];
+  let dbAppearances: MatchAppearance[] = [];
+
+  if (fs.existsSync(PLAYERS_FILE)) {
+    try {
+      dbPlayers = JSON.parse(fs.readFileSync(PLAYERS_FILE, "utf-8"));
+    } catch (e) {
+      dbPlayers = [];
+    }
+  }
+
+  if (fs.existsSync(APPEARANCES_FILE)) {
+    try {
+      dbAppearances = JSON.parse(fs.readFileSync(APPEARANCES_FILE, "utf-8"));
+    } catch (e) {
+      dbAppearances = [];
+    }
+  }
+
+  // Seed default player list if empty
+  if (dbPlayers.length === 0) {
+    console.log("[Appearances DB] Seeding players database structure...");
+    let regs: Record<string, any> = {};
+    if (fs.existsSync(REGISTRATIONS_FILE)) {
+      try {
+        regs = JSON.parse(fs.readFileSync(REGISTRATIONS_FILE, "utf-8"));
+      } catch (e) {
+        regs = {};
+      }
+    }
+
+    const registrationPlayerMap = new Map<string, string>();
+    Object.values(regs).forEach((teamReg: any) => {
+      if (teamReg && Array.isArray(teamReg.players)) {
+        teamReg.players.forEach((p: any) => {
+          if (p && p.fullName && p.matricNumber) {
+            registrationPlayerMap.set(p.fullName.trim().toLowerCase(), p.matricNumber);
+          }
+        });
+      }
+    });
+
+    try {
+      PLAYERS.forEach((p, idx) => {
+        const teamAbbr = p.teamId.toUpperCase();
+        const normalizedName = p.name.trim();
+        const matric_number = registrationPlayerMap.get(normalizedName.toLowerCase()) || `FCL/26/${1001 + idx}`;
+        
+        dbPlayers.push({
+          id: idx + 1,
+          name: normalizedName,
+          team: teamAbbr,
+          position: p.position || "MID",
+          matric_number,
+          appearances: 0
+        });
+      });
+    } catch (err) {
+      console.error("[Appearances DB] Error loading PLAYERS during seeding:", err);
+    }
+
+    fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
+  }
+
+  // Seeding initial appearance events from Matchday 1 md1-1 completed results
+  if (dbAppearances.length === 0) {
+    console.log("[Appearances DB] Seeding initial appearances from Matchday 1 (MST vs ICE)...");
+    
+    const mstStarterNames = [
+      "Ogundeji Feyitunmise Hezekiah",
+      "Akinnayajo Irewale",
+      "Adeyemi Adedayo Ibrahim",
+      "Bernard Augustine Obioma",
+      "Philip Believe Oluwashina",
+      "Adediran Olanrewaju Abeeb",
+      "Iyare Praise",
+      "Akintunde Ayomide Oluwaseyifunmi",
+      "Nkemjika Sydney",
+      "Fabusuyi Daniel Oluwafisayo",
+      "Adekunle Ayomide Mubarak"
+    ];
+
+    const mstSubs = [
+      "Adeniyi Ademola Daniel",
+      "Boyede Joseph Ayomide",
+      "Ekwe Fortune",
+      "Shomuyiwa Lateef Babatunde"
+    ];
+
+    const iceStarterNames = [
+      "Olayiwola Samson",
+      "Faleye Aduragbemi",
+      "Ayeni Samuel",
+      "Olayinka Quadri",
+      "player-14", "player-15", "player-16", "player-17", "player-18", "player-19", "player-20"
+    ];
+
+    const iceSubs = [
+      "Bamidele Usman",
+      "Iyinbor Michael",
+      "Adeyemi Damola"
+    ];
+
+    let appearanceId = 1;
+    
+    const addRecord = (playerName: string, team: string, isStarting: boolean) => {
+      const foundInDb = dbPlayers.find(p => p.name.toLowerCase() === playerName.toLowerCase() || String(p.id) === playerName);
+      const cleanName = foundInDb ? foundInDb.name : playerName;
+
+      dbAppearances.push({
+        id: appearanceId++,
+        match_id: "md1-1",
+        player_name: cleanName,
+        team: team.toUpperCase(),
+        is_starting: isStarting,
+        minutes_played: isStarting ? 90 : 30
+      });
+
+      if (foundInDb) {
+        foundInDb.appearances += 1;
+      }
+    };
+
+    // Build MST
+    mstStarterNames.forEach(p => addRecord(p, "MST", true));
+    mstSubs.forEach(p => addRecord(p, "MST", false));
+
+    // Build ICE
+    const findIcePlayerName = (nameOrId: string) => {
+      const pObj = PLAYERS.find(p => p.id === nameOrId || p.name.toLowerCase() === nameOrId.toLowerCase());
+      return pObj ? pObj.name : nameOrId;
+    };
+
+    iceStarterNames.forEach(p => addRecord(findIcePlayerName(p), "ICE", true));
+    iceSubs.forEach(p => addRecord(findIcePlayerName(p), "ICE", false));
+
+    fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
+    fs.writeFileSync(APPEARANCES_FILE, JSON.stringify(dbAppearances, null, 2), "utf-8");
+  }
+}
+
+// Invoke seeded check right away
+seedAppearancesDB();
+
+// API to load players appearances lists
+app.get("/api/players/appearances", (req, res) => {
+  try {
+    let dbPlayers: DBPlayer[] = [];
+    if (fs.existsSync(PLAYERS_FILE)) {
+      dbPlayers = JSON.parse(fs.readFileSync(PLAYERS_FILE, "utf-8"));
+    }
+    const sorted = [...dbPlayers].sort((a,b) => {
+      if (b.appearances !== a.appearances) {
+        return b.appearances - a.appearances;
+      }
+      return a.name.localeCompare(b.name);
+    });
+    res.json(sorted);
+  } catch(err: any) {
+    res.status(500).json({ error: "Failed to retrieve player appearances database" });
+  }
+});
+
+// API to register completed match results and calculate players appearances
+app.post("/api/match/complete", (req, res) => {
+  try {
+    const { match, starters, substitutes, homeTeam, awayTeam, matchId } = req.body;
+    
+    const mObject = match || {};
+    const finalStatus = mObject.status || req.body.status || "Finished";
+    const statusUpper = finalStatus.toUpperCase().trim();
+    const isCompleted = statusUpper === "FINISHED" || statusUpper === "FULL_TIME" || statusUpper === "FULL-TIME" || statusUpper === "COMPLETED";
+    
+    if (!isCompleted) {
+      return res.status(400).json({ error: "Match not completed yet" });
+    }
+
+    const finalMatchId = matchId || mObject.id || "manual-entry";
+    const finalHomeTeam = homeTeam || mObject.homeTeam || "Home";
+    const finalAwayTeam = awayTeam || mObject.awayTeam || "Away";
+
+    let finalStarters: string[] = Array.isArray(starters) ? starters : [];
+    let finalSubs: string[] = Array.isArray(substitutes) ? substitutes : [];
+
+    if (finalStarters.length === 0 && mObject.homeTeamLineup?.starters) {
+      finalStarters = [...mObject.homeTeamLineup.starters, ...(mObject.awayTeamLineup?.starters || [])];
+    }
+    if (finalSubs.length === 0 && mObject.substitutions) {
+      finalSubs = mObject.substitutions.map((s: any) => s.in || s.playerIn || s);
+    }
+
+    if (finalStarters.length === 0) {
+      return res.status(400).json({ error: "Missing squad starter names to update appearances tracker" });
+    }
+
+    let dbPlayers: DBPlayer[] = [];
+    let dbAppearances: MatchAppearance[] = [];
+
+    if (fs.existsSync(PLAYERS_FILE)) {
+      try { dbPlayers = JSON.parse(fs.readFileSync(PLAYERS_FILE, "utf-8")); } catch(e){}
+    }
+    if (fs.existsSync(APPEARANCES_FILE)) {
+      try { dbAppearances = JSON.parse(fs.readFileSync(APPEARANCES_FILE, "utf-8")); } catch(e){}
+    }
+
+    dbAppearances = dbAppearances.filter(a => a.match_id !== finalMatchId);
+
+    const matchRecordsMap = [
+      ...finalStarters.map(name => ({ name, isStarting: true })),
+      ...finalSubs.map(name => ({ name, isStarting: false }))
+    ];
+
+    const uniqueMatchRecordsMap: typeof matchRecordsMap = [];
+    const seenNames = new Set<string>();
+
+    matchRecordsMap.forEach((item) => {
+      const norm = item.name.trim().toLowerCase();
+      if (!seenNames.has(norm)) {
+        seenNames.add(norm);
+        uniqueMatchRecordsMap.push(item);
+      }
+    });
+
+    let lastAppId = dbAppearances.reduce((max, curr) => Math.max(max, Number(curr.id) || 0), 0) + 1;
+
+    uniqueMatchRecordsMap.forEach(item => {
+      const cleanName = item.name.trim();
+      let player = dbPlayers.find(p => p.name.toLowerCase() === cleanName.toLowerCase());
+      
+      if (!player) {
+        const teamKey = determineTeamForPlayer(cleanName, finalHomeTeam, finalAwayTeam);
+        const nextId = dbPlayers.length + 1;
+        player = {
+          id: nextId,
+          name: cleanName,
+          team: teamKey.toUpperCase(),
+          position: "MID",
+          matric_number: `FCL/26/${3000 + nextId}`,
+          appearances: 0
+        };
+        dbPlayers.push(player);
+      }
+
+      dbAppearances.push({
+        id: lastAppId++,
+        match_id: finalMatchId,
+        player_name: player.name,
+        team: player.team,
+        is_starting: item.isStarting,
+        minutes_played: item.isStarting ? 90 : 30
+      });
+    });
+
+    dbPlayers.forEach((p) => {
+      p.appearances = dbAppearances.filter(a => a.player_name.toLowerCase() === p.name.toLowerCase()).length;
+    });
+
+    fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
+    fs.writeFileSync(APPEARANCES_FILE, JSON.stringify(dbAppearances, null, 2), "utf-8");
+
+    res.json({ success: true, message: "Appearances database updated successfully" });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Failed to process match completeness occurrences" });
   }
 });
 

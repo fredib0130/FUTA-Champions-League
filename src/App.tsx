@@ -16,7 +16,8 @@ import {
   Playoffs,
   Rankings,
   Pots,
-  Champions
+  Champions,
+  Appearances
 } from './pages';
 
 import PublicMatchCenter from './pages/PublicMatchCenter';
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="teams" element={<Teams />} />
             <Route path="teams/:id" element={<TeamProfile />} />
             <Route path="stats" element={<Stats />} />
+            <Route path="appearances" element={<Appearances />} />
             <Route path="media" element={<Media />} />
             <Route path="news" element={<News />} />
             <Route path="sponsorship" element={<Sponsorship />} />
