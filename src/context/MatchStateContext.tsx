@@ -237,8 +237,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     // 1. Calculate Goals
     goalScorers.forEach(g => {
       if (g.type !== 'Own Goal') {
-        const finishedAndMatchExists = finishedMatches.some(m => m.id === g.matchId);
-        if (finishedAndMatchExists) {
+        const matchExists = matches.some(m => m.id === g.matchId && ['FINISHED', 'FULL-TIME', 'FULL TIME', 'COMPLETED', 'LIVE'].includes(m.status.trim().toUpperCase()));
+        if (matchExists) {
           const playerObj = basePlayers.find(p => p.id === g.playerName || p.name.toLowerCase() === g.playerName.toLowerCase());
           if (playerObj) {
             playerObj.goals += 1;
@@ -249,8 +249,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
     // 2. Calculate Cards (Yellow/Red)
     cards.forEach(c => {
-      const finishedAndMatchExists = finishedMatches.some(m => m.id === c.matchId);
-      if (finishedAndMatchExists) {
+      const matchExists = matches.some(m => m.id === c.matchId && ['FINISHED', 'FULL-TIME', 'FULL TIME', 'COMPLETED', 'LIVE'].includes(m.status.trim().toUpperCase()));
+      if (matchExists) {
         const playerObj = basePlayers.find(p => p.id === c.playerName || p.name.toLowerCase() === c.playerName.toLowerCase());
         if (playerObj) {
           if (c.type === 'Yellow') {
@@ -414,8 +414,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.manOfTheMatch !== official.manOfTheMatch ||
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
-            (['md1-1', 'md1-2'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-5'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-5'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
             (official.matchday === 1 && m.status !== official.status) // Sync status specifically for matchday 1 reschedules
           ) {
@@ -434,8 +434,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
-              homeScore: ['md1-1', 'md1-2'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2'].includes(official.id) ? official.awayScore : m.awayScore
+              homeScore: ['md1-1', 'md1-2', 'md1-5'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-5'].includes(official.id) ? official.awayScore : m.awayScore
             };
             updated = true;
           }
@@ -602,6 +602,18 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         playerName: 'Roland',
         team: 'AGP',
         minute: "46'",
+        type: 'Goal'
+      });
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md1-5' && g.playerName === 'Tofunmi')) {
+      loadedGoals.push({
+        id: 'goal-md1-5-tofunmi-7',
+        matchId: 'md1-5',
+        playerName: 'Tofunmi',
+        team: 'BDG',
+        minute: "7'",
         type: 'Goal'
       });
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
@@ -1277,6 +1289,36 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       ];
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
+
+    if (!loadedCommentary['md1-5'] || !loadedCommentary['md1-5'].some(c => c.id === 'comm-goal-md1-5-tofunmi')) {
+      loadedCommentary['md1-5'] = [
+        {
+          id: 'comm-md1-5-current',
+          matchId: 'md1-5',
+          minute: "10'",
+          text: "BDG is in full control after Tofunmi's opening goal. ENT is trying to reorganize their backline, finding it difficult to pass through BDG's high press.",
+          timestamp: "2:10 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-5-tofunmi',
+          matchId: 'md1-5',
+          minute: "7'",
+          text: "⚽ GOAL! Tofunmi scores an incredible early opener for BDG! They break the deadlock with a brilliant build-up play. BDG 1–0 ENT.",
+          timestamp: "2:07 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-kickoff-md1-5',
+          matchId: 'md1-5',
+          minute: "0'",
+          text: "🏁 KICKOFF! Referee Abraham blows his whistle and the match between BDG and ENT is underway at the Mini Pitch! The battle of Matchday 1 continues.",
+          timestamp: "2:00 PM",
+          type: 'general'
+        }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
     setCommentaries(loadedCommentary);
 
     // 10. Reports
@@ -1292,6 +1334,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     }
     if (!loadedTimers['md1-2'] || loadedTimers['md1-2'].liveMinute === "35:00") {
       loadedTimers['md1-2'] = { liveMinute: "46:00", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['md1-5']) {
+      loadedTimers['md1-5'] = { liveMinute: "10:00", isPaused: false };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     setActiveMinAndStatus(loadedTimers);
@@ -1678,7 +1724,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_live_v2');
+    const hasReset = localStorage.getItem('fcl_reset_2026_live_v4');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -1691,7 +1737,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_live_v2', 'true');
+      localStorage.setItem('fcl_reset_2026_live_v4', 'true');
     }
 
     loadState();

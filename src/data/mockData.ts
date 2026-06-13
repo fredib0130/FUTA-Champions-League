@@ -65,6 +65,11 @@ export const TEAMS: Team[] = [
 })).sort((a, b) => a.name.localeCompare(b.name));
 
 export const PLAYERS: Player[] = [
+  // Live Star Players
+  { id: 'player-agp-michael', name: "Michael", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'agp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=agp-michael' },
+  { id: 'player-agp-roland', name: "Roland", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'agp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=agp-roland' },
+  { id: 'player-bdg-tofunmi', name: "Tofunmi", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'bdg', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=bdg-tofunmi' },
+
   // Official MST Squad List
   ...[
     { name: "Ogundeji Feyitunmise Hezekiah", position: "GK" as const, level: "500L", jerseyNo: 1, matricNumber: "MST/20/5287" },
@@ -207,10 +212,10 @@ export const MATCHES: Match[] = [
       'Final match report validation'
     ]
   }, // OPENING MATCH
-  { id: 'md1-2', homeTeam: 'AGP', awayTeam: 'BCH', date: '2026-06-13', time: '09:30', venue: 'Mini Pitch', status: 'Live', homeScore: 2, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Abraham', refereeAssigned: true },
+  { id: 'md1-2', homeTeam: 'AGP', awayTeam: 'BCH', date: '2026-06-13', time: '09:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Abraham', refereeAssigned: true, manOfTheMatch: 'Oyelakin Abdulquadri' },
   { id: 'md1-3', homeTeam: 'CYS', awayTeam: 'ANA', date: '2026-06-13', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Tosin', refereeAssigned: true },
   { id: 'md1-4', homeTeam: 'PHS', awayTeam: 'APH', date: '2026-06-13', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Tosin', refereeAssigned: true },
-  { id: 'md1-5', homeTeam: 'BDG', awayTeam: 'ENT', date: '2026-06-13', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Abraham', refereeAssigned: true },
+  { id: 'md1-5', homeTeam: 'BDG', awayTeam: 'ENT', date: '2026-06-13', time: '14:00', venue: 'Mini Pitch', status: 'Live', homeScore: 1, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Abraham', refereeAssigned: true },
   { id: 'md1-6', homeTeam: 'IFS', awayTeam: 'CSP', date: '2026-06-13', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Jones', refereeAssigned: true },
   { id: 'md1-7', homeTeam: 'FWT', awayTeam: 'IDD', date: '2026-06-13', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Jones', refereeAssigned: true },
   { id: 'md1-8', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-14', time: '16:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1 },
