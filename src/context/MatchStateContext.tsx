@@ -572,6 +572,37 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
     }
 
+    if (loadedStats['md1-5']) {
+      loadedStats['md1-5'] = {
+        ...loadedStats['md1-5'],
+        cornersHome: 7,
+        cornersAway: 4,
+        yellowCardsHome: 1,
+        yellowCardsAway: 2,
+        redCardsHome: 0,
+        redCardsAway: 0,
+        foulsHome: 4,
+        foulsAway: 9,
+        offsidesHome: loadedStats['md1-5'].offsidesHome ?? 0,
+        offsidesAway: loadedStats['md1-5'].offsidesAway ?? 0,
+        freeKicksHome: 12, // BDG free kicks awarded (BDG 12)
+        freeKicksAway: 7,  // ENT free kicks awarded (ENT 7)
+        homeCorners: 7,
+        awayCorners: 4,
+        homeYellowCards: 1,
+        awayYellowCards: 2,
+        homeRedCards: 0,
+        awayRedCards: 0,
+        homeOffsides: loadedStats['md1-5'].homeOffsides ?? 0,
+        awayOffsides: loadedStats['md1-5'].awayOffsides ?? 0,
+        homeFouls: 4,
+        awayFouls: 9,
+        homeFreeKicks: 12,
+        awayFreeKicks: 7
+      };
+      localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
+    }
+
     setDetailedStats(loadedStats);
 
     // 4. Goal events
@@ -618,6 +649,18 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       });
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
+
+    if (!loadedGoals.some(g => g.matchId === 'md1-5' && g.playerName === 'Desmond')) {
+      loadedGoals.push({
+        id: 'goal-md1-5-desmond-43',
+        matchId: 'md1-5',
+        playerName: 'Desmond',
+        team: 'BDG',
+        minute: "43'",
+        type: 'Goal'
+      });
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -641,6 +684,23 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         localStorage.setItem('fcl_admin_cards', JSON.stringify(loadedCards));
       }
     }
+
+    let cardsUpdated_md1_5 = false;
+    const officialMd1_5Cards: CardEvent[] = [
+      { id: 'card-md1-5-praise', matchId: 'md1-5', playerName: 'Praise', teamAbbr: 'BDG', minute: "38'", type: 'Yellow' },
+      { id: 'card-md1-5-promise', matchId: 'md1-5', playerName: 'Promise', teamAbbr: 'ENT', minute: "15'", type: 'Yellow' },
+      { id: 'card-md1-5-fairy', matchId: 'md1-5', playerName: 'Fairy', teamAbbr: 'ENT', minute: "55'", type: 'Yellow' }
+    ];
+    officialMd1_5Cards.forEach(c => {
+      if (!loadedCards.some(existing => existing.id === c.id)) {
+        loadedCards.push(c);
+        cardsUpdated_md1_5 = true;
+      }
+    });
+    if (cardsUpdated_md1_5) {
+      localStorage.setItem('fcl_admin_cards', JSON.stringify(loadedCards));
+    }
+
     setCards(loadedCards);
 
     const storedSubs = localStorage.getItem('fcl_admin_subs');
@@ -1724,7 +1784,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_live_v4');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v5');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -1737,7 +1797,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_live_v4', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v5', 'true');
     }
 
     loadState();
