@@ -113,6 +113,8 @@ interface MatchStateContextType {
   articles: Article[];
   newsItems: NewsItem[];
   matchPhotos: MatchPhoto[];
+  isLiveTableActive: boolean;
+  officialTeams: Team[];
   saveArticle: (article: Article) => void;
   deleteArticle: (id: string) => void;
   saveNewsItem: (newsItem: NewsItem) => void;
@@ -380,12 +382,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     return basePlayers;
   }, [matches, goalScorers, cards, subs, lineups]);
 
-  const computedTeams = React.useMemo(() => {
-    return teams.map(t => ({
-      ...t,
-      squad: players.filter(p => p.teamId.toLowerCase() === t.id.toLowerCase())
-    }));
-  }, [teams, players]);
+
 
   // Helper to load all state from localStorage or seed initial data
   const loadState = () => {
@@ -417,8 +414,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.manOfTheMatch !== official.manOfTheMatch ||
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
-            (official.id === 'md1-1' && m.homeScore !== official.homeScore) ||
-            (official.id === 'md1-1' && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
             (official.matchday === 1 && m.status !== official.status) // Sync status specifically for matchday 1 reschedules
           ) {
@@ -437,8 +434,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
-              homeScore: official.id === 'md1-1' ? official.homeScore : m.homeScore,
-              awayScore: official.id === 'md1-1' ? official.awayScore : m.awayScore
+              homeScore: ['md1-1', 'md1-2'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2'].includes(official.id) ? official.awayScore : m.awayScore
             };
             updated = true;
           }
@@ -466,6 +463,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     let loadedTeams: Team[] = [];
     if (storedTeams) {
       loadedTeams = JSON.parse(storedTeams);
+      loadedTeams = recalculateStandingsFromMatches(loadedTeams, loadedMatches);
     } else {
       loadedTeams = TEAMS.map(team => ({
         ...team,
@@ -583,6 +581,17 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       loadedGoals = JSON.parse(storedGoals);
     } else {
       loadedGoals = [];
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md1-2' && g.playerName === 'Michael')) {
+      loadedGoals.unshift({
+        id: 'goal-md1-2-michael-20',
+        matchId: 'md1-2',
+        playerName: 'Michael',
+        team: 'AGP',
+        minute: "20'",
+        type: 'Goal'
+      });
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
     setGoalScorers(loadedGoals);
@@ -1202,6 +1211,52 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       ];
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
+
+    if (!loadedCommentary['md1-2'] || !loadedCommentary['md1-2'].some(c => c.id === 'comm-goal-md1-2')) {
+      loadedCommentary['md1-2'] = [
+        {
+          id: 'comm-md1-2-current',
+          matchId: 'md1-2',
+          minute: "35'",
+          text: "Play continues at the Mini Pitch with AGP maintaining control and protecting their 1-0 lead. BCH is pushing for an equalizer.",
+          timestamp: "10:05 AM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-2',
+          matchId: 'md1-2',
+          minute: "20'",
+          text: "⚽ GOAL! Michael scores for AGP with a sensational shot to give AGP a 1–0 lead! Outstanding play by the home side.",
+          timestamp: "9:50 AM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-foul-md1-2-12',
+          matchId: 'md1-2',
+          minute: "12'",
+          text: "AGP wins a foul in midfield. Free kick awarded to AGP.",
+          timestamp: "9:42 AM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-md1-2-5',
+          matchId: 'md1-2',
+          minute: "5'",
+          text: "BCH wins a foul. Free kick awarded to BCH.",
+          timestamp: "9:35 AM",
+          type: 'general'
+        },
+        {
+          id: 'comm-kickoff-md1-2',
+          matchId: 'md1-2',
+          minute: "0'",
+          text: "🏁 KICKOFF! The referee blows his whistle to kickoff the Matchday 1 clash between AGP and BCH at the Mini Pitch!",
+          timestamp: "9:30 AM",
+          type: 'general'
+        }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
     setCommentaries(loadedCommentary);
 
     // 10. Reports
@@ -1213,6 +1268,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     let loadedTimers: Record<string, { liveMinute: string; isPaused: boolean }> = storedTimers ? JSON.parse(storedTimers) : {};
     if (!loadedTimers['md1-1'] || loadedTimers['md1-1'].liveMinute !== "FT") {
       loadedTimers['md1-1'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['md1-2']) {
+      loadedTimers['md1-2'] = { liveMinute: "35:00", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     setActiveMinAndStatus(loadedTimers);
@@ -1385,7 +1444,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   };
 
   // Standing calculation helper
-  const recalculateStandingsFromMatches = (allTeams: Team[], allMatches: Match[]): Team[] => {
+  const calculateStandingsHelper = (allTeams: Team[], allMatches: Match[], includeLive: boolean): Team[] => {
     // Reset core stats first
     const calculatedTeams = allTeams.map(t => ({
       ...t,
@@ -1437,13 +1496,15 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       return { yellowHome: 0, yellowAway: 0, redHome: 0, redAway: 0 };
     };
 
-    // Find all matches finished
-    const finishedMatches = allMatches.filter(m => {
+    // Find matches to include
+    const matchesToInclude = allMatches.filter(m => {
       const s = m.status.trim().toUpperCase();
-      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED';
+      const isFinished = s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED';
+      const isLive = s === 'LIVE' || s === 'FIRST_HALF' || s === 'FIRSTHALF' || s === 'HALF_TIME' || s === 'HALFTIME' || s === 'HALF-TIME' || s === 'SECOND_HALF' || s === 'SECONDHALF';
+      return isFinished || (includeLive && isLive);
     });
 
-    finishedMatches.forEach(match => {
+    matchesToInclude.forEach(match => {
       const homeTeamObj = calculatedTeams.find(t => t.id === match.homeTeam.toLowerCase());
       const awayTeamObj = calculatedTeams.find(t => t.id === match.awayTeam.toLowerCase());
 
@@ -1571,6 +1632,31 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     return calculatedTeams;
   };
 
+  const recalculateStandingsFromMatches = (allTeams: Team[], allMatches: Match[]): Team[] => {
+    return calculateStandingsHelper(allTeams, allMatches, true);
+  };
+
+  const isLiveTableActive = React.useMemo(() => {
+    return matches.some(m => {
+      const s = m.status.trim().toUpperCase();
+      return s === 'LIVE' || s === 'FIRST_HALF' || s === 'FIRSTHALF' || s === 'HALF_TIME' || s === 'HALFTIME' || s === 'HALF-TIME' || s === 'SECOND_HALF' || s === 'SECONDHALF';
+    });
+  }, [matches]);
+
+  const officialTeams = React.useMemo(() => {
+    return calculateStandingsHelper(teams, matches, false).map(t => ({
+      ...t,
+      squad: players.filter(p => p.teamId.toLowerCase() === t.id.toLowerCase())
+    }));
+  }, [teams, matches, players]);
+
+  const computedTeams = React.useMemo(() => {
+    return calculateStandingsHelper(teams, matches, true).map(t => ({
+      ...t,
+      squad: players.filter(p => p.teamId.toLowerCase() === t.id.toLowerCase())
+    }));
+  }, [teams, matches, players]);
+
   useEffect(() => {
     const hasReset = localStorage.getItem('fcl_reset_2026_fulltime_v1');
     if (!hasReset) {
@@ -1662,13 +1748,19 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     updatedAudits?: AuditLogItem[],
     updatedTimers?: Record<string, { liveMinute: string; isPaused: boolean }>
   ) => {
+    let finalTeams = updatedTeams;
+
     if (updatedMatches) {
       setMatches(updatedMatches);
       localStorage.setItem('fcl_admin_matches', JSON.stringify(updatedMatches));
+      if (!updatedTeams) {
+        finalTeams = recalculateStandingsFromMatches(teams, updatedMatches);
+      }
     }
-    if (updatedTeams) {
-      setTeams(updatedTeams);
-      localStorage.setItem('fcl_admin_teams', JSON.stringify(updatedTeams));
+
+    if (finalTeams) {
+      setTeams(finalTeams);
+      localStorage.setItem('fcl_admin_teams', JSON.stringify(finalTeams));
     }
     if (updatedStats) {
       setDetailedStats(updatedStats);
@@ -2879,6 +2971,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         auditLogs,
         currentUser,
         activeMinAndStatus,
+        isLiveTableActive,
+        officialTeams,
         login,
         logout,
         startMatch,

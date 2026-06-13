@@ -338,7 +338,7 @@ const SponsorCard: React.FC<SponsorCardProps> = ({ sponsor, onContactClick }) =>
 }
 
 export function Home() {
-  const { matches, sponsors, players } = useMatchState();
+  const { matches, sponsors, players, isLiveTableActive } = useMatchState();
   const [contactSponsor, setContactSponsor] = React.useState<Sponsor | null>(null);
   
   const completedMatches = React.useMemo(() => {
@@ -365,7 +365,7 @@ export function Home() {
       })
       .slice(0, 3);
   }, [players]);
-  const topTeamsTable = <LeagueTable limit={5} />;
+  const topTeamsTable = <LeagueTable limit={10} />;
   const topCoefficients = COEFFICIENTS.slice(0, 3);
 
   return (
@@ -523,7 +523,9 @@ export function Home() {
           
           <aside className="space-y-8">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-display italic uppercase">STANDINGS</h2>
+              <h2 className="text-xl font-display italic uppercase">
+                {isLiveTableActive ? '🔴 Live Table' : 'STANDINGS'}
+              </h2>
               <Link to="/table" className="text-primary font-bold text-xs hover:underline uppercase tracking-widest">FULL TABLE</Link>
             </div>
             {topTeamsTable}

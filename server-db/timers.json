@@ -1,0 +1,18 @@
+{
+  "md1-1": {
+    "matchId": "md1-1",
+    "status": "Finished",
+    "isPaused": true,
+    "firstHalfAddedTime": 0,
+    "secondHalfAddedTime": 0,
+    "accumulatedElapsedMs": 0
+  },
+  "md1-2": {
+    "matchId": "md1-2",
+    "status": "FirstHalf",
+    "isPaused": true,
+    "firstHalfAddedTime": 3,
+    "secondHalfAddedTime": 0,
+    "accumulatedElapsedMs": 2100000
+  }
+}
