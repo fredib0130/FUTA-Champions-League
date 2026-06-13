@@ -154,8 +154,6 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
                   <th className="px-4 py-4 text-center">GF</th>
                   <th className="px-4 py-4 text-center">GA</th>
                   <th className="px-4 py-4 text-center">GD</th>
-                  <th className="px-4 py-4 text-center text-yellow-500 font-bold">YC</th>
-                  <th className="px-4 py-4 text-center text-red-500 font-bold">RC</th>
                 </>
               )}
               <th className="px-4 py-4 text-center font-bold text-white">PTS</th>
@@ -254,8 +252,6 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
                         {team.goalDifference > 0 ? `+${team.goalDifference}` : team.goalDifference}
                       </span>
                     </td>
-                    <td className="px-4 py-4 text-center font-mono text-sm text-yellow-500 font-bold">{team.yellowCards || 0}</td>
-                    <td className="px-4 py-4 text-center font-mono text-sm text-red-500 font-bold">{team.redCards || 0}</td>
                   </>
                 )}
                 <td className="px-4 py-4 text-center font-mono font-bold text-white">{team.points}</td>
