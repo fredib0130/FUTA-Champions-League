@@ -414,8 +414,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.manOfTheMatch !== official.manOfTheMatch ||
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
             (official.matchday === 1 && m.status !== official.status) // Sync status specifically for matchday 1 reschedules
           ) {
@@ -434,8 +434,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5'].includes(official.id) ? official.awayScore : m.awayScore
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7'].includes(official.id) ? official.awayScore : m.awayScore
             };
             updated = true;
           }
@@ -665,6 +665,68 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
     }
 
+    if (loadedStats['md1-6']) {
+      loadedStats['md1-6'] = {
+        ...loadedStats['md1-6'],
+        cornersHome: 3,
+        cornersAway: 1,
+        yellowCardsHome: 0,
+        yellowCardsAway: 0,
+        redCardsHome: 0,
+        redCardsAway: 0,
+        foulsHome: 2,
+        foulsAway: 5,
+        offsidesHome: 0,
+        offsidesAway: 3,
+        freeKicksHome: 5,
+        freeKicksAway: 2,
+        homeCorners: 3,
+        awayCorners: 1,
+        homeYellowCards: 0,
+        awayYellowCards: 0,
+        homeRedCards: 0,
+        awayRedCards: 0,
+        homeOffsides: 0,
+        awayOffsides: 3,
+        homeFouls: 2,
+        awayFouls: 5,
+        homeFreeKicks: 5,
+        awayFreeKicks: 2
+      };
+      localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
+    }
+
+    if (loadedStats['md1-7']) {
+      loadedStats['md1-7'] = {
+        ...loadedStats['md1-7'],
+        cornersHome: 1,
+        cornersAway: 0,
+        yellowCardsHome: 0,
+        yellowCardsAway: 0,
+        redCardsHome: 1,
+        redCardsAway: 1,
+        foulsHome: 2,
+        foulsAway: 3,
+        offsidesHome: 0,
+        offsidesAway: 1,
+        freeKicksHome: 3,
+        freeKicksAway: 2,
+        homeCorners: 1,
+        awayCorners: 0,
+        homeYellowCards: 0,
+        awayYellowCards: 0,
+        homeRedCards: 1,
+        awayRedCards: 1,
+        homeOffsides: 0,
+        awayOffsides: 1,
+        homeFouls: 2,
+        awayFouls: 3,
+        homeFreeKicks: 3,
+        awayFreeKicks: 2
+      };
+      localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
+    }
+
     setDetailedStats(loadedStats);
 
     // 4. Goal events
@@ -747,6 +809,42 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       });
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
+
+    if (!loadedGoals.some(g => g.matchId === 'md1-6' && g.playerName === 'Ademide')) {
+      loadedGoals.push({
+        id: 'goal-md1-6-ademide-1',
+        matchId: 'md1-6',
+        playerName: 'Ademide',
+        team: 'CSP',
+        minute: "1'",
+        type: 'Goal'
+      });
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md1-7' && g.playerName === 'Soji')) {
+      loadedGoals.push({
+        id: 'goal-md1-7-soji-12',
+        matchId: 'md1-7',
+        playerName: 'Soji',
+        team: 'IDD',
+        minute: "12'",
+        type: 'Goal'
+      });
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md1-7' && g.playerName === 'Sola')) {
+      loadedGoals.push({
+        id: 'goal-md1-7-sola-51',
+        matchId: 'md1-7',
+        playerName: 'Sola',
+        team: 'IDD',
+        minute: "51'",
+        type: 'Goal'
+      });
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -775,7 +873,9 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     const officialMd1_5Cards: CardEvent[] = [
       { id: 'card-md1-5-praise', matchId: 'md1-5', playerName: 'Praise', teamAbbr: 'BDG', minute: "38'", type: 'Yellow' },
       { id: 'card-md1-5-promise', matchId: 'md1-5', playerName: 'Promise', teamAbbr: 'ENT', minute: "15'", type: 'Yellow' },
-      { id: 'card-md1-5-fairy', matchId: 'md1-5', playerName: 'Fairy', teamAbbr: 'ENT', minute: "55'", type: 'Yellow' }
+      { id: 'card-md1-5-fairy', matchId: 'md1-5', playerName: 'Fairy', teamAbbr: 'ENT', minute: "55'", type: 'Yellow' },
+      { id: 'card-md1-7-malik', matchId: 'md1-7', playerName: 'Malik', teamAbbr: 'FWT', minute: "53'", type: 'Red' },
+      { id: 'card-md1-7-tolu', matchId: 'md1-7', playerName: 'Tolu', teamAbbr: 'IDD', minute: "53'", type: 'Red' }
     ];
     officialMd1_5Cards.forEach(c => {
       if (!loadedCards.some(existing => existing.id === c.id)) {
@@ -799,7 +899,11 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'sub-ice-sam-iyin', matchId: 'md1-1', teamAbbr: 'ICE', playerOut: 'Ayeni Samuel', playerIn: 'Iyinbor Michael', minute: 43 },
       { id: 'sub-mst-ade-sho', matchId: 'md1-1', teamAbbr: 'MST', playerOut: 'Adekunle Ayomide Mubarak', playerIn: 'Shomuyiwa Lateef Babatunde', minute: 52 },
       { id: 'sub-ice-quad-dam', matchId: 'md1-1', teamAbbr: 'ICE', playerOut: 'Olayinka Quadri', playerIn: 'Adeyemi Damola', minute: 53 },
-      { id: 'sub-mst-ake-for', matchId: 'md1-1', teamAbbr: 'MST', playerOut: 'Akintunde Ayomide Oluwaseyifunmi', playerIn: 'Ekwe Fortune', minute: 60 }
+      { id: 'sub-mst-ake-for', matchId: 'md1-1', teamAbbr: 'MST', playerOut: 'Akintunde Ayomide Oluwaseyifunmi', playerIn: 'Ekwe Fortune', minute: 60 },
+      { id: 'sub-csp-ademide-adedara', matchId: 'md1-6', teamAbbr: 'CSP', playerOut: 'Ademide', playerIn: 'Adedara', minute: 43 },
+      { id: 'sub-ifs-idris-kehinde', matchId: 'md1-6', teamAbbr: 'IFS', playerOut: 'Idris', playerIn: 'Kehinde', minute: 46 },
+      { id: 'sub-ifs-segun-victor', matchId: 'md1-6', teamAbbr: 'IFS', playerOut: 'Segun', playerIn: 'Victor', minute: 46 },
+      { id: 'sub-fwt-ney-enzo', matchId: 'md1-7', teamAbbr: 'FWT', playerOut: 'Neymar', playerIn: 'Enzo', minute: 39 }
     ];
 
     let subsUpdated = false;
@@ -1541,6 +1645,314 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       ];
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
+
+    if (!loadedCommentary['md1-6'] || !loadedCommentary['md1-6'].some(c => c.id === 'comm-goal-md1-6-ademide')) {
+      loadedCommentary['md1-6'] = [
+        {
+          id: 'comm-ft-md1-6',
+          matchId: 'md1-6',
+          minute: "60+4'",
+          text: "🏁 FULL TIME! CSP secures a narrow but important 1–0 victory over IFS, defending strongly after an early goal and managing the game effectively through both halves.",
+          timestamp: "4:34 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-additional-md1-6',
+          matchId: 'md1-6',
+          minute: "60'",
+          text: "🕟 4 minutes additional time declared.",
+          timestamp: "4:30 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-md1-6-58',
+          matchId: 'md1-6',
+          minute: "58'",
+          text: "Corner kick to IFS. Defensive clearances secure the area.",
+          timestamp: "4:28 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-freekick-md1-6-51',
+          matchId: 'md1-6',
+          minute: "51'",
+          text: "Freekick to IFS in the attacking field.",
+          timestamp: "4:21 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sub-ifs-md1-6-46',
+          matchId: 'md1-6',
+          minute: "46'",
+          text: "🔄 Substitution: Segun & Idris OUT, Victor & Kehinde IN (IFS).",
+          timestamp: "4:16 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-sub-csp-md1-6-43',
+          matchId: 'md1-6',
+          minute: "43'",
+          text: "🔄 Substitution: Ademide OUT, Adedara IN (CSP).",
+          timestamp: "4:13 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-freekick-md1-6-42',
+          matchId: 'md1-6',
+          minute: "42'",
+          text: "Freekick to IFS after a late challenge.",
+          timestamp: "4:12 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-md1-6-40',
+          matchId: 'md1-6',
+          minute: "40'",
+          text: "Corner kick to IFS played short and cleared.",
+          timestamp: "4:10 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-md1-6-37',
+          matchId: 'md1-6',
+          minute: "37'",
+          text: "Corner kick to CSP swung in deep.",
+          timestamp: "4:07 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-freekick-md1-6-32',
+          matchId: 'md1-6',
+          minute: "32'",
+          text: "IFS wins a foul – freekick on the wing.",
+          timestamp: "4:02 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-shkickoff-md1-6-31',
+          matchId: 'md1-6',
+          minute: "31'",
+          text: "🏁 Second Half Start! CSP looks to defend their thin lead.",
+          timestamp: "4:01 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-ht-md1-6',
+          matchId: 'md1-6',
+          minute: "30+1'",
+          text: "⏸ Half-time whistle. CSP leads 1–0 right from the opening seconds.",
+          timestamp: "3:31 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-offside-md1-6-26',
+          matchId: 'md1-6',
+          minute: "26'",
+          text: "CSP player caught offside under pressure.",
+          timestamp: "3:26 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-offside-md1-6-22',
+          matchId: 'md1-6',
+          minute: "22'",
+          text: "❌ Goal ruled out for offside! CSP denied a second score.",
+          timestamp: "3:22 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-freekick-md1-6-17',
+          matchId: 'md1-6',
+          minute: "17'",
+          text: "CSP wins a foul – freekick.",
+          timestamp: "3:17 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-freekick-md1-6-13',
+          matchId: 'md1-6',
+          minute: "13'",
+          text: "CSP wins a foul – freekick.",
+          timestamp: "3:13 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-offside-md1-6-10',
+          matchId: 'md1-6',
+          minute: "10'",
+          text: "CSP player caught offside.",
+          timestamp: "3:10 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-md1-6-7',
+          matchId: 'md1-6',
+          minute: "7'",
+          text: "Corner kick to IFS of no consequence.",
+          timestamp: "3:07 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-handball-md1-6-6',
+          matchId: 'md1-6',
+          minute: "6'",
+          text: "Handball by CSP – freekick to IFS.",
+          timestamp: "3:06 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-freekick-md1-6-4',
+          matchId: 'md1-6',
+          minute: "4'",
+          text: "IFS wins a foul – freekick.",
+          timestamp: "3:04 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-6-ademide',
+          matchId: 'md1-6',
+          minute: "1'",
+          text: "⚽ Goal! Ademide gives CSP the lead right after kickoff with an absolute flyer! IFS 0-1 CSP.",
+          timestamp: "3:01 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-kickoff-md1-6',
+          matchId: 'md1-6',
+          minute: "0'",
+          text: "🏁 KICKOFF! Referee Jones signals kickoff and the battle begins between IFS and CSP!",
+          timestamp: "3:00 PM",
+          type: 'general'
+        }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
+    if (!loadedCommentary['md1-7'] || !loadedCommentary['md1-7'].some(c => c.id === 'comm-goal-md1-7-soji')) {
+      loadedCommentary['md1-7'] = [
+        {
+          id: 'comm-ft-md1-7',
+          matchId: 'md1-7',
+          minute: "60'",
+          text: "🏁 FULL TIME! IDD secures a strong 2–0 victory over FWT, controlling key moments in both halves. Both teams finish with 10 men in an eventful match.",
+          timestamp: "5:45 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-red-fwt-idd-md1-7',
+          matchId: 'md1-7',
+          minute: "53'",
+          text: "🟥 RED CARD! A heated altercation breaks out! The referee brandishes direct matching red cards: Malik of FWT and Tolu of IDD are both sent off! FWT 0-2 IDD.",
+          timestamp: "5:38 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-7-sola',
+          matchId: 'md1-7',
+          minute: "51'",
+          text: "⚽ GOAL! Sola strikes a beauty to double IDD's lead! Magnificent vision and execution to place it in the bottom corner! FWT 0-2 IDD.",
+          timestamp: "5:36 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-freekick-fwt-md1-7-41',
+          matchId: 'md1-7',
+          minute: "41'",
+          text: "Freekick given to FWT deep in the defensive quarter. Swept forward but intercepted.",
+          timestamp: "5:26 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sub-fwt-md1-7',
+          matchId: 'md1-7',
+          minute: "39'",
+          text: "🔄 Substitution: Neymar OUT, Enzo IN (FWT) as the coach makes a tactical change up front.",
+          timestamp: "5:24 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-freekick-fwt-md1-7-33',
+          matchId: 'md1-7',
+          minute: "33'",
+          text: "Freekick given to FWT after Sola commits a late challenge on the flank.",
+          timestamp: "5:18 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-shkickoff-md1-7',
+          matchId: 'md1-7',
+          minute: "31'",
+          text: "🏁 SECOND HALF START! FWT needs to recover their composure to counter IDD's threat.",
+          timestamp: "5:16 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-ht-md1-7',
+          matchId: 'md1-7',
+          minute: "30'",
+          text: "⏸ HALF-TIME! Referee signals halftime with IDD leading 1-0 courtesy of Soji's early clinical finish.",
+          timestamp: "5:15 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-freekick-idd-md1-7-20',
+          matchId: 'md1-7',
+          minute: "20'",
+          text: "Freekick given to IDD after an aerial collision.",
+          timestamp: "5:05 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-7-soji',
+          matchId: 'md1-7',
+          minute: "12'",
+          text: "⚽ GOAL! Soji scores! A delicious team movement is slotted home perfectly by Soji to give IDD the early breakthroughs! FWT 0-1 IDD.",
+          timestamp: "4:57 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-freekick-idd-md1-7-7',
+          matchId: 'md1-7',
+          minute: "7'",
+          text: "Freekick given to IDD in midcourt.",
+          timestamp: "4:52 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-handball-idd-md1-7',
+          matchId: 'md1-7',
+          minute: "7'",
+          text: "Handball by IDD – freekick to FWT near the center circle.",
+          timestamp: "4:51 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-offside-idd-md1-7',
+          matchId: 'md1-7',
+          minute: "5'",
+          text: "IDD player caught offside during a dangerous direct run.",
+          timestamp: "4:49 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-fwt-md1-7',
+          matchId: 'md1-7',
+          minute: "3'",
+          text: "Corner field for FWT. Whipped into the box but headed clear by IDD defense.",
+          timestamp: "4:47 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-kickoff-md1-7',
+          matchId: 'md1-7',
+          minute: "0'",
+          text: "🏁 KICKOFF! Referee Jones blows the whistle and gets us underway at the Mini Pitch for matchday 1: FWT vs IDD!",
+          timestamp: "4:45 PM",
+          type: 'general'
+        }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
     setCommentaries(loadedCommentary);
 
     // 10. Reports
@@ -1568,6 +1980,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     }
     if (!loadedTimers['md1-5'] || loadedTimers['md1-5'].liveMinute !== "FT") {
       loadedTimers['md1-5'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['md1-6'] || loadedTimers['md1-6'].liveMinute !== "FT") {
+      loadedTimers['md1-6'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['md1-7'] || loadedTimers['md1-7'].liveMinute !== "FT") {
+      loadedTimers['md1-7'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     setActiveMinAndStatus(loadedTimers);
@@ -1954,7 +2374,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v6');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v8');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -1967,7 +2387,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_ft_v6', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v8', 'true');
     }
 
     loadState();
