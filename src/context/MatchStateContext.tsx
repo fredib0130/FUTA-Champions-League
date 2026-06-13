@@ -414,8 +414,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.manOfTheMatch !== official.manOfTheMatch ||
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
-            (['md1-1', 'md1-2', 'md1-5'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-5'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
             (official.matchday === 1 && m.status !== official.status) // Sync status specifically for matchday 1 reschedules
           ) {
@@ -434,8 +434,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
-              homeScore: ['md1-1', 'md1-2', 'md1-5'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-5'].includes(official.id) ? official.awayScore : m.awayScore
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5'].includes(official.id) ? official.awayScore : m.awayScore
             };
             updated = true;
           }
@@ -603,6 +603,68 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
     }
 
+    if (loadedStats['md1-3']) {
+      loadedStats['md1-3'] = {
+        ...loadedStats['md1-3'],
+        cornersHome: 4,
+        cornersAway: 2,
+        yellowCardsHome: 0,
+        yellowCardsAway: 0,
+        redCardsHome: 0,
+        redCardsAway: 0,
+        foulsHome: 0,
+        foulsAway: 0,
+        offsidesHome: 0,
+        offsidesAway: 0,
+        freeKicksHome: 7,
+        freeKicksAway: 5,
+        homeCorners: 4,
+        awayCorners: 2,
+        homeYellowCards: 0,
+        awayYellowCards: 0,
+        homeRedCards: 0,
+        awayRedCards: 0,
+        homeOffsides: 0,
+        awayOffsides: 0,
+        homeFouls: 0,
+        awayFouls: 0,
+        homeFreeKicks: 7,
+        awayFreeKicks: 5
+      };
+      localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
+    }
+
+    if (loadedStats['md1-4']) {
+      loadedStats['md1-4'] = {
+        ...loadedStats['md1-4'],
+        cornersHome: 2,
+        cornersAway: 4,
+        yellowCardsHome: 0,
+        yellowCardsAway: 0,
+        redCardsHome: 0,
+        redCardsAway: 0,
+        foulsHome: 0,
+        foulsAway: 0,
+        offsidesHome: 0,
+        offsidesAway: 0,
+        freeKicksHome: 3,
+        freeKicksAway: 6,
+        homeCorners: 2,
+        awayCorners: 4,
+        homeYellowCards: 0,
+        awayYellowCards: 0,
+        homeRedCards: 0,
+        awayRedCards: 0,
+        homeOffsides: 0,
+        awayOffsides: 0,
+        homeFouls: 0,
+        awayFouls: 0,
+        homeFreeKicks: 3,
+        awayFreeKicks: 6
+      };
+      localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
+    }
+
     setDetailedStats(loadedStats);
 
     // 4. Goal events
@@ -657,6 +719,30 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         playerName: 'Desmond',
         team: 'BDG',
         minute: "43'",
+        type: 'Goal'
+      });
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md1-3' && g.playerName === 'Taiwo')) {
+      loadedGoals.push({
+        id: 'goal-md1-3-taiwo-28',
+        matchId: 'md1-3',
+        playerName: 'Taiwo',
+        team: 'CYS',
+        minute: "28'",
+        type: 'Goal'
+      });
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md1-4' && g.playerName === 'Kunlex')) {
+      loadedGoals.push({
+        id: 'goal-md1-4-kunlex-30+3',
+        matchId: 'md1-4',
+        playerName: 'Kunlex',
+        team: 'APH',
+        minute: "30+3'",
         type: 'Goal'
       });
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
@@ -1350,8 +1436,24 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
-    if (!loadedCommentary['md1-5'] || !loadedCommentary['md1-5'].some(c => c.id === 'comm-goal-md1-5-tofunmi')) {
+    if (!loadedCommentary['md1-5'] || !loadedCommentary['md1-5'].some(c => c.id === 'comm-goal-md1-5-desmond')) {
       loadedCommentary['md1-5'] = [
+        {
+          id: 'comm-ft-md1-5',
+          matchId: 'md1-5',
+          minute: "FT",
+          text: "🏁 FULL TIME! BDG secures a comfortable, controlled 2-0 victory over ENT to claim all 3 points. Tofunmi and Desmond are the heroes today!",
+          timestamp: "2:50 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-5-desmond',
+          matchId: 'md1-5',
+          minute: "43'",
+          text: "⚽ GOAL! Desmond scores! Beautiful interplay results in a calm finish from Desmond to make it BDG 2–0 ENT before the whistle.",
+          timestamp: "2:43 PM",
+          type: 'goal'
+        },
         {
           id: 'comm-md1-5-current',
           matchId: 'md1-5',
@@ -1379,6 +1481,66 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       ];
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
+
+    if (!loadedCommentary['md1-3'] || !loadedCommentary['md1-3'].some(c => c.id === 'comm-goal-md1-3-taiwo')) {
+      loadedCommentary['md1-3'] = [
+        {
+          id: 'comm-ft-md1-3',
+          matchId: 'md1-3',
+          minute: "FT",
+          text: "🏁 FULL TIME! CYS secures their first FCL game win on their fourth attempt, defeating ANA 1–0! Historical day for the computer scientists.",
+          timestamp: "12:15 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-3-taiwo',
+          matchId: 'md1-3',
+          minute: "28'",
+          text: "⚽ GOAL! Taiwo scores a brilliant volley to put CYS in front! A spectacular finish that sends the fans into absolute limbs! CYS 1-0 ANA.",
+          timestamp: "11:28 AM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-kickoff-md1-3',
+          matchId: 'md1-3',
+          minute: "0'",
+          text: "🏁 KICKOFF! Referee Tosin signals the start of the matchday 1 clash between CYS and ANA! Let the games begin.",
+          timestamp: "11:00 AM",
+          type: 'general'
+        }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
+    if (!loadedCommentary['md1-4'] || !loadedCommentary['md1-4'].some(c => c.id === 'comm-goal-md1-4-kunlex')) {
+      loadedCommentary['md1-4'] = [
+        {
+          id: 'comm-ft-md1-4',
+          matchId: 'md1-4',
+          minute: "FT",
+          text: "🏁 FULL TIME! APH wins 1–0 against PHS courtesy of an extra-time goal in the first half from Kunlex! Emmanuel wins MOTM for a colossal display.",
+          timestamp: "1:45 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-4-kunlex',
+          matchId: 'md1-4',
+          minute: "30+3'",
+          text: "⚽ GOAL! Kunlex breaks the deadlock for APH right on the stroke of halftime (30+3')! Incredible poise to slot it home under pressure. PHS 0-1 APH.",
+          timestamp: "1:03 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-kickoff-md1-4',
+          matchId: 'md1-4',
+          minute: "0'",
+          text: "🏁 KICKOFF! We are live at the Mini Pitch for PHS vs APH! Both teams fielding strong lineups.",
+          timestamp: "12:30 PM",
+          type: 'general'
+        }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
     setCommentaries(loadedCommentary);
 
     // 10. Reports
@@ -1396,8 +1558,16 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       loadedTimers['md1-2'] = { liveMinute: "46:00", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
-    if (!loadedTimers['md1-5']) {
-      loadedTimers['md1-5'] = { liveMinute: "10:00", isPaused: false };
+    if (!loadedTimers['md1-3'] || loadedTimers['md1-3'].liveMinute !== "FT") {
+      loadedTimers['md1-3'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['md1-4'] || loadedTimers['md1-4'].liveMinute !== "FT") {
+      loadedTimers['md1-4'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['md1-5'] || loadedTimers['md1-5'].liveMinute !== "FT") {
+      loadedTimers['md1-5'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     setActiveMinAndStatus(loadedTimers);
@@ -1784,7 +1954,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v5');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v6');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -1797,7 +1967,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_ft_v5', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v6', 'true');
     }
 
     loadState();
