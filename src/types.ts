@@ -57,6 +57,9 @@ export interface Player {
   goals_conceded?: number;
   teamId: string;
   image: string;
+  level?: string;
+  jerseyNo?: number;
+  matricNumber?: string;
 }
 
 export interface Match {

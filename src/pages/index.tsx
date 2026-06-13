@@ -3599,6 +3599,19 @@ export function Contact() {
     </div>
   );
 }
+const TECHNICAL_CREWS: Record<string, { headCoach: { name: string; phone?: string }; assistantCoach?: { name: string; phone?: string } }> = {
+  fwt: {
+    headCoach: { name: "Omoloye Olaide", phone: "+234 (0) 9053144721" },
+    assistantCoach: { name: "Oyebamiji Samuel Olajuwo", phone: "+234 (0) 7056091618" }
+  },
+  mst: {
+    headCoach: { name: "Esezobor Isaac Eromosele", phone: "+234 (0) 8107366950" }
+  },
+  cys: {
+    headCoach: { name: "Simileoluwa Olawale Awosan" }
+  }
+};
+
 export function TeamProfile() {
   const { id } = useParams();
   const { players, teams } = useMatchState();
@@ -3685,8 +3698,25 @@ export function TeamProfile() {
                     <div className="flex items-center space-x-4">
                       <img src={player.image} alt={player.name} className="w-12 h-12 rounded-xl object-cover bg-white/5" />
                       <div>
-                        <h4 className="font-bold">{player.name}</h4>
-                        <p className="text-[10px] font-bold text-primary uppercase italic">{player.position}</p>
+                        <h4 className="font-bold leading-tight">{player.name}</h4>
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1">
+                          <span className="text-[10px] font-bold text-primary uppercase italic">{player.position}</span>
+                          {player.jerseyNo !== undefined && (
+                            <span className="text-[9px] font-mono font-black bg-white/10 text-white/80 px-1 py-0.5 rounded border border-white/5">
+                              #{player.jerseyNo}
+                            </span>
+                          )}
+                          {player.level && (
+                            <span className="text-[9px] font-mono text-white/45 bg-white/[0.04] px-1 py-0.5 rounded">
+                              {player.level}
+                            </span>
+                          )}
+                        </div>
+                        {player.matricNumber && (
+                          <span className="text-[9px] font-mono text-white/25 block mt-1 tracking-tight">
+                            {player.matricNumber}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="flex items-center space-x-3 justify-end bg-navy-dark/40 px-3 py-1.5 rounded-xl border border-white/5">
@@ -3755,6 +3785,30 @@ export function TeamProfile() {
                   </div>
                 </div>
               </div>
+
+              {TECHNICAL_CREWS[team.id] && (
+                <div className="border-t border-white/5 pt-6 mt-6">
+                  <h4 className="text-xs font-black uppercase text-primary tracking-[0.2em] mb-4">Technical Crew</h4>
+                  <div className="space-y-4 bg-slate-950/40 p-4 rounded-2xl border border-white/5">
+                    <div>
+                      <div className="text-[10px] text-white/40 font-bold uppercase tracking-wider leading-none mb-1">Head Coach</div>
+                      <div className="text-sm font-bold text-white">{TECHNICAL_CREWS[team.id].headCoach.name}</div>
+                      {TECHNICAL_CREWS[team.id].headCoach.phone && (
+                        <div className="text-[11px] font-mono text-primary mt-1">📞 {TECHNICAL_CREWS[team.id].headCoach.phone}</div>
+                      )}
+                    </div>
+                    {TECHNICAL_CREWS[team.id].assistantCoach && (
+                      <div className="border-t border-white/5 pt-3">
+                        <div className="text-[10px] text-white/40 font-bold uppercase tracking-wider leading-none mb-1">Assistant Coach</div>
+                        <div className="text-sm font-bold text-white">{TECHNICAL_CREWS[team.id].assistantCoach.name}</div>
+                        {TECHNICAL_CREWS[team.id].assistantCoach.phone && (
+                          <div className="text-[11px] font-mono text-primary mt-1">📞 {TECHNICAL_CREWS[team.id].assistantCoach.phone}</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

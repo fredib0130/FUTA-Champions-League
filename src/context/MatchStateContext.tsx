@@ -726,6 +726,93 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       }
     };
 
+    // Force/overlay CYS official Matchday 1 lineup specifically for md1-5 (CYS vs ANA)
+    loadedLineups['md1-5'] = {
+      home: {
+        matchId: 'md1-5',
+        teamAbbr: 'CYS',
+        formation: '4-3-3',
+        captainId: 'player-cys-5', // Fashola Tobi (Captain)
+        players: {
+          'GK': 'player-cys-1',  // Olabode Victor
+          'LB': 'player-cys-2',  // Adewunmi Excel
+          'LCB': 'player-cys-3', // Kadiri Akorede
+          'RCB': 'player-cys-4', // Raji Jubril
+          'RB': 'player-cys-5',  // Fashola Tobi
+          'DM1': 'player-cys-6', // Nwoke Isaac
+          'AM': 'player-cys-7',  // Ayeni Paul
+          'DM2': 'player-cys-8', // Onah Caleb
+          'LW': 'player-cys-9',  // Ajao Alameed
+          'CF': 'player-cys-10', // Jegede Daniel
+          'RW': 'player-cys-11'  // Akinyede Allen
+        },
+        bench: [],
+        status: 'Approved'
+      },
+      away: loadedLineups['md1-5']?.away || {
+        matchId: 'md1-5',
+        teamAbbr: 'ANA',
+        formation: '4-3-3',
+        captainId: 'player-12',
+        players: {
+          'GK': 'player-12', 'LB': 'player-13', 'CB1': 'player-14', 'CB2': 'player-15', 'RB': 'player-16',
+          'LM': 'player-17', 'CM1': 'player-18', 'CM2': 'player-19', 'RM': 'player-20', 'ST1': 'player-21', 'ST2': 'player-22'
+        },
+        bench: ['Tunde Williams', 'David Alaba'],
+        status: 'Pending'
+      }
+    };
+
+    // Force/overlay FWT official Matchday 1 lineup specifically for md1-7 (FWT vs IDD)
+    loadedLineups['md1-7'] = {
+      home: {
+        matchId: 'md1-7',
+        teamAbbr: 'FWT',
+        formation: '4-3-3',
+        captainId: 'player-fwt-16', // Ayodeji Bright Kehinde (Captain)
+        players: {
+          'GK': 'player-fwt-1',  // Afolabi Timothy Testimony
+          'LB': 'player-fwt-3',  // Ayodeji Blessing Elisha
+          'LCB': 'player-fwt-5', // Ganiyu Malik Ayomide
+          'RCB': 'player-fwt-6', // Owolabi Taofeeq Ademola
+          'RB': 'player-fwt-4',  // Ayadi Bright Tayo
+          'CM1': 'player-fwt-13',// Iyapo Banji
+          'DM': 'player-fwt-12', // Ajayi Oluwatobi Oluwasegun
+          'CM2': 'player-fwt-9',  // Bello Baki Oluwaseyi
+          'LW': 'player-fwt-16', // Ayodeji Bright Kehinde (Captain)
+          'CF': 'player-fwt-11', // Fadiji Bonnke Samuel
+          'RW': 'player-fwt-17'  // Ogunkanmi Oluwanimisire Oladayo
+        },
+        bench: [
+          'Jonathan Henry Chukwu',
+          'Tiamiyu Samuel Temitope',
+          'Awosiyan Oluwaseun Victor',
+          'Famuwagun Tomiwa Young',
+          'Oghoromai Richard Ayomide',
+          'Adegoke Blessing Moses',
+          'Agunloye Segun Isaac',
+          'Sanusi Olaitan John',
+          'Olalekan Hammed Olajuwon',
+          'Akinmola Oluwafisayo Oluwafemi',
+          'Olayemi Elijah Ayokunle',
+          'Akindele Damilola Temitope'
+        ],
+        status: 'Approved'
+      },
+      away: loadedLineups['md1-7']?.away || {
+        matchId: 'md1-7',
+        teamAbbr: 'IDD',
+        formation: '4-3-3',
+        captainId: 'player-12',
+        players: {
+          'GK': 'player-12', 'LB': 'player-13', 'CB1': 'player-14', 'CB2': 'player-15', 'RB': 'player-16',
+          'LM': 'player-17', 'CM1': 'player-18', 'CM2': 'player-19', 'RM': 'player-20', 'ST1': 'player-21', 'ST2': 'player-22'
+        },
+        bench: ['Tunde Williams', 'David Alaba'],
+        status: 'Pending'
+      }
+    };
+
     localStorage.setItem('fcl_admin_lineups', JSON.stringify(loadedLineups));
     setLineups(loadedLineups);
 
