@@ -594,6 +594,18 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       });
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
+
+    if (!loadedGoals.some(g => g.matchId === 'md1-2' && g.playerName === 'Roland')) {
+      loadedGoals.push({
+        id: 'goal-md1-2-roland-46',
+        matchId: 'md1-2',
+        playerName: 'Roland',
+        team: 'AGP',
+        minute: "46'",
+        type: 'Goal'
+      });
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -735,10 +747,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       }
     };
 
-    // Force/overlay CYS official Matchday 1 lineup specifically for md1-5 (CYS vs ANA)
-    loadedLineups['md1-5'] = {
+    // Force/overlay CYS official Matchday 1 lineup specifically for md1-3 (CYS vs ANA)
+    loadedLineups['md1-3'] = {
       home: {
-        matchId: 'md1-5',
+        matchId: 'md1-3',
         teamAbbr: 'CYS',
         formation: '4-3-3',
         captainId: 'player-cys-5', // Fashola Tobi (Captain)
@@ -758,8 +770,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         bench: [],
         status: 'Approved'
       },
-      away: loadedLineups['md1-5']?.away || {
-        matchId: 'md1-5',
+      away: loadedLineups['md1-3']?.away || {
+        matchId: 'md1-3',
         teamAbbr: 'ANA',
         formation: '4-3-3',
         captainId: 'player-12',
@@ -1212,15 +1224,23 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
-    if (!loadedCommentary['md1-2'] || !loadedCommentary['md1-2'].some(c => c.id === 'comm-goal-md1-2')) {
+    if (!loadedCommentary['md1-2'] || !loadedCommentary['md1-2'].some(c => c.id === 'comm-goal-md1-2-roland')) {
       loadedCommentary['md1-2'] = [
         {
           id: 'comm-md1-2-current',
           matchId: 'md1-2',
-          minute: "35'",
-          text: "Play continues at the Mini Pitch with AGP maintaining control and protecting their 1-0 lead. BCH is pushing for an equalizer.",
-          timestamp: "10:05 AM",
+          minute: "46'",
+          text: "AGP doubles their advantage shortly after the restart. Play continues at the Mini Pitch with AGP maintaining control and protecting their 2-0 lead.",
+          timestamp: "10:16 AM",
           type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-2-roland',
+          matchId: 'md1-2',
+          minute: "46'",
+          text: "⚽ GOAL! Roland scores for AGP shortly after the restart, doubling their advantage! AGP 2–0 BCH.",
+          timestamp: "10:16 AM",
+          type: 'goal'
         },
         {
           id: 'comm-goal-md1-2',
@@ -1270,8 +1290,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       loadedTimers['md1-1'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
-    if (!loadedTimers['md1-2']) {
-      loadedTimers['md1-2'] = { liveMinute: "35:00", isPaused: true };
+    if (!loadedTimers['md1-2'] || loadedTimers['md1-2'].liveMinute === "35:00") {
+      loadedTimers['md1-2'] = { liveMinute: "46:00", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     setActiveMinAndStatus(loadedTimers);
@@ -1658,7 +1678,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_fulltime_v1');
+    const hasReset = localStorage.getItem('fcl_reset_2026_live_v2');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -1671,7 +1691,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_fulltime_v1', 'true');
+      localStorage.setItem('fcl_reset_2026_live_v2', 'true');
     }
 
     loadState();
