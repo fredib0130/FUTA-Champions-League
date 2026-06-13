@@ -75,8 +75,6 @@ export const PLAYERS: Player[] = [
   { id: 'player-ent-fairy', name: "Fairy", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ent', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ent-fairy' },
   { id: 'player-aph-kunlex', name: "Kunlex", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'aph', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=aph-kunlex' },
   { id: 'player-aph-emmanuel', name: "Emmanuel", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'aph', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=aph-emmanuel' },
-  { id: 'player-cys-taiwo', name: "Taiwo", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'cys', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=cys-taiwo' },
-  { id: 'player-cys-jubril', name: "Jubril", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'cys', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=cys-jubril' },
   { id: 'player-csp-ademide', name: "Ademide", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'csp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=csp-ademide' },
   { id: 'player-csp-adedara', name: "Adedara", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'csp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=csp-adedara' },
   { id: 'player-ifs-idris', name: "Idris", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ifs', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ifs-idris' },
@@ -163,33 +161,88 @@ export const PLAYERS: Player[] = [
     teamId: 'fwt',
     image: `https://api.dicebear.com/7.x/avataaars/svg?seed=fwt-player-${idx + 1}`
   })),
-  // CYS Official Squad
+  // CYS Official Squad (Extensive 23-player registry, ordered to match historical lineup mappings)
   ...[
-    { name: "Olabode Victor", position: "GK" as const },
-    { name: "Adewunmi Excel", position: "DEF" as const },
-    { name: "Kadiri Akorede", position: "DEF" as const },
-    { name: "Raji Jubril", position: "DEF" as const },
-    { name: "Fashola Tobi", position: "DEF" as const },
-    { name: "Nwoke Isaac", position: "MID" as const },
-    { name: "Ayeni Paul", position: "MID" as const },
-    { name: "Onah Caleb", position: "MID" as const },
-    { name: "Ajao Alameed", position: "FWD" as const },
-    { name: "Jegede Daniel", position: "FWD" as const },
-    { name: "Akinyede Allen", position: "FWD" as const }
+    { name: "Olabode Victor Oluwatosin", position: "GK" as const, level: "500L", jerseyNo: 1, matricNumber: "CYS/20/4932" },
+    { name: "Adewumi Excel Joshua", position: "DEF" as const, level: "500L", jerseyNo: 3, matricNumber: "CYS/22/9017" },
+    { name: "Kadri Taofeek Akorede", position: "DEF" as const, level: "300L", jerseyNo: 4, matricNumber: "CYS/23/4061" },
+    { name: "Raji Jubril Olarewaju", position: "DEF" as const, level: "100L", jerseyNo: 5, matricNumber: "CYS/25/7084" },
+    { name: "Fashola Oluwatobi Joshua", position: "DEF" as const, level: "500L", jerseyNo: 2, matricNumber: "CYS/20/4918" },
+    { name: "Nwoke Isaac Honour", position: "MID" as const, level: "300L", jerseyNo: 6, matricNumber: "CYS/23/4068" },
+    { name: "Ayeni Babatunde Paul", position: "MID" as const, level: "500L", jerseyNo: 21, matricNumber: "CYS/20/4911" },
+    { name: "Onah Caleb Igoche", position: "MID" as const, level: "500L", jerseyNo: 8, matricNumber: "CYS/22/9082" },
+    { name: "Ajao Alameen Olaide", position: "MID" as const, level: "200L", jerseyNo: 17, matricNumber: "CYS/24/9175" },
+    { name: "Jegede Daniel Kolawole", position: "FWD" as const, level: "500L", jerseyNo: 9, matricNumber: "CYS/20/4923" },
+    { name: "Akinyede Allen Oluwaferanmi", position: "FWD" as const, level: "500L", jerseyNo: 7, matricNumber: "CYS/20/4908" },
+    { name: "Adedotun Faiz Ayobami", position: "GK" as const, level: "100L", jerseyNo: 13, matricNumber: "CYS/25/6982" },
+    { name: "Ifedayoijitimeyin Valerian Igbagboyemi", position: "DEF" as const, level: "500L", jerseyNo: 15, matricNumber: "CYS/20/4920" },
+    { name: "Olanrewaju Mujeeb Abolaji", position: "DEF" as const, level: "100L", jerseyNo: 12, matricNumber: "CYS/25/7071" },
+    { name: "Akinrinola Samuel Temitope", position: "MID" as const, level: "500L", jerseyNo: 20, matricNumber: "CYS/20/4905" },
+    { name: "Akinshipe Oluwafemi Solomon", position: "MID" as const, level: "300L", jerseyNo: 23, matricNumber: "CYS/24/9180" },
+    { name: "Oluwadiya Timilehin Abraham", position: "MID" as const, level: "500L", jerseyNo: 18, matricNumber: "CYS/20/4935" },
+    { name: "Olamijulo Israel Damilare", position: "MID" as const, level: "500L", jerseyNo: 10, matricNumber: "CYS/22/9071" },
+    { name: "Adeoye Ezekiel Oluwaseyi", position: "MID" as const, level: "500L", jerseyNo: 14, matricNumber: "CYS/20/4897" },
+    { name: "Owolabi Olaifeoluwa Solomon", position: "MID" as const, level: "300L", jerseyNo: 16, matricNumber: "CYS/23/4090" },
+    { name: "Bello Daniel Damilare", position: "FWD" as const, level: "500L", jerseyNo: 11, matricNumber: "CYS/20/4914" },
+    { name: "Olorunfemi Taiwo James", position: "FWD" as const, level: "100L", jerseyNo: 22, matricNumber: "CYS/25/7075" },
+    { name: "Adetule Marvellous Mayowa", position: "FWD" as const, level: "500L", jerseyNo: 19, matricNumber: "CYS/20/4899" }
   ].map((p, idx) => ({
     id: `player-cys-${idx + 1}`,
     name: p.name,
     position: p.position,
+    level: p.level,
+    jerseyNo: p.jerseyNo,
+    matricNumber: p.matricNumber,
     goals: 0,
     played: 0,
     cleanSheets: 0,
     teamId: 'cys',
     image: `https://api.dicebear.com/7.x/avataaars/svg?seed=cys-player-${idx + 1}`
   })),
+
+  // SIMT Official Squad (Underdogs' extensive 23-player registry)
+  ...[
+    { name: "Nwabunwanne Chibichi Daniel", position: "GK" as const, level: "200L", jerseyNo: 1, matricNumber: "SIM/24/1738" },
+    { name: "Divine Gabriel Ibrahim", position: "GK" as const, level: "200L", matricNumber: "SIM/24/1727" },
+    { name: "Adebayo Samuel Ayobami", position: "DEF" as const, level: "200L", jerseyNo: 16, matricNumber: "SIM/24/1697" },
+    { name: "Adeniyi Opeyemi Israel", position: "DEF" as const, level: "200L", jerseyNo: 99, matricNumber: "SIM/24/1701" },
+    { name: "Momoh Joshua David", position: "DEF" as const, level: "200L", jerseyNo: 66, matricNumber: "SIM/24/1737" },
+    { name: "Aderiye Joshua Adekunle", position: "DEF" as const, level: "200L", jerseyNo: 2, matricNumber: "SIM/24/1703" },
+    { name: "Adewale Uthman Boluwatife", position: "DEF" as const, level: "100L", matricNumber: "SIM/25/0329" },
+    { name: "Omolayo Precious Ayomide", position: "DEF" as const, level: "200L", jerseyNo: 19, matricNumber: "SIM/24/1757" },
+    { name: "Yusuf Soliu Okikiola", position: "DEF" as const, level: "200L", matricNumber: "SIM/24/1768" },
+    { name: "Ajiwoye Oluwalonimi Israel", position: "DEF" as const, level: "200L", matricNumber: "SIM/24/1711" },
+    { name: "Afolabi Abdulmuheez", position: "DEF" as const, level: "200L", jerseyNo: 4, matricNumber: "SIM/24/1707" },
+    { name: "Olabamiji Eric Ayokunle", position: "DEF" as const, level: "200L", jerseyNo: 24, matricNumber: "SIM/24/1749" },
+    { name: "Kolawole Emmanuel Timilehin", position: "MID" as const, level: "200L", jerseyNo: 12, matricNumber: "SIM/24/1735" },
+    { name: "Oweazim Chukwudumebi", position: "MID" as const, level: "200L", jerseyNo: 8, matricNumber: "SIM/24/1761" },
+    { name: "Okoye Philip C.", position: "MID" as const, level: "100L", matricNumber: "SIM/25/0377" },
+    { name: "Adeniyi Temitope Oluwadamilare", position: "MID" as const, level: "100L", matricNumber: "SIM/25/0326" },
+    { name: "Adewopo Feranmi", position: "MID" as const, level: "200L", jerseyNo: 5, matricNumber: "SIM/24/1704" },
+    { name: "Omowale Ridwan Gbolahun", position: "MID" as const, level: "200L", jerseyNo: 11, matricNumber: "SIM/24/1760" },
+    { name: "Oladapo Isaac Ayomide", position: "FWD" as const, level: "200L", jerseyNo: 10, matricNumber: "SIM/24/1750" },
+    { name: "Emmanuel Oluwapamilerin Joshua", position: "FWD" as const, level: "200L", jerseyNo: 7, matricNumber: "SIM/24/1724" },
+    { name: "Ogboye Samuel Oluwaponmile", position: "FWD" as const, level: "200L", jerseyNo: 9, matricNumber: "SIM/24/1746" },
+    { name: "Ipinlaye Samuel Fisayo", position: "FWD" as const, level: "200L", jerseyNo: 14, matricNumber: "SIM/24/1731" },
+    { name: "Amure Matthew", position: "FWD" as const, level: "200L", jerseyNo: 20, matricNumber: "SIM/24/1718" }
+  ].map((p, idx) => ({
+    id: `player-simt-${idx + 1}`,
+    name: p.name,
+    position: p.position,
+    level: p.level,
+    jerseyNo: p.jerseyNo,
+    matricNumber: p.matricNumber,
+    goals: 0,
+    played: 0,
+    cleanSheets: 0,
+    teamId: 'simt',
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=simt-player-${idx + 1}`
+  })),
+
   // Auto-generate helper players for other teams to keep rosters occupied
   ...Array.from({ length: 150 }, (_, i) => {
     const team = TEAMS[i % TEAMS.length];
-    if (team.id === 'mst' || team.id === 'fwt' || team.id === 'cys') {
+    if (team.id === 'mst' || team.id === 'fwt' || team.id === 'cys' || team.id === 'simt') {
       return null;
     }
     return {
@@ -233,7 +286,7 @@ export const MATCHES: Match[] = [
     ]
   }, // OPENING MATCH
   { id: 'md1-2', homeTeam: 'AGP', awayTeam: 'BCH', date: '2026-06-13', time: '09:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Abraham', refereeAssigned: true, manOfTheMatch: 'Oyelakin Abdulquadri' },
-  { id: 'md1-3', homeTeam: 'CYS', awayTeam: 'ANA', date: '2026-06-13', time: '11:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Tosin', refereeAssigned: true, manOfTheMatch: 'Jubril' },
+  { id: 'md1-3', homeTeam: 'CYS', awayTeam: 'ANA', date: '2026-06-13', time: '11:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Tosin', refereeAssigned: true, manOfTheMatch: 'Raji Jubril Olarewaju' },
   { id: 'md1-4', homeTeam: 'PHS', awayTeam: 'APH', date: '2026-06-13', time: '12:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Tosin', refereeAssigned: true, manOfTheMatch: 'Emmanuel' },
   { id: 'md1-5', homeTeam: 'BDG', awayTeam: 'ENT', date: '2026-06-13', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Abraham', refereeAssigned: true, manOfTheMatch: 'Tofunmi' },
   { id: 'md1-6', homeTeam: 'IFS', awayTeam: 'CSP', date: '2026-06-13', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Jones', refereeAssigned: true, manOfTheMatch: 'Ademide' },

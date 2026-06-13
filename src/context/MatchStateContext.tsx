@@ -786,11 +786,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
 
-    if (!loadedGoals.some(g => g.matchId === 'md1-3' && g.playerName === 'Taiwo')) {
+    if (!loadedGoals.some(g => g.matchId === 'md1-3' && g.playerName === 'Olorunfemi Taiwo James')) {
+      loadedGoals = loadedGoals.filter(g => g.matchId !== 'md1-3' || (g.playerName !== 'Taiwo' && g.playerName !== 'Olorunfemi Taiwo James'));
       loadedGoals.push({
         id: 'goal-md1-3-taiwo-28',
         matchId: 'md1-3',
-        playerName: 'Taiwo',
+        playerName: 'Olorunfemi Taiwo James',
         team: 'CYS',
         minute: "28'",
         type: 'Goal'
@@ -1026,7 +1027,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'AM': 'player-cys-7',  // Ayeni Paul
           'DM2': 'player-cys-8', // Onah Caleb
           'LW': 'player-cys-9',  // Ajao Alameed
-          'CF': 'player-cys-10', // Jegede Daniel
+          'CF': 'player-cys-22', // Olorunfemi Taiwo James
           'RW': 'player-cys-11'  // Akinyede Allen
         },
         bench: [],
