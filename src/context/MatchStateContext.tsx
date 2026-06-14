@@ -414,8 +414,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.manOfTheMatch !== official.manOfTheMatch ||
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
             (official.matchday === 1 && m.status !== official.status) // Sync status specifically for matchday 1 reschedules
           ) {
@@ -434,8 +434,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7'].includes(official.id) ? official.awayScore : m.awayScore
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8'].includes(official.id) ? official.awayScore : m.awayScore
             };
             updated = true;
           }
@@ -727,6 +727,36 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
     }
 
+    // AGE vs SIMT Match Statistics (md1-8)
+    loadedStats['md1-8'] = {
+      matchId: 'md1-8',
+      cornersHome: 0,
+      cornersAway: 0,
+      yellowCardsHome: 0,
+      yellowCardsAway: 3,
+      redCardsHome: 0,
+      redCardsAway: 2,
+      foulsHome: 6,
+      foulsAway: 0,
+      offsidesHome: 0,
+      offsidesAway: 0,
+      freeKicksHome: 0,
+      freeKicksAway: 5,
+      homeCorners: 0,
+      awayCorners: 0,
+      homeYellowCards: 0,
+      awayYellowCards: 3,
+      homeRedCards: 0,
+      awayRedCards: 2,
+      homeOffsides: 0,
+      awayOffsides: 0,
+      homeFouls: 6,
+      awayFouls: 0,
+      homeFreeKicks: 0,
+      awayFreeKicks: 5
+    };
+    localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
+
     setDetailedStats(loadedStats);
 
     // 4. Goal events
@@ -846,6 +876,51 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       });
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
+    if (!loadedGoals.some(g => g.matchId === 'md1-8')) {
+      loadedGoals.push(
+        {
+          id: 'goal-md1-8-adebayo-8',
+          matchId: 'md1-8',
+          playerName: 'Adebayo Samuel Ayobami',
+          team: 'SIMT',
+          minute: "8'",
+          type: 'Goal'
+        },
+        {
+          id: 'goal-md1-8-adebayo-25',
+          matchId: 'md1-8',
+          playerName: 'Adebayo Samuel Ayobami',
+          team: 'SIMT',
+          minute: "25'",
+          type: 'Goal'
+        },
+        {
+          id: 'goal-md1-8-sylvanus-42',
+          matchId: 'md1-8',
+          playerName: 'Sylvanus',
+          team: 'AGE',
+          minute: "42'",
+          type: 'Penalty'
+        },
+        {
+          id: 'goal-md1-8-anthony-47',
+          matchId: 'md1-8',
+          playerName: 'Anthony',
+          team: 'AGE',
+          minute: "47'",
+          type: 'Goal'
+        },
+        {
+          id: 'goal-md1-8-adebayo-55',
+          matchId: 'md1-8',
+          playerName: 'Adebayo Samuel Ayobami',
+          team: 'SIMT',
+          minute: "55'",
+          type: 'Goal'
+        }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -876,7 +951,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'card-md1-5-promise', matchId: 'md1-5', playerName: 'Promise', teamAbbr: 'ENT', minute: "15'", type: 'Yellow' },
       { id: 'card-md1-5-fairy', matchId: 'md1-5', playerName: 'Fairy', teamAbbr: 'ENT', minute: "55'", type: 'Yellow' },
       { id: 'card-md1-7-malik', matchId: 'md1-7', playerName: 'Ganiyu Malik Ayomide', teamAbbr: 'FWT', minute: "53'", type: 'Red' },
-      { id: 'card-md1-7-tolu', matchId: 'md1-7', playerName: 'Tolu', teamAbbr: 'IDD', minute: "53'", type: 'Red' }
+      { id: 'card-md1-7-tolu', matchId: 'md1-7', playerName: 'Tolu', teamAbbr: 'IDD', minute: "53'", type: 'Red' },
+      // AGE vs SIMT Card Events (md1-8)
+      { id: 'card-md1-8-coach', matchId: 'md1-8', playerName: 'Asinwa Peter Adeleke (Coach)', teamAbbr: 'SIMT', minute: "1'", type: 'Yellow' },
+      { id: 'card-md1-8-daniel-y1', matchId: 'md1-8', playerName: 'Nwabunwanne Chibichi Daniel', teamAbbr: 'SIMT', minute: "1'", type: 'Yellow' },
+      { id: 'card-md1-8-adebayo-y', matchId: 'md1-8', playerName: 'Adebayo Samuel Ayobami', teamAbbr: 'SIMT', minute: "1'", type: 'Yellow' },
+      { id: 'card-md1-8-daniel-r', matchId: 'md1-8', playerName: 'Nwabunwanne Chibichi Daniel', teamAbbr: 'SIMT', minute: "58'", type: 'Red' },
+      { id: 'card-md1-8-gbolahun-r', matchId: 'md1-8', playerName: 'Omowale Ridwan Gbolahun', teamAbbr: 'SIMT', minute: "56'", type: 'Red' }
     ];
     officialMd1_5Cards.forEach(c => {
       const existingIdx = loadedCards.findIndex(existing => existing.id === c.id);
@@ -1137,13 +1218,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         matchId: 'md1-8',
         teamAbbr: 'AGE',
         formation: '4-3-3',
-        captainId: 'player-1',
+        captainId: 'player-age-7',
         players: {
-          'GK': 'player-1', 'LB': 'player-2', 'CB1': 'player-3', 'CB2': 'player-4', 'RB': 'player-5',
-          'DM': 'player-6', 'CM1': 'player-7', 'CM2': 'player-8', 'LW': 'player-9', 'ST': 'player-10', 'RW': 'player-11'
+          'GK': 'player-age-1', 'LB': 'player-age-2', 'CB1': 'player-age-3', 'CB2': 'player-age-4', 'RB': 'player-age-5',
+          'DM': 'player-age-6', 'CM1': 'player-age-7', 'CM2': 'player-age-8', 'LW': 'player-age-9', 'ST': 'player-age-10', 'RW': 'player-age-11'
         },
         bench: [],
-        status: 'Pending'
+        status: 'Approved'
       },
       away: {
         matchId: 'md1-8',
@@ -2153,6 +2234,125 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
       }
     }
+
+    if (!loadedCommentary['md1-8'] || !loadedCommentary['md1-8'].some(c => c.id === 'comm-goal-md1-8-adebayo-3')) {
+      loadedCommentary['md1-8'] = [
+        {
+          id: 'comm-ft-md1-8',
+          matchId: 'md1-8',
+          minute: "60'",
+          text: "🏁 FULL TIME! SIMT holds on to claim a remarkable 3–2 victory over AGE! A thrilling match highlighted by Captain Adebayo Samuel Ayobami's spectacular free-kick hat-trick! AGE fought back to 2-2 but couldn't snatch a point even after SIMT were reduced to 9 men in the dying minutes. AGE 2 - 3 SIMT.",
+          timestamp: "5:05 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-red-daniel-md1-8',
+          matchId: 'md1-8',
+          minute: "58'",
+          text: "🟥 RED CARD! Nwabunwanne Chibichi Daniel receives his second yellow card and is sent off! SIMT is down to 9 men on the pitch!",
+          timestamp: "5:03 PM",
+          type: 'card'
+        },
+        {
+          id: 'comm-red-gbolahun-md1-8',
+          matchId: 'md1-8',
+          minute: "56'",
+          text: "🟥 RED CARD! Omowale Ridwan Gbolahun is shown a straight red card! SIMT is down to 10 men as we enter the final minutes!",
+          timestamp: "5:01 PM",
+          type: 'card'
+        },
+        {
+          id: 'comm-goal-md1-8-adebayo-3',
+          matchId: 'md1-8',
+          minute: "55'",
+          text: "⚽ GOAL!!! HATTRICK OF DIRECT FREEKICKS FOR THE CAPTAIN! Adebayo Samuel Ayobami stands ready, fires from distance and curls it exquisitely over the wall into the top shelf! Unbelievable performance! AGE 2 - 3 SIMT.",
+          timestamp: "5:00 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-goal-md1-8-anthony',
+          matchId: 'md1-8',
+          minute: "47'",
+          text: "⚽ GOAL!!! Anthony scores for AGE! He links up perfectly with the midfield, cuts inside the box and strokes a precise low drive past the diving GK to bring AGE level! Phenomenal comeback! AGE 2 - 2 SIMT.",
+          timestamp: "4:52 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-goal-md1-8-sylvanus',
+          matchId: 'md1-8',
+          minute: "42'",
+          text: "⚽ GOAL!!! Sylvanus converts from the spot! He sends the goalkeeper the wrong way and slams the penalty into the bottom left corner, restoring hope to AGE! AGE 1 - 2 SIMT.",
+          timestamp: "4:47 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-pen-age-md1-8',
+          matchId: 'md1-8',
+          minute: "41'",
+          text: "PENALTY AWARDED TO AGE! A late tackle in the box by SIMT defenders prompts Referee Juwon to point straight to the spot!",
+          timestamp: "4:46 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-shkickoff-md1-8',
+          matchId: 'md1-8',
+          minute: "31'",
+          text: "🏁 SECOND HALF START! AGE pushes players forward, seeking a way back into this fiery encounter.",
+          timestamp: "4:36 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-ht-md1-8',
+          matchId: 'md1-8',
+          minute: "30'",
+          text: "⏸ HALF-TIME! Referee Juwon signals halftime. SIMT goes into the break with a 2-0 cushion, courtesy of two majestic freekicks from Ayobami.",
+          timestamp: "4:30 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-8-adebayo-2',
+          matchId: 'md1-8',
+          minute: "25'",
+          text: "⚽ GOAL!!! HE DOES IT AGAIN! Adebayo Samuel Ayobami scores another magnificent direct freekick! An absolute masterclass in dead-ball delivery to extend the lead! AGE 0 - 2 SIMT.",
+          timestamp: "4:25 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-goal-md1-8-adebayo-1',
+          matchId: 'md1-8',
+          minute: "8'",
+          text: "⚽ GOAL!!! Adebayo Samuel Ayobami scores directly from the freekick! A sublime curl that flies into the top corner, yielding an early lead for SIMT! AGE 0 - 1 SIMT.",
+          timestamp: "4:08 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-freekick-simt-8',
+          matchId: 'md1-8',
+          minute: "7'",
+          text: "SIMT wins a foul. Free kick given just outside the box in a dangerous position.",
+          timestamp: "4:07 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-yellow-coach-md1-8',
+          matchId: 'md1-8',
+          minute: "1'",
+          text: "🟨 YELLOW CARDS! An early flare of tempers! Referee Juwon issues yellow cards to SIMT Coach Asinwa Peter Adeleke, defender Nwabunwanne Chibichi Daniel, and Captain Adebayo Samuel Ayobami for dissent.",
+          timestamp: "4:01 PM",
+          type: 'card'
+        },
+        {
+          id: 'comm-kickoff-md1-8',
+          matchId: 'md1-8',
+          minute: "0'",
+          text: "🏁 KICKOFF! Referee Juwon blows his whistle to start this Matchday 1 clash between AGE and SIMT at the Mini Pitch!",
+          timestamp: "4:00 PM",
+          type: 'general'
+        }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
     setCommentaries(loadedCommentary);
 
     // 10. Reports
@@ -2188,6 +2388,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     }
     if (!loadedTimers['md1-7'] || loadedTimers['md1-7'].liveMinute !== "FT") {
       loadedTimers['md1-7'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['md1-8'] || loadedTimers['md1-8'].liveMinute !== "FT") {
+      loadedTimers['md1-8'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     setActiveMinAndStatus(loadedTimers);

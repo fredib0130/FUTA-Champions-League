@@ -401,10 +401,37 @@ export const PLAYERS: Player[] = [
     image: `https://api.dicebear.com/7.x/avataaars/svg?seed=phy-player-${idx + 1}`
   })),
 
+  // AGE Official Squad (Agricultural and Environmental Engineering)
+  ...[
+    { name: "Babatunde", position: "GK" as const, level: "300L", jerseyNo: 1, matricNumber: "AGE/23/3912" }, // player-age-1
+    { name: "Afolabi", position: "DEF" as const, level: "400L", jerseyNo: 2, matricNumber: "AGE/22/3913" },  // player-age-2
+    { name: "Olawale", position: "DEF" as const, level: "200L", jerseyNo: 3, matricNumber: "AGE/24/3914" },  // player-age-3
+    { name: "Temitope", position: "DEF" as const, level: "500L", jerseyNo: 4, matricNumber: "AGE/21/3915" }, // player-age-4
+    { name: "Femi", position: "DEF" as const, level: "300L", jerseyNo: 5, matricNumber: "AGE/23/3916" },     // player-age-5
+    { name: "Adeyemi", position: "MID" as const, level: "200L", jerseyNo: 6, matricNumber: "AGE/24/3917" },  // player-age-6
+    { name: "Jones Falana", position: "MID" as const, level: "400L", jerseyNo: 7, matricNumber: "AGE/22/4021" }, // player-age-7
+    { name: "Anthony", position: "MID" as const, level: "300L", jerseyNo: 9, matricNumber: "AGE/23/3911" },   // player-age-8 (Anthony scored 47')
+    { name: "Tunde", position: "FWD" as const, level: "400L", jerseyNo: 8, matricNumber: "AGE/22/3918" },    // player-age-9
+    { name: "Sylvanus", position: "FWD" as const, level: "500L", jerseyNo: 10, matricNumber: "AGE/21/5012" }, // player-age-10 (Sylvanus scored penalty 42')
+    { name: "Samuel", position: "FWD" as const, level: "100L", jerseyNo: 11, matricNumber: "AGE/25/3919" }   // player-age-11
+  ].map((p, idx) => ({
+    id: `player-age-${idx + 1}`,
+    name: p.name,
+    position: p.position,
+    level: p.level,
+    jerseyNo: p.jerseyNo,
+    regNumber: (globalThis as any).getPlayerRegNumber('age', idx),
+    goals: 0,
+    played: 0,
+    cleanSheets: 0,
+    teamId: 'age',
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=age-player-${idx + 1}`
+  })),
+
   // Auto-generate helper players for other teams to keep rosters occupied
   ...Array.from({ length: 150 }, (_, i) => {
     const team = TEAMS[i % TEAMS.length];
-    if (team.id === 'mst' || team.id === 'fwt' || team.id === 'cys' || team.id === 'simt' || team.id === 'sta' || team.id === 'ifs' || team.id === 'mcb' || team.id === 'phy') {
+    if (team.id === 'mst' || team.id === 'fwt' || team.id === 'cys' || team.id === 'simt' || team.id === 'sta' || team.id === 'ifs' || team.id === 'mcb' || team.id === 'phy' || team.id === 'age') {
       return null;
     }
     return {
@@ -454,7 +481,7 @@ export const MATCHES: Match[] = [
   { id: 'md1-5', homeTeam: 'BDG', awayTeam: 'ENT', date: '2026-06-13', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Abraham', refereeAssigned: true, manOfTheMatch: 'Tofunmi' },
   { id: 'md1-6', homeTeam: 'IFS', awayTeam: 'CSP', date: '2026-06-13', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Jones', refereeAssigned: true, manOfTheMatch: 'Ademide' },
   { id: 'md1-7', homeTeam: 'FWT', awayTeam: 'IDD', date: '2026-06-13', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 2, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Jones', refereeAssigned: true, manOfTheMatch: 'Sola' },
-  { id: 'md1-8', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-14', time: '16:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Juwon', refereeAssigned: true },
+  { id: 'md1-8', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-14', time: '16:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 3, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 1, referee: 'Juwon', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Adebayo Samuel Ayobami' },
   { id: 'md1-9', homeTeam: 'MBBS', awayTeam: 'STA', date: '2026-06-14', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Victor', refereeAssigned: true },
   { id: 'md1-10', homeTeam: 'MCB', awayTeam: 'PHY', date: '2026-06-14', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Juwon', refereeAssigned: true },
 
