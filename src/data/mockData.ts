@@ -84,9 +84,8 @@ export const PLAYERS: Player[] = [
   { id: 'player-idd-soji', name: "Soji", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-soji' },
   { id: 'player-idd-sola', name: "Sola", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-sola' },
   { id: 'player-idd-tolu', name: "Tolu", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-tolu' },
-  { id: 'player-fwt-neymar', name: "Neymar", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'fwt', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=fwt-neymar' },
-  { id: 'player-fwt-enzo', name: "Enzo", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'fwt', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=fwt-enzo' },
-  { id: 'player-fwt-malik', name: "Malik", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'fwt', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=fwt-malik' },
+  { id: 'player-idd-neymar', name: "Neymar", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-neymar' },
+  { id: 'player-idd-enzo', name: "Enzo", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-enzo' },
 
   // Official MST Squad List
   ...[
@@ -239,10 +238,142 @@ export const PLAYERS: Player[] = [
     image: `https://api.dicebear.com/7.x/avataaars/svg?seed=simt-player-${idx + 1}`
   })),
 
+  // STA Official Squad (Statistics department squad list)
+  ...[
+    { name: "Rotimi Joseph Folahan", position: "GK" as const, level: "100L", jerseyNo: 1, matricNumber: "STA/25/1591" },
+    { name: "Okusi Edward", position: "GK" as const, level: "300L", jerseyNo: 13, matricNumber: "STA/23/6720" },
+    { name: "Emmanuel Olaoluwa Akintayo", position: "DEF" as const, level: "300L", jerseyNo: 2, matricNumber: "STA/23/6687" },
+    { name: "Adewumi Micclinton Adegoke", position: "DEF" as const, level: "200L", jerseyNo: 6, matricNumber: "STA/24/2807" },
+    { name: "Afilaka Praise Temidayo", position: "DEF" as const, level: "300L", jerseyNo: 5, matricNumber: "STA/23/6682" },
+    { name: "Omowole Adebusuyi Abraham", position: "DEF" as const, level: "200L", jerseyNo: 29, matricNumber: "STA/24/2890" },
+    { name: "Aminu Moses Vincent", position: "DEF" as const, level: "100L", jerseyNo: 20, matricNumber: "STA/25/0920" },
+    { name: "Victor Gospel Leo", position: "DEF" as const, level: "300L", jerseyNo: 3, matricNumber: "STA/23/6745" },
+    { name: "Jackson Joseph", position: "DEF" as const, level: "200L", jerseyNo: 17, matricNumber: "STA/24/2862" },
+    { name: "Adedeji Taofeek Oyeleke", position: "DEF" as const, level: "300L", jerseyNo: 12, matricNumber: "STA/23/6673" },
+    { name: "Eki Kelvin Aghoghomena", position: "DEF" as const, level: "300L", jerseyNo: 15, matricNumber: "STA/23/6697" },
+    { name: "Afolabi David Adebayo", position: "MID" as const, level: "100L", jerseyNo: 16, matricNumber: "STA/25/0905" },
+    { name: "Agbo Peter", position: "MID" as const, level: "100L", jerseyNo: 19, matricNumber: "STA/25/0906" },
+    { name: "Johnson Emmanuel Olaoluwa", position: "MID" as const, level: "300L", jerseyNo: 7, matricNumber: "STA/23/6711" },
+    { name: "Akinjogunla Mayowa", position: "MID" as const, level: "300L", jerseyNo: 14, matricNumber: "STA/23/6686" },
+    { name: "Akinsowon Gbenga Ejiro", position: "MID" as const, level: "500L", jerseyNo: 16, matricNumber: "STA/20/7167" },
+    { name: "Ayetan Samuel Precious", position: "MID" as const, level: "500L", jerseyNo: 24, matricNumber: "STA/20/7178" },
+    { name: "Salam Rokeeb Oladimeji", position: "MID" as const, level: "200L", jerseyNo: 8, matricNumber: "STA/24/2898" },
+    { name: "Daisi Tioluwanimi", position: "FWD" as const, level: "300L", jerseyNo: 11, matricNumber: "STA/23/6695" },
+    { name: "Akintunde Samuel", position: "FWD" as const, level: "200L", jerseyNo: 18, matricNumber: "STA/24/2822" },
+    { name: "Precious", position: "FWD" as const, level: "100L", jerseyNo: 21, matricNumber: "STA/25/0890" },
+    { name: "Bello Riliwan Remilekun", position: "FWD" as const, level: "200L", jerseyNo: 9, matricNumber: "STA/24/2843" },
+    { name: "Nwachukwu Jesse", position: "FWD" as const, level: "300L", jerseyNo: 10, matricNumber: "STA/23/6713" }
+  ].map((p, idx) => ({
+    id: `player-sta-${idx + 1}`,
+    name: p.name,
+    position: p.position,
+    level: p.level,
+    jerseyNo: p.jerseyNo,
+    matricNumber: p.matricNumber,
+    goals: 0,
+    played: 0,
+    cleanSheets: 0,
+    teamId: 'sta',
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=sta-player-${idx + 1}`
+  })),
+
+  // IFS Official Squad (Information Systems department squad list)
+  ...[
+    { name: "Harun Abdulkareem", position: "GK" as const, level: "500L", jerseyNo: 1, matricNumber: "IFS/20/4978" },
+    { name: "Owogbemi Oluwadunsin Emmanuel", position: "GK" as const, level: "300L", jerseyNo: 23, matricNumber: "IFS/23/6822" },
+    { name: "Gowon Mathias Monday", position: "DEF" as const, level: "100L", jerseyNo: 5, matricNumber: "IFS/25/7267" },
+    { name: "Ude-Abara George Chidindu", position: "DEF" as const, level: "200L", jerseyNo: 13, matricNumber: "IFS/24/9370" },
+    { name: "Sokun Omotayo Clinton", position: "DEF" as const, level: "300L", jerseyNo: 12, matricNumber: "IFS/23/6829" },
+    { name: "Falana Stephen Odunayo", position: "DEF" as const, level: "500L", jerseyNo: 22, matricNumber: "IFS/20/4976" },
+    { name: "Olatunji Dunni Oluwagbenga", position: "DEF" as const, level: "300L", jerseyNo: 3, matricNumber: "IFS/23/6810" },
+    { name: "Owamokele Joshua", position: "DEF" as const, level: "300L", jerseyNo: 6, matricNumber: "IFS/23/6821" },
+    { name: "Oshunniran Gbolahan", position: "DEF" as const, level: "500L", jerseyNo: 15, matricNumber: "IFS/20/4998" },
+    { name: "Adeosun Peace", position: "DEF" as const, level: "500L", jerseyNo: 2, matricNumber: "IFS/20/4949" },
+    { name: "Adeyanju Dominion Harry", position: "MID" as const, level: "200L", jerseyNo: 18, matricNumber: "IFS/24/9294" },
+    { name: "Olorunfunmilayo Gbolaga Emmanuel", position: "MID" as const, level: "500L", jerseyNo: 28, matricNumber: "IFS/20/4993" },
+    { name: "Olawuyi Praise Olatunji", position: "MID" as const, level: "200L", jerseyNo: 11, matricNumber: "IFS/24/9348" },
+    { name: "Olanrewaju Ifeoluwa", position: "MID" as const, level: "300L", jerseyNo: 4, matricNumber: "IFS/23/6808" },
+    { name: "Uhiene Paul Anuoluwapo", position: "MID" as const, level: "500L", jerseyNo: 8, matricNumber: "IFS/20/5006" },
+    { name: "Bakare Idris", position: "FWD" as const, level: "500L", jerseyNo: 10, matricNumber: "IFS/20/4970" },
+    { name: "Ojodako Joseph Olayinka", position: "FWD" as const, level: "100L", jerseyNo: 17, matricNumber: "IFS/25/7302" },
+    { name: "Fasiku Victor Adebola", position: "FWD" as const, level: "300L", jerseyNo: 14, matricNumber: "IFS/23/6784" },
+    { name: "Busari Ifeoluwa Habeeb", position: "FWD" as const, level: "300L", jerseyNo: 7, matricNumber: "IFS/23/6893" },
+    { name: "Omotomo Olumide Daniel", position: "FWD" as const, level: "300L", jerseyNo: 27, matricNumber: "IFS/23/6818" },
+    { name: "Adewale Adeola Samue", position: "FWD" as const, level: "300L", jerseyNo: 9, matricNumber: "IFS/23/6764" },
+    { name: "Akinyemi Feranmi Olusegun", position: "FWD" as const, level: "500L", jerseyNo: 19, matricNumber: "IFS/20/4961" },
+    { name: "Olorunfemi Kehinde John", position: "FWD" as const, level: "100L", jerseyNo: 29, matricNumber: "IFS/25/7309" }
+  ].map((p, idx) => ({
+    id: `player-ifs-${idx + 1}`,
+    name: p.name,
+    position: p.position,
+    level: p.level,
+    jerseyNo: p.jerseyNo,
+    matricNumber: p.matricNumber,
+    goals: 0,
+    played: 0,
+    cleanSheets: 0,
+    teamId: 'ifs',
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=ifs-player-${idx + 1}`
+  })),
+
+  // MCB Official Squad (Microbiology 11 starting players)
+  ...[
+    { name: "Adesuyi Oluwasegun", position: "GK" as const, level: "300L", jerseyNo: 1, matricNumber: "MCB/23/2410" },
+    { name: "Ayeni Opeyemi", position: "DEF" as const, level: "300L", jerseyNo: 3, matricNumber: "MCB/23/2415" },
+    { name: "Alagbe Jeremiah Kehinde", position: "DEF" as const, level: "400L", jerseyNo: 4, matricNumber: "MCB/22/7511" },
+    { name: "Osowo Taiwo", position: "DEF" as const, level: "200L", jerseyNo: 5, matricNumber: "MCB/24/8912" },
+    { name: "Favour", position: "MID" as const, level: "300L", jerseyNo: 6, matricNumber: "MCB/23/2422" },
+    { name: "Oni Oluwadamilola", position: "MID" as const, level: "500L", jerseyNo: 10, matricNumber: "MCB/20/4389" },
+    { name: "Lawal Favour Ben", position: "MID" as const, level: "300L", jerseyNo: 17, matricNumber: "MCB/23/2436" },
+    { name: "Olowu Dennis", position: "MID" as const, level: "300L", jerseyNo: 8, matricNumber: "MCB/23/2448" },
+    { name: "Olaniran Oluwatimilehin", position: "FWD" as const, level: "450L", jerseyNo: 11, matricNumber: "MCB/21/5820" },
+    { name: "Ameh Lucky", position: "FWD" as const, level: "300L", jerseyNo: 9, matricNumber: "MCB/23/2452" },
+    { name: "Alowonle Clement", position: "FWD" as const, level: "500L", jerseyNo: 7, matricNumber: "MCB/20/4405" }
+  ].map((p, idx) => ({
+    id: `player-mcb-${idx + 1}`,
+    name: p.name,
+    position: p.position,
+    level: p.level,
+    jerseyNo: p.jerseyNo,
+    matricNumber: p.matricNumber,
+    goals: 0,
+    played: 0,
+    cleanSheets: 0,
+    teamId: 'mcb',
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=mcb-player-${idx + 1}`
+  })),
+
+  // PHY Official Squad (Physics 11 starting players)
+  ...[
+    { name: "Adeleye Benjamin", position: "GK" as const, level: "300L", jerseyNo: 1, matricNumber: "PHY/23/3104" },
+    { name: "Ajayi Timothy", position: "DEF" as const, level: "200L", jerseyNo: 5, matricNumber: "PHY/24/5210" },
+    { name: "Balogun Praise", position: "DEF" as const, level: "500L", jerseyNo: 4, matricNumber: "PHY/20/1908" },
+    { name: "Okumagba Franklin", position: "DEF" as const, level: "400L", jerseyNo: 3, matricNumber: "PHY/22/4119" },
+    { name: "Olamide Agboola", position: "DEF" as const, level: "300L", jerseyNo: 2, matricNumber: "PHY/23/3144" },
+    { name: "Ajigboteleda Emmanuel", position: "MID" as const, level: "300L", jerseyNo: 6, matricNumber: "PHY/23/3152" },
+    { name: "Temitope Ajayi", position: "MID" as const, level: "300L", jerseyNo: 10, matricNumber: "PHY/23/3160" },
+    { name: "Uduak Abasi", position: "MID" as const, level: "200L", jerseyNo: 8, matricNumber: "PHY/24/5299" },
+    { name: "Ubine David", position: "FWD" as const, level: "100L", jerseyNo: 11, matricNumber: "PHY/25/7890" },
+    { name: "Iyenagbe David", position: "FWD" as const, level: "500L", jerseyNo: 9, matricNumber: "PHY/20/1944" },
+    { name: "Akinseye Oluwasemilore", position: "FWD" as const, level: "300L", jerseyNo: 7, matricNumber: "PHY/23/3180" }
+  ].map((p, idx) => ({
+    id: `player-phy-${idx + 1}`,
+    name: p.name,
+    position: p.position,
+    level: p.level,
+    jerseyNo: p.jerseyNo,
+    matricNumber: p.matricNumber,
+    goals: 0,
+    played: 0,
+    cleanSheets: 0,
+    teamId: 'phy',
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=phy-player-${idx + 1}`
+  })),
+
   // Auto-generate helper players for other teams to keep rosters occupied
   ...Array.from({ length: 150 }, (_, i) => {
     const team = TEAMS[i % TEAMS.length];
-    if (team.id === 'mst' || team.id === 'fwt' || team.id === 'cys' || team.id === 'simt') {
+    if (team.id === 'mst' || team.id === 'fwt' || team.id === 'cys' || team.id === 'simt' || team.id === 'sta' || team.id === 'ifs' || team.id === 'mcb' || team.id === 'phy') {
       return null;
     }
     return {

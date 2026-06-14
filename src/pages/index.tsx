@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useParams } from 'react-router-dom';
-import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone, Image as ImageIcon, Twitter, ExternalLink, ShieldCheck, Clock, Medal, BookOpen, ChevronRight, Search, Edit2, AlertCircle, Inbox, Trash2, Filter, Check, CheckCheck } from 'lucide-react';
+import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone, Image as ImageIcon, Twitter, ExternalLink, ShieldCheck, Clock, Medal, BookOpen, ChevronRight, Search, Edit2, AlertCircle, Inbox, Trash2, Filter, Check, CheckCheck, AlertTriangle } from 'lucide-react';
 import { Countdown } from '../components/Countdown';
 import { MatchCard } from '../components/MatchCard';
 import { PageHeader } from '../components/PageHeader';
@@ -1802,6 +1802,36 @@ export function Stats() {
       });
   }, [players]);
 
+  const yellowCardRankings = React.useMemo(() => {
+    return [...players]
+      .filter(p => (p.yellowCards ?? 0) > 0)
+      .sort((a, b) => {
+        // 1. Yellow Cards (Highest to Lowest)
+        const yc_a = a.yellowCards ?? 0;
+        const yc_b = b.yellowCards ?? 0;
+        if (yc_b !== yc_a) {
+          return yc_b - yc_a;
+        }
+        // 2. Alphabetical Order
+        return a.name.localeCompare(b.name);
+      });
+  }, [players]);
+
+  const redCardRankings = React.useMemo(() => {
+    return [...players]
+      .filter(p => (p.redCards ?? 0) > 0)
+      .sort((a, b) => {
+        // 1. Red Cards (Highest to Lowest)
+        const rc_a = a.redCards ?? 0;
+        const rc_b = b.redCards ?? 0;
+        if (rc_b !== rc_a) {
+          return rc_b - rc_a;
+        }
+        // 2. Alphabetical Order
+        return a.name.localeCompare(b.name);
+      });
+  }, [players]);
+
   // Compute aggregated team stats for the FUTA Champions League
   const teamStats = React.useMemo(() => {
     const statsMap: Record<string, {
@@ -1905,9 +1935,9 @@ export function Stats() {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
         {activeTab === 'players' ? (
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Top Scorers */}
-            <div className="space-y-8">
+          <div className="space-y-20">
+            {/* 1. TOP SCORERS */}
+            <div className="space-y-8 max-w-4xl mx-auto">
               <div className="flex items-center justify-between border-b border-primary pb-4">
                 <h2 className="text-2xl font-display italic">TOP SCORERS</h2>
                 <TrendingUp className="text-primary" />
@@ -1931,11 +1961,83 @@ export function Stats() {
                     </div>
                   </div>
                 ))}
+                {scorers.length === 0 && (
+                  <div className="text-center text-white/40 py-8">No scorer data available.</div>
+                )}
               </div>
             </div>
 
-            {/* Goalkeeper Clean Sheets Leaderboard */}
-            <div className="space-y-8">
+            {/* 2. DISCIPLINE STATISTICS */}
+            <div className="space-y-8 max-w-7xl mx-auto">
+              <div className="flex items-center space-x-3 border-b border-amber-500 pb-4">
+                <h2 className="text-2xl font-display italic uppercase">DISCIPLINE STATISTICS</h2>
+                <AlertTriangle className="text-amber-500 w-6 h-6" />
+              </div>
+              <div className="grid md:grid-cols-2 gap-12">
+                {/* Yellow Cards Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between border-b border-yellow-500/35 pb-3">
+                    <h3 className="text-lg font-bold text-white/95 uppercase tracking-wide">🟨 YELLOW CARDS</h3>
+                  </div>
+                  <div className="space-y-4">
+                    {yellowCardRankings.map((player, i) => (
+                      <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
+                        <div className="flex items-center space-x-4">
+                          <span className="text-lg font-mono font-bold text-white/20 w-8 text-center">{i + 1}</span>
+                          <img src={player.image} className="w-10 h-10 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
+                          <div>
+                            <h4 className="font-bold group-hover:text-yellow-500 transition-colors text-sm">{player.name}</h4>
+                            <p className="text-[10px] text-white/40 uppercase tracking-widest">
+                              {TEAMS.find(t => t.id === player.teamId)?.name || player.teamId}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right bg-yellow-500/10 px-3 py-1 border border-yellow-500/20 rounded-xl">
+                          <div className="text-lg font-mono font-bold text-yellow-500">{player.yellowCards}</div>
+                          <div className="text-[7px] font-bold text-yellow-500/60 uppercase tracking-widest mt-0.5">YC</div>
+                        </div>
+                      </div>
+                    ))}
+                    {yellowCardRankings.length === 0 && (
+                      <div className="text-center text-white/30 py-8 text-xs">No yellow card records found.</div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Red Cards Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between border-b border-red-500/35 pb-3">
+                    <h3 className="text-lg font-bold text-white/95 uppercase tracking-wide">🟥 RED CARDS</h3>
+                  </div>
+                  <div className="space-y-4">
+                    {redCardRankings.map((player, i) => (
+                      <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
+                        <div className="flex items-center space-x-4">
+                          <span className="text-lg font-mono font-bold text-white/20 w-8 text-center">{i + 1}</span>
+                          <img src={player.image} className="w-10 h-10 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
+                          <div>
+                            <h4 className="font-bold group-hover:text-red-500 transition-colors text-sm">{player.name}</h4>
+                            <p className="text-[10px] text-white/40 uppercase tracking-widest">
+                              {TEAMS.find(t => t.id === player.teamId)?.name || player.teamId}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right bg-red-500/10 px-3 py-1 border border-red-500/20 rounded-xl">
+                          <div className="text-lg font-mono font-bold text-red-500">{player.redCards}</div>
+                          <div className="text-[7px] font-bold text-red-500/60 uppercase tracking-widest mt-0.5">RC</div>
+                        </div>
+                      </div>
+                    ))}
+                    {redCardRankings.length === 0 && (
+                      <div className="text-center text-white/30 py-8 text-xs">No red card records found.</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 3. GOALKEEPER CLEAN SHEETS */}
+            <div className="space-y-8 max-w-4xl mx-auto">
               <div className="flex items-center justify-between border-b border-emerald-500 pb-4">
                 <h2 className="text-2xl font-display italic">GK CLEAN SHEETS</h2>
                 <ShieldCheck className="text-emerald-500" />
@@ -3610,7 +3712,20 @@ const TECHNICAL_CREWS: Record<string, { headCoach: { name: string; phone?: strin
     headCoach: { name: "Esezobor Isaac Eromosele", phone: "+234 (0) 8107366950" }
   },
   cys: {
-    headCoach: { name: "Simileoluwa Olawale Awosan" }
+    headCoach: { name: "Awosan Simileoluwa Olawale", phone: "+234 (0) 9051204181" },
+    assistantCoach: { name: "Balogun Abdulbazeet Olatunji", phone: "+234 (0) 8089070396" }
+  },
+  simt: {
+    headCoach: { name: "Asinwa Peter Adeleke", phone: "+234 (0) 9079984603" },
+    assistantCoach: { name: "Adisa Bright", phone: "+234 (0) 8168141917" }
+  },
+  sta: {
+    headCoach: { name: "Timilehin Joseph Abegunde", phone: "+234 (0) 9160557669" },
+    assistantCoach: { name: "Adekunle-Oni Samuel Ayodele", phone: "+234 (0) 9011453376" }
+  },
+  ifs: {
+    headCoach: { name: "Hountodji Shadrach", phone: "+234 (0) 9037978015" },
+    assistantCoach: { name: "Azubuike Emeka", phone: "+234 (0) 8129742055" }
   }
 };
 
@@ -3727,17 +3842,19 @@ export function TeamProfile() {
                         <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">Apps</div>
                       </div>
                       <div className="w-px h-5 bg-white/10" />
-                      {player.position === 'GK' ? (
-                        <div className="text-center px-1">
-                          <div className="text-xs font-bold text-emerald-500">{player.cleanSheets ?? 0}</div>
-                          <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">CS</div>
-                        </div>
-                      ) : (
-                        <div className="text-center px-1">
-                          <div className="text-xs font-bold text-primary">{player.goals ?? 0}</div>
-                          <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">Goals</div>
-                        </div>
+                      {player.position === 'GK' && (
+                        <>
+                          <div className="text-center px-1">
+                            <div className="text-xs font-bold text-emerald-500">{player.cleanSheets ?? 0}</div>
+                            <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">CS</div>
+                          </div>
+                          <div className="w-px h-5 bg-white/10" />
+                        </>
                       )}
+                      <div className="text-center px-1">
+                        <div className="text-xs font-bold text-primary">{player.goals ?? 0}</div>
+                        <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">Goals</div>
+                      </div>
                       <div className="w-px h-5 bg-white/10" />
                       <div className="text-center px-1">
                         <div className="text-xs font-bold text-yellow-500">{player.yellowCards ?? 0}</div>

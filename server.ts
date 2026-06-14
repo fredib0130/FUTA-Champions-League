@@ -1380,13 +1380,13 @@ function seedAppearancesDB() {
 
     let appearanceId = 1;
     
-    const addRecord = (playerName: string, team: string, isStarting: boolean) => {
+    const addRecord = (playerName: string, team: string, isStarting: boolean, matchId: string = "md1-1") => {
       const foundInDb = dbPlayers.find(p => p.name.toLowerCase() === playerName.toLowerCase() || String(p.id) === playerName);
       const cleanName = foundInDb ? foundInDb.name : playerName;
 
       dbAppearances.push({
         id: appearanceId++,
-        match_id: "md1-1",
+        match_id: matchId,
         player_name: cleanName,
         team: team.toUpperCase(),
         is_starting: isStarting,
@@ -1399,8 +1399,8 @@ function seedAppearancesDB() {
     };
 
     // Build MST
-    mstStarterNames.forEach(p => addRecord(p, "MST", true));
-    mstSubs.forEach(p => addRecord(p, "MST", false));
+    mstStarterNames.forEach(p => addRecord(p, "MST", true, "md1-1"));
+    mstSubs.forEach(p => addRecord(p, "MST", false, "md1-1"));
 
     // Build ICE
     const findIcePlayerName = (nameOrId: string) => {
@@ -1408,8 +1408,50 @@ function seedAppearancesDB() {
       return pObj ? pObj.name : nameOrId;
     };
 
-    iceStarterNames.forEach(p => addRecord(findIcePlayerName(p), "ICE", true));
-    iceSubs.forEach(p => addRecord(findIcePlayerName(p), "ICE", false));
+    iceStarterNames.forEach(p => addRecord(findIcePlayerName(p), "ICE", true, "md1-1"));
+    iceSubs.forEach(p => addRecord(findIcePlayerName(p), "ICE", false, "md1-1"));
+
+    // Build FWT vs IDD (md1-7) Completed Results Seeding
+    const fwtStarterNames = [
+      "Afolabi Timothy Testimony",
+      "Ayodeji Blessing Elisha",
+      "Ganiyu Malik Ayomide",
+      "Owolabi Taofeeq Ademola",
+      "Ayadi Bright Tayo",
+      "Iyapo Banji",
+      "Ajayi Oluwatobi Oluwasegun",
+      "Bello Baki Oluwaseyi",
+      "Ayodeji Bright Kehinde",
+      "Fadiji Bonnke Samuel",
+      "Ogunkanmi Oluwanimisire Oladayo"
+    ];
+
+    const iddStarterNames = [
+      "Soji",
+      "Sola",
+      "Tolu",
+      "Neymar",
+      "player-idd-gk",
+      "player-idd-cb1",
+      "player-idd-cb2",
+      "player-idd-rb",
+      "player-idd-dm",
+      "player-idd-cm1",
+      "player-idd-cm2"
+    ];
+
+    const iddSubs = [
+      "Enzo"
+    ];
+
+    const findIddPlayerName = (nameOrId: string) => {
+      const pObj = PLAYERS.find(p => p.id === nameOrId || p.name.toLowerCase() === nameOrId.toLowerCase());
+      return pObj ? pObj.name : nameOrId;
+    };
+
+    fwtStarterNames.forEach(p => addRecord(p, "FWT", true, "md1-7"));
+    iddStarterNames.forEach(p => addRecord(findIddPlayerName(p), "IDD", true, "md1-7"));
+    iddSubs.forEach(p => addRecord(findIddPlayerName(p), "IDD", false, "md1-7"));
 
     fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
     fs.writeFileSync(APPEARANCES_FILE, JSON.stringify(dbAppearances, null, 2), "utf-8");

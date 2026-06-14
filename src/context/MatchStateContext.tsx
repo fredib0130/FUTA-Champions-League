@@ -875,11 +875,17 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'card-md1-5-praise', matchId: 'md1-5', playerName: 'Praise', teamAbbr: 'BDG', minute: "38'", type: 'Yellow' },
       { id: 'card-md1-5-promise', matchId: 'md1-5', playerName: 'Promise', teamAbbr: 'ENT', minute: "15'", type: 'Yellow' },
       { id: 'card-md1-5-fairy', matchId: 'md1-5', playerName: 'Fairy', teamAbbr: 'ENT', minute: "55'", type: 'Yellow' },
-      { id: 'card-md1-7-malik', matchId: 'md1-7', playerName: 'Malik', teamAbbr: 'FWT', minute: "53'", type: 'Red' },
+      { id: 'card-md1-7-malik', matchId: 'md1-7', playerName: 'Ganiyu Malik Ayomide', teamAbbr: 'FWT', minute: "53'", type: 'Red' },
       { id: 'card-md1-7-tolu', matchId: 'md1-7', playerName: 'Tolu', teamAbbr: 'IDD', minute: "53'", type: 'Red' }
     ];
     officialMd1_5Cards.forEach(c => {
-      if (!loadedCards.some(existing => existing.id === c.id)) {
+      const existingIdx = loadedCards.findIndex(existing => existing.id === c.id);
+      if (existingIdx !== -1) {
+        if (loadedCards[existingIdx].playerName !== c.playerName) {
+          loadedCards[existingIdx].playerName = c.playerName;
+          cardsUpdated_md1_5 = true;
+        }
+      } else {
         loadedCards.push(c);
         cardsUpdated_md1_5 = true;
       }
@@ -904,12 +910,31 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'sub-csp-ademide-adedara', matchId: 'md1-6', teamAbbr: 'CSP', playerOut: 'Ademide', playerIn: 'Adedara', minute: 43 },
       { id: 'sub-ifs-idris-kehinde', matchId: 'md1-6', teamAbbr: 'IFS', playerOut: 'Idris', playerIn: 'Kehinde', minute: 46 },
       { id: 'sub-ifs-segun-victor', matchId: 'md1-6', teamAbbr: 'IFS', playerOut: 'Segun', playerIn: 'Victor', minute: 46 },
-      { id: 'sub-fwt-ney-enzo', matchId: 'md1-7', teamAbbr: 'FWT', playerOut: 'Neymar', playerIn: 'Enzo', minute: 39 }
+      { id: 'sub-idd-ney-enzo', matchId: 'md1-7', teamAbbr: 'IDD', playerOut: 'Neymar', playerIn: 'Enzo', minute: 39 }
     ];
 
     let subsUpdated = false;
+    if (loadedSubs.some(existing => existing.id === 'sub-fwt-ney-enzo')) {
+      loadedSubs = loadedSubs.filter(existing => existing.id !== 'sub-fwt-ney-enzo');
+      subsUpdated = true;
+    }
+
     officialSubs.forEach(s => {
-      if (!loadedSubs.some(existing => existing.id === s.id)) {
+      const existingIdx = loadedSubs.findIndex(existing => existing.id === s.id);
+      if (existingIdx !== -1) {
+        if (
+          loadedSubs[existingIdx].teamAbbr !== s.teamAbbr ||
+          loadedSubs[existingIdx].playerOut !== s.playerOut ||
+          loadedSubs[existingIdx].playerIn !== s.playerIn ||
+          loadedSubs[existingIdx].minute !== s.minute
+        ) {
+          loadedSubs[existingIdx].teamAbbr = s.teamAbbr;
+          loadedSubs[existingIdx].playerOut = s.playerOut;
+          loadedSubs[existingIdx].playerIn = s.playerIn;
+          loadedSubs[existingIdx].minute = s.minute;
+          subsUpdated = true;
+        }
+      } else {
         loadedSubs.unshift(s);
         subsUpdated = true;
       }
@@ -981,9 +1006,9 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'LCM': 'player-mst-9', // Adediran Olanrewaju Abeeb
           'CM': 'player-mst-10', // Iyare Praise
           'RCM': 'player-mst-12',// Adekunle Ayomide Mubarak
-          'LW': 'player-mst-18', // Akintunde Ayomide Oluwaseyifunmi
-          'CF': 'player-mst-14', // Nkemjika Sydney
-          'RW': 'player-mst-17'  // Fabusuyi Daniel Oluwafisayo
+          'LW': 'player-mst-19', // Akintunde Ayomide Oluwaseyifunmi
+          'CF': 'player-mst-15', // Nkemjika Sydney
+          'RW': 'player-mst-18'  // Fabusuyi Daniel Oluwafisayo
         },
         bench: [
           'Ojoisimi Bright Agbomizi',
@@ -1083,17 +1108,172 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         ],
         status: 'Approved'
       },
-      away: loadedLineups['md1-7']?.away || {
+      away: {
         matchId: 'md1-7',
         teamAbbr: 'IDD',
         formation: '4-3-3',
-        captainId: 'player-12',
+        captainId: 'player-idd-soji',
         players: {
-          'GK': 'player-12', 'LB': 'player-13', 'CB1': 'player-14', 'CB2': 'player-15', 'RB': 'player-16',
-          'LM': 'player-17', 'CM1': 'player-18', 'CM2': 'player-19', 'RM': 'player-20', 'ST1': 'player-21', 'ST2': 'player-22'
+          'GK': 'player-idd-gk',
+          'LB': 'player-idd-tolu',
+          'CB1': 'player-idd-cb1',
+          'CB2': 'player-idd-cb2',
+          'RB': 'player-idd-rb',
+          'DM': 'player-idd-dm',
+          'CM1': 'player-idd-cm1',
+          'CM2': 'player-idd-cm2',
+          'LW': 'player-idd-neymar',
+          'CF': 'player-idd-soji',
+          'RW': 'player-idd-sola'
         },
-        bench: ['Tunde Williams', 'David Alaba'],
+        bench: ['Enzo', 'Tunde Williams', 'David Alaba'],
+        status: 'Approved'
+      }
+    };
+
+    // Force/overlay AGE vs SIMT official Matchday 1 lineup specifically for md1-8
+    loadedLineups['md1-8'] = {
+      home: loadedLineups['md1-8']?.home || {
+        matchId: 'md1-8',
+        teamAbbr: 'AGE',
+        formation: '4-3-3',
+        captainId: 'player-1',
+        players: {
+          'GK': 'player-1', 'LB': 'player-2', 'CB1': 'player-3', 'CB2': 'player-4', 'RB': 'player-5',
+          'DM': 'player-6', 'CM1': 'player-7', 'CM2': 'player-8', 'LW': 'player-9', 'ST': 'player-10', 'RW': 'player-11'
+        },
+        bench: [],
         status: 'Pending'
+      },
+      away: {
+        matchId: 'md1-8',
+        teamAbbr: 'SIMT',
+        formation: '4-3-3',
+        captainId: 'player-simt-3', // Adebayo Samuel Ayobami (Captain)
+        players: {
+          'GK': 'player-simt-1',  // Nwabunwanne Chibichi Daniel
+          'LB': 'player-simt-5',  // Momoh Joshua David
+          'LCB': 'player-simt-4', // Adeniyi Opeyemi Israel
+          'RCB': 'player-simt-3', // Adebayo Samuel Ayobami (Captain)
+          'RB': 'player-simt-6',  // Aderiye Joshua Adekunle
+          'LCM': 'player-simt-14',// Oweazim Chukwudumebi
+          'DM': 'player-simt-17', // Adewopo Feranmi
+          'RCM': 'player-simt-18',// Omowale Ridwan Gbolahun
+          'LW': 'player-simt-19', // Oladapo Isaac Ayomide
+          'CF': 'player-simt-22', // Ipinlaye Samuel Fisayo
+          'RW': 'player-simt-20'  // Emmanuel Oluwapamilerin Joshua
+        },
+        bench: [
+          'Divine Gabriel Ibrahim',
+          'Adewale Uthman Boluwatife',
+          'Omolayo Precious Ayomide',
+          'Yusuf Soliu Okikiola',
+          'Ajiwoye Oluwalonimi Israel',
+          'Afolabi Abdulmuheez',
+          'Olabamiji Eric Ayokunle',
+          'Kolawole Emmanuel Timilehin',
+          'Okoye Philip C.',
+          'Adeniyi Temitope Oluwadamilare',
+          'Ogboye Samuel Oluwaponmile',
+          'Amure Matthew'
+        ],
+        status: 'Approved'
+      }
+    };
+
+    // Force/overlay MBBS vs STA official Matchday 1 lineup specifically for md1-9
+    loadedLineups['md1-9'] = {
+      home: loadedLineups['md1-9']?.home || {
+        matchId: 'md1-9',
+        teamAbbr: 'MBBS',
+        formation: '4-3-3',
+        captainId: 'player-20',
+        players: {
+          'GK': 'player-20', 'LB': 'player-21', 'CB1': 'player-22', 'CB2': 'player-23', 'RB': 'player-24',
+          'DM': 'player-25', 'CM1': 'player-26', 'CM2': 'player-27', 'LW': 'player-28', 'ST': 'player-29', 'RW': 'player-30'
+        },
+        bench: [],
+        status: 'Pending'
+      },
+      away: {
+        matchId: 'md1-9',
+        teamAbbr: 'STA',
+        formation: '4-3-3',
+        captainId: 'player-sta-3', // Emmanuel Olaoluwa Akintayo (Captain)
+        players: {
+          'GK': 'player-sta-1',  // Rotimi Joseph Folahan
+          'LB': 'player-sta-10', // Adedeji Taofeek Oyeleke
+          'LCB': 'player-sta-5',  // Afilaka Praise Temidayo
+          'RCB': 'player-sta-4',  // Adewumi MicClinton Adegoke
+          'RB': 'player-sta-3',   // Emmanuel Olaoluwa Akintayo (Captain)
+          'LCM': 'player-sta-13', // Agbo Peter
+          'DM': 'player-sta-18',  // Salam Rokeeb Oladimeji
+          'RCM': 'player-sta-14', // Johnson Emmanuel Olaoluwa
+          'LW': 'player-sta-23',  // Nwachukwu Jesse
+          'CF': 'player-sta-22',  // Bello Riliwan Remilekun
+          'RW': 'player-sta-19'   // Daisi Tioluwanimi
+        },
+        bench: [
+          'Okusi Edward',
+          'Omowole Adebusuyi Abraham',
+          'Aminu Moses Vincent',
+          'Victor Gospel Leo',
+          'Jackson Joseph',
+          'Eki Kelvin Aghoghomena',
+          'Afolabi David Adebayo',
+          'Akinjogunla Mayowa',
+          'Akinsowon Gbenga Ejiro',
+          'Ayetan Samuel Precious',
+          'Akintunde Samuel',
+          'Precious'
+        ],
+        status: 'Approved'
+      }
+    };
+
+    // Force/overlay MCB vs PHY official Matchday 1 lineup specifically for md1-10
+    loadedLineups['md1-10'] = {
+      home: {
+        matchId: 'md1-10',
+        teamAbbr: 'MCB',
+        formation: '3-4-3',
+        captainId: 'player-mcb-6', // Oni Oluwadamilola (Captain)
+        players: {
+          'GK': 'player-mcb-1',  // Adesuyi Oluwasegun
+          'LCB': 'player-mcb-2', // Ayeni Opeyemi
+          'CB': 'player-mcb-3',  // Alagbe Jeremiah Kehinde
+          'RCB': 'player-mcb-4', // Osowo Taiwo
+          'DM': 'player-mcb-5',  // Favour
+          'CM1': 'player-mcb-6', // Oni Oluwadamilola (Captain)
+          'AM': 'player-mcb-7',  // Lawal Favour Ben
+          'CM2': 'player-mcb-8', // Olowu Dennis
+          'LW': 'player-mcb-9',  // Olaniran Oluwatimilehin
+          'CF': 'player-mcb-10', // Ameh Lucky
+          'RW': 'player-mcb-11'  // Alowonle Clement
+        },
+        bench: [],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'md1-10',
+        teamAbbr: 'PHY',
+        formation: '4-3-3',
+        captainId: 'player-phy-3', // Balogun Praise (Captain)
+        players: {
+          'GK': 'player-phy-1',  // Adeleye Benjamin
+          'LB': 'player-phy-2',  // Ajayi Timothy
+          'LCB': 'player-phy-3', // Balogun Praise (Captain)
+          'RCB': 'player-phy-4', // Okumagba Franklin
+          'RB': 'player-phy-5',  // Olamide Agboola
+          'LCM': 'player-phy-6', // Ajigboteleda Emmanuel
+          'AM': 'player-phy-7',  // Temitope Ajayi
+          'RCM': 'player-phy-8', // Uduak Abasi
+          'LW': 'player-phy-9',  // Ubine David
+          'CF': 'player-phy-10', // Iyenagbe David
+          'RW': 'player-phy-11'  // Akinseye Oluwasemilore
+        },
+        bench: [],
+        status: 'Approved'
       }
     };
 
@@ -1587,7 +1767,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
-    if (!loadedCommentary['md1-3'] || !loadedCommentary['md1-3'].some(c => c.id === 'comm-goal-md1-3-taiwo')) {
+    if (!loadedCommentary['md1-3'] || !loadedCommentary['md1-3'].some(c => c.id === 'comm-goal-md1-3-taiwo-james')) {
       loadedCommentary['md1-3'] = [
         {
           id: 'comm-ft-md1-3',
@@ -1598,10 +1778,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           type: 'general'
         },
         {
-          id: 'comm-goal-md1-3-taiwo',
+          id: 'comm-goal-md1-3-taiwo-james',
           matchId: 'md1-3',
           minute: "28'",
-          text: "⚽ GOAL! Taiwo scores a brilliant volley to put CYS in front! A spectacular finish that sends the fans into absolute limbs! CYS 1-0 ANA.",
+          text: "⚽ GOAL! Olorunfemi Taiwo James scores a brilliant volley to put CYS in front! A spectacular finish that sends the fans into absolute limbs! CYS 1-0 ANA.",
           timestamp: "11:28 AM",
           type: 'goal'
         },
@@ -1843,7 +2023,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           id: 'comm-red-fwt-idd-md1-7',
           matchId: 'md1-7',
           minute: "53'",
-          text: "🟥 RED CARD! A heated altercation breaks out! The referee brandishes direct matching red cards: Malik of FWT and Tolu of IDD are both sent off! FWT 0-2 IDD.",
+          text: "🟥 RED CARD! A heated altercation breaks out! The referee brandishes direct matching red cards: Ganiyu Malik Ayomide of FWT and Tolu of IDD are both sent off! FWT 0-2 IDD.",
           timestamp: "5:38 PM",
           type: 'general'
         },
@@ -1864,10 +2044,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           type: 'general'
         },
         {
-          id: 'comm-sub-fwt-md1-7',
+          id: 'comm-sub-idd-md1-7',
           matchId: 'md1-7',
           minute: "39'",
-          text: "🔄 Substitution: Neymar OUT, Enzo IN (FWT) as the coach makes a tactical change up front.",
+          text: "🔄 Substitution: Neymar OUT, Enzo IN (IDD) as the coach makes a tactical change up front.",
           timestamp: "5:24 PM",
           type: 'sub'
         },
@@ -1953,6 +2133,25 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         }
       ];
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    } else {
+      // Synchronize/correct existing records in commentary
+      let commUpdated = false;
+      const commIdx = loadedCommentary['md1-7'] ? loadedCommentary['md1-7'].findIndex(c => c.id === 'comm-red-fwt-idd-md1-7') : -1;
+      if (commIdx !== -1 && loadedCommentary['md1-7'] && loadedCommentary['md1-7'][commIdx].text.includes("Malik of FWT")) {
+        loadedCommentary['md1-7'][commIdx].text = "🟥 RED CARD! A heated altercation breaks out! The referee brandishes direct matching red cards: Ganiyu Malik Ayomide of FWT and Tolu of IDD are both sent off! FWT 0-2 IDD.";
+        commUpdated = true;
+      }
+      const subIdx = loadedCommentary['md1-7'] ? loadedCommentary['md1-7'].findIndex(c => c.id === 'comm-sub-fwt-md1-7' || c.id === 'comm-sub-idd-md1-7') : -1;
+      if (subIdx !== -1 && loadedCommentary['md1-7']) {
+        if (loadedCommentary['md1-7'][subIdx].id !== 'comm-sub-idd-md1-7' || loadedCommentary['md1-7'][subIdx].text.includes('(FWT)')) {
+          loadedCommentary['md1-7'][subIdx].id = 'comm-sub-idd-md1-7';
+          loadedCommentary['md1-7'][subIdx].text = "🔄 Substitution: Neymar OUT, Enzo IN (IDD) as the coach makes a tactical change up front.";
+          commUpdated = true;
+        }
+      }
+      if (commUpdated) {
+        localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+      }
     }
     setCommentaries(loadedCommentary);
 
