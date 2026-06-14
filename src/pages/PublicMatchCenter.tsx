@@ -639,10 +639,17 @@ export default function PublicMatchCenter() {
                           return (
                             <div key={pos} className="bg-white/[0.02] hover:bg-white/[0.04] p-1.5 px-3 rounded-xl text-[10px] text-white/80 flex items-center justify-between gap-2 border border-white/5 transition-all">
                               <div className="flex items-center gap-2 min-w-0 truncate font-sans">
-                                <span className="text-primary font-mono font-bold tracking-wider shrink-0">{pos}</span>
-                                <span className="truncate font-medium text-white/90">
-                                  {playerObj ? playerObj.name : pid}
-                                </span>
+                                <span className="text-primary font-mono font-bold tracking-wider shrink-0 w-8">{pos}</span>
+                                <div className="flex flex-col min-w-0">
+                                  <span className="truncate font-medium text-white/90">
+                                    {playerObj ? playerObj.name : pid}
+                                  </span>
+                                  {playerObj?.regNumber && (
+                                    <span className="text-[7.5px] font-mono text-white/35 tracking-wider uppercase">
+                                      {playerObj.regNumber}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                               {isCaptain && (
                                 <span className="text-[7px] font-black bg-yellow-500/20 text-yellow-400 border border-yellow-500/35 px-1 py-0.2 rounded font-mono uppercase tracking-widest shrink-0 animate-pulse">
@@ -672,10 +679,17 @@ export default function PublicMatchCenter() {
                           return (
                             <div key={pos} className="bg-white/[0.02] hover:bg-white/[0.04] p-1.5 px-3 rounded-xl text-[10px] text-white/80 flex items-center justify-between gap-2 border border-white/5 transition-all">
                               <div className="flex items-center gap-2 min-w-0 truncate font-sans">
-                                <span className="text-yellow-400 font-mono font-bold tracking-wider shrink-0">{pos}</span>
-                                <span className="truncate font-medium text-white/90">
-                                  {playerObj ? playerObj.name : pid}
-                                </span>
+                                <span className="text-yellow-400 font-mono font-bold tracking-wider shrink-0 w-8">{pos}</span>
+                                <div className="flex flex-col min-w-0">
+                                  <span className="truncate font-medium text-white/90">
+                                    {playerObj ? playerObj.name : pid}
+                                  </span>
+                                  {playerObj?.regNumber && (
+                                    <span className="text-[7.5px] font-mono text-white/35 tracking-wider uppercase">
+                                      {playerObj.regNumber}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                               {isCaptain && (
                                 <span className="text-[7px] font-black bg-yellow-500/20 text-yellow-400 border border-yellow-500/35 px-1 py-0.2 rounded font-mono uppercase tracking-widest shrink-0 animate-pulse">

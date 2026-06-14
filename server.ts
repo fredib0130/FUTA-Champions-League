@@ -10,6 +10,34 @@ const app = express();
 const PORT = 3000;
 const DB_DIR = path.join(process.cwd(), "server-db");
 
+const TEAM_REG_BASES: Record<string, number> = {
+  mst: 1001,
+  fwt: 1024,
+  simt: 1047,
+  cys: 1070,
+  phy: 1093,
+  sta: 1116,
+  ifs: 1139,
+  mcb: 1162,
+  bdg: 1185,
+  ice: 1208,
+  age: 1231,
+  mbbs: 1254,
+  aph: 1277,
+  ent: 1300,
+  csp: 1323,
+  bch: 1346,
+  ana: 1369,
+  idd: 1392,
+  phs: 1415,
+  agp: 1438,
+};
+
+function getPlayerRegNumber(teamId: string, idx: number): string {
+  const base = TEAM_REG_BASES[teamId.toLowerCase()] || 2000;
+  return `FCL/${teamId.toUpperCase()}/26/${base + idx}`;
+}
+
 // Ensure DB directory exists
 if (!fs.existsSync(DB_DIR)) {
   fs.mkdirSync(DB_DIR, { recursive: true });
@@ -1244,7 +1272,7 @@ export interface DBPlayer {
   name: string;
   team: string;
   position: string;
-  matric_number: string;
+  reg_number: string;
   appearances: number;
 }
 
@@ -1310,8 +1338,9 @@ function seedAppearancesDB() {
     Object.values(regs).forEach((teamReg: any) => {
       if (teamReg && Array.isArray(teamReg.players)) {
         teamReg.players.forEach((p: any) => {
-          if (p && p.fullName && p.matricNumber) {
-            registrationPlayerMap.set(p.fullName.trim().toLowerCase(), p.matricNumber);
+          const matchedRegNo = p.regNumber || p.matricNumber;
+          if (p && p.fullName && matchedRegNo) {
+            registrationPlayerMap.set(p.fullName.trim().toLowerCase(), matchedRegNo);
           }
         });
       }
@@ -1321,14 +1350,14 @@ function seedAppearancesDB() {
       PLAYERS.forEach((p, idx) => {
         const teamAbbr = p.teamId.toUpperCase();
         const normalizedName = p.name.trim();
-        const matric_number = registrationPlayerMap.get(normalizedName.toLowerCase()) || `FCL/26/${1001 + idx}`;
+        const reg_number = p.regNumber || registrationPlayerMap.get(normalizedName.toLowerCase()) || getPlayerRegNumber(p.teamId, idx);
         
         dbPlayers.push({
           id: idx + 1,
           name: normalizedName,
           team: teamAbbr,
           position: p.position || "MID",
-          matric_number,
+          reg_number,
           appearances: 0
         });
       });
@@ -1549,12 +1578,13 @@ app.post("/api/match/complete", (req, res) => {
       if (!player) {
         const teamKey = determineTeamForPlayer(cleanName, finalHomeTeam, finalAwayTeam);
         const nextId = dbPlayers.length + 1;
+        const teamPlayersCount = dbPlayers.filter(p => p.team.toLowerCase() === teamKey.toLowerCase()).length;
         player = {
           id: nextId,
           name: cleanName,
           team: teamKey.toUpperCase(),
           position: "MID",
-          matric_number: `FCL/26/${3000 + nextId}`,
+          reg_number: getPlayerRegNumber(teamKey, teamPlayersCount),
           appearances: 0
         };
         dbPlayers.push(player);

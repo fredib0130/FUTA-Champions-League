@@ -8,7 +8,7 @@ interface ServerPlayer {
   name: string;
   team: string;
   position: string;
-  matric_number: string;
+  reg_number: string;
   appearances: number;
 }
 
@@ -21,6 +21,7 @@ export function Appearances() {
   const [selectedPosition, setSelectedPosition] = useState<string>('ALL');
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
   const [countdown, setCountdown] = useState<number>(5);
+  const [selectedAccreditationPlayer, setSelectedAccreditationPlayer] = useState<any | null>(null);
 
   // Load instances from `/api/players/appearances`
   const loadAppearances = async (showLoadingIndicator = false) => {
@@ -112,7 +113,7 @@ export function Appearances() {
     return players.filter(p => {
       const matchSearch = 
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.matric_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.reg_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.team.toLowerCase().includes(searchQuery.toLowerCase());
       
       const matchTeam = selectedTeam === 'ALL' || p.team.toUpperCase() === selectedTeam.toUpperCase();
@@ -214,7 +215,7 @@ export function Appearances() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
             <input
               type="text"
-              placeholder="Search by player name, matric / jersey, team..."
+              placeholder="Search by player name, reg no / jersey, team..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-slate-950/40 border border-white/5 pl-11 pr-4 py-3 rounded-xl text-sm focus:outline-none focus:border-primary/50 transition-all placeholder:text-white/20 text-white font-medium"
@@ -269,7 +270,7 @@ export function Appearances() {
                   <th className="py-5 px-6 text-[10px] font-bold text-white/40 uppercase tracking-widest text-left">Player Info</th>
                   <th className="py-5 px-6 text-[10px] font-bold text-white/40 uppercase tracking-widest text-center w-32">Team Badge</th>
                   <th className="py-5 px-6 text-[10px] font-bold text-white/40 uppercase tracking-widest text-center w-32">Position</th>
-                  <th className="py-5 px-6 text-[10px] font-bold text-white/40 uppercase tracking-widest text-left w-48">Registry Matric ID</th>
+                  <th className="py-5 px-6 text-[10px] font-bold text-white/40 uppercase tracking-widest text-left w-48 font-bold">Registration Number</th>
                   <th className="py-5 px-6 text-[10px] font-bold text-white/40 uppercase tracking-widest text-center w-36">Appearances</th>
                 </tr>
               </thead>
@@ -361,12 +362,28 @@ export function Appearances() {
                           </span>
                         </td>
 
-                        {/* Matric Number */}
+                        {/* Registration Number */}
                         <td className="py-4.5 px-6">
-                          <div className="flex items-center gap-1.5">
-                            <span className="font-mono text-xs font-bold text-white/50 tracking-normal select-all">
-                              {player.matric_number || 'N/A'}
+                          <div className="flex items-center gap-2.5">
+                            <span className="font-mono text-xs font-bold text-glow-primary tracking-wide select-all">
+                              {player.reg_number || 'N/A'}
                             </span>
+                            {player.reg_number && player.reg_number !== 'N/A' && (
+                              <button
+                                type="button"
+                                onClick={() => setSelectedAccreditationPlayer({
+                                  name: player.name,
+                                  position: player.position,
+                                  team: player.team,
+                                  regNumber: player.reg_number,
+                                  level: "500L",
+                                  image: `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.name}`
+                                })}
+                                className="text-[8px] font-black text-[#00e5ff] hover:text-[#03050B] hover:bg-[#00e5ff] transition-all uppercase tracking-wider font-mono cursor-pointer bg-[#00e5ff]/10 px-1.5 py-0.5 rounded border border-[#00e5ff]/20 select-none shrink-0"
+                              >
+                                PASS 🎫
+                              </button>
+                            )}
                           </div>
                         </td>
 
@@ -404,6 +421,116 @@ export function Appearances() {
           </ul>
         </div>
         
+        {/* ACCREDITATION PASS CARD MODAL */}
+        {selectedAccreditationPlayer && (
+          <div 
+            className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-md overflow-y-auto print:bg-black"
+            onClick={() => setSelectedAccreditationPlayer(null)}
+          >
+            <div 
+              className="bg-[#03050B] border-2 border-[#00e5ff]/30 my-8 max-w-sm w-full rounded-[30px] overflow-hidden shadow-[0_0_50px_rgba(0,229,255,0.2)] relative text-center p-6 print:p-0 print:border-0 print:shadow-none print:my-0 text-white animate-in zoom-in-95 duration-200"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                type="button"
+                className="absolute top-4 right-5 text-white/50 hover:text-white text-2xl font-mono z-10 print:hidden cursor-pointer bg-transparent border-0"
+                onClick={() => setSelectedAccreditationPlayer(null)}
+              >
+                &times;
+              </button>
+
+              {/* Print Container with print styles */}
+              <div className="space-y-6 pt-2 print:p-4 print:bg-black print:text-white print:border-2 print:border-cyan-500 rounded-2xl">
+                <div className="flex flex-col items-center">
+                  <div className="text-[10px] font-mono font-black text-[#00e5ff] tracking-widest uppercase mb-1">FUTA CHAMPIONS LEAGUE 2026</div>
+                  <h4 className="text-sm font-display font-black italic uppercase text-white tracking-tight">OFFICIAL ACCREDITATION</h4>
+                  <div className="h-0.5 w-12 bg-gradient-to-r from-transparent via-[#00e5ff] to-transparent mt-2" />
+                </div>
+
+                {/* Badge Core Card Layout */}
+                <div className="bg-white/[0.02] border border-white/5 p-5 rounded-2xl space-y-4 relative overflow-hidden">
+                  {/* Badge Type Banner */}
+                  <div className="absolute top-0 right-0 bg-[#00e5ff] text-[#03050B] text-[7.5px] font-mono font-black py-1 px-3.5 uppercase tracking-widest rounded-bl-xl shadow-md">
+                    ATHLETE
+                  </div>
+
+                  {/* Photo & Team Shield */}
+                  <div className="flex items-center space-x-4">
+                    <div className="relative">
+                      <img 
+                        src={selectedAccreditationPlayer.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${selectedAccreditationPlayer.name}`} 
+                        alt={selectedAccreditationPlayer.name} 
+                        className="w-20 h-20 rounded-xl object-cover bg-slate-900 border border-white/10" 
+                      />
+                    </div>
+
+                    <div className="text-left space-y-1 max-w-[150px]">
+                      <span className="text-[8px] font-mono font-bold text-[#00e5ff]/70 uppercase tracking-wider block">
+                        {(selectedAccreditationPlayer.team || 'FCL').toUpperCase()} SQUAD RETAINER
+                      </span>
+                      <h3 className="text-sm font-bold text-white uppercase tracking-tight leading-tight truncate">
+                        {selectedAccreditationPlayer.name}
+                      </h3>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <span className="text-[8.5px] font-black text-white/60 uppercase italic bg-white/5 border border-white/10 px-1.5 py-0.5 rounded leading-none shrink-0">
+                          {selectedAccreditationPlayer.position}
+                        </span>
+                        {selectedAccreditationPlayer.level && (
+                          <span className="text-[8px] font-mono text-white/40 shrink-0">
+                            {selectedAccreditationPlayer.level}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Monospace Registration Number Barcode Styling */}
+                  <div className="bg-black/60 border border-white/5 p-3 rounded-xl space-y-1.5 text-center relative overflow-hidden">
+                    <span className="text-[7.5px] font-mono text-white/30 tracking-widest uppercase block">FCL REGISTRATION ID EXCEL</span>
+                    <div className="text-xs font-mono font-black text-[#00e5ff] tracking-widest select-all uppercase">
+                      {selectedAccreditationPlayer.regNumber}
+                    </div>
+                  </div>
+
+                  {/* Simulated Barcode */}
+                  <div className="flex justify-center items-center h-8 bg-white/5 p-1 rounded-sm opacity-50 hover:opacity-100 transition-opacity gap-[1px]">
+                    {[2,1,4,1,3,1,2,5,1,2,1,3,2,1,4,1,3,1,2,5,1,2].map((w, idx) => (
+                      <div 
+                        key={idx} 
+                        style={{ width: `${w}px` }} 
+                        className="h-full bg-white shrink-0" 
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Metadata summary & Security Sign Off */}
+                <div className="flex items-center justify-between text-[8px] font-mono text-white/30 border-t border-white/5 pt-4">
+                  <div>SECURE ACCESS VERIFIED</div>
+                  <div>fcl.futa.edu.ng</div>
+                </div>
+              </div>
+
+              {/* Actions Block */}
+              <div className="mt-6 flex gap-3 print:hidden">
+                <button 
+                  type="button"
+                  onClick={() => window.print()}
+                  className="flex-1 py-3 bg-primary text-[#03050B] hover:scale-[1.02] font-black text-[10px] tracking-widest uppercase rounded-xl transition-all cursor-pointer shadow-md border-0"
+                >
+                  PRINT PASS 🖨️
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => setSelectedAccreditationPlayer(null)}
+                  className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white font-bold text-[10px] tracking-widest uppercase rounded-xl transition-all border border-white/10 cursor-pointer"
+                >
+                  CLOSE CARD
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

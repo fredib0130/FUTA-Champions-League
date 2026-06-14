@@ -2164,6 +2164,7 @@ export function Media() {
   const [readReportMatchId, setReadReportMatchId] = React.useState<string | null>(null);
   const [readArticleId, setReadArticleId] = React.useState<string | null>(null);
   const [readNewsId, setReadNewsId] = React.useState<string | null>(null);
+  const [selectedAccreditationPlayer, setSelectedAccreditationPlayer] = React.useState<any | null>(null);
 
   // Live video modal
   const [activeVideoUrl, setActiveVideoUrl] = React.useState<string | null>(null);
@@ -2439,6 +2440,119 @@ export function Media() {
                         CLOSE ARTICLE
                       </button>
                     </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ACCREDITATION PASS CARD MODAL */}
+            {selectedAccreditationPlayer && (
+              <div 
+                className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-md overflow-y-auto print:bg-black"
+                onClick={() => setSelectedAccreditationPlayer(null)}
+              >
+                <div 
+                  className="bg-[#03050B] border-2 border-[#00e5ff]/30 my-8 max-w-sm w-full rounded-[30px] overflow-hidden shadow-[0_0_50px_rgba(0,229,255,0.2)] relative text-center p-6 print:p-0 print:border-0 print:shadow-none print:my-0"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button 
+                    className="absolute top-4 right-5 text-white/50 hover:text-white text-2xl font-mono z-10 print:hidden cursor-pointer"
+                    onClick={() => setSelectedAccreditationPlayer(null)}
+                  >
+                    &times;
+                  </button>
+
+                  {/* Print Container with print styles */}
+                  <div className="space-y-6 pt-2 print:p-4 print:bg-black print:text-white print:border-2 print:border-cyan-500 rounded-2xl">
+                    <div className="flex flex-col items-center">
+                      <div className="text-[10px] font-mono font-black text-[#00e5ff] tracking-widest uppercase mb-1">FUTA CHAMPIONS LEAGUE 2026</div>
+                      <h4 className="text-sm font-display font-black italic uppercase text-white tracking-tight">OFFICIAL ACCREDITATION</h4>
+                      <div className="h-0.5 w-12 bg-gradient-to-r from-transparent via-[#00e5ff] to-transparent mt-2" />
+                    </div>
+
+                    {/* Badge Core Card Layout */}
+                    <div className="bg-white/[0.02] border border-white/5 p-5 rounded-2xl space-y-4 relative overflow-hidden">
+                      {/* Badge Type Banner */}
+                      <div className="absolute top-0 right-0 bg-[#00e5ff] text-[#03050B] text-[7.5px] font-mono font-black py-1 px-3.5 uppercase tracking-widest rounded-bl-xl shadow-md">
+                        ATHLETE
+                      </div>
+
+                      {/* Photo & Team Shield */}
+                      <div className="flex items-center space-x-4">
+                        <div className="relative">
+                          <img 
+                            src={selectedAccreditationPlayer.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${selectedAccreditationPlayer.name}`} 
+                            alt={selectedAccreditationPlayer.name} 
+                            className="w-20 h-20 rounded-xl object-cover bg-slate-900 border border-white/10" 
+                          />
+                          {selectedAccreditationPlayer.jerseyNo !== undefined && (
+                            <div className="absolute -bottom-2 -right-2 w-7 h-7 bg-primary text-dark font-black font-mono text-xs rounded-lg flex items-center justify-center border border-dark">
+                              #{selectedAccreditationPlayer.jerseyNo}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="text-left space-y-1 max-w-[150px]">
+                          <span className="text-[8px] font-mono font-bold text-[#00e5ff]/70 uppercase tracking-wider block">
+                            {(selectedAccreditationPlayer.teamId || selectedAccreditationPlayer.team || 'FCL').toUpperCase()} SQUAD RETAINER
+                          </span>
+                          <h3 className="text-sm font-bold text-white uppercase tracking-tight leading-tight truncate">
+                            {selectedAccreditationPlayer.name}
+                          </h3>
+                          <div className="flex items-center gap-1.5 mt-0.5">
+                            <span className="text-[8.5px] font-black text-white/60 uppercase italic bg-white/5 border border-white/10 px-1.5 py-0.5 rounded leading-none shrink-0">
+                              {selectedAccreditationPlayer.position}
+                            </span>
+                            {selectedAccreditationPlayer.level && (
+                              <span className="text-[8px] font-mono text-white/40 shrink-0">
+                                {selectedAccreditationPlayer.level}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Monospace Registration Number Barcode Styling */}
+                      <div className="bg-black/60 border border-white/5 p-3 rounded-xl space-y-1.5 text-center relative overflow-hidden">
+                        <span className="text-[7.5px] font-mono text-white/30 tracking-widest uppercase block">FCL REGISTRATION ID EXCEL</span>
+                        <div className="text-xs font-mono font-black text-[#00e5ff] tracking-widest select-all uppercase">
+                          {selectedAccreditationPlayer.regNumber || 'FCL/FUTA/26/1021'}
+                        </div>
+                      </div>
+
+                      {/* Simulated Barcode */}
+                      <div className="flex justify-center items-center h-8 bg-white/5 p-1 rounded-sm opacity-50 hover:opacity-100 transition-opacity gap-[1px]">
+                        {[2,1,4,1,3,1,2,5,1,2,1,3,2,1,4,1,3,1,2,5,1,2].map((w, idx) => (
+                          <div 
+                            key={idx} 
+                            style={{ width: `${w}px` }} 
+                            className="h-full bg-white shrink-0" 
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Metadata summary & Security Sign Off */}
+                    <div className="flex items-center justify-between text-[8px] font-mono text-white/30 border-t border-white/5 pt-4">
+                      <div>SECURE ACCESS VERIFIED</div>
+                      <div>fcl.futa.edu.ng</div>
+                    </div>
+                  </div>
+
+                  {/* Actions Block */}
+                  <div className="mt-6 flex gap-3 print:hidden">
+                    <button 
+                      onClick={() => window.print()}
+                      className="flex-1 py-3 bg-primary text-[#03050B] hover:scale-[1.02] font-black text-[10px] tracking-widest uppercase rounded-xl transition-all cursor-pointer shadow-md"
+                    >
+                      PRINT PASS 🖨️
+                    </button>
+                    <button 
+                      onClick={() => setSelectedAccreditationPlayer(null)}
+                      className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white font-bold text-[10px] tracking-widest uppercase rounded-xl transition-all border border-white/10 cursor-pointer"
+                    >
+                      CLOSE CARD
+                    </button>
                   </div>
                 </div>
               </div>
@@ -3732,6 +3846,7 @@ const TECHNICAL_CREWS: Record<string, { headCoach: { name: string; phone?: strin
 export function TeamProfile() {
   const { id } = useParams();
   const { players, teams } = useMatchState();
+  const [selectedAccreditationPlayer, setSelectedAccreditationPlayer] = React.useState<any | null>(null);
   const team = teams.find(t => t.id === id) || TEAMS.find(t => t.id === id);
   const teamPlayers = players.filter(p => p.teamId === id);
   const teamCoefficient = COEFFICIENTS.find(c => c.teamId === id);
@@ -3828,10 +3943,17 @@ export function TeamProfile() {
                               {player.level}
                             </span>
                           )}
+                          <button 
+                            type="button"
+                            onClick={() => setSelectedAccreditationPlayer(player)}
+                            className="text-[8.5px] font-black text-[#00e5ff] hover:text-white transition-colors uppercase tracking-wider font-mono cursor-pointer bg-[#00e5ff]/10 hover:bg-[#00e5ff]/25 px-1.5 py-0.5 rounded border border-[#00e5ff]/20 flex items-center gap-1"
+                          >
+                            <span>PASS 🎫</span>
+                          </button>
                         </div>
-                        {player.matricNumber && (
-                          <span className="text-[9px] font-mono text-white/25 block mt-1 tracking-tight">
-                            {player.matricNumber}
+                        {player.regNumber && (
+                          <span className="text-[9px] font-mono text-white/40 block mt-1 tracking-wider uppercase">
+                            REG NO: {player.regNumber}
                           </span>
                         )}
                       </div>
@@ -3932,6 +4054,122 @@ export function TeamProfile() {
           </div>
         </div>
       </section>
+
+      {/* LOCAL ACCREDITATION PASS CARD MODAL */}
+      {selectedAccreditationPlayer && (
+        <div 
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-md overflow-y-auto print:bg-black"
+          onClick={() => setSelectedAccreditationPlayer(null)}
+        >
+          <div 
+            className="bg-[#03050B] border-2 border-[#00e5ff]/30 my-8 max-w-sm w-full rounded-[30px] overflow-hidden shadow-[0_0_50px_rgba(0,229,255,0.2)] relative text-center p-6 print:p-0 print:border-0 print:shadow-none print:my-0 text-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              type="button"
+              className="absolute top-4 right-5 text-white/50 hover:text-white text-2xl font-mono z-10 print:hidden cursor-pointer bg-transparent border-0"
+              onClick={() => setSelectedAccreditationPlayer(null)}
+            >
+              &times;
+            </button>
+
+            {/* Print Container with print styles */}
+            <div className="space-y-6 pt-2 print:p-4 print:bg-black print:text-white print:border-2 print:border-cyan-500 rounded-2xl">
+              <div className="flex flex-col items-center">
+                <div className="text-[10px] font-mono font-black text-[#00e5ff] tracking-widest uppercase mb-1">FUTA CHAMPIONS LEAGUE 2026</div>
+                <h4 className="text-sm font-display font-black italic uppercase text-white tracking-tight">OFFICIAL ACCREDITATION</h4>
+                <div className="h-0.5 w-12 bg-gradient-to-r from-transparent via-[#00e5ff] to-transparent mt-2" />
+              </div>
+
+              {/* Badge Core Card Layout */}
+              <div className="bg-white/[0.02] border border-white/5 p-5 rounded-2xl space-y-4 relative overflow-hidden">
+                {/* Badge Type Banner */}
+                <div className="absolute top-0 right-0 bg-[#00e5ff] text-[#03050B] text-[7.5px] font-mono font-black py-1 px-3.5 uppercase tracking-widest rounded-bl-xl shadow-md">
+                  ATHLETE
+                </div>
+
+                {/* Photo & Team Shield */}
+                <div className="flex items-center space-x-4">
+                  <div className="relative">
+                    <img 
+                      src={selectedAccreditationPlayer.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${selectedAccreditationPlayer.name}`} 
+                      alt={selectedAccreditationPlayer.name} 
+                      className="w-20 h-20 rounded-xl object-cover bg-slate-900 border border-white/10" 
+                    />
+                    {selectedAccreditationPlayer.jerseyNo !== undefined && (
+                      <div className="absolute -bottom-2 -right-2 w-7 h-7 bg-primary text-dark font-black font-mono text-xs rounded-lg flex items-center justify-center border border-dark">
+                        #{selectedAccreditationPlayer.jerseyNo}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="text-left space-y-1 max-w-[150px]">
+                    <span className="text-[8px] font-mono font-bold text-[#00e5ff]/70 uppercase tracking-wider block">
+                      {(selectedAccreditationPlayer.teamId || selectedAccreditationPlayer.team || team.id || 'FCL').toUpperCase()} SQUAD RETAINER
+                    </span>
+                    <h3 className="text-sm font-bold text-white uppercase tracking-tight leading-tight truncate">
+                      {selectedAccreditationPlayer.name}
+                    </h3>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <span className="text-[8.5px] font-black text-white/60 uppercase italic bg-white/5 border border-white/10 px-1.5 py-0.5 rounded leading-none shrink-0">
+                        {selectedAccreditationPlayer.position}
+                      </span>
+                      {selectedAccreditationPlayer.level && (
+                        <span className="text-[8px] font-mono text-white/40 shrink-0">
+                          {selectedAccreditationPlayer.level}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Monospace Registration Number Barcode Styling */}
+                <div className="bg-black/60 border border-white/5 p-3 rounded-xl space-y-1.5 text-center relative overflow-hidden">
+                  <span className="text-[7.5px] font-mono text-white/30 tracking-widest uppercase block">FCL REGISTRATION ID EXCEL</span>
+                  <div className="text-xs font-mono font-black text-[#00e5ff] tracking-widest select-all uppercase">
+                    {selectedAccreditationPlayer.regNumber || 'FCL/FUTA/26/1021'}
+                  </div>
+                </div>
+
+                {/* Simulated Barcode */}
+                <div className="flex justify-center items-center h-8 bg-white/5 p-1 rounded-sm opacity-50 hover:opacity-100 transition-opacity gap-[1px]">
+                  {[2,1,4,1,3,1,2,5,1,2,1,3,2,1,4,1,3,1,2,5,1,2].map((w, idx) => (
+                    <div 
+                      key={idx} 
+                      style={{ width: `${w}px` }} 
+                      className="h-full bg-white shrink-0" 
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Metadata summary & Security Sign Off */}
+              <div className="flex items-center justify-between text-[8px] font-mono text-white/30 border-t border-white/5 pt-4">
+                <div>SECURE ACCESS VERIFIED</div>
+                <div>fcl.futa.edu.ng</div>
+              </div>
+            </div>
+
+            {/* Actions Block */}
+            <div className="mt-6 flex gap-3 print:hidden">
+              <button 
+                type="button"
+                onClick={() => window.print()}
+                className="flex-1 py-3 bg-primary text-[#03050B] hover:scale-[1.02] font-black text-[10px] tracking-widest uppercase rounded-xl transition-all cursor-pointer shadow-md border-0"
+              >
+                PRINT PASS 🖨️
+              </button>
+              <button 
+                type="button"
+                onClick={() => setSelectedAccreditationPlayer(null)}
+                className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white font-bold text-[10px] tracking-widest uppercase rounded-xl transition-all border border-white/10 cursor-pointer"
+              >
+                CLOSE CARD
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

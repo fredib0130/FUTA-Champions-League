@@ -2240,7 +2240,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           featuredImage: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1000',
           author: 'FrediB',
           category: 'Registration Updates',
-          body: 'The FCL Committee invites all sports officials and department coaches to complete player and technical official credential submissions by midnight. Ensure all matric numbers and official FUTA student ID card uploads are completely legible.',
+          body: 'The FCL Committee invites all sports officials and department coaches to complete player and technical official credential submissions by midnight. Ensure all registration numbers and official FUTA student ID card uploads are completely legible.',
           tags: ['Accreditation', 'FCL2026', 'Registration'],
           isPublished: true,
           createdAt: '2026-06-01 10:00'

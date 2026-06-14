@@ -59,7 +59,7 @@ export interface Player {
   image: string;
   level?: string;
   jerseyNo?: number;
-  matricNumber?: string;
+  regNumber?: string;
 }
 
 export interface Match {
