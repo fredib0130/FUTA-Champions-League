@@ -414,8 +414,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.manOfTheMatch !== official.manOfTheMatch ||
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
             (official.matchday === 1 && m.status !== official.status) // Sync status specifically for matchday 1 reschedules
           ) {
@@ -434,8 +434,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8'].includes(official.id) ? official.awayScore : m.awayScore
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10'].includes(official.id) ? official.awayScore : m.awayScore
             };
             updated = true;
           }
@@ -757,6 +757,66 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     };
     localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
 
+    // MCB vs PHY Match Statistics (md1-10)
+    loadedStats['md1-10'] = {
+      matchId: 'md1-10',
+      cornersHome: 2,
+      cornersAway: 2,
+      yellowCardsHome: 4,
+      yellowCardsAway: 1,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      foulsHome: 4,
+      foulsAway: 9,
+      offsidesHome: 0,
+      offsidesAway: 6,
+      freeKicksHome: 15,
+      freeKicksAway: 4,
+      homeCorners: 2,
+      awayCorners: 2,
+      homeYellowCards: 4,
+      awayYellowCards: 1,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 0,
+      awayOffsides: 6,
+      homeFouls: 4,
+      awayFouls: 9,
+      homeFreeKicks: 15,
+      awayFreeKicks: 4
+    };
+    localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
+
+    // MBBS vs STA Match Statistics (md1-9)
+    loadedStats['md1-9'] = {
+      matchId: 'md1-9',
+      cornersHome: 0,
+      cornersAway: 0,
+      yellowCardsHome: 0,
+      yellowCardsAway: 0,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      foulsHome: 0,
+      foulsAway: 0,
+      offsidesHome: 0,
+      offsidesAway: 0,
+      freeKicksHome: 0,
+      freeKicksAway: 0,
+      homeCorners: 0,
+      awayCorners: 0,
+      homeYellowCards: 0,
+      awayYellowCards: 0,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 0,
+      awayOffsides: 0,
+      homeFouls: 0,
+      awayFouls: 0,
+      homeFreeKicks: 0,
+      awayFreeKicks: 0
+    };
+    localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
+
     setDetailedStats(loadedStats);
 
     // 4. Goal events
@@ -921,6 +981,64 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
+    if (!loadedGoals.some(g => g.matchId === 'md1-10')) {
+      loadedGoals.push(
+        {
+          id: 'goal-md1-10-akinseye-13',
+          matchId: 'md1-10',
+          playerName: 'Akinseye Oluwasanmilore',
+          team: 'PHY',
+          minute: "13'",
+          type: 'Goal'
+        },
+        {
+          id: 'goal-md1-10-olaniran-30',
+          matchId: 'md1-10',
+          playerName: 'Olaniran Oluwatimilehin',
+          team: 'MCB',
+          minute: "30'",
+          type: 'Goal'
+        },
+        {
+          id: 'goal-md1-10-iyenagbe-59',
+          matchId: 'md1-10',
+          playerName: 'Iyenagbe David',
+          team: 'PHY',
+          minute: "59'",
+          type: 'Goal'
+        }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+    if (!loadedGoals.some(g => g.matchId === 'md1-9')) {
+      loadedGoals.push(
+        {
+          id: 'goal-md1-9-sk-7',
+          matchId: 'md1-9',
+          playerName: 'SK',
+          team: 'MBBS',
+          minute: "7'",
+          type: 'Goal'
+        },
+        {
+          id: 'goal-md1-9-tioluwanimi-15',
+          matchId: 'md1-9',
+          playerName: 'Daisi Tioluwanimi',
+          team: 'STA',
+          minute: "15'",
+          type: 'Goal'
+        },
+        {
+          id: 'goal-md1-9-fikayo-48',
+          matchId: 'md1-9',
+          playerName: 'Bamidele Fikayo',
+          team: 'MBBS',
+          minute: "48'",
+          type: 'Goal'
+        }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -957,7 +1075,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'card-md1-8-daniel-y1', matchId: 'md1-8', playerName: 'Nwabunwanne Chibichi Daniel', teamAbbr: 'SIMT', minute: "1'", type: 'Yellow' },
       { id: 'card-md1-8-adebayo-y', matchId: 'md1-8', playerName: 'Adebayo Samuel Ayobami', teamAbbr: 'SIMT', minute: "1'", type: 'Yellow' },
       { id: 'card-md1-8-daniel-r', matchId: 'md1-8', playerName: 'Nwabunwanne Chibichi Daniel', teamAbbr: 'SIMT', minute: "58'", type: 'Red' },
-      { id: 'card-md1-8-gbolahun-r', matchId: 'md1-8', playerName: 'Omowale Ridwan Gbolahun', teamAbbr: 'SIMT', minute: "56'", type: 'Red' }
+      { id: 'card-md1-8-gbolahun-r', matchId: 'md1-8', playerName: 'Omowale Ridwan Gbolahun', teamAbbr: 'SIMT', minute: "56'", type: 'Red' },
+      // MCB vs PHY Card Events (md1-10)
+      { id: 'card-md1-10-osowo-1', matchId: 'md1-10', playerName: 'Osowo Taiwo', teamAbbr: 'MCB', minute: "1'", type: 'Yellow' },
+      { id: 'card-md1-10-adesuyi-1', matchId: 'md1-10', playerName: 'Adesuyi Oluwasegun', teamAbbr: 'MCB', minute: "1'", type: 'Yellow' },
+      { id: 'card-md1-10-ajayi-19', matchId: 'md1-10', playerName: 'Ajayi Timothy', teamAbbr: 'PHY', minute: "19'", type: 'Yellow' },
+      { id: 'card-md1-10-oni-44', matchId: 'md1-10', playerName: 'Oni Oluwadamilola', teamAbbr: 'MCB', minute: "44'", type: 'Yellow' },
+      { id: 'card-md1-10-lawal-44', matchId: 'md1-10', playerName: 'Lawal Favour Ben', teamAbbr: 'MCB', minute: "44'", type: 'Yellow' }
     ];
     officialMd1_5Cards.forEach(c => {
       const existingIdx = loadedCards.findIndex(existing => existing.id === c.id);
@@ -991,7 +1115,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'sub-csp-ademide-adedara', matchId: 'md1-6', teamAbbr: 'CSP', playerOut: 'Ademide', playerIn: 'Adedara', minute: 43 },
       { id: 'sub-ifs-idris-kehinde', matchId: 'md1-6', teamAbbr: 'IFS', playerOut: 'Idris', playerIn: 'Kehinde', minute: 46 },
       { id: 'sub-ifs-segun-victor', matchId: 'md1-6', teamAbbr: 'IFS', playerOut: 'Segun', playerIn: 'Victor', minute: 46 },
-      { id: 'sub-idd-ney-enzo', matchId: 'md1-7', teamAbbr: 'IDD', playerOut: 'Neymar', playerIn: 'Enzo', minute: 39 }
+      { id: 'sub-idd-ney-enzo', matchId: 'md1-7', teamAbbr: 'IDD', playerOut: 'Neymar', playerIn: 'Enzo', minute: 39 },
+      // MCB vs PHY Subs (md1-10)
+      { id: 'sub-md1-10-mcb-1', matchId: 'md1-10', teamAbbr: 'MCB', playerOut: 'Alagbe Jeremiah Kehinde', playerIn: 'Adameji Isaac', minute: 31 },
+      { id: 'sub-md1-10-mcb-2', matchId: 'md1-10', teamAbbr: 'MCB', playerOut: 'Ameh Lucky', playerIn: 'Wasiu Ismaeel', minute: 50 },
+      { id: 'sub-md1-10-phy-1', matchId: 'md1-10', teamAbbr: 'PHY', playerOut: 'Are Moses', playerIn: 'Lawal Oluwabukunmi', minute: 41 },
+      { id: 'sub-md1-10-phy-2', matchId: 'md1-10', teamAbbr: 'PHY', playerOut: 'Akinseye Oluwasanmilore', playerIn: 'Oladipupo Kayode Afeez', minute: 47 },
+      { id: 'sub-md1-10-phy-3', matchId: 'md1-10', teamAbbr: 'PHY', playerOut: 'Ajigboteleda Emmanuel', playerIn: 'Andrew Emmanuel', minute: 57 }
     ];
 
     let subsUpdated = false;
@@ -1318,21 +1448,24 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         matchId: 'md1-10',
         teamAbbr: 'MCB',
         formation: '3-4-3',
-        captainId: 'player-mcb-6', // Oni Oluwadamilola (Captain)
+        captainId: 'player-mcb-4', // Osowo Taiwo (Captain)
         players: {
           'GK': 'player-mcb-1',  // Adesuyi Oluwasegun
           'LCB': 'player-mcb-2', // Ayeni Opeyemi
           'CB': 'player-mcb-3',  // Alagbe Jeremiah Kehinde
-          'RCB': 'player-mcb-4', // Osowo Taiwo
+          'RCB': 'player-mcb-4', // Osowo Taiwo (Captain)
           'DM': 'player-mcb-5',  // Favour
-          'CM1': 'player-mcb-6', // Oni Oluwadamilola (Captain)
+          'CM1': 'player-mcb-6', // Oni Oluwadamilola
           'AM': 'player-mcb-7',  // Lawal Favour Ben
           'CM2': 'player-mcb-8', // Olowu Dennis
           'LW': 'player-mcb-9',  // Olaniran Oluwatimilehin
           'CF': 'player-mcb-10', // Ameh Lucky
           'RW': 'player-mcb-11'  // Alowonle Clement
         },
-        bench: [],
+        bench: [
+          'Adameji Isaac',
+          'Wasiu Ismaeel'
+        ],
         status: 'Approved'
       },
       away: {
@@ -1341,7 +1474,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         formation: '4-3-3',
         captainId: 'player-phy-3', // Balogun Praise (Captain)
         players: {
-          'GK': 'player-phy-1',  // Adeleye Benjamin
+          'GK': 'player-phy-1',  // Eniola Emmanuel
           'LB': 'player-phy-2',  // Ajayi Timothy
           'LCB': 'player-phy-3', // Balogun Praise (Captain)
           'RCB': 'player-phy-4', // Okumagba Franklin
@@ -1349,11 +1482,15 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'LCM': 'player-phy-6', // Ajigboteleda Emmanuel
           'AM': 'player-phy-7',  // Temitope Ajayi
           'RCM': 'player-phy-8', // Uduak Abasi
-          'LW': 'player-phy-9',  // Ubine David
+          'LW': 'player-phy-9',  // Are Moses
           'CF': 'player-phy-10', // Iyenagbe David
-          'RW': 'player-phy-11'  // Akinseye Oluwasemilore
+          'RW': 'player-phy-11'  // Akinseye Oluwasanmilore
         },
-        bench: [],
+        bench: [
+          'Lawal Oluwabukunmi',
+          'Oladipupo Kayode Afeez',
+          'Andrew Emmanuel'
+        ],
         status: 'Approved'
       }
     };
@@ -2353,6 +2490,386 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
+    if (!loadedCommentary['md1-10'] || !loadedCommentary['md1-10'].some(c => c.id === 'comm-goal-md1-10-iyenagbe')) {
+      loadedCommentary['md1-10'] = [
+        {
+          id: 'comm-ft-md1-10',
+          matchId: 'md1-10',
+          minute: "60'",
+          text: "🏁 FULL TIME! PHY holding on to claim a remarkable 2–1 victory over MCB in a highly matches clash! David Iyenagbe's opportunistic 59th minute winner decided a fierce derby where MCB fought bravely to level at 1-1 through Timilehin. A fitting end to Matchday 1! MCB 1 - 2 PHY.",
+          timestamp: "6:05 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-10-iyenagbe',
+          matchId: 'md1-10',
+          minute: "59'",
+          text: "⚽ GOAL!!! David Iyenagbe fires PHY into the lead! A beautiful sequence down the flank, and he guides a low matching drive into the corner of the net! MCB 1 - 2 PHY.",
+          timestamp: "6:03 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-sub-phy-3-md1-10',
+          matchId: 'md1-10',
+          minute: "57'",
+          text: "🔄 Substitution: Ajigboteleda Emmanuel OUT, Andrew Emmanuel IN (PHY) as the coach shores up the central mid tier.",
+          timestamp: "6:01 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-offside-phy-6-md1-10',
+          matchId: 'md1-10',
+          minute: "55'",
+          text: "🚩 Offside to PHY. Free kick awarded to MCB to launch themselves forward.",
+          timestamp: "5:58 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mcb-9-md1-10',
+          matchId: 'md1-10',
+          minute: "51'",
+          text: "MCB wins a foul. Free kick given just past the half line.",
+          timestamp: "5:53 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mcb-8-md1-10',
+          matchId: 'md1-10',
+          minute: "50'",
+          text: "MCB wins a foul. Play stopped temporarily for a brief medical treatment.",
+          timestamp: "5:51 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sub-mcb-2-md1-10',
+          matchId: 'md1-10',
+          minute: "50'",
+          text: "🔄 Substitution: Ameh Lucky OUT, Wasiu Ismaeel IN (MCB) as Microbiology search for a spark.",
+          timestamp: "5:50 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-foul-mcb-7-md1-10',
+          matchId: 'md1-10',
+          minute: "48'",
+          text: "MCB wins a foul as Physics defenders commit an aggressive push.",
+          timestamp: "5:48 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sub-phy-2-md1-10',
+          matchId: 'md1-10',
+          minute: "47'",
+          text: "🔄 Substitution: Akinseye Oluwasanmilore OUT, Oladipupo Kayode Afeez IN (PHY).",
+          timestamp: "5:47 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-cards-mcb-md1-10',
+          matchId: 'md1-10',
+          minute: "44'",
+          text: "🟨 YELLOW CARDS! Tempers flare out during an aggressive sequence. Referee Juwon hands out yellow caution cards to Oni Oluwadamilola (MCB) and Lawal Favour Ben (MCB).",
+          timestamp: "5:44 PM",
+          type: 'card'
+        },
+        {
+          id: 'comm-foul-phy-4-md1-10',
+          matchId: 'md1-10',
+          minute: "44'",
+          text: "PHY wins a foul. Free kick given near the central circle.",
+          timestamp: "5:43 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sub-phy-1-md1-10',
+          matchId: 'md1-10',
+          minute: "41'",
+          text: "🔄 Substitution: Are Moses OUT, Lawal Oluwabukunmi IN (PHY) as things heat up up front.",
+          timestamp: "5:40 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-foul-mcb-6-md1-10',
+          matchId: 'md1-10',
+          minute: "37'",
+          text: "MCB wins a foul. High boot from the midfielder in blue.",
+          timestamp: "5:36 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mcb-5-md1-10',
+          matchId: 'md1-10',
+          minute: "36'",
+          text: "MCB wins a foul near safety line.",
+          timestamp: "5:35 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-phy-3-md1-10',
+          matchId: 'md1-10',
+          minute: "32'",
+          text: "PHY wins a foul. Quick restart taken.",
+          timestamp: "5:31 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-phy-2-md1-10',
+          matchId: 'md1-10',
+          minute: "32'",
+          text: "PHY wins a foul in progress.",
+          timestamp: "5:31 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-shkickoff-md1-10',
+          matchId: 'md1-10',
+          minute: "31'",
+          text: "🏁 SECOND HALF START! We are back on.",
+          timestamp: "5:30 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-sub-mcb-1-md1-10',
+          matchId: 'md1-10',
+          minute: "31'",
+          text: "🔄 Substitution: Alagbe Jeremiah OUT, Adameji Isaac IN (MCB) as the coach makes a half-time adjustment in defense.",
+          timestamp: "5:29 PM",
+          type: 'sub'
+        },
+        {
+          id: 'comm-ht-md1-10',
+          matchId: 'md1-10',
+          minute: "30'",
+          text: "⏸ HALF-TIME! Referee Juwon blows his whistle. It has been a thrilling first half ending at 1-1.",
+          timestamp: "5:15 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-10-laniran',
+          matchId: 'md1-10',
+          minute: "30'",
+          text: "⚽ GOAL!!! Olaniran Oluwatimilehin gets MCB on level terms! He slots it home exquisitely past the keeper after some neat setup play! MCB 1 - 1 PHY.",
+          timestamp: "5:14 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-offside-phy-5-md1-10',
+          matchId: 'md1-10',
+          minute: "23'",
+          text: "🚩 Offside to PHY - freekick given to MCB.",
+          timestamp: "5:06 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-mcb-2-md1-10',
+          matchId: 'md1-10',
+          minute: "21'",
+          text: "📐 Corner to MCB as the goalie tips it over the bar.",
+          timestamp: "5:03 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-yellow-phy-md1-10',
+          matchId: 'md1-10',
+          minute: "19'",
+          text: "🟨 Yellow card given - Ajayi Timothy (PHY) is booked for pulling back the assailant.",
+          timestamp: "5:01 PM",
+          type: 'card'
+        },
+        {
+          id: 'comm-foul-mcb-4-md1-10',
+          matchId: 'md1-10',
+          minute: "19'",
+          text: "MCB wins a foul in a favorable advanced layout.",
+          timestamp: "5:00 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-offside-phy-4-md1-10',
+          matchId: 'md1-10',
+          minute: "17'",
+          text: "🚩 Offside to PHY - freekick given to MCB.",
+          timestamp: "4:57 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-offside-phy-3-md1-10',
+          matchId: 'md1-10',
+          minute: "15'",
+          text: "🚩 Offside to PHY - freekick given to MCB.",
+          timestamp: "4:53 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mcb-3-md1-10',
+          matchId: 'md1-10',
+          minute: "15'",
+          text: "MCB wins a foul.",
+          timestamp: "4:52 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-10-akinseye',
+          matchId: 'md1-10',
+          minute: "13'",
+          text: "⚽ GOAL!!! Akinseye Oluwasanmilore puts Physics ahead! He catches the defense sleeping, latches onto a cross, and bangs it into the roof of the net! MCB 0 - 1 PHY.",
+          timestamp: "4:49 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-foul-phy-1-md1-10',
+          matchId: 'md1-10',
+          minute: "12'",
+          text: "PHY wins a foul. Free kick given near the right sideline.",
+          timestamp: "4:47 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-mcb-1-md1-10',
+          matchId: 'md1-10',
+          minute: "10'",
+          text: "📐 Corner to MCB as the defender headers it over his own goal-line.",
+          timestamp: "4:43 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mcb-2-md1-10',
+          matchId: 'md1-10',
+          minute: "9'",
+          text: "MCB wins a foul. Hand ball against PHY attacker.",
+          timestamp: "4:41 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-offside-phy-2-md1-10',
+          matchId: 'md1-10',
+          minute: "8'",
+          text: "🚩 Offside to PHY - freekick given to MCB.",
+          timestamp: "4:39 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-foul-mcb-1-md1-10',
+          matchId: 'md1-10',
+          minute: "5'",
+          text: "MCB wins a foul.",
+          timestamp: "4:07 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-phy-2-md1-10',
+          matchId: 'md1-10',
+          minute: "5'",
+          text: "📐 Corner to PHY after a deflected strike from distance.",
+          timestamp: "4:06 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-corner-phy-1-md1-10',
+          matchId: 'md1-10',
+          minute: "5'",
+          text: "📐 Corner to PHY as they press hard early on.",
+          timestamp: "4:05 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-offside-phy-1-md1-10',
+          matchId: 'md1-10',
+          minute: "3'",
+          text: "🚩 Offside to PHY - freekick given to MCB.",
+          timestamp: "4:03 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-yellows-mcb-md1-10',
+          matchId: 'md1-10',
+          minute: "1'",
+          text: "🟨 YELLOW CARDS! An early flare of nerves! Osowo Taiwo (MCB) and goalkeeper Adesuyi Oluwasegun (MCB) are both booked for excessive dissent.",
+          timestamp: "4:01 PM",
+          type: 'card'
+        },
+        {
+          id: 'comm-kickoff-md1-10',
+          matchId: 'md1-10',
+          minute: "0'",
+          text: "🏁 KICKOFF! Referee Juwon blows his whistle to start this Matchday 1 clash between MCB and PHY at the Mini Pitch!",
+          timestamp: "4:00 PM",
+          type: 'general'
+        }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
+    if (!loadedCommentary['md1-9'] || !loadedCommentary['md1-9'].some(c => c.id === 'comm-goal-md1-9-fikayo')) {
+      loadedCommentary['md1-9'] = [
+        {
+          id: 'comm-ft-md1-9',
+          matchId: 'md1-9',
+          minute: "60'",
+          text: "🏁 FULL TIME! MBBS secure their first ever FUTA Champions League win in four attempts after matching standard play! A spirited 2–1 victory against Statistics (STA). Bamidele Fikayo's second half header is the decider! MBBS 2 - 1 STA.",
+          timestamp: "5:05 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-9-fikayo',
+          matchId: 'md1-9',
+          minute: "48'",
+          text: "⚽ GOAL!!! Bamidele Fikayo heads MBBS back in front! A spectacular delivery from the set piece, and the talisman leaps highest to send his header into the corner! High drama at the Mini Pitch! MBBS 2 - 1 STA.",
+          timestamp: "4:50 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-chance-mbs-md1-9',
+          matchId: 'md1-9',
+          minute: "38'",
+          text: "🔥 CHANCE! MBBS nearly scores their second! A fierce strike bounces off the upright as the STA defense scrambles it away.",
+          timestamp: "4:39 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-second-half-md1-9',
+          matchId: 'md1-9',
+          minute: "31'",
+          text: "🏁 SECOND HALF starts! Both teams resume action hoping to break the deadlock.",
+          timestamp: "4:32 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-ht-md1-9',
+          matchId: 'md1-9',
+          minute: "30'",
+          text: "⏸️ HALF-TIME! An action-packed opening half draws to a close with both teams deadlocked at 1–1. Dynamic visual play from both departments.",
+          timestamp: "4:16 PM",
+          type: 'general'
+        },
+        {
+          id: 'comm-goal-md1-9-toluwanimi',
+          matchId: 'md1-9',
+          minute: "15'",
+          text: "⚽ GOAL!!! Daisi Tioluwanimi replies instantly for STA! A majestic team move, sliced through MBBS lines, and finished with precision! Back on level terms! MBBS 1 - 1 STA.",
+          timestamp: "4:15 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-goal-md1-9-sk',
+          matchId: 'md1-9',
+          minute: "7'",
+          text: "⚽ GOAL!!! SK puts MBBS in the lead early! A beautifully placed shot from distance catches the STA goalkeeper off guard! A dream start for MBBS! MBBS 1 - 0 STA.",
+          timestamp: "4:07 PM",
+          type: 'goal'
+        },
+        {
+          id: 'comm-kickoff-md1-9',
+          matchId: 'md1-9',
+          minute: "0'",
+          text: "🏁 KICKOFF! Referee Victor blows his whistle, and we are underway for this Group Stage Matchday 1 clash between MBBS and STA at the Mini Pitch!",
+          timestamp: "4:00 PM",
+          type: 'general'
+        }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
     setCommentaries(loadedCommentary);
 
     // 10. Reports
@@ -2392,6 +2909,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     }
     if (!loadedTimers['md1-8'] || loadedTimers['md1-8'].liveMinute !== "FT") {
       loadedTimers['md1-8'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['md1-9'] || loadedTimers['md1-9'].liveMinute !== "FT") {
+      loadedTimers['md1-9'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['md1-10'] || loadedTimers['md1-10'].liveMinute !== "FT") {
+      loadedTimers['md1-10'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     setActiveMinAndStatus(loadedTimers);
@@ -2509,6 +3034,29 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       existingOfficialFixtures.title = '🚨 RESCHEDULING OF OPENING MATCH FIXTURE 🚨';
       existingOfficialFixtures.body = 'The Organizing Committee of the FUTA Champions League (FCL) wishes to inform all stakeholders that the Opening Match of the 2026 FUTA Champions League has been further rescheduled. This follows an earlier adjustment set for Wednesday, 10th June, 2026 (3:30 PM – 4:00 PM), which could not be sustained due to unforeseen weather conditions. The heavy rainfall experienced on Wednesday, 10th June, 2026 at about 2:00 PM significantly affected the playing surface, rendering it unfit for safe and competitive football. NEW DETAILS: Thursday, 11th June, 2026 at 1:30 PM on the FUTA Football Pitch (MST vs ICE). Player safety and match quality remain our top priority.';
       existingOfficialFixtures.createdAt = '2026-06-10 16:00';
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    }
+
+    // Force inject/update the newly scheduled Matchday 2 fixtures announcement
+    const existingOfficialFixturesMd2 = loadedNews.find(n => n.id === 'news-official-fixtures-md2');
+    const md2NewsBody = 'The FUTA Champions League 2026 Matchday 2 fixtures have been officially announced by the Organizing Committee! All matches will take place on Saturday, 20th June, and Sunday, 21st June, 2026, at the FUTA Mini Pitch. SATURDAY ACTIONS: CSP vs STA at 9:30 AM, APH vs IDD at 11:00 AM, ENT vs ANA at 12:30 PM, ICE vs BCH at 2:00 PM (14:00), PHS vs AGP at 3:30 PM, and defending champions MST vs CYS in a headline clash at 5:00 PM. SUNDAY ACTIONS: IFS vs MBBS at 12:30 PM, MCB vs AGE at 2:00 PM, League Leaders BDG vs FWT at 3:30 PM, and PHY vs SIMT closing the Matchday 2 at 5:00 PM. All matchday statuses are set to Scheduled, and Referee Assignments remain pending official appointment.';
+    if (!existingOfficialFixturesMd2) {
+      loadedNews.unshift({
+        id: 'news-official-fixtures-md2',
+        title: '📅 OFFICIAL MATCHDAY 2 FIXTURES RELEASED 📅',
+        featuredImage: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?q=80&w=1000',
+        author: 'FCL Committee',
+        category: 'Committee Announcement',
+        body: md2NewsBody,
+        tags: ['Matchday 2', 'Fixtures', 'Official Schedule', 'League Phase'],
+        isPublished: true,
+        createdAt: '2026-06-16 11:30'
+      });
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    } else {
+      existingOfficialFixturesMd2.title = '📅 OFFICIAL MATCHDAY 2 FIXTURES RELEASED 📅';
+      existingOfficialFixturesMd2.body = md2NewsBody;
+      existingOfficialFixturesMd2.createdAt = '2026-06-16 11:30';
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
 
@@ -2778,7 +3326,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v8');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v10');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -2791,7 +3339,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_ft_v8', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v10', 'true');
     }
 
     loadState();

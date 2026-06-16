@@ -347,7 +347,7 @@ export const PLAYERS: Player[] = [
     image: `https://api.dicebear.com/7.x/avataaars/svg?seed=ifs-player-${idx + 1}`
   })),
 
-  // MCB Official Squad (Microbiology 11 starting players)
+  // MCB Official Squad (Microbiology 11 starting players + subs)
   ...[
     { name: "Adesuyi Oluwasegun", position: "GK" as const, level: "300L", jerseyNo: 1, matricNumber: "MCB/23/2410" },
     { name: "Ayeni Opeyemi", position: "DEF" as const, level: "300L", jerseyNo: 3, matricNumber: "MCB/23/2415" },
@@ -359,7 +359,9 @@ export const PLAYERS: Player[] = [
     { name: "Olowu Dennis", position: "MID" as const, level: "300L", jerseyNo: 8, matricNumber: "MCB/23/2448" },
     { name: "Olaniran Oluwatimilehin", position: "FWD" as const, level: "450L", jerseyNo: 11, matricNumber: "MCB/21/5820" },
     { name: "Ameh Lucky", position: "FWD" as const, level: "300L", jerseyNo: 9, matricNumber: "MCB/23/2452" },
-    { name: "Alowonle Clement", position: "FWD" as const, level: "500L", jerseyNo: 7, matricNumber: "MCB/20/4405" }
+    { name: "Alowonle Clement", position: "FWD" as const, level: "500L", jerseyNo: 7, matricNumber: "MCB/20/4405" },
+    { name: "Adameji Isaac", position: "DEF" as const, level: "200L", jerseyNo: 12, matricNumber: "MCB/24/2501" },
+    { name: "Wasiu Ismaeel", position: "FWD" as const, level: "300L", jerseyNo: 14, matricNumber: "MCB/23/2513" }
   ].map((p, idx) => ({
     id: `player-mcb-${idx + 1}`,
     name: p.name,
@@ -374,9 +376,36 @@ export const PLAYERS: Player[] = [
     image: `https://api.dicebear.com/7.x/avataaars/svg?seed=mcb-player-${idx + 1}`
   })),
 
-  // PHY Official Squad (Physics 11 starting players)
+  // MBBS Official Squad (Medicine and Surgery starts + subs)
   ...[
-    { name: "Adeleye Benjamin", position: "GK" as const, level: "300L", jerseyNo: 1, matricNumber: "PHY/23/3104" },
+    { name: "Afolabi Yusuf", position: "GK" as const, level: "300L", jerseyNo: 1, matricNumber: "MBS/23/0980" },
+    { name: "Ojo Daniel", position: "DEF" as const, level: "400L", jerseyNo: 4, matricNumber: "MBS/21/0945" },
+    { name: "Chinedu Nelson", position: "DEF" as const, level: "300L", jerseyNo: 5, matricNumber: "MBS/23/0954" },
+    { name: "Eze Joshua", position: "DEF" as const, level: "300L", jerseyNo: 3, matricNumber: "MBS/23/0957" },
+    { name: "Olumide Olamide", position: "DEF" as const, level: "500L", jerseyNo: 2, matricNumber: "MBS/20/0899" },
+    { name: "SK", position: "MID" as const, level: "500L", jerseyNo: 7, matricNumber: "MBS/20/0912" },
+    { name: "Balogun Victor", position: "MID" as const, level: "300L", jerseyNo: 8, matricNumber: "MBS/23/0932" },
+    { name: "Adeniyi Samuel", position: "MID" as const, level: "400L", jerseyNo: 6, matricNumber: "MBS/22/0971" },
+    { name: "Bamidele Fikayo", position: "FWD" as const, level: "500L", jerseyNo: 10, matricNumber: "MBS/20/0904" },
+    { name: "Olawale Ibrahim", position: "FWD" as const, level: "300L", jerseyNo: 9, matricNumber: "MBS/23/0921" },
+    { name: "Okonkwo Charles", position: "FWD" as const, level: "200L", jerseyNo: 11, matricNumber: "MBS/24/1012" }
+  ].map((p, idx) => ({
+    id: `player-mbbs-${idx + 1}`,
+    name: p.name,
+    position: p.position,
+    level: p.level,
+    jerseyNo: p.jerseyNo,
+    regNumber: (globalThis as any).getPlayerRegNumber('mbbs', idx),
+    goals: 0,
+    played: 0,
+    cleanSheets: 0,
+    teamId: 'mbbs',
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=mbbs-player-${idx + 1}`
+  })),
+
+  // PHY Official Squad (Physics 11 starting players + subs)
+  ...[
+    { name: "Eniola Emmanuel", position: "GK" as const, level: "300L", jerseyNo: 1, matricNumber: "PHY/23/3104" },
     { name: "Ajayi Timothy", position: "DEF" as const, level: "200L", jerseyNo: 5, matricNumber: "PHY/24/5210" },
     { name: "Balogun Praise", position: "DEF" as const, level: "500L", jerseyNo: 4, matricNumber: "PHY/20/1908" },
     { name: "Okumagba Franklin", position: "DEF" as const, level: "400L", jerseyNo: 3, matricNumber: "PHY/22/4119" },
@@ -384,9 +413,12 @@ export const PLAYERS: Player[] = [
     { name: "Ajigboteleda Emmanuel", position: "MID" as const, level: "300L", jerseyNo: 6, matricNumber: "PHY/23/3152" },
     { name: "Temitope Ajayi", position: "MID" as const, level: "300L", jerseyNo: 10, matricNumber: "PHY/23/3160" },
     { name: "Uduak Abasi", position: "MID" as const, level: "200L", jerseyNo: 8, matricNumber: "PHY/24/5299" },
-    { name: "Ubine David", position: "FWD" as const, level: "100L", jerseyNo: 11, matricNumber: "PHY/25/7890" },
+    { name: "Are Moses", position: "FWD" as const, level: "200L", jerseyNo: 11, matricNumber: "PHY/24/7901" },
     { name: "Iyenagbe David", position: "FWD" as const, level: "500L", jerseyNo: 9, matricNumber: "PHY/20/1944" },
-    { name: "Akinseye Oluwasemilore", position: "FWD" as const, level: "300L", jerseyNo: 7, matricNumber: "PHY/23/3180" }
+    { name: "Akinseye Oluwasanmilore", position: "FWD" as const, level: "300L", jerseyNo: 7, matricNumber: "PHY/23/3180" },
+    { name: "Lawal Oluwabukunmi", position: "FWD" as const, level: "200L", jerseyNo: 12, matricNumber: "PHY/24/5341" },
+    { name: "Oladipupo Kayode Afeez", position: "FWD" as const, level: "300L", jerseyNo: 13, matricNumber: "PHY/23/3211" },
+    { name: "Andrew Emmanuel", position: "MID" as const, level: "100L", jerseyNo: 14, matricNumber: "PHY/25/5123" }
   ].map((p, idx) => ({
     id: `player-phy-${idx + 1}`,
     name: p.name,
@@ -431,7 +463,7 @@ export const PLAYERS: Player[] = [
   // Auto-generate helper players for other teams to keep rosters occupied
   ...Array.from({ length: 150 }, (_, i) => {
     const team = TEAMS[i % TEAMS.length];
-    if (team.id === 'mst' || team.id === 'fwt' || team.id === 'cys' || team.id === 'simt' || team.id === 'sta' || team.id === 'ifs' || team.id === 'mcb' || team.id === 'phy' || team.id === 'age') {
+    if (team.id === 'mst' || team.id === 'fwt' || team.id === 'cys' || team.id === 'simt' || team.id === 'sta' || team.id === 'ifs' || team.id === 'mcb' || team.id === 'phy' || team.id === 'age' || team.id === 'mbbs') {
       return null;
     }
     return {
@@ -482,20 +514,20 @@ export const MATCHES: Match[] = [
   { id: 'md1-6', homeTeam: 'IFS', awayTeam: 'CSP', date: '2026-06-13', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Jones', refereeAssigned: true, manOfTheMatch: 'Ademide' },
   { id: 'md1-7', homeTeam: 'FWT', awayTeam: 'IDD', date: '2026-06-13', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 2, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Jones', refereeAssigned: true, manOfTheMatch: 'Sola' },
   { id: 'md1-8', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-14', time: '16:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 3, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 1, referee: 'Juwon', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Adebayo Samuel Ayobami' },
-  { id: 'md1-9', homeTeam: 'MBBS', awayTeam: 'STA', date: '2026-06-14', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Victor', refereeAssigned: true },
-  { id: 'md1-10', homeTeam: 'MCB', awayTeam: 'PHY', date: '2026-06-14', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Juwon', refereeAssigned: true },
+  { id: 'md1-9', homeTeam: 'MBBS', awayTeam: 'STA', date: '2026-06-14', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 1, referee: 'Victor', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Bamidele Fikayo' },
+  { id: 'md1-10', homeTeam: 'MCB', awayTeam: 'PHY', date: '2026-06-14', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 2, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 1, referee: 'Juwon', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Iyenagbe David' },
 
   // --- MATCHDAY 2 (June 20 - 21) ---
-  { id: 'md2-1', homeTeam: 'CSP', awayTeam: 'STA', date: '2026-06-20', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-2', homeTeam: 'PHS', awayTeam: 'AGP', date: '2026-06-20', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-3', homeTeam: 'PHY', awayTeam: 'SIMT', date: '2026-06-20', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-4', homeTeam: 'MST', awayTeam: 'CYS', date: '2026-06-20', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-5', homeTeam: 'APH', awayTeam: 'IDD', date: '2026-06-20', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-6', homeTeam: 'IFS', awayTeam: 'MBBS', date: '2026-06-21', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-7', homeTeam: 'ENT', awayTeam: 'ANA', date: '2026-06-21', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-1', homeTeam: 'CSP', awayTeam: 'STA', date: '2026-06-20', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-2', homeTeam: 'PHS', awayTeam: 'AGP', date: '2026-06-20', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-3', homeTeam: 'PHY', awayTeam: 'SIMT', date: '2026-06-21', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-4', homeTeam: 'MST', awayTeam: 'CYS', date: '2026-06-20', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-5', homeTeam: 'APH', awayTeam: 'IDD', date: '2026-06-20', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-6', homeTeam: 'IFS', awayTeam: 'MBBS', date: '2026-06-21', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-7', homeTeam: 'ENT', awayTeam: 'ANA', date: '2026-06-20', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
   { id: 'md2-8', homeTeam: 'MCB', awayTeam: 'AGE', date: '2026-06-21', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-9', homeTeam: 'ICE', awayTeam: 'BCH', date: '2026-06-21', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-10', homeTeam: 'BDG', awayTeam: 'FWT', date: '2026-06-21', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-9', homeTeam: 'ICE', awayTeam: 'BCH', date: '2026-06-20', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-10', homeTeam: 'BDG', awayTeam: 'FWT', date: '2026-06-21', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
 
   // --- MATCHDAY 3 (June 27 - 28) ---
   { id: 'md3-1', homeTeam: 'MST', awayTeam: 'SIMT', date: '2026-06-27', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
