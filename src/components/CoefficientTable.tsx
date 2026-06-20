@@ -95,9 +95,15 @@ export const CoefficientTable: React.FC<CoefficientTableProps> = ({ data, limit,
                 </div>
               </th>
               <th className="px-6 py-4 text-right cursor-pointer hover:text-white transition-colors" onClick={() => requestSort('totalCoefficient')}>
-                <div className="flex items-center justify-end space-x-2">
+                <div className="flex items-center justify-end space-x-2 relative group/headtooltip">
                   <span>Total Coeff</span>
+                  <Info size={12} className="text-white/40 hover:text-white" />
                   {getSortIcon('totalCoefficient')}
+                  <div className="absolute right-0 bottom-full mb-2 hidden group-hover/headtooltip:block z-50 animate-in fade-in slide-in-from-bottom-1">
+                    <div className="glass px-3 py-2 rounded-xl text-[9px] font-bold text-white uppercase tracking-wider whitespace-nowrap border border-white/10 shadow-xl">
+                      Higher coefficient = stronger historical performance
+                    </div>
+                  </div>
                 </div>
               </th>
             </tr>
@@ -137,10 +143,10 @@ export const CoefficientTable: React.FC<CoefficientTableProps> = ({ data, limit,
                         <div className="flex flex-col">
                           <span className="font-bold tracking-tight text-white group-hover:text-primary transition-colors">{ranking.teamName}</span>
                           {isTop5 && (
-                            <div className="flex items-center space-x-1 mt-1">
-                              <Medal size={10} className="text-primary" />
-                              <span className="text-[8px] font-black uppercase text-primary tracking-widest">
-                                {ranking.rank === 1 ? 'Departmental King' : 'Power Index Leader'}
+                            <div className="flex items-center space-x-1.5 mt-1">
+                              <Medal size={10} className="text-primary animate-pulse" />
+                              <span className="text-[8px] font-black uppercase text-primary tracking-widest bg-primary/10 border border-primary/25 px-1.5 py-0.5 rounded-full">
+                                {ranking.rank === 1 ? 'Kings Rank • Power Ranking' : 'Power Ranking'}
                               </span>
                             </div>
                           )}
