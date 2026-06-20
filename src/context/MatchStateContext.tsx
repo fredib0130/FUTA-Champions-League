@@ -1099,11 +1099,24 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
 
-    if (!loadedGoals.some(g => g.matchId === 'md1-7' && g.playerName === 'Sola')) {
+    // Replace any existing 'Sola' with 'Ikudayisi Oyesola'
+    let goalsPruned = false;
+    loadedGoals = loadedGoals.map(g => {
+      if (g.playerName === 'Sola') {
+        goalsPruned = true;
+        return { ...g, playerName: 'Ikudayisi Oyesola' };
+      }
+      return g;
+    });
+    if (goalsPruned) {
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md1-7' && g.playerName === 'Ikudayisi Oyesola')) {
       loadedGoals.push({
         id: 'goal-md1-7-sola-51',
         matchId: 'md1-7',
-        playerName: 'Sola',
+        playerName: 'Ikudayisi Oyesola',
         team: 'IDD',
         minute: "51'",
         type: 'Goal'
@@ -1801,6 +1814,76 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'Lawal Oluwabukunmi',
           'Oladipupo Kayode Afeez',
           'Andrew Emmanuel'
+        ],
+        status: 'Approved'
+      }
+    };
+
+    // Force/overlay MST vs CYS official Matchday 2 lineup specifically for md2-6
+    loadedLineups['md2-6'] = {
+      home: {
+        matchId: 'md2-6',
+        teamAbbr: 'MST',
+        formation: '5-2-3',
+        captainId: 'player-mst-2', // Adeyemi Adedayo Ibrahim (Captain)
+        players: {
+          'GK': 'player-mst-1',  // Ogundeji Feyitunmise Hezekiah
+          'RB': 'player-mst-3',  // Akinnayajo Irewale
+          'CB1': 'player-mst-2', // Adeyemi Adedayo Ibrahim (Captain)
+          'CB2': 'player-mst-5', // Bernard Augustine Obioma
+          'CB3': 'player-mst-6', // Philip Believe Oluwashina
+          'LB': 'player-mst-7',  // Adeniyi Ademola Daniel
+          'CM1': 'player-mst-9', // Adediran Olanrewaju Abeeb
+          'CM2': 'player-mst-10',// Iyare Praise
+          'RW': 'player-mst-19', // Akintunde Ayomide Oluwaseyifunmi
+          'CF': 'player-mst-15', // Nkemjika Sydney
+          'LW': 'player-mst-17'  // Boyede Joseph Ayomide
+        },
+        bench: [
+          'Ojoisimi Bright Agbomizi',
+          'Ademisoye Segun',
+          'Akinyo Boluwatife Precious',
+          'Adekunle Ayomide Mubarak',
+          'Olagunju Moses Temitope',
+          'Ayeni Ayobami',
+          'Shomuyiwa Lateef Babatunde',
+          'Fabusuyi Daniel Oluwafisayo',
+          'Ekwe Fortune'
+        ],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'md2-6',
+        teamAbbr: 'CYS',
+        formation: '4-2-3-1',
+        captainId: 'player-cys-5', // Fashola Oluwatobi Joshua (Captain)
+        players: {
+          'GK': 'player-cys-24',  // John Igbalamide
+          'RWB': 'player-cys-5', // Fashola Oluwatobi Joshua
+          'CB1': 'player-cys-4',  // Raji Jubril Olarewaju
+          'CB2': 'player-cys-3',  // Kadri Taofeek Akorede
+          'LWB': 'player-cys-2',  // Adewumi Excel Joshua
+          'DM1': 'player-cys-8',  // Onah Caleb Igoche
+          'DM2': 'player-cys-6',  // Nwoke Isaac Honour
+          'RWF': 'player-cys-9',  // Ajao Alameen Olaide
+          'AMF': 'player-cys-18', // Olamijulo Israel Damilare
+          'LWF': 'player-cys-21', // Bello Daniel Damilare
+          'ST': 'player-cys-22'   // Olorunfemi Taiwo James
+        },
+        bench: [
+          'Olabode Victor Oluwatosin',
+          'Ayeni Babatunde Paul',
+          'Jegede Daniel Kolawole',
+          'Akinyede Allen Oluwaferanmi',
+          'Adedotun Faiz Ayobami',
+          'Ifedayoijitimeyin Valerian Igbagboyemi',
+          'Olanrewaju Mujeeb Abolaji',
+          'Akinrinola Samuel Temitope',
+          'Akinshipe Oluwafemi Solomon',
+          'Oluwadiya Timilehin Abraham',
+          'Adeoye Ezekiel Oluwaseyi',
+          'Owolabi Olaifeoluwa Solomon',
+          'Adetule Marvellous Mayowa'
         ],
         status: 'Approved'
       }
@@ -2560,7 +2643,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           id: 'comm-goal-md1-7-sola',
           matchId: 'md1-7',
           minute: "51'",
-          text: "⚽ GOAL! Sola strikes a beauty to double IDD's lead! Magnificent vision and execution to place it in the bottom corner! FWT 0-2 IDD.",
+          text: "⚽ GOAL! Ikudayisi Oyesola strikes a beauty to double IDD's lead! Magnificent vision and execution to place it in the bottom corner! FWT 0-2 IDD.",
           timestamp: "5:36 PM",
           type: 'goal'
         },
@@ -2584,7 +2667,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           id: 'comm-freekick-fwt-md1-7-33',
           matchId: 'md1-7',
           minute: "33'",
-          text: "Freekick given to FWT after Sola commits a late challenge on the flank.",
+          text: "Freekick given to FWT after Ikudayisi Oyesola commits a late challenge on the flank.",
           timestamp: "5:18 PM",
           type: 'general'
         },
@@ -2675,6 +2758,20 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         if (loadedCommentary['md1-7'][subIdx].id !== 'comm-sub-idd-md1-7' || loadedCommentary['md1-7'][subIdx].text.includes('(FWT)')) {
           loadedCommentary['md1-7'][subIdx].id = 'comm-sub-idd-md1-7';
           loadedCommentary['md1-7'][subIdx].text = "🔄 Substitution: Neymar OUT, Enzo IN (IDD) as the coach makes a tactical change up front.";
+          commUpdated = true;
+        }
+      }
+      const goalSolaIdx = loadedCommentary['md1-7'] ? loadedCommentary['md1-7'].findIndex(c => c.id === 'comm-goal-md1-7-sola') : -1;
+      if (goalSolaIdx !== -1 && loadedCommentary['md1-7']) {
+        if (loadedCommentary['md1-7'][goalSolaIdx].text.includes("Sola strikes")) {
+          loadedCommentary['md1-7'][goalSolaIdx].text = "⚽ GOAL! Ikudayisi Oyesola strikes a beauty to double IDD's lead! Magnificent vision and execution to place it in the bottom corner! FWT 0-2 IDD.";
+          commUpdated = true;
+        }
+      }
+      const fkSolaIdx = loadedCommentary['md1-7'] ? loadedCommentary['md1-7'].findIndex(c => c.id === 'comm-freekick-fwt-md1-7-33') : -1;
+      if (fkSolaIdx !== -1 && loadedCommentary['md1-7']) {
+        if (loadedCommentary['md1-7'][fkSolaIdx].text.includes("Sola commits")) {
+          loadedCommentary['md1-7'][fkSolaIdx].text = "Freekick given to FWT after Ikudayisi Oyesola commits a late challenge on the flank.";
           commUpdated = true;
         }
       }
@@ -4081,7 +4178,7 @@ One of the most entertaining fixtures in FCL history ends in an eight-goal thril
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v14');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v16');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -4094,7 +4191,7 @@ One of the most entertaining fixtures in FCL history ends in an eight-goal thril
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_ft_v14', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v16', 'true');
     }
 
     loadState();

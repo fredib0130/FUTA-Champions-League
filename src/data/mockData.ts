@@ -82,7 +82,7 @@ export const PLAYERS: Player[] = [
   { id: 'player-ifs-segun', name: "Segun", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ifs', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ifs-segun' },
   { id: 'player-ifs-victor', name: "Victor", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ifs', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ifs-victor' },
   { id: 'player-idd-soji', name: "Soji", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-soji' },
-  { id: 'player-idd-sola', name: "Sola", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-sola' },
+  { id: 'player-idd-sola', name: "Ikudayisi Oyesola", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-sola' },
   { id: 'player-idd-tolu', name: "Tolu", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-tolu' },
   { id: 'player-idd-neymar', name: "Neymar", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-neymar' },
   { id: 'player-idd-enzo', name: "Enzo", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-enzo' },
@@ -215,7 +215,8 @@ export const PLAYERS: Player[] = [
     { name: "Owolabi Olaifeoluwa Solomon", position: "MID" as const, level: "300L", jerseyNo: 16, matricNumber: "CYS/23/4090" },
     { name: "Bello Daniel Damilare", position: "FWD" as const, level: "500L", jerseyNo: 11, matricNumber: "CYS/20/4914" },
     { name: "Olorunfemi Taiwo James", position: "FWD" as const, level: "100L", jerseyNo: 22, matricNumber: "CYS/25/7075" },
-    { name: "Adetule Marvellous Mayowa", position: "FWD" as const, level: "500L", jerseyNo: 19, matricNumber: "CYS/20/4899" }
+    { name: "Adetule Marvellous Mayowa", position: "FWD" as const, level: "500L", jerseyNo: 19, matricNumber: "CYS/20/4899" },
+    { name: "John Igbalamide", position: "GK" as const, level: "200L", jerseyNo: 16, matricNumber: "CYS/24/9111" }
   ].map((p, idx) => ({
     id: `player-cys-${idx + 1}`,
     name: p.name,
@@ -512,7 +513,7 @@ export const MATCHES: Match[] = [
   { id: 'md1-4', homeTeam: 'PHS', awayTeam: 'APH', date: '2026-06-13', time: '12:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Tosin', refereeAssigned: true, manOfTheMatch: 'Emmanuel' },
   { id: 'md1-5', homeTeam: 'BDG', awayTeam: 'ENT', date: '2026-06-13', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Abraham', refereeAssigned: true, manOfTheMatch: 'Tofunmi' },
   { id: 'md1-6', homeTeam: 'IFS', awayTeam: 'CSP', date: '2026-06-13', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Jones', refereeAssigned: true, manOfTheMatch: 'Ademide' },
-  { id: 'md1-7', homeTeam: 'FWT', awayTeam: 'IDD', date: '2026-06-13', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 2, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Jones', refereeAssigned: true, manOfTheMatch: 'Sola' },
+  { id: 'md1-7', homeTeam: 'FWT', awayTeam: 'IDD', date: '2026-06-13', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 2, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Jones', refereeAssigned: true, manOfTheMatch: 'Ikudayisi Oyesola' },
   { id: 'md1-8', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-14', time: '16:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 3, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 1, referee: 'Juwon', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Adebayo Samuel Ayobami' },
   { id: 'md1-9', homeTeam: 'MBBS', awayTeam: 'STA', date: '2026-06-14', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 1, referee: 'Victor', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Bamidele Fikayo' },
   { id: 'md1-10', homeTeam: 'MCB', awayTeam: 'PHY', date: '2026-06-14', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 2, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 1, referee: 'Juwon', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Iyenagbe David' },
