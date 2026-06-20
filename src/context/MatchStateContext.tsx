@@ -1265,7 +1265,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'goal-md2-6-sydney-15', matchId: 'md2-6', playerName: 'Nkemjika Sydney', team: 'MST', minute: "15'", type: 'Goal' },
         { id: 'goal-md2-6-alameen-23', matchId: 'md2-6', playerName: 'Ajao Alameen Olaide', team: 'CYS', minute: "23'", type: 'Goal' },
         { id: 'goal-md2-6-bello-28', matchId: 'md2-6', playerName: 'Bello Daniel Damilare', team: 'CYS', minute: "28'", type: 'Goal' },
-        { id: 'goal-md2-6-onah-42', matchId: 'md2-6', playerName: 'Onah Caleb Igoche', team: 'CYS', minute: "42'", type: 'Goal' },
+        { id: 'goal-md2-6-bello-42', matchId: 'md2-6', playerName: 'Bello Daniel Damilare', team: 'CYS', minute: "42'", type: 'Goal' },
         { id: 'goal-md2-6-iyare-60', matchId: 'md2-6', playerName: 'Iyare Praise', team: 'MST', minute: "60'", type: 'Goal' }
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
@@ -3416,7 +3416,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'comm-md2-6-ft', matchId: 'md2-6', minute: "60'", text: "🏁 FULL-TIME! MST 4 - 4 CYS. A high-scoring thriller ending in a draw! Iyare Praise is named MOTM for his sensational brace.", timestamp: "6:00 PM", type: 'general' },
         { id: 'comm-md2-6-goal-mst-3', matchId: 'md2-6', minute: "60'", text: "⚽ GOAL!!! Iyare Praise does it again! He converts another magnificent free kick to level the score at 4-4 in the dying minutes!", timestamp: "6:00 PM", type: 'goal' },
         { id: 'comm-md2-6-foul-mst-3', matchId: 'md2-6', minute: "60'", text: "MST wins a free kick in a dangerous position near the CYS box.", timestamp: "6:00 PM", type: 'general' },
-        { id: 'comm-md2-6-goal-cys-4', matchId: 'md2-6', minute: "42'", text: "⚽ GOAL!!! gives CYS the lead for the first time! A fine team move allows Onah Caleb Igoche to slide the ball home! MST 3 - 4 CYS.", timestamp: "5:42 PM", type: 'goal' },
+        { id: 'comm-md2-6-goal-cys-4', matchId: 'md2-6', minute: "42'", text: "⚽ GOAL!!! Bello Daniel Damilare gives CYS the lead for the first time! A fine team move allows Bello Daniel Damilare to slide the ball home! MST 3 - 4 CYS.", timestamp: "5:42 PM", type: 'goal' },
         { id: 'comm-md2-6-corner-mst-4', matchId: 'md2-6', minute: "40'", text: "📐 Corner to MST.", timestamp: "5:40 PM", type: 'general' },
         { id: 'comm-md2-6-corner-mst-3', matchId: 'md2-6', minute: "40'", text: "📐 Corner to MST.", timestamp: "5:40 PM", type: 'general' },
         { id: 'comm-md2-6-foul-mst-2', matchId: 'md2-6', minute: "38'", text: "MST wins a free kick.", timestamp: "5:38 PM", type: 'general' },
@@ -3644,6 +3644,174 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       existingOfficialFixturesMd2.title = '📅 OFFICIAL MATCHDAY 2 FIXTURES & REFEREE ASSIGNMENTS 📅';
       existingOfficialFixturesMd2.body = md2NewsBody;
       existingOfficialFixturesMd2.createdAt = '2026-06-20 12:18';
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    }
+
+    // Force inject/update the Matchday 2 Saturday Round-Up
+    const existingOfficialRoundupMd2 = loadedNews.find(n => n.id === 'news-official-roundup-md2-sat');
+    const md2RoundupBody = `### 📍 Venue: FUTA Mini Pitch
+
+---
+
+# MD2-1: CSP 3 – 2 STA
+**Referee:** Abraham (MEE)
+### ⚽ Goals
+* 15' Agbo Peter (STA)
+* 44' Timilehin Victor (CSP)
+* 55' Akindeko Emmanuel (CSP)
+* 59' Daisi Toluwanimi (STA)
+* 60+1' Akindeko Emmanuel (CSP)
+
+### 🟨 Yellow Cards
+* Nwachukwu Jesse (STA)
+* Akinjogunla Mayowa (STA)
+* Salam Rokeeb Oladimeji (STA)
+
+### 🏅 Man of the Match
+**Akindeko Emmanuel (CSP)**
+
+### 📈 Match Impact
+* CSP remain unbeaten.
+* CSP become the first team to officially qualify for the Knockout Stage.
+* Akindeko Emmanuel records:
+  * APPS: +1
+  * GOALS: +2
+  * Assists (match report): 1
+
+---
+
+# MD2-2: APH 0 – 1 IDD
+**Referee:** Abraham (MEE)
+### ⚽ Goal
+* 54' Ikudayisi Oyesola (Penalty)
+
+### 🟨 Yellow Cards
+* Olajide Gabriel (APH)
+* Aremu Stone (APH)
+* Adebamibola Emmanuel (IDD)
+* Awosoji Ifeoluwa Emmanuel (IDD)
+* Ridwan Akinwekomi (APH)
+
+### 🟥 Red Cards
+* Olajide Gabriel (APH) – Second Yellow (38')
+
+### 🏅 Man of the Match
+**Ikudayisi Oyesola (IDD)**
+
+### 📈 Match Impact
+IDD make it:
+* Played: 2
+* Wins: 2
+* Points: 6
+
+---
+
+# MD2-3: IFS 2 – 1 MBBS
+**Referee:** Abraham (MEE)
+### ⚽ Goals
+* 3' Adewale Adeola Samuel (IFS)
+* 17' Okoh Chibuike (MBBS)
+* 55' Olorunfunmilayo Gbolaga Emmanuel (IFS)
+
+### 🟨 Yellow Cards
+* Okunola Samuel (MBBS)
+
+### 🏅 Man of the Match
+**Gowon Mathias Monday (IFS)**
+
+### 📈 Match Impact
+IFS secure their first win of the season.
+
+---
+
+# MD2-4: ICE 2 – 0 BCH
+**Referee:** Tosin (MTS)
+### ⚽ Goals
+* 43' Bamidele Usman
+* 60+3' Bamidele Usman
+
+### 🟨 Yellow Cards
+**ICE**
+* Adeyemi Damola
+* Six
+
+**BCH**
+* Tunde Akinwande
+* Folorunsho Toluwanimi
+* Miracle
+* Sammy
+
+### 🏅 Man of the Match
+**Adeyemi Prosper (ICE)**
+
+### 📈 Match Impact
+ICE record their first victory of the tournament.
+
+---
+
+# MD2-5: PHS 1 – 0 AGP
+**Referee:** Victor (ESM)
+### ⚽ Goal
+* 8' Abimbola Alexander Akinmoyegun
+
+### 🏅 Man of the Match
+**Adeagbo Pelumi (PHS)**
+
+### 📈 Match Impact
+PHS continue their strong campaign with another narrow victory.
+
+---
+
+# MD2-6: MST 4 – 4 CYS
+**Referee:** Tosin (MTS)
+### ⚽ Goals
+#### MST
+* 2' Iyare Praise
+* 7' Akintunde Ayomide Oluwaseyifunmi
+* 15' Nkemjika Sydney
+* 60' Iyare Praise
+
+#### CYS
+* 10' Olorunfemi Taiwo James
+* 23' Ajao Alameen Olaide
+* 28' Bello Daniel Damilare
+* 42' Bello Daniel Damilare
+
+### 🟨 Yellow Cards
+**MST**
+* Fabusuyi Daniel Oluwafisayo
+
+**CYS**
+* Adewumi Excel Joshua
+* Akinyede Allen Oluwaferanmi
+
+### 🟨 Technical Area
+* Esezobor Isaac Eromosele (MST Head Coach)
+
+### 🏅 Man of the Match
+**Iyare Praise (MST)**
+
+### 📈 Match Impact
+One of the most entertaining fixtures in FCL history ends in an eight-goal thriller.`;
+
+    if (!existingOfficialRoundupMd2) {
+      loadedNews.unshift({
+        id: 'news-official-roundup-md2-sat',
+        title: '🏆 FUTA CHAMPIONS LEAGUE 2026: MATCHDAY 2 SATURDAY ROUND-UP 🏆',
+        featuredImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
+        author: 'FCL Committee',
+        category: 'Competition Updates',
+        body: md2RoundupBody,
+        tags: ['Matchday 2', 'Round-Up', 'Saturday', 'League Phase'],
+        isPublished: true,
+        createdAt: '2026-06-20 18:30'
+      });
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    } else {
+      existingOfficialRoundupMd2.title = '🏆 FUTA CHAMPIONS LEAGUE 2026: MATCHDAY 2 SATURDAY ROUND-UP 🏆';
+      existingOfficialRoundupMd2.category = 'Competition Updates';
+      existingOfficialRoundupMd2.body = md2RoundupBody;
+      existingOfficialRoundupMd2.createdAt = '2026-06-20 18:30';
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
 
@@ -3913,7 +4081,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v12');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v14');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -3926,7 +4094,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_ft_v12', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v14', 'true');
     }
 
     loadState();
