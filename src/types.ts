@@ -24,6 +24,10 @@ export interface Team {
   form: ('W' | 'D' | 'L')[];
   description: string;
   squad: Player[];
+  isDisqualified?: boolean;
+  disqualificationReason?: string;
+  fineAmount?: number;
+  finePaid?: boolean;
   
   // FCL 2026 Standing Rules
   yellowCards?: number;
@@ -89,6 +93,8 @@ export interface Match {
   matchApproved?: boolean;
   officialsPanel?: string[];
   manOfTheMatch?: string;
+  walkover?: boolean;
+  note?: string;
 }
 
 export interface NewsPost {

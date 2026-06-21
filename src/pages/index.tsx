@@ -299,7 +299,7 @@ const SponsorCard: React.FC<SponsorCardProps> = ({ sponsor, onContactClick }) =>
       >
         {!showPlaceholder && sponsor.logoUrl ? (
           <img 
-            src={sponsor.logoUrl} 
+            src={sponsor.logoUrl || null} 
             alt={sponsor.name} 
             onError={() => setShowPlaceholder(true)}
             className="max-h-16 max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
@@ -564,7 +564,7 @@ export function Home() {
                 <div className="flex justify-between items-start mb-8">
                   <div className="relative">
                     <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-0 group-hover:scale-100 transition-transform" />
-                    <img src={player.image} alt={player.name} className="w-20 h-20 rounded-3xl relative z-10" />
+                    <img src={player.image || null} alt={player.name} className="w-20 h-20 rounded-3xl relative z-10" />
                   </div>
                   <span className="text-6xl font-display font-black text-white/5 italic">0{i+1}</span>
                 </div>
@@ -1947,7 +1947,7 @@ export function Stats() {
                   <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
                     <div className="flex items-center space-x-4">
                       <span className="text-xl font-display font-bold text-white/20 w-8">{i + 1}</span>
-                      <img src={player.image} className="w-12 h-12 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
+                      <img src={player.image || null} className="w-12 h-12 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
                       <div>
                         <h4 className="font-bold group-hover:text-primary transition-colors">{player.name}</h4>
                         <p className="text-xs text-white/40 uppercase tracking-widest">
@@ -1984,7 +1984,7 @@ export function Stats() {
                       <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
                         <div className="flex items-center space-x-4">
                           <span className="text-lg font-mono font-bold text-white/20 w-8 text-center">{i + 1}</span>
-                          <img src={player.image} className="w-10 h-10 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
+                          <img src={player.image || null} className="w-10 h-10 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
                           <div>
                             <h4 className="font-bold group-hover:text-yellow-500 transition-colors text-sm">{player.name}</h4>
                             <p className="text-[10px] text-white/40 uppercase tracking-widest">
@@ -2014,7 +2014,7 @@ export function Stats() {
                       <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
                         <div className="flex items-center space-x-4">
                           <span className="text-lg font-mono font-bold text-white/20 w-8 text-center">{i + 1}</span>
-                          <img src={player.image} className="w-10 h-10 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
+                          <img src={player.image || null} className="w-10 h-10 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
                           <div>
                             <h4 className="font-bold group-hover:text-red-500 transition-colors text-sm">{player.name}</h4>
                             <p className="text-[10px] text-white/40 uppercase tracking-widest">
@@ -2047,7 +2047,7 @@ export function Stats() {
                   <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
                     <div className="flex items-center space-x-4">
                       <span className="text-xl font-display font-bold text-white/20 w-8">{i + 1}</span>
-                      <img src={player.image} className="w-12 h-12 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
+                      <img src={player.image || null} className="w-12 h-12 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
                       <div>
                         <h4 className="font-bold group-hover:text-emerald-500 transition-colors">{player.name}</h4>
                         <div className="text-xs text-white/40 uppercase tracking-widest flex items-center gap-2">
@@ -2269,7 +2269,7 @@ export function Media() {
                     className="group relative aspect-video md:aspect-square bg-navy/40 border border-white/10 rounded-3xl overflow-hidden cursor-pointer shadow-lg"
                   >
                     <img 
-                      src={photo.fileUrl} 
+                      src={photo.fileUrl || null} 
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                       alt="Game capture" 
                     />
@@ -2308,7 +2308,7 @@ export function Media() {
                   onClick={(e) => e.stopPropagation()}
                 >
                   <img 
-                    src={filteredPhotos[lightboxIndex].fileUrl} 
+                    src={filteredPhotos[lightboxIndex].fileUrl || null} 
                     className="max-h-[70vh] max-w-full rounded-2xl object-contain border border-white/10 shadow-2xl" 
                     alt="Lightbox showcase" 
                   />
@@ -2365,7 +2365,7 @@ export function Media() {
                   >
                     <div>
                       <div className="aspect-video relative overflow-hidden">
-                        <img src={r.featuredImage} className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-700" alt="" />
+                        <img src={r.featuredImage || null} className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-700" alt="" />
                         <div className="absolute top-4 left-4 bg-dark/80 px-3 py-1.5 rounded-full border border-white/10 flex items-center space-x-1">
                           <span className="text-[9px] font-black text-yellow-500 font-mono">&#9733; {r.excitementRating}/10</span>
                           <span className="text-[8px] text-white/40 uppercase font-bold tracking-widest">EXCITEMENT</span>
@@ -2576,7 +2576,7 @@ export function Media() {
                   className="glass p-6 sm:p-8 rounded-[32px] border border-white/5 hover:border-[#00e5ff]/25 flex flex-col md:flex-row gap-6 items-start sm:items-center transition-all group cursor-pointer"
                   onClick={() => setReadNewsId(item.id)}
                 >
-                  <img src={item.featuredImage} className="w-full md:w-32 h-24 object-cover rounded-2xl flex-shrink-0" alt="" />
+                  <img src={item.featuredImage || null} className="w-full md:w-32 h-24 object-cover rounded-2xl flex-shrink-0" alt="" />
                   <div className="flex-grow space-y-2">
                     <div className="flex flex-wrap items-center gap-3">
                       <span className="px-2.5 py-1 bg-[#00e5ff]/10 text-[#00e5ff] border border-[#00e5ff]/20 rounded-md text-[8px] font-black uppercase tracking-wider">{item.category}</span>
@@ -2663,7 +2663,7 @@ export function Media() {
                   className="glass rounded-[40px] overflow-hidden group border border-white/5 flex flex-col justify-between"
                 >
                   <div className="aspect-[21/10] overflow-hidden relative">
-                    <img src={art.featuredImage} className="w-full h-full object-cover transition-transform group-hover:scale-103 duration-700" alt="" />
+                    <img src={art.featuredImage || null} className="w-full h-full object-cover transition-transform group-hover:scale-103 duration-700" alt="" />
                     <div className="absolute bottom-4 left-4">
                       <span className="px-4 py-2 glass border border-white/10 rounded-full text-[9px] font-black tracking-widest uppercase text-primary">
                         {art.category}
@@ -2858,7 +2858,7 @@ export function News() {
                   className="glass rounded-[32px] overflow-hidden group border border-white/5"
                 >
                   <div className="aspect-[21/9] overflow-hidden relative">
-                    <img src={item.featuredImage} className="w-full h-full object-cover transition-transform group-hover:scale-102 duration-700" alt="" />
+                    <img src={item.featuredImage || null} className="w-full h-full object-cover transition-transform group-hover:scale-102 duration-700" alt="" />
                     <div className="absolute bottom-4 left-4">
                       <span className="px-3 py-1.5 glass rounded-full text-[9px] font-black tracking-widest uppercase text-primary">
                         {item.category}
@@ -3936,7 +3936,7 @@ export function TeamProfile() {
                 {teamPlayers.map((player) => (
                   <div key={player.id} className="glass p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center space-x-4">
-                      <img src={player.image} alt={player.name} className="w-12 h-12 rounded-xl object-cover bg-white/5" />
+                      <img src={player.image || null} alt={player.name} className="w-12 h-12 rounded-xl object-cover bg-white/5" />
                       <div>
                         <h4 className="font-bold leading-tight">{player.name}</h4>
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1">

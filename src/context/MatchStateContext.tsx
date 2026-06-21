@@ -414,10 +414,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.manOfTheMatch !== official.manOfTheMatch ||
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
-            ((official.matchday === 1 || official.matchday === 2) && m.status !== official.status) // Sync status specifically for matchday 1 and 2
+            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4') && m.status !== official.status) // Sync status specifically for matchday 1, 2 and FWT Walkover
           ) {
             loadedMatches[index] = {
               ...m,
@@ -430,12 +430,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               refereeAssigned: official.refereeAssigned,
               matchApproved: official.matchApproved,
               officialsPanel: official.officialsPanel,
-              status: (official.matchday === 1 || official.matchday === 2) ? official.status : m.status,
+              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4') ? official.status : m.status,
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10'].includes(official.id) ? official.awayScore : m.awayScore
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4'].includes(official.id) ? official.awayScore : m.awayScore
             };
             updated = true;
           }
@@ -1233,7 +1233,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'goal-md2-1-agbo-15', matchId: 'md2-1', playerName: 'Agbo Peter', team: 'STA', minute: "15'", type: 'Goal' },
         { id: 'goal-md2-1-timilehin-44', matchId: 'md2-1', playerName: 'Timilehin Victor', team: 'CSP', minute: "44'", type: 'Goal' },
         { id: 'goal-md2-1-akindeko-55', matchId: 'md2-1', playerName: 'Akindeko Emmanuel', team: 'CSP', minute: "55'", type: 'Goal' },
-        { id: 'goal-md2-1-daisi-59', matchId: 'md2-1', playerName: 'Daisi Toluwanimi', team: 'STA', minute: "59'", type: 'Goal' },
+        { id: 'goal-md2-1-daisi-59', matchId: 'md2-1', playerName: 'Daisi Tioluwanimi', team: 'STA', minute: "59'", type: 'Goal' },
         { id: 'goal-md2-1-akindeko-60', matchId: 'md2-1', playerName: 'Akindeko Emmanuel', team: 'CSP', minute: "60+1'", type: 'Goal' }
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
@@ -3564,7 +3564,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'comm-md2-1-goal-csp-5', matchId: 'md2-1', minute: "60+1'", text: "⚽ GOAL!!! Akindeko Emmanuel scores again! He restores the lead with a sublime effort to bring the score to CSP 3 - 2 STA!", timestamp: "10:31 AM", type: 'goal' },
         { id: 'comm-md2-1-sub-sta-3', matchId: 'md2-1', minute: "60'", text: "🔄 Substitution (STA): Emmanuel Olaoluwa Akintayo makes way for Eki Kelvin Aghoghomena.", timestamp: "10:30 AM", type: 'general' },
         { id: 'comm-md2-1-foul-csp-5', matchId: 'md2-1', minute: "60'", text: "CSP wins a free kick in their own half after a rough tackle.", timestamp: "10:30 AM", type: 'general' },
-        { id: 'comm-md2-1-goal-sta-2', matchId: 'md2-1', minute: "59'", text: "⚽ GOAL!!! Daisi Toluwanimi gets STA back on level terms with a marvelous strike following a brief CSP corner kick! CSP 2 - 2 STA.", timestamp: "10:29 AM", type: 'goal' },
+        { id: 'comm-md2-1-goal-sta-2', matchId: 'md2-1', minute: "59'", text: "⚽ GOAL!!! Daisi Tioluwanimi gets STA back on level terms with a marvelous strike following a brief CSP corner kick! CSP 2 - 2 STA.", timestamp: "10:29 AM", type: 'goal' },
         { id: 'comm-md2-1-corner-csp-4', matchId: 'md2-1', minute: "59'", text: "📐 Corner to CSP.", timestamp: "10:29 AM", type: 'general' },
         { id: 'comm-md2-1-sub-csp-4', matchId: 'md2-1', minute: "56'", text: "🔄 Substitution (CSP): Star man Timilehin Victor walks off to a standing ovation as Omowaye Timothy replaces him.", timestamp: "10:26 AM", type: 'general' },
         { id: 'comm-md2-1-goal-csp-2', matchId: 'md2-1', minute: "55'", text: "⚽ GOAL!!! Akindeko Emmanuel taps it home to put CSP in front! Spectacular goal, CSP 2 - 1 STA.", timestamp: "10:25 AM", type: 'goal' },
@@ -4120,7 +4120,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 * 15' Agbo Peter (STA)
 * 44' Timilehin Victor (CSP)
 * 55' Akindeko Emmanuel (CSP)
-* 59' Daisi Toluwanimi (STA)
+* 59' Daisi Tioluwanimi (STA)
 * 60+1' Akindeko Emmanuel (CSP)
 
 ### 🟨 Yellow Cards
@@ -4276,6 +4276,51 @@ One of the most entertaining fixtures in FCL history ends in an eight-goal thril
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
 
+    // Force inject/update the Disciplinary Committee Decision regarding the BDG vs FWT fixture
+    const existingDisciplinaryDecision = loadedNews.find(n => n.id === 'news-disciplinary-fwt');
+    const disciplinaryDecisionBody = `Following a thorough review of the incidents that occurred during the FUTA Champions League (FCL) Match Day 2 fixture between Building Technology (BDG) and Forestry and Wood Technology (FWT), the Organizing and Disciplinary Committee has reached the following decisions in accordance with the principles of fair play, sportsmanship, player safety, and the integrity of the competition.
+
+After considering reports from match officials, eyewitness accounts, and available evidence, the Committee finds that the conduct displayed during and after the match fell below the standards expected of participating teams and players.
+
+Accordingly, the Committee has resolved as follows:
+
+FORESTRY AND WOOD TECHNOLOGY (FWT): FWT is hereby disqualified from the 2026 FUTA Champions League for the actions of its players and officials, particularly the collective confrontation and intimidation directed at a Building Technology (BDG) player. The Committee considers such conduct a serious breach of competition rules and values.
+
+BUILDING TECGNOLOGY (BDG): BDG is hereby imposed a fine of ₦10,000 (Ten Thousand Naira Only) for its involvement in incidents arising from the fixture. The fine shall be paid within the time frame stipulated by the Organizing Committee.
+
+OBSERVATION ON REFEREEING STANDARDS (FRA): The FCL also notes with concern and formally criticizes certain decisions made by match officials under the FRA during the course of officiating, which contributed to tensions observed in the fixture. The FRA is advised to review its officiating processes to ensure higher standards of neutrality, consistency, and professionalism going forward.
+
+GENERAL WARNING: The Committee wishes to remind all participating teams, players, officials, and supporters that the FUTA Champions League maintains a zero-tolerance policy towards acts of intimidation, violence, misconduct, and any behavior capable of bringing the competition into disrepute.
+
+All teams are expected to uphold the highest standards of discipline, respect for opponents, match officials, and the spirit of the game throughout the remainder of the tournament.
+
+This decision takes immediate effect.
+
+Thank you.
+
+FUTA Champions League Committee`;
+
+    if (!existingDisciplinaryDecision) {
+      loadedNews.unshift({
+        id: 'news-disciplinary-fwt',
+        title: '🚨 RE: DISCIPLINARY DECISION ON THE BDG VS FWT FIXTURE 🚨',
+        featuredImage: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?q=80&w=1000',
+        author: 'FCL Committee',
+        category: 'Disciplinary Updates',
+        body: disciplinaryDecisionBody,
+        tags: ['Disciplinary Decision', 'BDG vs FWT', 'Official Statement'],
+        isPublished: true,
+        createdAt: '2026-06-21 21:00'
+      });
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    } else {
+      existingDisciplinaryDecision.title = '🚨 RE: DISCIPLINARY DECISION ON THE BDG VS FWT FIXTURE 🚨';
+      existingDisciplinaryDecision.category = 'Disciplinary Updates';
+      existingDisciplinaryDecision.body = disciplinaryDecisionBody;
+      existingDisciplinaryDecision.createdAt = '2026-06-21 21:00';
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    }
+
     setNewsItems(loadedNews);
 
     // 14. Match Photos Load & Seed
@@ -4393,61 +4438,91 @@ One of the most entertaining fixtures in FCL history ends in an eight-goal thril
       const awayTeamObj = calculatedTeams.find(t => t.id === match.awayTeam.toLowerCase());
 
       if (homeTeamObj && awayTeamObj) {
-        // Goals
-        homeTeamObj.goalsFor += match.homeScore;
-        homeTeamObj.goalsAgainst += match.awayScore;
-        
-        awayTeamObj.goalsFor += match.awayScore;
-        awayTeamObj.goalsAgainst += match.homeScore;
+        // Since FWT is disqualified, do not count the Match Day 2 match (md2-9) for FWT's official stats
+        const updateHome = match.id !== 'md2-9' || match.homeTeam.toLowerCase() !== 'fwt';
+        const updateAway = match.id !== 'md2-9' || match.awayTeam.toLowerCase() !== 'fwt';
 
-        // Played
-        homeTeamObj.played += 1;
-        awayTeamObj.played += 1;
+        // Goals
+        if (updateHome) {
+          homeTeamObj.goalsFor += match.homeScore;
+          homeTeamObj.goalsAgainst += match.awayScore;
+          homeTeamObj.played += 1;
+        }
+        
+        if (updateAway) {
+          awayTeamObj.goalsFor += match.awayScore;
+          awayTeamObj.goalsAgainst += match.homeScore;
+          awayTeamObj.played += 1;
+        }
 
         if (match.homeScore > match.awayScore) {
-          homeTeamObj.won += 1;
-          homeTeamObj.points += 3;
-          homeTeamObj.form.push('W');
+          if (updateHome) {
+            homeTeamObj.won += 1;
+            homeTeamObj.points += 3;
+            homeTeamObj.form.push('W');
+          }
 
-          awayTeamObj.lost += 1;
-          awayTeamObj.form.push('L');
+          if (updateAway) {
+            awayTeamObj.lost += 1;
+            awayTeamObj.form.push('L');
+          }
         } else if (match.awayScore > match.homeScore) {
-          awayTeamObj.won += 1;
-          awayTeamObj.points += 3;
-          awayTeamObj.form.push('W');
+          if (updateAway) {
+            awayTeamObj.won += 1;
+            awayTeamObj.points += 3;
+            awayTeamObj.form.push('W');
+          }
 
-          homeTeamObj.lost += 1;
-          homeTeamObj.form.push('L');
+          if (updateHome) {
+            homeTeamObj.lost += 1;
+            homeTeamObj.form.push('L');
+          }
         } else {
-          homeTeamObj.drawn += 1;
-          homeTeamObj.points += 1;
-          homeTeamObj.form.push('D');
+          if (updateHome) {
+            homeTeamObj.drawn += 1;
+            homeTeamObj.points += 1;
+            homeTeamObj.form.push('D');
+          }
 
-          awayTeamObj.drawn += 1;
-          awayTeamObj.points += 1;
-          awayTeamObj.form.push('D');
+          if (updateAway) {
+            awayTeamObj.drawn += 1;
+            awayTeamObj.points += 1;
+            awayTeamObj.form.push('D');
+          }
         }
 
         // Limit form to last 5
-        homeTeamObj.form = homeTeamObj.form.slice(-5);
-        awayTeamObj.form = awayTeamObj.form.slice(-5);
+        if (updateHome) {
+          homeTeamObj.form = homeTeamObj.form.slice(-5);
+        }
+        if (updateAway) {
+          awayTeamObj.form = awayTeamObj.form.slice(-5);
+        }
 
         // GD
-        homeTeamObj.goalDifference = homeTeamObj.goalsFor - homeTeamObj.goalsAgainst;
-        awayTeamObj.goalDifference = awayTeamObj.goalsFor - awayTeamObj.goalsAgainst;
+        if (updateHome) {
+          homeTeamObj.goalDifference = homeTeamObj.goalsFor - homeTeamObj.goalsAgainst;
+        }
+        if (updateAway) {
+          awayTeamObj.goalDifference = awayTeamObj.goalsFor - awayTeamObj.goalsAgainst;
+        }
 
         // Cards aggregation
         const mStats = getMatchStats(match.id);
         
-        homeTeamObj.yellowCards += mStats.yellowHome;
-        homeTeamObj.yellow_cards = homeTeamObj.yellowCards;
-        homeTeamObj.redCards += mStats.redHome;
-        homeTeamObj.red_cards = homeTeamObj.redCards;
+        if (updateHome) {
+          homeTeamObj.yellowCards += mStats.yellowHome;
+          homeTeamObj.yellow_cards = homeTeamObj.yellowCards;
+          homeTeamObj.redCards += mStats.redHome;
+          homeTeamObj.red_cards = homeTeamObj.redCards;
+        }
 
-        awayTeamObj.yellowCards += mStats.yellowAway;
-        awayTeamObj.yellow_cards = awayTeamObj.yellowCards;
-        awayTeamObj.redCards += mStats.redAway;
-        awayTeamObj.red_cards = awayTeamObj.redCards;
+        if (updateAway) {
+          awayTeamObj.yellowCards += mStats.yellowAway;
+          awayTeamObj.yellow_cards = awayTeamObj.yellowCards;
+          awayTeamObj.redCards += mStats.redAway;
+          awayTeamObj.red_cards = awayTeamObj.redCards;
+        }
       }
     });
 
@@ -4459,10 +4534,27 @@ One of the most entertaining fixtures in FCL history ends in an eight-goal thril
       team.goals_for = team.goalsFor;
       team.goals_against = team.goalsAgainst;
       team.goal_difference = team.goalDifference;
+
+      // Inject dynamic disciplinary status
+      if (team.id === 'fwt') {
+        team.isDisqualified = true;
+        team.disqualificationReason = "Forestry and Wood Technology (FWT) has been disqualified from the 2026 FUTA Champions League due to incidents of team confrontation and intimidation of Building Technology (BDG) players on Match Day 2.";
+      }
+      if (team.id === 'bdg') {
+        team.fineAmount = 10000;
+        team.finePaid = false;
+      }
     });
 
     // Sort according to FCL Official tiebreaker ranking order
     calculatedTeams.sort((a, b) => {
+      // Disqualified teams are always sorted to the very bottom
+      const isDisqA = a.isDisqualified ? 1 : 0;
+      const isDisqB = b.isDisqualified ? 1 : 0;
+      if (isDisqA !== isDisqB) {
+        return isDisqA - isDisqB;
+      }
+
       // 1. points DESC
       if ((b.points || 0) !== (a.points || 0)) {
         return (b.points || 0) - (a.points || 0);
@@ -4542,7 +4634,7 @@ One of the most entertaining fixtures in FCL history ends in an eight-goal thril
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v21');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v23');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -4555,7 +4647,7 @@ One of the most entertaining fixtures in FCL history ends in an eight-goal thril
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_ft_v21', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v23', 'true');
     }
 
     loadState();

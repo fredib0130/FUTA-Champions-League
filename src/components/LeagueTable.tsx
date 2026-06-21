@@ -14,6 +14,11 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
 
   const liveSortedTeams = React.useMemo(() => {
     return [...teams].sort((a, b) => {
+      const isDisqA = a.isDisqualified ? 1 : 0;
+      const isDisqB = b.isDisqualified ? 1 : 0;
+      if (isDisqA !== isDisqB) {
+        return isDisqA - isDisqB;
+      }
       // 1. points DESC
       if ((b.points || 0) !== (a.points || 0)) {
         return (b.points || 0) - (a.points || 0);
@@ -67,6 +72,11 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
 
   const officialSortedTeams = React.useMemo(() => {
     return [...officialTeams].sort((a, b) => {
+      const isDisqA = a.isDisqualified ? 1 : 0;
+      const isDisqB = b.isDisqualified ? 1 : 0;
+      if (isDisqA !== isDisqB) {
+        return isDisqA - isDisqB;
+      }
       // 1. points DESC
       if ((b.points || 0) !== (a.points || 0)) {
         return (b.points || 0) - (a.points || 0);
@@ -172,7 +182,11 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
               let statusLabel = '';
               let rowBg = '';
 
-              if (pos <= 2) {
+              if (team.isDisqualified) {
+                statusColor = 'bg-red-650/40 text-red-500 border-red-500/50';
+                statusLabel = 'Disqualified';
+                rowBg = 'bg-red-950/25 opacity-70';
+              } else if (pos <= 2) {
                 statusColor = 'bg-green-500/20 text-green-500 border-green-500/50';
                 statusLabel = 'Quarter-Finals';
                 rowBg = 'bg-green-500/[0.02]';
