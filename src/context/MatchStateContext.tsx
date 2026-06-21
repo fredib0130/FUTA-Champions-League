@@ -414,8 +414,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.manOfTheMatch !== official.manOfTheMatch ||
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
             ((official.matchday === 1 || official.matchday === 2) && m.status !== official.status) // Sync status specifically for matchday 1 and 2
           ) {
@@ -434,8 +434,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6'].includes(official.id) ? official.awayScore : m.awayScore
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8'].includes(official.id) ? official.awayScore : m.awayScore
             };
             updated = true;
           }
@@ -1283,6 +1283,22 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
+
+    if (!loadedGoals.some(g => g.matchId === 'md2-7')) {
+      loadedGoals.push(
+        { id: 'goal-md2-7-dominion-37', matchId: 'md2-7', playerName: 'Dominion', team: 'ANA', minute: "37'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md2-8')) {
+      loadedGoals.push(
+        { id: 'goal-md2-8-alowonle-37', matchId: 'md2-8', playerName: 'Alowonle Clement', team: 'MCB', minute: "37'", type: 'Goal' },
+        { id: 'goal-md2-8-oni-45', matchId: 'md2-8', playerName: 'Oni Oluwadamilola', team: 'MCB', minute: "45'", type: 'Goal' },
+        { id: 'goal-md2-8-agesin-60', matchId: 'md2-8', playerName: 'Agesin', team: 'AGE', minute: "60+1'", type: 'Own Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -1355,7 +1371,18 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'card-md2-6-esezobor-21', matchId: 'md2-6', playerName: 'Esezobor Isaac Eromosele (Coach)', teamAbbr: 'MST', minute: "21'", type: 'Yellow' },
       { id: 'card-md2-6-adewumi-21', matchId: 'md2-6', playerName: 'Adewumi Excel Joshua', teamAbbr: 'CYS', minute: "21'", type: 'Yellow' },
       { id: 'card-md2-6-fabusuyi-28', matchId: 'md2-6', playerName: 'Fabusuyi Daniel Oluwafisayo', teamAbbr: 'MST', minute: "28'", type: 'Yellow' },
-      { id: 'card-md2-6-akinyede-32', matchId: 'md2-6', playerName: 'Akinyede Allen Oluwaferanmi', teamAbbr: 'CYS', minute: "32'", type: 'Yellow' }
+      { id: 'card-md2-6-akinyede-32', matchId: 'md2-6', playerName: 'Akinyede Allen Oluwaferanmi', teamAbbr: 'CYS', minute: "32'", type: 'Yellow' },
+
+      // ENT vs ANA Cards (md2-7)
+      { id: 'card-md2-7-ent-promise', matchId: 'md2-7', playerName: 'Promise', teamAbbr: 'ENT', minute: "15'", type: 'Yellow' },
+      { id: 'card-md2-7-ent-fairy', matchId: 'md2-7', playerName: 'Fairy', teamAbbr: 'ENT', minute: "42'", type: 'Yellow' },
+      { id: 'card-md2-7-ana-dominion', matchId: 'md2-7', playerName: 'Dominion', teamAbbr: 'ANA', minute: "54'", type: 'Yellow' },
+
+      // MCB vs AGE Cards (md2-8)
+      { id: 'card-md2-8-mcb-osowo', matchId: 'md2-8', playerName: 'Osowo Taiwo', teamAbbr: 'MCB', minute: "22'", type: 'Yellow' },
+      { id: 'card-md2-8-mcb-alowonle', matchId: 'md2-8', playerName: 'Alowonle Clement', teamAbbr: 'MCB', minute: "51'", type: 'Yellow' },
+      { id: 'card-md2-8-age-afolabi', matchId: 'md2-8', playerName: 'Afolabi', teamAbbr: 'AGE', minute: "44'", type: 'Yellow' },
+      { id: 'card-md2-8-age-muhammed', matchId: 'md2-8', playerName: 'Muhammed', teamAbbr: 'AGE', minute: "40'", type: 'Red' }
     ];
     officialMd1_5Cards.forEach(c => {
       const existingIdx = loadedCards.findIndex(existing => existing.id === c.id);
@@ -1884,6 +1911,104 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'Adeoye Ezekiel Oluwaseyi',
           'Owolabi Olaifeoluwa Solomon',
           'Adetule Marvellous Mayowa'
+        ],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['md2-7'] = {
+      home: {
+        matchId: 'md2-7',
+        teamAbbr: 'ENT',
+        formation: '4-3-3',
+        captainId: 'player-ent-promise',
+        players: {
+          'GK': 'player-1',
+          'RB': 'player-2',
+          'CB1': 'player-ent-promise',
+          'CB2': 'player-3',
+          'LB': 'player-4',
+          'DM': 'player-ent-fairy',
+          'CM1': 'player-5',
+          'CM2': 'player-6',
+          'RW': 'player-7',
+          'ST': 'player-8',
+          'LW': 'player-9'
+        },
+        bench: ['player-10', 'player-11'],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'md2-7',
+        teamAbbr: 'ANA',
+        formation: '4-3-3',
+        captainId: 'player-15',
+        players: {
+          'GK': 'player-12',
+          'RB': 'player-13',
+          'CB1': 'player-14',
+          'CB2': 'player-15',
+          'LB': 'player-16',
+          'DM': 'player-17',
+          'CM1': 'player-18',
+          'CM2': 'player-19',
+          'RW': 'player-20',
+          'ST': 'player-21',
+          'LW': 'player-22'
+        },
+        bench: ['player-23', 'player-24'],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['md2-8'] = {
+      home: {
+        matchId: 'md2-8',
+        teamAbbr: 'MCB',
+        formation: '4-3-3',
+        captainId: 'player-mcb-6', // Oni Oluwadamilola (Captain)
+        players: {
+          'GK': 'player-mcb-1',  // Adesuyi Oluwasegun
+          'LB': 'player-mcb-2',  // Ayeni Opeyemi
+          'LCB': 'player-mcb-14', // Adeleye Blessing
+          'RCB': 'player-mcb-4',  // Osowo Taiwo
+          'RB': 'player-mcb-12', // Adameji Isaac
+          'LCM': 'player-mcb-6',  // Oni Oluwadamilola (Captain)
+          'AM': 'player-mcb-7',  // Lawal Favour Ben
+          'RCM': 'player-mcb-5', // Favour
+          'LW': 'player-mcb-13', // Wasiu Ismaeel
+          'CF': 'player-mcb-10', // Ameh Lucky
+          'RW': 'player-mcb-11'  // Alowonle Clement
+        },
+        bench: [
+          'Alagbe Jeremiah Kehinde',
+          'Olowu Dennis',
+          'Olaniran Oluwatimilehin',
+          'Tallest'
+        ],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'md2-8',
+        teamAbbr: 'AGE',
+        formation: '4-3-3',
+        captainId: 'player-age-10', // Sylvanus (Captain)
+        players: {
+          'GK': 'player-age-1',  // Babatunde
+          'LB': 'player-age-2',  // Afolabi
+          'LCB': 'player-age-3', // Olawale
+          'RCB': 'player-age-4', // Temitope
+          'RB': 'player-age-12', // Agesin
+          'LCM': 'player-age-6', // Adeyemi
+          'AM': 'player-age-7',  // Jones Falana
+          'RCM': 'player-age-8', // Anthony
+          'LW': 'player-age-9',  // Tunde
+          'CF': 'player-age-10', // Sylvanus
+          'RW': 'player-age-13'  // Muhammed
+        },
+        bench: [
+          'Samuel',
+          'Femi'
         ],
         status: 'Approved'
       }
@@ -3547,6 +3672,33 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
+    if (!loadedCommentary['md2-7'] || loadedCommentary['md2-7'].length === 0) {
+      loadedCommentary['md2-7'] = [
+        { id: 'comm-md2-7-ft', matchId: 'md2-7', minute: "60'", text: "🏁 FULL-TIME! ENT 0 - 1 ANA. Anatomy secures a narrow but massive 1-0 win thanks to Dominion's 37th-minute strike! Dominion is named Man of the Match.", timestamp: "1:35 PM", type: 'general' },
+        { id: 'comm-md2-7-card-ana-dom', matchId: 'md2-7', minute: "54'", text: "🟨 Yellow card to Dominion (ANA) for shirt pulling.", timestamp: "1:24 PM", type: 'card' },
+        { id: 'comm-md2-7-card-ent-fairy', matchId: 'md2-7', minute: "42'", text: "🟨 Yellow card given to Fairy (ENT) for dissent.", timestamp: "1:12 PM", type: 'card' },
+        { id: 'comm-md2-7-goal-ana-dom', matchId: 'md2-7', minute: "37'", text: "⚽ GOAL!!! Dominion scores! A brilliant header gives ANA the lead! ENT 0 - 1 ANA.", timestamp: "1:07 PM", type: 'goal' },
+        { id: 'comm-md2-7-card-ent-promise', matchId: 'md2-7', minute: "15'", text: "🟨 Yellow card handed to Promise (ENT) for a block.", timestamp: "12:45 PM", type: 'card' },
+        { id: 'comm-md2-7-kickoff', matchId: 'md2-7', minute: "1'", text: "🏁 KICKOFF! Under the intense atmosphere of the Mini Pitch, ENT vs ANA gets underway. Referee Juwon (MNE) is officiating.", timestamp: "12:30 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
+    if (!loadedCommentary['md2-8'] || loadedCommentary['md2-8'].length === 0) {
+      loadedCommentary['md2-8'] = [
+        { id: 'comm-md2-8-ft', matchId: 'md2-8', minute: "60+1'", text: "🏁 FULL-TIME! MCB 3 - 0 AGE. Oni Oluwadamilola is named MOTM as Microbiology claims a resounding 3-0 victory over Agricultural Engineering!", timestamp: "3:05 PM", type: 'general' },
+        { id: 'comm-md2-8-goal-age-og', matchId: 'md2-8', minute: "60+1'", text: "⚽ OWN GOAL! Agesin (AGE) headers the ball past his own goalkeeper trying to clear a dangerous cross! MCB 3 - 0 AGE.", timestamp: "3:01 PM", type: 'goal' },
+        { id: 'comm-md2-8-card-mcb-alowonle', matchId: 'md2-8', minute: "51'", text: "🟨 Yellow card given to Clement Alowonle (MCB) for delay.", timestamp: "2:51 PM", type: 'card' },
+        { id: 'comm-md2-8-goal-mcb-oni', matchId: 'md2-8', minute: "45'", text: "⚽ GOAL!!! Oni Oluwadamilola doubles the lead with a spectacular curling effort! MCB 2 - 0 AGE.", timestamp: "2:45 PM", type: 'goal' },
+        { id: 'comm-md2-8-card-age-afolabi', matchId: 'md2-8', minute: "44'", text: "🟨 Yellow card given to Afolabi (AGE) for dynamic slide.", timestamp: "2:44 PM", type: 'card' },
+        { id: 'comm-md2-8-card-age-red', matchId: 'md2-8', minute: "40'", text: "🟥 RED CARD! Muhammed (AGE) is shown a straight red card for a serious foul play! AGE are down to 10 men!", timestamp: "2:40 PM", type: 'card' },
+        { id: 'comm-md2-8-goal-mcb-alowonle', matchId: 'md2-8', minute: "37'", text: "⚽ GOAL!!! Clement Alowonle breaks the deadlock, firing MCB into the lead! MCB 1 - 0 AGE.", timestamp: "2:37 PM", type: 'goal' },
+        { id: 'comm-md2-8-card-mcb-osowo', matchId: 'md2-8', minute: "22'", text: "🟨 Yellow card shown to Osowo Taiwo (MCB) for a reckless block.", timestamp: "2:22 PM", type: 'card' },
+        { id: 'comm-md2-8-kickoff', matchId: 'md2-8', minute: "1'", text: "🏁 KICKOFF! MCB faces AGE in a high-stakes Matchday 2 clash. Referee Juwon (MNE) signals the start!", timestamp: "2:00 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
     setCommentaries(loadedCommentary);
 
     // 10. Reports
@@ -3597,7 +3749,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     // Matchday 2 Saturday Timers as Finished
-    ['md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6'].forEach(id => {
+    ['md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8'].forEach(id => {
       if (!loadedTimers[id] || loadedTimers[id].liveMinute !== "FT") {
         loadedTimers[id] = { liveMinute: "FT", isPaused: true };
       }
@@ -4178,7 +4330,7 @@ One of the most entertaining fixtures in FCL history ends in an eight-goal thril
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v17');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v18');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -4191,7 +4343,7 @@ One of the most entertaining fixtures in FCL history ends in an eight-goal thril
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_ft_v17', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v18', 'true');
     }
 
     loadState();

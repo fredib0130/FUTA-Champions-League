@@ -465,7 +465,9 @@ export const PLAYERS: Player[] = [
     { name: "Anthony", position: "MID" as const, level: "300L", jerseyNo: 9, matricNumber: "AGE/23/3911" },   // player-age-8 (Anthony scored 47')
     { name: "Tunde", position: "FWD" as const, level: "400L", jerseyNo: 8, matricNumber: "AGE/22/3918" },    // player-age-9
     { name: "Sylvanus", position: "FWD" as const, level: "500L", jerseyNo: 10, matricNumber: "AGE/21/5012" }, // player-age-10 (Sylvanus scored penalty 42')
-    { name: "Samuel", position: "FWD" as const, level: "100L", jerseyNo: 11, matricNumber: "AGE/25/3919" }   // player-age-11
+    { name: "Samuel", position: "FWD" as const, level: "100L", jerseyNo: 11, matricNumber: "AGE/25/3919" },   // player-age-11
+    { name: "Agesin", position: "DEF" as const, level: "300L", jerseyNo: 14, matricNumber: "AGE/23/3931" },   // player-age-12
+    { name: "Muhammed", position: "FWD" as const, level: "400L", jerseyNo: 17, matricNumber: "AGE/22/3944" }  // player-age-13
   ].map((p, idx) => ({
     id: `player-age-${idx + 1}`,
     name: p.name,
@@ -544,8 +546,8 @@ export const MATCHES: Match[] = [
   { id: 'md2-4', homeTeam: 'ICE', awayTeam: 'BCH', date: '2026-06-20', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 2, referee: 'Tosin (MTS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Adeyemi Prosper' },
   { id: 'md2-5', homeTeam: 'PHS', awayTeam: 'AGP', date: '2026-06-20', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 2, referee: 'Victor (ESM)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Adeagbo Pelumi' },
   { id: 'md2-6', homeTeam: 'MST', awayTeam: 'CYS', date: '2026-06-20', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 4, awayScore: 4, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 2, referee: 'Tosin (MTS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Iyare Praise' },
-  { id: 'md2-7', homeTeam: 'ENT', awayTeam: 'ANA', date: '2026-06-21', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-8', homeTeam: 'MCB', awayTeam: 'AGE', date: '2026-06-21', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-7', homeTeam: 'ENT', awayTeam: 'ANA', date: '2026-06-21', time: '12:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 2, referee: 'Juwon (MNE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Dominion' },
+  { id: 'md2-8', homeTeam: 'MCB', awayTeam: 'AGE', date: '2026-06-21', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 3, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 2, referee: 'Juwon (MNE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Oni Oluwadamilola' },
   { id: 'md2-9', homeTeam: 'BDG', awayTeam: 'FWT', date: '2026-06-21', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
   { id: 'md2-10', homeTeam: 'PHY', awayTeam: 'SIMT', date: '2026-06-21', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
 
@@ -682,6 +684,40 @@ export const MOCK_MATCH_STATS: MatchStats[] = MATCHES.map((match) => {
       awayFouls: 0,
       homeFreeKicks: 0,
       awayFreeKicks: 0
+    };
+  }
+  if (match.id === 'md2-7') {
+    return {
+      matchId: match.id,
+      cornersHome: 4,
+      cornersAway: 3,
+      yellowCardsHome: 2,
+      yellowCardsAway: 1,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      homeCorners: 4,
+      awayCorners: 3,
+      homeYellowCards: 2,
+      awayYellowCards: 1,
+      homeRedCards: 0,
+      awayRedCards: 0
+    };
+  }
+  if (match.id === 'md2-8') {
+    return {
+      matchId: match.id,
+      cornersHome: 6,
+      cornersAway: 5,
+      yellowCardsHome: 2,
+      yellowCardsAway: 1,
+      redCardsHome: 0,
+      redCardsAway: 1,
+      homeCorners: 6,
+      awayCorners: 5,
+      homeYellowCards: 2,
+      awayYellowCards: 1,
+      homeRedCards: 0,
+      awayRedCards: 1
     };
   }
   const charSum = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
