@@ -1189,7 +1189,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         {
           id: 'goal-md1-10-iyenagbe-59',
           matchId: 'md1-10',
-          playerName: 'Iyenagbe David',
+          playerName: 'Iyenagbe Christian',
           team: 'PHY',
           minute: "59'",
           type: 'Goal'
@@ -1796,23 +1796,23 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         matchId: 'md1-10',
         teamAbbr: 'PHY',
         formation: '4-3-3',
-        captainId: 'player-phy-3', // Balogun Praise (Captain)
+        captainId: 'player-phy-3', // Praise Balogun (Captain)
         players: {
-          'GK': 'player-phy-1',  // Eniola Emmanuel
+          'GK': 'player-phy-1',  // Eniola Ayomide Emmanuel
           'LB': 'player-phy-2',  // Ajayi Timothy
-          'LCB': 'player-phy-3', // Balogun Praise (Captain)
+          'LCB': 'player-phy-3', // Praise Balogun (Captain)
           'RCB': 'player-phy-4', // Okumagba Franklin
           'RB': 'player-phy-5',  // Olamide Agboola
           'LCM': 'player-phy-6', // Ajigboteleda Emmanuel
           'AM': 'player-phy-7',  // Temitope Ajayi
           'RCM': 'player-phy-8', // Uduak Abasi
           'LW': 'player-phy-9',  // Are Moses
-          'CF': 'player-phy-10', // Iyenagbe David
+          'CF': 'player-phy-10', // Iyenagbe Christian
           'RW': 'player-phy-11'  // Akinseye Oluwasanmilore
         },
         bench: [
           'Lawal Oluwabukunmi',
-          'Oladipupo Kayode Afeez',
+          'Oladipupo Afeez',
           'Andrew Emmanuel'
         ],
         status: 'Approved'
@@ -2904,7 +2904,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           id: 'comm-ft-md1-10',
           matchId: 'md1-10',
           minute: "60'",
-          text: "🏁 FULL TIME! PHY holding on to claim a remarkable 2–1 victory over MCB in a highly matches clash! David Iyenagbe's opportunistic 59th minute winner decided a fierce derby where MCB fought bravely to level at 1-1 through Timilehin. A fitting end to Matchday 1! MCB 1 - 2 PHY.",
+          text: "🏁 FULL TIME! PHY holding on to claim a remarkable 2–1 victory over MCB in a highly matches clash! Christian Iyenagbe's opportunistic 59th minute winner decided a fierce derby where MCB fought bravely to level at 1-1 through Timilehin. A fitting end to Matchday 1! MCB 1 - 2 PHY.",
           timestamp: "6:05 PM",
           type: 'general'
         },
@@ -2912,7 +2912,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           id: 'comm-goal-md1-10-iyenagbe',
           matchId: 'md1-10',
           minute: "59'",
-          text: "⚽ GOAL!!! David Iyenagbe fires PHY into the lead! A beautiful sequence down the flank, and he guides a low matching drive into the corner of the net! MCB 1 - 2 PHY.",
+          text: "⚽ GOAL!!! Christian Iyenagbe fires PHY into the lead! A beautiful sequence down the flank, and he guides a low matching drive into the corner of the net! MCB 1 - 2 PHY.",
           timestamp: "6:03 PM",
           type: 'goal'
         },
@@ -4178,7 +4178,7 @@ One of the most entertaining fixtures in FCL history ends in an eight-goal thril
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v16');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v17');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -4191,7 +4191,7 @@ One of the most entertaining fixtures in FCL history ends in an eight-goal thril
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_ft_v16', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v17', 'true');
     }
 
     loadState();

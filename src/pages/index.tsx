@@ -3840,6 +3840,14 @@ const TECHNICAL_CREWS: Record<string, { headCoach: { name: string; phone?: strin
   ifs: {
     headCoach: { name: "Hountodji Shadrach", phone: "+234 (0) 9037978015" },
     assistantCoach: { name: "Azubuike Emeka", phone: "+234 (0) 8129742055" }
+  },
+  mcb: {
+    headCoach: { name: "Adeyinka Adetoye Israel", phone: "+234 (0) 9133763339" },
+    assistantCoach: { name: "Ishola Kayode", phone: "+234 (0) 9019864203" }
+  },
+  phy: {
+    headCoach: { name: "Daniel Adura", phone: "+234 (0) 8162873908" },
+    assistantCoach: { name: "Oladunjoye David", phone: "+234 (0) 8146802754" }
   }
 };
 
