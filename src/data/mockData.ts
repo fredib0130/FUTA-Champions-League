@@ -68,9 +68,6 @@ export const PLAYERS: Player[] = [
   // Live Star Players
   { id: 'player-agp-michael', name: "Michael", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'agp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=agp-michael' },
   { id: 'player-agp-roland', name: "Roland", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'agp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=agp-roland' },
-  { id: 'player-bdg-tofunmi', name: "Tofunmi", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'bdg', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=bdg-tofunmi' },
-  { id: 'player-bdg-desmond', name: "Desmond", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'bdg', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=bdg-desmond' },
-  { id: 'player-bdg-praise', name: "Praise", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'bdg', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=bdg-praise' },
   { id: 'player-ent-promise', name: "Promise", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ent', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ent-promise' },
   { id: 'player-ent-fairy', name: "Fairy", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ent', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ent-fairy' },
   { id: 'player-aph-kunlex', name: "Kunlex", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'aph', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=aph-kunlex' },
@@ -453,6 +450,41 @@ export const PLAYERS: Player[] = [
     image: `https://api.dicebear.com/7.x/avataaars/svg?seed=phy-player-${idx + 1}`
   })),
 
+  // BDG Official Squad (Building Technology)
+  ...[
+    { name: "Ojo David", position: "GK" as const, level: "400L", jerseyNo: 1, matricNumber: "BDG/22/1185" },
+    { name: "Arowolo Gideon", position: "DEF" as const, level: "500L", jerseyNo: 4, matricNumber: "BDG/21/1186" },
+    { name: "Adeleke Samson", position: "DEF" as const, level: "300L", jerseyNo: 5, matricNumber: "BDG/23/1188" },
+    { name: "Salami Victor", position: "DEF" as const, level: "200L", jerseyNo: 3, matricNumber: "BDG/24/1189" },
+    { name: "Babalola Toheeb", position: "DEF" as const, level: "500L", jerseyNo: 2, matricNumber: "BDG/21/1190" },
+    { name: "Akinbiyi Akinwalere Ayomikun", position: "MID" as const, level: "500L", jerseyNo: 8, matricNumber: "BDG/21/1192" },
+    { name: "Akinfolahan Temidayo Ebunoluwa", position: "MID" as const, level: "300L", jerseyNo: 10, matricNumber: "BDG/23/1195" },
+    { name: "Praise", position: "MID" as const, level: "400L", jerseyNo: 14, matricNumber: "BDG/22/1198" },
+    { name: "Christopher Samuel", position: "FWD" as const, level: "100L", jerseyNo: 7, matricNumber: "BDG/25/1196" },
+    { name: "Awoyemi Jesutofunmi", position: "FWD" as const, level: "400L", jerseyNo: 9, matricNumber: "BDG/22/1191" },
+    { name: "Desmond", position: "FWD" as const, level: "500L", jerseyNo: 19, matricNumber: "BDG/21/1201" },
+    { name: "Adebayo Kolawole", position: "DEF" as const, level: "300L", jerseyNo: 13, matricNumber: "BDG/23/1202" },
+    { name: "Olawuyi Moses", position: "MID" as const, level: "200L", jerseyNo: 15, matricNumber: "BDG/24/1205" }
+  ].map((p, idx) => ({
+    id: p.name === "Awoyemi Jesutofunmi" ? "player-bdg-tofunmi" :
+        p.name === "Desmond" ? "player-bdg-desmond" :
+        p.name === "Praise" ? "player-bdg-praise" :
+        `player-bdg-${idx + 1}`,
+    name: p.name,
+    position: p.position,
+    level: p.level,
+    jerseyNo: p.jerseyNo,
+    regNumber: (globalThis as any).getPlayerRegNumber('bdg', idx),
+    goals: 0,
+    played: 0,
+    cleanSheets: 0,
+    teamId: 'bdg',
+    image: p.name === "Awoyemi Jesutofunmi" ? 'https://api.dicebear.com/7.x/avataaars/svg?seed=bdg-tofunmi' :
+           p.name === "Desmond" ? 'https://api.dicebear.com/7.x/avataaars/svg?seed=bdg-desmond' :
+           p.name === "Praise" ? 'https://api.dicebear.com/7.x/avataaars/svg?seed=bdg-praise' :
+           `https://api.dicebear.com/7.x/avataaars/svg?seed=bdg-player-${idx + 1}`
+  })),
+
   // AGE Official Squad (Agricultural and Environmental Engineering)
   ...[
     { name: "Babatunde", position: "GK" as const, level: "300L", jerseyNo: 1, matricNumber: "AGE/23/3912" }, // player-age-1
@@ -485,7 +517,7 @@ export const PLAYERS: Player[] = [
   // Auto-generate helper players for other teams to keep rosters occupied
   ...Array.from({ length: 150 }, (_, i) => {
     const team = TEAMS[i % TEAMS.length];
-    if (team.id === 'mst' || team.id === 'fwt' || team.id === 'cys' || team.id === 'simt' || team.id === 'sta' || team.id === 'ifs' || team.id === 'mcb' || team.id === 'phy' || team.id === 'age' || team.id === 'mbbs') {
+    if (team.id === 'mst' || team.id === 'fwt' || team.id === 'cys' || team.id === 'simt' || team.id === 'sta' || team.id === 'ifs' || team.id === 'mcb' || team.id === 'phy' || team.id === 'age' || team.id === 'mbbs' || team.id === 'bdg') {
       return null;
     }
     return {
@@ -532,7 +564,7 @@ export const MATCHES: Match[] = [
   { id: 'md1-2', homeTeam: 'AGP', awayTeam: 'BCH', date: '2026-06-13', time: '09:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Abraham', refereeAssigned: true, manOfTheMatch: 'Oyelakin Abdulquadri' },
   { id: 'md1-3', homeTeam: 'CYS', awayTeam: 'ANA', date: '2026-06-13', time: '11:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Tosin', refereeAssigned: true, manOfTheMatch: 'Raji Jubril Olarewaju' },
   { id: 'md1-4', homeTeam: 'PHS', awayTeam: 'APH', date: '2026-06-13', time: '12:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Tosin', refereeAssigned: true, manOfTheMatch: 'Emmanuel' },
-  { id: 'md1-5', homeTeam: 'BDG', awayTeam: 'ENT', date: '2026-06-13', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Abraham', refereeAssigned: true, manOfTheMatch: 'Tofunmi' },
+  { id: 'md1-5', homeTeam: 'BDG', awayTeam: 'ENT', date: '2026-06-13', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Abraham', refereeAssigned: true, manOfTheMatch: 'Awoyemi Jesutofunmi' },
   { id: 'md1-6', homeTeam: 'IFS', awayTeam: 'CSP', date: '2026-06-13', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Jones', refereeAssigned: true, manOfTheMatch: 'Ademide' },
   { id: 'md1-7', homeTeam: 'FWT', awayTeam: 'IDD', date: '2026-06-13', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 2, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 1, referee: 'Jones', refereeAssigned: true, manOfTheMatch: 'Ikudayisi Oyesola' },
   { id: 'md1-8', homeTeam: 'AGE', awayTeam: 'SIMT', date: '2026-06-14', time: '16:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 3, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 1, referee: 'Juwon', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Adebayo Samuel Ayobami' },
@@ -548,8 +580,8 @@ export const MATCHES: Match[] = [
   { id: 'md2-6', homeTeam: 'MST', awayTeam: 'CYS', date: '2026-06-20', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 4, awayScore: 4, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 2, referee: 'Tosin (MTS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Iyare Praise' },
   { id: 'md2-7', homeTeam: 'ENT', awayTeam: 'ANA', date: '2026-06-21', time: '12:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 2, referee: 'Juwon (MNE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Dominion' },
   { id: 'md2-8', homeTeam: 'MCB', awayTeam: 'AGE', date: '2026-06-21', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 3, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 2, referee: 'Juwon (MNE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Oni Oluwadamilola' },
-  { id: 'md2-9', homeTeam: 'BDG', awayTeam: 'FWT', date: '2026-06-21', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
-  { id: 'md2-10', homeTeam: 'PHY', awayTeam: 'SIMT', date: '2026-06-21', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 2 },
+  { id: 'md2-9', homeTeam: 'BDG', awayTeam: 'FWT', date: '2026-06-21', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 4, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 2, referee: 'Juwon (MNE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Awoyemi Jesutofunmi' },
+  { id: 'md2-10', homeTeam: 'PHY', awayTeam: 'SIMT', date: '2026-06-21', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 2, referee: 'Victor (ESM)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Oweazim Chukwudumebi' },
 
   // --- MATCHDAY 3 (June 27 - 28) ---
   { id: 'md3-1', homeTeam: 'MST', awayTeam: 'SIMT', date: '2026-06-27', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
@@ -718,6 +750,52 @@ export const MOCK_MATCH_STATS: MatchStats[] = MATCHES.map((match) => {
       awayYellowCards: 1,
       homeRedCards: 0,
       awayRedCards: 1
+    };
+  }
+  if (match.id === 'md2-9') {
+    return {
+      matchId: match.id,
+      cornersHome: 3,
+      cornersAway: 5,
+      yellowCardsHome: 1,
+      yellowCardsAway: 2,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      homeCorners: 3,
+      awayCorners: 5,
+      homeYellowCards: 1,
+      awayYellowCards: 2,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 0,
+      awayOffsides: 0,
+      homeFouls: 5,
+      awayFouls: 8,
+      homeFreeKicks: 8,
+      awayFreeKicks: 5
+    };
+  }
+  if (match.id === 'md2-10') {
+    return {
+      matchId: match.id,
+      cornersHome: 5,
+      cornersAway: 1,
+      yellowCardsHome: 0,
+      yellowCardsAway: 3,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      homeCorners: 5,
+      awayCorners: 1,
+      homeYellowCards: 0,
+      awayYellowCards: 3,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 0,
+      awayOffsides: 3,
+      homeFouls: 4,
+      awayFouls: 8,
+      homeFreeKicks: 8,
+      awayFreeKicks: 4
     };
   }
   const charSum = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
