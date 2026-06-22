@@ -64,6 +64,10 @@ export interface Player {
   level?: string;
   jerseyNo?: number;
   regNumber?: string;
+  isSuspended?: boolean;
+  suspensionDuration?: string;
+  fineAmount?: number;
+  finePaid?: boolean;
 }
 
 export interface Match {

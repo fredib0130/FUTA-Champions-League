@@ -287,7 +287,7 @@ export const PLAYERS: Player[] = [
     { name: "Akinsowon Gbenga Ejiro", position: "MID" as const, level: "500L", jerseyNo: 16, matricNumber: "STA/20/7167" },
     { name: "Ayetan Samuel Precious", position: "MID" as const, level: "500L", jerseyNo: 24, matricNumber: "STA/20/7178" },
     { name: "Salam Rokeeb Oladimeji", position: "MID" as const, level: "200L", jerseyNo: 8, matricNumber: "STA/24/2898" },
-    { name: "Daisi Tioluwanimi", position: "FWD" as const, level: "300L", jerseyNo: 11, matricNumber: "STA/23/6695" },
+    { name: "Daisi Toluwanimi", position: "FWD" as const, level: "300L", jerseyNo: 11, matricNumber: "STA/23/6695" },
     { name: "Akintunde Samuel", position: "FWD" as const, level: "200L", jerseyNo: 18, matricNumber: "STA/24/2822" },
     { name: "Precious", position: "FWD" as const, level: "100L", jerseyNo: 21, matricNumber: "STA/25/0890" },
     { name: "Bello Riliwan Remilekun", position: "FWD" as const, level: "200L", jerseyNo: 9, matricNumber: "STA/24/2843" },

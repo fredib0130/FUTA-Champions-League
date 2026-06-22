@@ -3964,6 +3964,18 @@ export function TeamProfile() {
                             REG NO: {player.regNumber}
                           </span>
                         )}
+                        {player.isSuspended && (
+                          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                            <span className="px-1.5 py-0.5 bg-red-500/10 text-red-500 border border-red-500/20 rounded-md text-[8px] font-black uppercase tracking-wider animate-pulse flex items-center gap-1">
+                              <span>🚫 SUSPENDED ({player.suspensionDuration})</span>
+                            </span>
+                            {player.fineAmount !== undefined && (
+                              <span className="px-1.5 py-0.5 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-md text-[8px] font-black uppercase tracking-wider flex items-center gap-1">
+                                <span>💸 FINE: ₦{player.fineAmount.toLocaleString()} ({player.finePaid ? 'Paid' : 'Unpaid'})</span>
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="flex items-center space-x-3 justify-end bg-navy-dark/40 px-3 py-1.5 rounded-xl border border-white/5">

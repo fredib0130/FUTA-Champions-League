@@ -379,6 +379,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       }
     });
 
+    const mjd = basePlayers.find(p => p.id === 'player-simt-5' || p.name.toLowerCase() === 'momoh joshua david');
+    if (mjd) {
+      mjd.isSuspended = true;
+      mjd.suspensionDuration = '1 Match';
+      mjd.fineAmount = 3000;
+      mjd.finePaid = false;
+    }
+
     return basePlayers;
   }, [matches, goalScorers, cards, subs, lineups]);
 
@@ -1210,7 +1218,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         {
           id: 'goal-md1-9-tioluwanimi-15',
           matchId: 'md1-9',
-          playerName: 'Daisi Tioluwanimi',
+          playerName: 'Daisi Toluwanimi',
           team: 'STA',
           minute: "15'",
           type: 'Goal'
@@ -1233,7 +1241,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'goal-md2-1-agbo-15', matchId: 'md2-1', playerName: 'Agbo Peter', team: 'STA', minute: "15'", type: 'Goal' },
         { id: 'goal-md2-1-timilehin-44', matchId: 'md2-1', playerName: 'Timilehin Victor', team: 'CSP', minute: "44'", type: 'Goal' },
         { id: 'goal-md2-1-akindeko-55', matchId: 'md2-1', playerName: 'Akindeko Emmanuel', team: 'CSP', minute: "55'", type: 'Goal' },
-        { id: 'goal-md2-1-daisi-59', matchId: 'md2-1', playerName: 'Daisi Tioluwanimi', team: 'STA', minute: "59'", type: 'Goal' },
+        { id: 'goal-md2-1-daisi-59', matchId: 'md2-1', playerName: 'Daisi Toluwanimi', team: 'STA', minute: "59'", type: 'Goal' },
         { id: 'goal-md2-1-akindeko-60', matchId: 'md2-1', playerName: 'Akindeko Emmanuel', team: 'CSP', minute: "60+1'", type: 'Goal' }
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
@@ -1812,7 +1820,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'RCM': 'player-sta-14', // Johnson Emmanuel Olaoluwa
           'LW': 'player-sta-23',  // Nwachukwu Jesse
           'CF': 'player-sta-22',  // Bello Riliwan Remilekun
-          'RW': 'player-sta-19'   // Daisi Tioluwanimi
+          'RW': 'player-sta-19'   // Daisi Toluwanimi
         },
         bench: [
           'Okusi Edward',
@@ -3530,7 +3538,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           id: 'comm-goal-md1-9-toluwanimi',
           matchId: 'md1-9',
           minute: "15'",
-          text: "⚽ GOAL!!! Daisi Tioluwanimi replies instantly for STA! A majestic team move, sliced through MBBS lines, and finished with precision! Back on level terms! MBBS 1 - 1 STA.",
+          text: "⚽ GOAL!!! Daisi Toluwanimi replies instantly for STA! A majestic team move, sliced through MBBS lines, and finished with precision! Back on level terms! MBBS 1 - 1 STA.",
           timestamp: "4:15 PM",
           type: 'goal'
         },
@@ -3564,7 +3572,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'comm-md2-1-goal-csp-5', matchId: 'md2-1', minute: "60+1'", text: "⚽ GOAL!!! Akindeko Emmanuel scores again! He restores the lead with a sublime effort to bring the score to CSP 3 - 2 STA!", timestamp: "10:31 AM", type: 'goal' },
         { id: 'comm-md2-1-sub-sta-3', matchId: 'md2-1', minute: "60'", text: "🔄 Substitution (STA): Emmanuel Olaoluwa Akintayo makes way for Eki Kelvin Aghoghomena.", timestamp: "10:30 AM", type: 'general' },
         { id: 'comm-md2-1-foul-csp-5', matchId: 'md2-1', minute: "60'", text: "CSP wins a free kick in their own half after a rough tackle.", timestamp: "10:30 AM", type: 'general' },
-        { id: 'comm-md2-1-goal-sta-2', matchId: 'md2-1', minute: "59'", text: "⚽ GOAL!!! Daisi Tioluwanimi gets STA back on level terms with a marvelous strike following a brief CSP corner kick! CSP 2 - 2 STA.", timestamp: "10:29 AM", type: 'goal' },
+        { id: 'comm-md2-1-goal-sta-2', matchId: 'md2-1', minute: "59'", text: "⚽ GOAL!!! Daisi Toluwanimi gets STA back on level terms with a marvelous strike following a brief CSP corner kick! CSP 2 - 2 STA.", timestamp: "10:29 AM", type: 'goal' },
         { id: 'comm-md2-1-corner-csp-4', matchId: 'md2-1', minute: "59'", text: "📐 Corner to CSP.", timestamp: "10:29 AM", type: 'general' },
         { id: 'comm-md2-1-sub-csp-4', matchId: 'md2-1', minute: "56'", text: "🔄 Substitution (CSP): Star man Timilehin Victor walks off to a standing ovation as Omowaye Timothy replaces him.", timestamp: "10:26 AM", type: 'general' },
         { id: 'comm-md2-1-goal-csp-2', matchId: 'md2-1', minute: "55'", text: "⚽ GOAL!!! Akindeko Emmanuel taps it home to put CSP in front! Spectacular goal, CSP 2 - 1 STA.", timestamp: "10:25 AM", type: 'goal' },
@@ -4120,7 +4128,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 * 15' Agbo Peter (STA)
 * 44' Timilehin Victor (CSP)
 * 55' Akindeko Emmanuel (CSP)
-* 59' Daisi Tioluwanimi (STA)
+* 59' Daisi Toluwanimi (STA)
 * 60+1' Akindeko Emmanuel (CSP)
 
 ### 🟨 Yellow Cards
@@ -4318,6 +4326,46 @@ FUTA Champions League Committee`;
       existingDisciplinaryDecision.category = 'Disciplinary Updates';
       existingDisciplinaryDecision.body = disciplinaryDecisionBody;
       existingDisciplinaryDecision.createdAt = '2026-06-21 21:00';
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    }
+
+    // Force inject/update the Disciplinary Committee Decision regarding Momoh Joshua David
+    const existingDisciplinaryDecisionMomoh = loadedNews.find(n => n.id === 'news-disciplinary-momoh');
+    const disciplinaryDecisionMomohBody = `Following a review of the match reports and incidents recorded during the FUTA Champions League fixture between Physics (PHY) and Security, Investment and Management Technology (SIMT), the FCL Disciplinary Committee has reached the following decision regarding the conduct of Momoh Joshua David (SIMT).
+
+The Committee found Momoh Joshua David guilty of using inappropriate and unsporting language towards match officials and opposing players, conduct which falls below the standards of discipline, respect, and sportsmanship expected of all participants in the competition.
+
+Accordingly, the Committee has imposed the following sanctions:
+
+1. A fine of ₦3,000 (Three Thousand Naira only).
+2. A one-match suspension, effective immediately, during which the player shall be ineligible to participate in any official FCL fixture.
+
+The FUTA Champions League remains committed to promoting fair play, mutual respect, and professionalism both on and off the field. All players, officials, and team representatives are reminded that misconduct towards match officials, opponents, or any participant in the competition will attract appropriate disciplinary measures.
+
+This decision takes immediate effect.
+
+Signed,
+FCL Disciplinary Committee
+FUTA Champions League 2026 ⚽🏆`;
+
+    if (!existingDisciplinaryDecisionMomoh) {
+      loadedNews.unshift({
+        id: 'news-disciplinary-momoh',
+        title: '🚨 OFFICIAL STATEMENT ON THE CONDUCT OF MOMOH JOSHUA DAVID (SIMT) DURING THE PHY vs SIMT FIXTURE',
+        featuredImage: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1000',
+        author: 'FCL Disciplinary Committee',
+        category: 'Disciplinary Updates',
+        body: disciplinaryDecisionMomohBody,
+        tags: ['Disciplinary Decision', 'Momoh Joshua David', 'Official Statement', 'SIMT'],
+        isPublished: true,
+        createdAt: '2026-06-22 12:10'
+      });
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    } else {
+      existingDisciplinaryDecisionMomoh.title = '🚨 OFFICIAL STATEMENT ON THE CONDUCT OF MOMOH JOSHUA DAVID (SIMT) DURING THE PHY vs SIMT FIXTURE';
+      existingDisciplinaryDecisionMomoh.category = 'Disciplinary Updates';
+      existingDisciplinaryDecisionMomoh.body = disciplinaryDecisionMomohBody;
+      existingDisciplinaryDecisionMomoh.createdAt = '2026-06-22 12:10';
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
 
@@ -4634,7 +4682,7 @@ FUTA Champions League Committee`;
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v23');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v25');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -4647,7 +4695,8 @@ FUTA Champions League Committee`;
       localStorage.removeItem('fcl_admin_commentaries');
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
-      localStorage.setItem('fcl_reset_2026_ft_v23', 'true');
+      localStorage.removeItem('fcl_admin_news');
+      localStorage.setItem('fcl_reset_2026_ft_v25', 'true');
     }
 
     loadState();
