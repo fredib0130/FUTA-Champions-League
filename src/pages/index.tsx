@@ -4258,7 +4258,7 @@ export function Rankings() {
     <div>
       <PageHeader 
         title="FCL Coefficient Rankings" 
-        subtitle="Departmental Power Index & Pre-Tournament Hierarchy"
+        subtitle="Departmental Power Index & Live Tournament Hierarchy"
       />
       
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
@@ -4271,14 +4271,14 @@ export function Rankings() {
               </div>
               <h3 className="text-2xl font-display italic uppercase tracking-tighter text-white mb-4">Historical Strength</h3>
               <p className="text-sm text-white/50 leading-relaxed italic">
-                “The FCL Coefficient Ranking measures team performance across previous seasons. It reflects consistency, historical strength, and competitive pedigree heading into the 2026 tournament.”
+                “The FCL Team Coefficient Ranking is updated live since the commencement of the 2026 Tournament. It reflects consistency, performance in the 2026 season, and historical strength.”
               </p>
             </div>
 
             <div className="p-8 glass rounded-[32px] border border-primary/20 bg-primary/5">
               <h4 className="text-[10px] font-black text-primary uppercase tracking-widest mb-4">Seeding Note</h4>
               <p className="text-[10px] text-white/40 leading-relaxed uppercase tracking-widest italic font-bold">
-                *FCL Team Coefficient Ranking was calculated before the commencement of the 2026 Tournament*
+                *FCL Team Coefficient Ranking is updated live since the commencement of the 2026 Tournament*
               </p>
             </div>
           </aside>

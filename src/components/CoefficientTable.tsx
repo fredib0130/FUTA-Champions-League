@@ -11,6 +11,15 @@ interface CoefficientTableProps {
   highlightTop?: boolean;
 }
 
+const getMovementDescription = (m: string) => {
+  if (m === '🟢⬆️') return 'Improved position';
+  if (m === '🟢⬇️') return 'Position dropped despite active participation';
+  if (m === '🟢➡️') return 'Position unchanged';
+  if (m === '🔴⬇️') return 'Inactive/non-participating team dropped in ranking';
+  if (m === '🔴➡️') return 'Inactive team with unchanged ranking';
+  return 'No movement data';
+};
+
 export const CoefficientTable: React.FC<CoefficientTableProps> = ({ data, limit, highlightTop = true }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState<{ key: keyof CoefficientRanking; direction: 'asc' | 'desc' } | null>({
@@ -106,6 +115,7 @@ export const CoefficientTable: React.FC<CoefficientTableProps> = ({ data, limit,
                   </div>
                 </div>
               </th>
+              <th className="px-6 py-4 text-center">Movement</th>
             </tr>
           </thead>
           <tbody>
@@ -182,6 +192,18 @@ export const CoefficientTable: React.FC<CoefficientTableProps> = ({ data, limit,
                         </div>
                       </div>
                     </td>
+                    <td className="px-6 py-5">
+                      <div className="flex items-center justify-center relative group/movetooltip">
+                        <span className="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-mono text-xs cursor-help transition-all duration-300">
+                          {ranking.movement || '🟢➡️'}
+                        </span>
+                        <div className="absolute bottom-full mb-2 hidden group-hover/movetooltip:block z-50 animate-in fade-in slide-in-from-bottom-1">
+                          <div className="glass px-3 py-1.5 rounded-xl text-[9px] font-bold text-white uppercase tracking-wider whitespace-nowrap border border-white/10 shadow-xl">
+                            {getMovementDescription(ranking.movement || '🟢➡️')}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
                   </motion.tr>
                 );
               })}
@@ -190,24 +212,39 @@ export const CoefficientTable: React.FC<CoefficientTableProps> = ({ data, limit,
         </table>
       </div>
       
-      <div className="flex flex-col sm:flex-row items-center justify-between p-8 glass rounded-[32px] border border-white/5 bg-white/[0.01] gap-6">
-        <div className="flex items-start space-x-4">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-8 glass rounded-[32px] border border-white/5 bg-white/[0.01] gap-6">
+        <div className="flex items-start space-x-4 max-w-lg">
           <div className="p-2 bg-primary/10 rounded-lg shrink-0">
             <Info className="text-primary w-5 h-5" />
           </div>
           <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest leading-relaxed">
-            *FCL Team Coefficient Ranking was calculated before the commencement of the 2026 Tournament. <br />
-            Higher coefficient = stronger historical performance and elite seeding.
+            *FCL Team Coefficient Ranking is updated live since the commencement of the 2026 Tournament. <br />
+            Higher coefficient = stronger performance and elite seeding.
           </p>
         </div>
-        <div className="flex space-x-8">
-          <div className="flex items-center space-x-3">
-            <div className="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.4)]" />
-            <span className="text-[10px] font-black text-white/40 uppercase tracking-widest leading-none">2026 Contributor</span>
-          </div>
-          <div className="flex items-center space-x-3">
-            <div className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.4)]" />
-            <span className="text-[10px] font-black text-white/40 uppercase tracking-widest leading-none">Legacy Points</span>
+        <div className="flex flex-col gap-2.5 max-w-md w-full md:w-auto">
+          <span className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1 block">Movement Legend</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+            <div className="flex items-center space-x-2">
+              <span className="font-mono text-xs">🟢⬆️</span>
+              <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Improved Position</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="font-mono text-xs">🟢⬇️</span>
+              <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Dropped (Active)</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="font-mono text-xs">🟢➡️</span>
+              <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Position Unchanged</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="font-mono text-xs">🔴⬇️</span>
+              <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Dropped (Inactive)</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="font-mono text-xs">🔴➡️</span>
+              <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Inactive Unchanged</span>
+            </div>
           </div>
         </div>
       </div>

@@ -119,6 +119,7 @@ export interface CoefficientRanking {
   points2025: number;
   totalCoefficient: number;
   isActive: boolean; // green indicator if true, red if false
+  movement?: string;
 }
 
 export interface Sponsor {
