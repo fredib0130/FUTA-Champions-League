@@ -12,11 +12,9 @@ interface CoefficientTableProps {
 }
 
 const getMovementDescription = (m: string) => {
-  if (m === '🟢⬆️') return 'Improved position';
-  if (m === '🟢⬇️') return 'Position dropped despite active participation';
-  if (m === '🟢➡️') return 'Position unchanged';
-  if (m === '🔴⬇️') return 'Inactive/non-participating team dropped in ranking';
-  if (m === '🔴➡️') return 'Inactive team with unchanged ranking';
+  if (m === '⬆️' || m === '🟢⬆️') return 'Improved position';
+  if (m === '⬇️' || m === '🟢⬇️' || m === '🔴⬇️') return 'Position dropped';
+  if (m === '➡️' || m === '🟢➡️' || m === '🔴➡️') return 'Position unchanged';
   return 'No movement data';
 };
 
@@ -195,11 +193,11 @@ export const CoefficientTable: React.FC<CoefficientTableProps> = ({ data, limit,
                     <td className="px-6 py-5">
                       <div className="flex items-center justify-center relative group/movetooltip">
                         <span className="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-mono text-xs cursor-help transition-all duration-300">
-                          {ranking.movement || '🟢➡️'}
+                          {ranking.movement || '➡️'}
                         </span>
                         <div className="absolute bottom-full mb-2 hidden group-hover/movetooltip:block z-50 animate-in fade-in slide-in-from-bottom-1">
                           <div className="glass px-3 py-1.5 rounded-xl text-[9px] font-bold text-white uppercase tracking-wider whitespace-nowrap border border-white/10 shadow-xl">
-                            {getMovementDescription(ranking.movement || '🟢➡️')}
+                            {getMovementDescription(ranking.movement || '➡️')}
                           </div>
                         </div>
                       </div>
@@ -224,26 +222,18 @@ export const CoefficientTable: React.FC<CoefficientTableProps> = ({ data, limit,
         </div>
         <div className="flex flex-col gap-2.5 max-w-md w-full md:w-auto">
           <span className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1 block">Movement Legend</span>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-2">
             <div className="flex items-center space-x-2">
-              <span className="font-mono text-xs">🟢⬆️</span>
+              <span className="font-mono text-xs">⬆️</span>
               <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Improved Position</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="font-mono text-xs">🟢⬇️</span>
-              <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Dropped (Active)</span>
+              <span className="font-mono text-xs">⬇️</span>
+              <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Position Dropped</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="font-mono text-xs">🟢➡️</span>
+              <span className="font-mono text-xs">➡️</span>
               <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Position Unchanged</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span className="font-mono text-xs">🔴⬇️</span>
-              <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Dropped (Inactive)</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span className="font-mono text-xs">🔴➡️</span>
-              <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Inactive Unchanged</span>
             </div>
           </div>
         </div>
