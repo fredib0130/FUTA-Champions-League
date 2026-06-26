@@ -584,16 +584,16 @@ export const MATCHES: Match[] = [
   { id: 'md2-10', homeTeam: 'PHY', awayTeam: 'SIMT', date: '2026-06-21', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 2, referee: 'Victor (ESM)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Oweazim Chukwudumebi' },
 
   // --- MATCHDAY 3 (June 27 - 28) ---
-  { id: 'md3-1', homeTeam: 'MST', awayTeam: 'SIMT', date: '2026-06-27', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-2', homeTeam: 'ENT', awayTeam: 'MBBS', date: '2026-06-27', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-3', homeTeam: 'PHS', awayTeam: 'BCH', date: '2026-06-27', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-4', homeTeam: 'ICE', awayTeam: 'FWT', date: '2026-06-27', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 3, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3, walkover: true, referee: 'Administrative Walkover', refereeAssigned: true, matchApproved: true, note: 'Walkover due to FWT Disqualification' },
-  { id: 'md3-5', homeTeam: 'BDG', awayTeam: 'ANA', date: '2026-06-27', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-6', homeTeam: 'CSP', awayTeam: 'CYS', date: '2026-06-28', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-7', homeTeam: 'IFS', awayTeam: 'STA', date: '2026-06-28', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-8', homeTeam: 'PHY', awayTeam: 'AGP', date: '2026-06-28', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-9', homeTeam: 'MCB', awayTeam: 'IDD', date: '2026-06-28', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-10', homeTeam: 'APH', awayTeam: 'AGE', date: '2026-06-28', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-1', homeTeam: 'PHY', awayTeam: 'AGP', date: '2026-06-27', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-2', homeTeam: 'PHS', awayTeam: 'BCH', date: '2026-06-27', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-3', homeTeam: 'CSP', awayTeam: 'CYS', date: '2026-06-27', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-4', homeTeam: 'IFS', awayTeam: 'STA', date: '2026-06-27', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-5', homeTeam: 'MCB', awayTeam: 'IDD', date: '2026-06-27', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-6', homeTeam: 'MST', awayTeam: 'SIMT', date: '2026-06-27', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-7', homeTeam: 'ICE', awayTeam: 'FWT', date: '2026-06-28', time: '12:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 3, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3, walkover: true, referee: 'Administrative Walkover', refereeAssigned: true, matchApproved: true, note: 'Walkover due to FWT Disqualification' },
+  { id: 'md3-8', homeTeam: 'APH', awayTeam: 'AGE', date: '2026-06-28', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-9', homeTeam: 'ENT', awayTeam: 'MBBS', date: '2026-06-28', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-10', homeTeam: 'BDG', awayTeam: 'ANA', date: '2026-06-28', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
 ];
 
 export const NEWS: NewsPost[] = [
