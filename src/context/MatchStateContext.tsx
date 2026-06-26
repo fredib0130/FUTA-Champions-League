@@ -1630,17 +1630,17 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         ],
         status: 'Approved'
       },
-      away: loadedLineups['md1-1']?.away || {
+      away: {
         matchId: 'md1-1',
         teamAbbr: 'ICE',
         formation: '4-4-2',
-        captainId: 'player-12',
+        captainId: 'player-ice-prosper',
         players: {
-          'GK': 'player-12', 'LB': 'player-13', 'CB1': 'player-14', 'CB2': 'player-15', 'RB': 'player-16',
-          'LM': 'player-17', 'CM1': 'player-18', 'CM2': 'player-19', 'RM': 'player-20', 'ST1': 'player-21', 'ST2': 'player-22'
+          'GK': 'player-ice-prosper', 'LB': 'player-13', 'CB1': 'player-14', 'CB2': 'player-15', 'RB': 'player-16',
+          'LM': 'player-17', 'CM1': 'player-ice-samson', 'CM2': 'player-19', 'RM': 'player-20', 'ST1': 'player-21', 'ST2': 'player-22'
         },
-        bench: ['Tunde Williams', 'David Alaba', 'Davido', 'Asake', 'Rema'],
-        status: 'Pending'
+        bench: ['Bamidele Usman', 'Tunde Williams', 'David Alaba', 'Davido', 'Asake', 'Rema'],
+        status: 'Approved'
       }
     };
 
@@ -2169,6 +2169,87 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'player-fwt-19', // Sanusi Olaitan John
           'player-fwt-20'  // Olalekan Hammed Olajuwon
         ],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['md1-6'] = {
+      home: {
+        matchId: 'md1-6',
+        teamAbbr: 'IFS',
+        formation: '4-3-3',
+        captainId: 'player-ifs-1',
+        players: {
+          'GK': 'player-ifs-1', 'LB': 'player-ifs-3', 'CB1': 'player-ifs-4', 'CB2': 'player-ifs-5', 'RB': 'player-ifs-6',
+          'DM': 'player-ifs-11', 'CM1': 'player-ifs-12', 'CM2': 'player-ifs-13', 'LW': 'player-ifs-16', 'ST': 'player-ifs-17', 'RW': 'player-ifs-18'
+        },
+        bench: [],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'md1-6',
+        teamAbbr: 'CSP',
+        formation: '4-3-3',
+        captainId: 'player-csp-ademide',
+        players: {
+          'GK': 'player-csp-gk', 'LB': 'player-csp-lb', 'CB1': 'player-csp-cb1', 'CB2': 'player-csp-cb2', 'RB': 'player-csp-rb',
+          'DM': 'player-csp-dm', 'CM1': 'player-csp-akindeko', 'CM2': 'player-csp-adedara', 'LW': 'player-csp-lw', 'ST': 'player-csp-ademide', 'RW': 'player-csp-rw'
+        },
+        bench: [],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['md2-1'] = {
+      home: {
+        matchId: 'md2-1',
+        teamAbbr: 'CSP',
+        formation: '4-3-3',
+        captainId: 'player-csp-ademide',
+        players: {
+          'GK': 'player-csp-gk', 'LB': 'player-csp-lb', 'CB1': 'player-csp-cb1', 'CB2': 'player-csp-cb2', 'RB': 'player-csp-rb',
+          'DM': 'player-csp-dm', 'CM1': 'player-csp-akindeko', 'CM2': 'player-csp-adedara', 'LW': 'player-csp-lw', 'ST': 'player-csp-ademide', 'RW': 'player-csp-rw'
+        },
+        bench: [],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'md2-1',
+        teamAbbr: 'STA',
+        formation: '4-3-3',
+        captainId: 'player-sta-3',
+        players: {
+          'GK': 'player-sta-1', 'LB': 'player-sta-10', 'CB1': 'player-sta-5', 'CB2': 'player-sta-4', 'RB': 'player-sta-3',
+          'LCM': 'player-sta-13', 'DM': 'player-sta-18', 'RCM': 'player-sta-14', 'LW': 'player-sta-23', 'CF': 'player-sta-22', 'RW': 'player-sta-19'
+        },
+        bench: [],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['md2-4'] = {
+      home: {
+        matchId: 'md2-4',
+        teamAbbr: 'ICE',
+        formation: '4-3-3',
+        captainId: 'player-ice-prosper',
+        players: {
+          'GK': 'player-ice-prosper', 'LB': 'player-ice-lb', 'CB1': 'player-ice-cb1', 'CB2': 'player-ice-cb2', 'RB': 'player-ice-rb',
+          'DM': 'player-ice-dm', 'CM1': 'player-ice-usman', 'CM2': 'player-ice-cm2', 'LW': 'player-ice-lw', 'ST': 'player-ice-samson', 'RW': 'player-ice-rw'
+        },
+        bench: [],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'md2-4',
+        teamAbbr: 'BCH',
+        formation: '4-3-3',
+        captainId: 'player-bch-captain',
+        players: {
+          'GK': 'player-bch-1', 'LB': 'player-bch-2', 'CB1': 'player-bch-3', 'CB2': 'player-bch-4', 'RB': 'player-bch-5',
+          'DM': 'player-bch-6', 'CM1': 'player-bch-7', 'CM2': 'player-bch-8', 'LW': 'player-bch-9', 'ST': 'player-bch-10', 'RW': 'player-bch-11'
+        },
+        bench: [],
         status: 'Approved'
       }
     };
@@ -4682,7 +4763,7 @@ FUTA Champions League 2026 ⚽🏆`;
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v25');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v26');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -4696,7 +4777,7 @@ FUTA Champions League 2026 ⚽🏆`;
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
       localStorage.removeItem('fcl_admin_news');
-      localStorage.setItem('fcl_reset_2026_ft_v25', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v26', 'true');
     }
 
     loadState();
