@@ -422,10 +422,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.manOfTheMatch !== official.manOfTheMatch ||
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
-            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4') && m.status !== official.status) // Sync status specifically for matchday 1, 2 and FWT Walkover
+            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1') && m.status !== official.status) // Sync status specifically for matchdays
           ) {
             loadedMatches[index] = {
               ...m,
@@ -438,12 +438,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               refereeAssigned: official.refereeAssigned,
               matchApproved: official.matchApproved,
               officialsPanel: official.officialsPanel,
-              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4') ? official.status : m.status,
+              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1') ? official.status : m.status,
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4'].includes(official.id) ? official.awayScore : m.awayScore
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1'].includes(official.id) ? official.awayScore : m.awayScore
             };
             updated = true;
           }
@@ -997,6 +997,152 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       homeFreeKicks: 5,
       awayFreeKicks: 2
     };
+
+    // CSP vs CYS (md3-3)
+    loadedStats['md3-3'] = {
+      matchId: 'md3-3',
+      cornersHome: 6,
+      cornersAway: 1,
+      yellowCardsHome: 2,
+      yellowCardsAway: 0,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      foulsHome: 8,
+      foulsAway: 10,
+      offsidesHome: 4,
+      offsidesAway: 2,
+      freeKicksHome: 10,
+      freeKicksAway: 8,
+      homeCorners: 6,
+      awayCorners: 1,
+      homeYellowCards: 2,
+      awayYellowCards: 0,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 4,
+      awayOffsides: 2,
+      homeFouls: 8,
+      awayFouls: 10,
+      homeFreeKicks: 10,
+      awayFreeKicks: 8
+    };
+
+    // IFS vs STA (md3-4)
+    loadedStats['md3-4'] = {
+      matchId: 'md3-4',
+      cornersHome: 4,
+      cornersAway: 3,
+      yellowCardsHome: 0,
+      yellowCardsAway: 3,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      foulsHome: 8,
+      foulsAway: 11,
+      offsidesHome: 2,
+      offsidesAway: 1,
+      freeKicksHome: 11,
+      freeKicksAway: 8,
+      homeCorners: 4,
+      awayCorners: 3,
+      homeYellowCards: 0,
+      awayYellowCards: 3,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 2,
+      awayOffsides: 1,
+      homeFouls: 8,
+      awayFouls: 11,
+      homeFreeKicks: 11,
+      awayFreeKicks: 8
+    };
+
+    // MST vs SIMT (md3-6)
+    loadedStats['md3-6'] = {
+      matchId: 'md3-6',
+      cornersHome: 11,
+      cornersAway: 1,
+      yellowCardsHome: 1,
+      yellowCardsAway: 6,
+      redCardsHome: 1,
+      redCardsAway: 1,
+      foulsHome: 3,
+      foulsAway: 12,
+      offsidesHome: 3,
+      offsidesAway: 0,
+      freeKicksHome: 11,
+      freeKicksAway: 6,
+      homeCorners: 11,
+      awayCorners: 1,
+      homeYellowCards: 1,
+      awayYellowCards: 6,
+      homeRedCards: 1,
+      awayRedCards: 1,
+      homeOffsides: 3,
+      awayOffsides: 0,
+      homeFouls: 3,
+      awayFouls: 12,
+      homeFreeKicks: 11,
+      awayFreeKicks: 6
+    };
+
+    // PHS vs BCH (md3-2)
+    loadedStats['md3-2'] = {
+      matchId: 'md3-2',
+      cornersHome: 0,
+      cornersAway: 0,
+      yellowCardsHome: 1,
+      yellowCardsAway: 1,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      foulsHome: 0,
+      foulsAway: 0,
+      offsidesHome: 0,
+      offsidesAway: 0,
+      freeKicksHome: 0,
+      freeKicksAway: 0,
+      homeCorners: 0,
+      awayCorners: 0,
+      homeYellowCards: 1,
+      awayYellowCards: 1,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 0,
+      awayOffsides: 0,
+      homeFouls: 0,
+      awayFouls: 0,
+      homeFreeKicks: 0,
+      awayFreeKicks: 0
+    };
+
+    // PHY vs AGP (md3-1)
+    loadedStats['md3-1'] = {
+      matchId: 'md3-1',
+      cornersHome: 0,
+      cornersAway: 0,
+      yellowCardsHome: 0,
+      yellowCardsAway: 0,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      foulsHome: 0,
+      foulsAway: 0,
+      offsidesHome: 0,
+      offsidesAway: 0,
+      freeKicksHome: 0,
+      freeKicksAway: 0,
+      homeCorners: 0,
+      awayCorners: 0,
+      homeYellowCards: 0,
+      awayYellowCards: 0,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 0,
+      awayOffsides: 0,
+      homeFouls: 0,
+      awayFouls: 0,
+      homeFreeKicks: 0,
+      awayFreeKicks: 0
+    };
+
     localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
 
     setDetailedStats(loadedStats);
@@ -1326,6 +1472,54 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
+
+    if (!loadedGoals.some(g => g.matchId === 'md3-3')) {
+      loadedGoals.push(
+        { id: 'goal-md3-3-olamijulo-46', matchId: 'md3-3', playerName: 'Olamijulo Israel Damilare', team: 'CYS', minute: "46'", type: 'Goal' },
+        { id: 'goal-md3-3-olorunfemi-52', matchId: 'md3-3', playerName: 'Olorunfemi Taiwo James', team: 'CYS', minute: "52'", type: 'Goal' },
+        { id: 'goal-md3-3-bello-64', matchId: 'md3-3', playerName: 'Bello Daniel Damilare', team: 'CYS', minute: "60+4'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md3-4')) {
+      loadedGoals.push(
+        { id: 'goal-md3-4-bello-24', matchId: 'md3-4', playerName: 'Bello Riliwan Remilekun', team: 'STA', minute: "24'", type: 'Goal' },
+        { id: 'goal-md3-4-adeola-41', matchId: 'md3-4', playerName: 'Adewale Adeola Samuel', team: 'IFS', minute: "41'", type: 'Goal' },
+        { id: 'goal-md3-4-agbo-45', matchId: 'md3-4', playerName: 'Agbo Peter', team: 'STA', minute: "45'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md3-6')) {
+      loadedGoals.push(
+        { id: 'goal-md3-6-sydney-25', matchId: 'md3-6', playerName: 'Nkemjika Sydney', team: 'MST', minute: "25'", type: 'Penalty' },
+        { id: 'goal-md3-6-sydney-34', matchId: 'md3-6', playerName: 'Nkemjika Sydney', team: 'MST', minute: "34'", type: 'Goal' },
+        { id: 'goal-md3-6-sydney-45', matchId: 'md3-6', playerName: 'Nkemjika Sydney', team: 'MST', minute: "45'", type: 'Goal' },
+        { id: 'goal-md3-6-boyede-46', matchId: 'md3-6', playerName: 'Boyede Joseph Ayomide', team: 'MST', minute: "46'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md3-2')) {
+      loadedGoals.push(
+        { id: 'goal-md3-2-peter-25', matchId: 'md3-2', playerName: 'Peter', team: 'BCH', minute: "25'", type: 'Goal' },
+        { id: 'goal-md3-2-eagle-30', matchId: 'md3-2', playerName: 'Eagle', team: 'BCH', minute: "30'", type: 'Goal' },
+        { id: 'goal-md3-2-isreal-42', matchId: 'md3-2', playerName: 'Isreal', team: 'PHS', minute: "42'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md3-1')) {
+      loadedGoals.push(
+        { id: 'goal-md3-1-olasunkanmi-7', matchId: 'md3-1', playerName: 'Olasunkanmi Michael', team: 'AGP', minute: "7'", type: 'Goal' },
+        { id: 'goal-md3-1-uduak-25', matchId: 'md3-1', playerName: 'Uduak Abasi', team: 'PHY', minute: "25'", type: 'Goal' },
+        { id: 'goal-md3-1-christian-42', matchId: 'md3-1', playerName: 'Iyenagbe Christian', team: 'PHY', minute: "42'", type: 'Goal' },
+        { id: 'goal-md3-1-olasunkanmi-60', matchId: 'md3-1', playerName: 'Olasunkanmi Michael', team: 'AGP', minute: "60'", type: 'Penalty' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -1419,7 +1613,31 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       // BDG vs FWT Cards (md2-9)
       { id: 'card-md2-9-arowolo-15', matchId: 'md2-9', playerName: 'Arowolo Gideon', teamAbbr: 'BDG', minute: "15'", type: 'Yellow' },
       { id: 'card-md2-9-famuwagun-22', matchId: 'md2-9', playerName: 'Famuwagun Tomiwa Young', teamAbbr: 'FWT', minute: "22'", type: 'Yellow' },
-      { id: 'card-md2-9-tiamiyu-44', matchId: 'md2-9', playerName: 'Tiamiyu Samuel Temitope', teamAbbr: 'FWT', minute: "44'", type: 'Yellow' }
+      { id: 'card-md2-9-tiamiyu-44', matchId: 'md2-9', playerName: 'Tiamiyu Samuel Temitope', teamAbbr: 'FWT', minute: "44'", type: 'Yellow' },
+
+      // CSP vs CYS Cards (md3-3)
+      { id: 'card-md3-3-akindeko-25', matchId: 'md3-3', playerName: 'Akindeko Emmanuel', teamAbbr: 'CSP', minute: "25'", type: 'Yellow' },
+      { id: 'card-md3-3-pelumi-43', matchId: 'md3-3', playerName: 'Pelumi', teamAbbr: 'CSP', minute: "43'", type: 'Yellow' },
+
+      // IFS vs STA Cards (md3-4)
+      { id: 'card-md3-4-bello-30', matchId: 'md3-4', playerName: 'Bello Riliwan Remilekun', teamAbbr: 'STA', minute: "30'", type: 'Yellow' },
+      { id: 'card-md3-4-oladimeji-45', matchId: 'md3-4', playerName: 'Salam Rokeeb Oladimeji', teamAbbr: 'STA', minute: "45'", type: 'Yellow' },
+      { id: 'card-md3-4-praise-51', matchId: 'md3-4', playerName: 'Afilaka Praise Temidayo', teamAbbr: 'STA', minute: "51'", type: 'Yellow' },
+
+      // MST vs SIMT Cards (md3-6)
+      { id: 'card-md3-6-coach-8', matchId: 'md3-6', playerName: 'Asinwa Peter Adeleke (Coach)', teamAbbr: 'SIMT', minute: "8'", type: 'Yellow' },
+      { id: 'card-md3-6-iyare-14', matchId: 'md3-6', playerName: 'Iyare Praise', teamAbbr: 'MST', minute: "14'", type: 'Yellow' },
+      { id: 'card-md3-6-adewopo-15', matchId: 'md3-6', playerName: 'Adewopo Feranmi', teamAbbr: 'SIMT', minute: "15'", type: 'Yellow' },
+      { id: 'card-md3-6-daniel-y1', matchId: 'md3-6', playerName: 'Nwabunwanne Chibichi Daniel', teamAbbr: 'SIMT', minute: "35'", type: 'Yellow' },
+      { id: 'card-md3-6-daniel-r', matchId: 'md3-6', playerName: 'Nwabunwanne Chibichi Daniel', teamAbbr: 'SIMT', minute: "35'", type: 'Red' },
+      { id: 'card-md3-6-adeyemi-r', matchId: 'md3-6', playerName: 'Adeyemi Adedayo Ibrahim', teamAbbr: 'MST', minute: "35'", type: 'Red' },
+      { id: 'card-md3-6-joshua-51', matchId: 'md3-6', playerName: 'Emmanuel Oluwapamilerin Joshua', teamAbbr: 'SIMT', minute: "51'", type: 'Yellow' },
+      { id: 'card-md3-6-ogboye-57', matchId: 'md3-6', playerName: 'Ogboye Samuel Oluwaponmile', teamAbbr: 'SIMT', minute: "57'", type: 'Yellow' },
+      { id: 'card-md3-6-omowale-58', matchId: 'md3-6', playerName: 'Omowale Ridwan Gbolahun', teamAbbr: 'SIMT', minute: "58'", type: 'Yellow' },
+
+      // PHS vs BCH Cards (md3-2)
+      { id: 'card-md3-2-peter-y', matchId: 'md3-2', playerName: 'Peter', teamAbbr: 'BCH', minute: "20'", type: 'Yellow' },
+      { id: 'card-md3-2-isreal-y', matchId: 'md3-2', playerName: 'Isreal', teamAbbr: 'PHS', minute: "45'", type: 'Yellow' }
     ];
     officialMd1_5Cards.forEach(c => {
       const existingIdx = loadedCards.findIndex(existing => existing.id === c.id);
@@ -2250,6 +2468,114 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'DM': 'player-bch-6', 'CM1': 'player-bch-7', 'CM2': 'player-bch-8', 'LW': 'player-bch-9', 'ST': 'player-bch-10', 'RW': 'player-bch-11'
         },
         bench: [],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['md3-3'] = {
+      home: {
+        matchId: 'md3-3',
+        teamAbbr: 'CSP',
+        formation: '4-3-3',
+        captainId: 'player-csp-ademide',
+        players: {
+          'GK': 'player-csp-gk', 'LB': 'player-csp-lb', 'CB1': 'player-csp-cb1', 'CB2': 'player-csp-cb2', 'RB': 'player-csp-rb',
+          'DM': 'player-csp-dm', 'CM1': 'player-csp-akindeko', 'CM2': 'player-csp-pelumi', 'LW': 'player-csp-lw', 'ST': 'player-csp-ademide', 'RW': 'player-csp-rw'
+        },
+        bench: ['player-csp-adedara'],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'md3-3',
+        teamAbbr: 'CYS',
+        formation: '4-3-3',
+        captainId: 'player-cys-5', // Fashola Oluwatobi Joshua (Captain)
+        players: {
+          'GK': 'player-cys-1',  // Olabode Victor Oluwatosin
+          'LB': 'player-cys-2',  // Adewumi Excel Joshua
+          'CB1': 'player-cys-3', // Kadri Taofeek Akorede
+          'CB2': 'player-cys-4', // Raji Jubril Olarewaju
+          'RB': 'player-cys-5',  // Fashola Oluwatobi Joshua
+          'DM1': 'player-cys-8', // Onah Caleb Igoche
+          'DM2': 'player-cys-6', // Nwoke Isaac Honour
+          'LW': 'player-cys-21', // Bello Daniel Damilare
+          'AMF': 'player-cys-18', // Olamijulo Israel Damilare
+          'CF': 'player-cys-22', // Olorunfemi Taiwo James
+          'RW': 'player-cys-11'  // Akinyede Allen Oluwaferanmi
+        },
+        bench: ['player-cys-19', 'player-cys-15'],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['md3-4'] = {
+      home: {
+        matchId: 'md3-4',
+        teamAbbr: 'IFS',
+        formation: '4-3-3',
+        captainId: 'player-ifs-1',
+        players: {
+          'GK': 'player-ifs-1', 'LB': 'player-ifs-3', 'CB1': 'player-ifs-4', 'CB2': 'player-ifs-5', 'RB': 'player-ifs-6',
+          'DM': 'player-ifs-11', 'CM1': 'player-ifs-12', 'CM2': 'player-ifs-13', 'LW': 'player-ifs-16', 'ST': 'player-ifs-21', 'RW': 'player-ifs-18'
+        },
+        bench: ['player-ifs-22', 'player-ifs-23'],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'md3-4',
+        teamAbbr: 'STA',
+        formation: '4-3-3',
+        captainId: 'player-sta-5',
+        players: {
+          'GK': 'player-sta-1', 'LB': 'player-sta-10', 'CB1': 'player-sta-5', 'CB2': 'player-sta-4', 'RB': 'player-sta-3',
+          'LCM': 'player-sta-13', 'DM': 'player-sta-18', 'RCM': 'player-sta-14', 'LW': 'player-sta-23', 'CF': 'player-sta-22', 'RW': 'player-sta-19'
+        },
+        bench: ['player-sta-20', 'player-sta-21'],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['md3-6'] = {
+      home: {
+        matchId: 'md3-6',
+        teamAbbr: 'MST',
+        formation: '5-2-3',
+        captainId: 'player-mst-2', // Adeyemi Adedayo Ibrahim (Captain)
+        players: {
+          'GK': 'player-mst-1',  // Ogundeji Feyitunmise Hezekiah
+          'RB': 'player-mst-3',  // Akinnayajo Irewale
+          'CB1': 'player-mst-2', // Adeyemi Adedayo Ibrahim (Captain)
+          'CB2': 'player-mst-5', // Bernard Augustine Obioma
+          'CB3': 'player-mst-6', // Philip Believe Oluwashina
+          'LB': 'player-mst-7',  // Adeniyi Ademola Daniel
+          'CM1': 'player-mst-9', // Adediran Olanrewaju Abeeb
+          'CM2': 'player-mst-10',// Iyare Praise
+          'RW': 'player-mst-19', // Akintunde Ayomide Oluwaseyifunmi
+          'CF': 'player-mst-15', // Nkemjika Sydney
+          'LW': 'player-mst-17'  // Boyede Joseph Ayomide
+        },
+        bench: ['player-mst-4', 'player-mst-13'],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'md3-6',
+        teamAbbr: 'SIMT',
+        formation: '4-3-3',
+        captainId: 'player-simt-3', // Adebayo Samuel Ayobami (Captain)
+        players: {
+          'GK': 'player-simt-1',  // Nwabunwanne Chibichi Daniel
+          'LB': 'player-simt-5',  // Momoh Joshua David
+          'LCB': 'player-simt-3', // Adebayo Samuel Ayobami
+          'RCB': 'player-simt-4', // Adeniyi Opeyemi Israel
+          'RB': 'player-simt-8',  // Omolayo Precious Ayomide
+          'LCM': 'player-simt-13', // Kolawole Emmanuel Timilehin
+          'DM': 'player-simt-17', // Adewopo Feranmi
+          'RCM': 'player-simt-14', // Oweazim Chukwudumebi
+          'LW': 'player-simt-19', // Oladapo Isaac Ayomide
+          'CF': 'player-simt-22', // Ipinlaye Samuel Fisayo
+          'RW': 'player-simt-20'  // Emmanuel Oluwapamilerin Joshua
+        },
+        bench: ['player-simt-15', 'player-simt-21', 'player-simt-18', 'player-simt-23'],
         status: 'Approved'
       }
     };
@@ -4000,11 +4326,184 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
+    if (!loadedCommentary['md3-3'] || loadedCommentary['md3-3'].length === 0) {
+      loadedCommentary['md3-3'] = [
+        { id: 'comm-md3-3-ft', matchId: 'md3-3', minute: "60+4'", text: "🏁 FULL-TIME! CSP 0 - 3 CYS. Referee Tosin (MTS) blows the final whistle! An outstanding performance by Computer Science (CYS) as they record a dominant 3-0 victory over Crop Soil and Pest Management (CSP). Olabode Victor Oluwatosin (CYS) is named the Man of the Match!", timestamp: "1:35 PM", type: 'general' },
+        { id: 'comm-md3-3-goal-3', matchId: 'md3-3', minute: "60+4'", text: "⚽ GOAL!!! Bello Daniel Damilare seals a spectacular victory with a third goal deep in stoppage time! Outstanding play by the winger to beat his marker and slide it past the goalkeeper. CSP 0 - 3 CYS.", timestamp: "1:34 PM", type: 'goal' },
+        { id: 'comm-md3-3-goal-2', matchId: 'md3-3', minute: "52'", text: "⚽ GOAL!!! Olorunfemi Taiwo James doubles the lead for CYS! He finds space in the box and buries a stunning shot into the bottom corner! CSP 0 - 2 CYS.", timestamp: "1:22 PM", type: 'goal' },
+        { id: 'comm-md3-3-goal-1', matchId: 'md3-3', minute: "46'", text: "⚽ GOAL!!! Olamijulo Israel Damilare strikes to put CYS ahead right after the break! A crisp finish following a beautiful combination on the left wing! CSP 0 - 1 CYS.", timestamp: "1:16 PM", type: 'goal' },
+        { id: 'comm-md3-3-card-2', matchId: 'md3-3', minute: "43'", text: "🟨 YELLOW CARD! Pelumi (CSP) is booked for pulling back a CYS winger on the counter-attack.", timestamp: "1:13 PM", type: 'card' },
+        { id: 'comm-md3-3-sh', matchId: 'md3-3', minute: "31'", text: "🏁 SECOND HALF gets underway! Both teams are back on the pitch.", timestamp: "1:01 PM", type: 'general' },
+        { id: 'comm-md3-3-ht', matchId: 'md3-3', minute: "30'", text: "⏸️ HALF-TIME! CSP 0 - 0 CYS. A highly competitive and energetic opening half ends goalless at the Mini Pitch.", timestamp: "1:00 PM", type: 'general' },
+        { id: 'comm-md3-3-card-1', matchId: 'md3-3', minute: "25'", text: "🟨 YELLOW CARD! Akindeko Emmanuel (CSP) gets booked for a sliding challenge in midfield.", timestamp: "12:55 PM", type: 'card' },
+        { id: 'comm-md3-3-corner-1', matchId: 'md3-3', minute: "12'", text: "📐 Corner won by CSP. Great defensive block from Raji Jubril to clear the cross.", timestamp: "12:42 PM", type: 'general' },
+        { id: 'comm-md3-3-kickoff', matchId: 'md3-3', minute: "1'", text: "🏁 KICKOFF! FCL Matchday 3 gets underway as CSP takes on CYS at the Mini Pitch. Referee Tosin (MTS) in charge.", timestamp: "12:30 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
+    if (!loadedCommentary['md3-4'] || loadedCommentary['md3-4'].length === 0) {
+      loadedCommentary['md3-4'] = [
+        { id: 'comm-md3-4-ft', matchId: 'md3-4', minute: "60+2'", text: "🏁 FULL-TIME! IFS 1 - 2 STA. Referee Uche (CYS) blows the final whistle! An excellent performance by Statistics (STA) as they secure a hard-fought 2-1 victory over Information Systems (IFS). Daisi Toluwanimi (STA) is named the Man of the Match!", timestamp: "3:05 PM", type: 'general' },
+        { id: 'comm-md3-4-foul-11', matchId: 'md3-4', minute: "60+1'", text: "IFS wins a foul - freekick given. IFS wins a foul in a dangerous midfield area.", timestamp: "3:03 PM", type: 'general' },
+        { id: 'comm-md3-4-handball-2', matchId: 'md3-4', minute: "60+1'", text: "Handball to STA - freekick given to IFS. The referee spotted a deliberate handball.", timestamp: "3:02 PM", type: 'general' },
+        { id: 'comm-md3-4-corner-5', matchId: 'md3-4', minute: "60'", text: "📐 Corner to STA. Pressure builds up for the final minutes of the match.", timestamp: "3:00 PM", type: 'general' },
+        { id: 'comm-md3-4-corner-4', matchId: 'md3-4', minute: "60'", text: "📐 Corner to STA. Great cross from the right flank cleared away by IFS defense.", timestamp: "2:59 PM", type: 'general' },
+        { id: 'comm-md3-4-offside-3', matchId: 'md3-4', minute: "58'", text: "Offside to STA - freekick given to IFS. The linesman raises the flag as the striker was ahead of the defensive line.", timestamp: "2:57 PM", type: 'general' },
+        { id: 'comm-md3-4-handball-1', matchId: 'md3-4', minute: "57'", text: "Handball to IFS - freekick given to STA. Quick set-piece about to be taken.", timestamp: "2:56 PM", type: 'general' },
+        { id: 'comm-md3-4-foul-10', matchId: 'md3-4', minute: "56'", text: "IFS wins a foul - freekick given as the STA defender is penalised for a late push.", timestamp: "2:55 PM", type: 'general' },
+        { id: 'comm-md3-4-card-3', matchId: 'md3-4', minute: "51'", text: "🟨 YELLOW CARD! Afilaka Praise Temidayo (STA) is booked by the referee.", timestamp: "2:51 PM", type: 'card' },
+        { id: 'comm-md3-4-foul-9', matchId: 'md3-4', minute: "51'", text: "IFS wins a foul - freekick given. Another robust block in the center.", timestamp: "2:50 PM", type: 'general' },
+        { id: 'comm-md3-4-corner-3', matchId: 'md3-4', minute: "47'", text: "📐 Corner to IFS. Outswinging corner cleared out with authority.", timestamp: "2:46 PM", type: 'general' },
+        { id: 'comm-md3-4-card-2', matchId: 'md3-4', minute: "45'", text: "🟨 YELLOW CARD! Salam Rokeeb Oladimeji (STA) is booked for a heavy challenge.", timestamp: "2:44 PM", type: 'card' },
+        { id: 'comm-md3-4-goal-3', matchId: 'md3-4', minute: "45'", text: "⚽ GOAL!!! Agbo Peter restores the lead back to STA! A wonderful combination play ends with Peter burying it into the back of the net! IFS 1 - 2 STA.", timestamp: "2:43 PM", type: 'goal' },
+        { id: 'comm-md3-4-foul-8', matchId: 'md3-4', minute: "44'", text: "IFS wins a foul - freekick given as the winger is brought down near the box.", timestamp: "2:42 PM", type: 'general' },
+        { id: 'comm-md3-4-foul-7', matchId: 'md3-4', minute: "43'", text: "IFS wins a foul - freekick given after a hard tackle in midfield.", timestamp: "2:41 PM", type: 'general' },
+        { id: 'comm-md3-4-foul-6', matchId: 'md3-4', minute: "42'", text: "STA wins a foul - freekick given. The referee warns the IFS defender.", timestamp: "2:40 PM", type: 'general' },
+        { id: 'comm-md3-4-goal-2', matchId: 'md3-4', minute: "41'", text: "⚽ GOAL!!! Adewale Adeola Samuel gets IFS back on levels! He finds space in the penalty box and fires a brilliant shot home! IFS 1 - 1 STA.", timestamp: "2:39 PM", type: 'goal' },
+        { id: 'comm-md3-4-offside-2', matchId: 'md3-4', minute: "38'", text: "Offside to IFS - freekick given to STA.", timestamp: "2:36 PM", type: 'general' },
+        { id: 'comm-md3-4-corner-2', matchId: 'md3-4', minute: "34'", text: "📐 Corner to STA. Inswinging ball punched away by the goalkeeper.", timestamp: "2:32 PM", type: 'general' },
+        { id: 'comm-md3-4-foul-5', matchId: 'md3-4', minute: "32'", text: "STA wins a foul - freekick given. High boot spotted by the referee.", timestamp: "2:30 PM", type: 'general' },
+        { id: 'comm-md3-4-offside-1', matchId: 'md3-4', minute: "32'", text: "Offside to IFS - freekick given to STA.", timestamp: "2:29 PM", type: 'general' },
+        { id: 'comm-md3-4-sh', matchId: 'md3-4', minute: "31'", text: "🏁 SECOND HALF starts! Both teams look determined to claim the maximum points.", timestamp: "2:27 PM", type: 'general' },
+        { id: 'comm-md3-4-card-1', matchId: 'md3-4', minute: "30'", text: "🟨 YELLOW CARD! Bello Riliwan Remilekun (STA) gets booked for an aggressive slide tackle.", timestamp: "2:14 PM", type: 'card' },
+        { id: 'comm-md3-4-ht', matchId: 'md3-4', minute: "30'", text: "⏸️ HALF-TIME! IFS 0 - 1 STA. Statistics head into the break with a slim 1-0 lead after a highly energetic first half.", timestamp: "2:13 PM", type: 'general' },
+        { id: 'comm-md3-4-goal-1', matchId: 'md3-4', minute: "24'", text: "⚽ GOAL!!! Bello Riliwan Remilekun gives STA the lead with a sublime strike! Absolute precision! IFS 0 - 1 STA.", timestamp: "2:07 PM", type: 'goal' },
+        { id: 'comm-md3-4-corner-1', matchId: 'md3-4', minute: "22'", text: "📐 Corner to IFS. A cross from the flank is deflected out by STA defense.", timestamp: "2:05 PM", type: 'general' },
+        { id: 'comm-md3-4-foul-4', matchId: 'md3-4', minute: "17'", text: "STA wins a foul - freekick given as the midfielder is tripped.", timestamp: "2:01 PM", type: 'general' },
+        { id: 'comm-md3-4-corner-ifs-2', matchId: 'md3-4', minute: "16'", text: "📐 Corner to IFS. Deep cross cleared at the back post.", timestamp: "2:00 PM", type: 'general' },
+        { id: 'comm-md3-4-corner-ifs-1', matchId: 'md3-4', minute: "14'", text: "📐 Corner to IFS. Brilliant block by STA defender to deny the cross.", timestamp: "1:58 PM", type: 'general' },
+        { id: 'comm-md3-4-foul-3', matchId: 'md3-4', minute: "12'", text: "IFS wins a foul - freekick given in midfield.", timestamp: "1:56 PM", type: 'general' },
+        { id: 'comm-md3-4-foul-2', matchId: 'md3-4', minute: "8'", text: "IFS wins a foul - freekick given as the captain gets pulled down.", timestamp: "1:52 PM", type: 'general' },
+        { id: 'comm-md3-4-foul-1', matchId: 'md3-4', minute: "7'", text: "IFS wins a foul - freekick given near the wing.", timestamp: "1:51 PM", type: 'general' },
+        { id: 'comm-md3-4-foul-ifs-1', matchId: 'md3-4', minute: "5'", text: "IFS wins a foul - freekick given after a late challenge.", timestamp: "1:49 PM", type: 'general' },
+        { id: 'comm-md3-4-foul-sta-2', matchId: 'md3-4', minute: "1'", text: "STA wins a foul - freekick given as the winger gets brought down on the flank.", timestamp: "1:45 PM", type: 'general' },
+        { id: 'comm-md3-4-foul-sta-1', matchId: 'md3-4', minute: "1'", text: "STA wins a foul - freekick given. Quick tactical foul in midfield.", timestamp: "1:44 PM", type: 'general' },
+        { id: 'comm-md3-4-kickoff', matchId: 'md3-4', minute: "1'", text: "🏁 KICKOFF! FCL Matchday 3 continues as IFS goes head-to-head with STA at the Mini Pitch. Referee Uche (CYS) is officiating.", timestamp: "1:43 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
+    if (!loadedCommentary['md3-6'] || loadedCommentary['md3-6'].length === 0) {
+      loadedCommentary['md3-6'] = [
+        { id: 'comm-md3-6-ft', matchId: 'md3-6', minute: "60'", text: "🏁 FULL-TIME! MST 4 - 0 SIMT. Referee Uche (CYS) blows the final whistle! A spectacular and commanding performance by Mathematical Sciences (MST) as they register an emphatic 4-0 victory over Software Engineering (SIMT). Nkemjika Sydney (MST) is named the Man of the Match after a breathtaking hat trick!", timestamp: "6:15 PM", type: 'general' },
+        { id: 'comm-md3-6-card-omowale', matchId: 'md3-6', minute: "58'", text: "🟨 YELLOW CARD! Omowale Ridwan Gbolahun (SIMT) is booked for dissent after arguing with the referee.", timestamp: "6:13 PM", type: 'card' },
+        { id: 'comm-md3-6-foul-12', matchId: 'md3-6', minute: "58'", text: "MST wins a foul - freekick given on the left channel.", timestamp: "6:13 PM", type: 'general' },
+        { id: 'comm-md3-6-card-ogboye', matchId: 'md3-6', minute: "57'", text: "🟨 YELLOW CARD! Ogboye Samuel Oluwaponmile (SIMT) gets a yellow card for a robust sliding challenge.", timestamp: "6:12 PM", type: 'card' },
+        { id: 'comm-md3-6-foul-11', matchId: 'md3-6', minute: "57'", text: "MST wins a foul - freekick given after a late challenge in the center circle.", timestamp: "6:12 PM", type: 'general' },
+        { id: 'comm-md3-6-corner-11', matchId: 'md3-6', minute: "56'", text: "📐 Corner to MST. Cleared away at the near post by the SIMT defense.", timestamp: "6:11 PM", type: 'general' },
+        { id: 'comm-md3-6-corner-10', matchId: 'md3-6', minute: "55'", text: "📐 Corner to MST after a deflection off a defender.", timestamp: "6:10 PM", type: 'general' },
+        { id: 'comm-md3-6-foul-mst-3', matchId: 'md3-6', minute: "54'", text: "SIMT wins a foul - freekick given. MST is penalised for pushing.", timestamp: "6:09 PM", type: 'general' },
+        { id: 'comm-md3-6-foul-10', matchId: 'md3-6', minute: "53'", text: "MST wins a foul - freekick given near the corner flag.", timestamp: "6:08 PM", type: 'general' },
+        { id: 'comm-md3-6-card-joshua', matchId: 'md3-6', minute: "51'", text: "🟨 YELLOW CARD! Emmanuel Oluwapamilerin Joshua (SIMT) is booked for a late trip on the winger.", timestamp: "6:06 PM", type: 'card' },
+        { id: 'comm-md3-6-foul-9', matchId: 'md3-6', minute: "51'", text: "MST wins a foul - freekick given near the penalty box.", timestamp: "6:06 PM", type: 'general' },
+        { id: 'comm-md3-6-foul-8', matchId: 'md3-6', minute: "47'", text: "MST wins a foul - freekick given as Boyede is fouled in midfield.", timestamp: "6:02 PM", type: 'general' },
+        { id: 'comm-md3-6-goal-4', matchId: 'md3-6', minute: "46'", text: "⚽ GOAL!!! Boyede Joseph Ayomide makes it four! He receives a fine pass and places it brilliantly into the far corner! MST 4 - 0 SIMT.", timestamp: "6:01 PM", type: 'goal' },
+        { id: 'comm-md3-6-goal-3', matchId: 'md3-6', minute: "45'", text: "⚽ GOAL!!! HAT TRICK for Nkemjika Sydney! A magnificent performance as he slots home his third of the match to extend the lead! MST 3 - 0 SIMT.", timestamp: "6:00 PM", type: 'goal' },
+        { id: 'comm-md3-6-offside-3', matchId: 'md3-6', minute: "41'", text: "Offside to MST - freekick given to SIMT as the linesman raises his flag.", timestamp: "5:56 PM", type: 'general' },
+        { id: 'comm-md3-6-red-adeyemi', matchId: 'md3-6', minute: "35'", text: "🟥 RED CARD! Adeyemi Adedayo Ibrahim (MST Captain) is also sent off following a serious altercation! Both teams are now down to 10 men!", timestamp: "5:50 PM", type: 'card' },
+        { id: 'comm-md3-6-red-daniel', matchId: 'md3-6', minute: "35'", text: "🟥 RED CARD! Nwabunwanne Chibichi Daniel (SIMT) is shown his second yellow card and is sent off! He receives his match orders!", timestamp: "5:50 PM", type: 'card' },
+        { id: 'comm-md3-6-card-daniel-y1', matchId: 'md3-6', minute: "35'", text: "🟨 YELLOW CARD! Nwabunwanne Chibichi Daniel (SIMT) is booked for a heavy tackle.", timestamp: "5:50 PM", type: 'card' },
+        { id: 'comm-md3-6-goal-2', matchId: 'md3-6', minute: "34'", text: "⚽ GOAL!!! Nkemjika Sydney doubles the lead! A sensational build-up from MST ends with Sydney firing it past the goalkeeper! MST 2 - 0 SIMT.", timestamp: "5:49 PM", type: 'goal' },
+        { id: 'comm-md3-6-corner-9', matchId: 'md3-6', minute: "34'", text: "📐 Corner to MST. Inswinging cross headed away.", timestamp: "5:49 PM", type: 'general' },
+        { id: 'comm-md3-6-foul-7', matchId: 'md3-6', minute: "33'", text: "MST wins a foul - freekick given in midfield.", timestamp: "5:48 PM", type: 'general' },
+        { id: 'comm-md3-6-foul-mst-2', matchId: 'md3-6', minute: "31'", text: "Handball to MST - freekick given to SIMT.", timestamp: "5:46 PM", type: 'general' },
+        { id: 'comm-md3-6-sh', matchId: 'md3-6', minute: "31'", text: "🏁 SECOND HALF gets underway! Both teams are back on the pitch.", timestamp: "5:45 PM", type: 'general' },
+        { id: 'comm-md3-6-ht', matchId: 'md3-6', minute: "30+3'", text: "⏸️ HALF-TIME! MST 1 - 0 SIMT. MST head into the break with a 1-0 lead after a highly energetic and dramatic opening half at the Mini Pitch.", timestamp: "5:33 PM", type: 'general' },
+        { id: 'comm-md3-6-corner-8', matchId: 'md3-6', minute: "30+2'", text: "📐 Corner to MST. Well cleared by the SIMT defenders.", timestamp: "5:32 PM", type: 'general' },
+        { id: 'comm-md3-6-foul-mst-1', matchId: 'md3-6', minute: "30+1'", text: "Handball to MST - freekick given to SIMT.", timestamp: "5:31 PM", type: 'general' },
+        { id: 'comm-md3-6-add-time', matchId: 'md3-6', minute: "29'", text: "⏱️ Two minutes of additional time indicated by the fourth official.", timestamp: "5:29 PM", type: 'general' },
+        { id: 'comm-md3-6-corner-6', matchId: 'md3-6', minute: "29'", text: "📐 Corner to MST. Outswinging delivery headed wide.", timestamp: "5:29 PM", type: 'general' },
+        { id: 'comm-md3-6-corner-7', matchId: 'md3-6', minute: "29'", text: "📐 Corner to MST. Deep cross punched away by the keeper.", timestamp: "5:29 PM", type: 'general' },
+        { id: 'comm-md3-6-foul-6', matchId: 'md3-6', minute: "28'", text: "MST wins a foul - freekick given as the defender is penalised for a pull.", timestamp: "5:28 PM", type: 'general' },
+        { id: 'comm-md3-6-goal-1', matchId: 'md3-6', minute: "25'", text: "⚽ GOAL!!! Nkemjika Sydney steps up and confidently dispatches the penalty! Absolute composure! MST 1 - 0 SIMT.", timestamp: "5:25 PM", type: 'goal' },
+        { id: 'comm-md3-6-foul-5-pen', matchId: 'md3-6', minute: "23'", text: "Handball to SIMT - penalty given to MST! The referee awards a spot-kick for a handball in the box!", timestamp: "5:23 PM", type: 'general' },
+        { id: 'comm-md3-6-foul-4', matchId: 'md3-6', minute: "23'", text: "MST wins a foul - freekick given near the wing.", timestamp: "5:23 PM", type: 'general' },
+        { id: 'comm-md3-6-corner-5', matchId: 'md3-6', minute: "21'", text: "📐 Corner to MST. Deep cross cleared at the back post.", timestamp: "5:21 PM", type: 'general' },
+        { id: 'comm-md3-6-offside-2', matchId: 'md3-6', minute: "20'", text: "Offside to MST - freekick given to SIMT.", timestamp: "5:20 PM", type: 'general' },
+        { id: 'comm-md3-6-foul-3-hand', matchId: 'md3-6', minute: "19'", text: "Handball to SIMT - freekick given to MST.", timestamp: "5:19 PM", type: 'general' },
+        { id: 'comm-md3-6-foul-2', matchId: 'md3-6', minute: "17'", text: "MST wins a foul - freekick given in midfield.", timestamp: "5:17 PM", type: 'general' },
+        { id: 'comm-md3-6-card-adewopo', matchId: 'md3-6', minute: "15'", text: "🟨 YELLOW CARD! Adewopo Feranmi (SIMT) is booked for a late push.", timestamp: "5:15 PM", type: 'card' },
+        { id: 'comm-md3-6-card-iyare', matchId: 'md3-6', minute: "14'", text: "🟨 YELLOW CARD! Iyare Praise (MST) is shown a yellow card for a sliding tackle.", timestamp: "5:14 PM", type: 'card' },
+        { id: 'comm-md3-6-offside-1', matchId: 'md3-6', minute: "10'", text: "Offside to MST - freekick given to SIMT.", timestamp: "5:10 PM", type: 'general' },
+        { id: 'comm-md3-6-foul-1', matchId: 'md3-6', minute: "10'", text: "MST wins a foul - freekick given in a central position.", timestamp: "5:10 PM", type: 'general' },
+        { id: 'comm-md3-6-corner-simt-1', matchId: 'md3-6', minute: "9'", text: "📐 Corner to SIMT. High ball punched away by the keeper.", timestamp: "5:09 PM", type: 'general' },
+        { id: 'comm-md3-6-card-coach', matchId: 'md3-6', minute: "8'", text: "🟨 YELLOW CARD! SIMT Coach Asinwa Peter Adeleke is booked for dissent on the sidelines.", timestamp: "5:08 PM", type: 'card' },
+        { id: 'comm-md3-6-corner-4', matchId: 'md3-6', minute: "8'", text: "📐 Corner to MST. Well blocked by the SIMT defense.", timestamp: "5:08 PM", type: 'general' },
+        { id: 'comm-md3-6-corner-3', matchId: 'md3-6', minute: "4'", text: "📐 Corner to MST. Pressure building early.", timestamp: "5:04 PM", type: 'general' },
+        { id: 'comm-md3-6-corner-2', matchId: 'md3-6', minute: "2'", text: "📐 Corner to MST. Deep cross cleared out.", timestamp: "5:02 PM", type: 'general' },
+        { id: 'comm-md3-6-corner-1', matchId: 'md3-6', minute: "1'", text: "📐 Corner to MST. MST starts on the front foot.", timestamp: "5:01 PM", type: 'general' },
+        { id: 'comm-md3-6-kickoff', matchId: 'md3-6', minute: "1'", text: "🏁 KICKOFF! FCL Matchday 3 gets underway as MST takes on SIMT at the Mini Pitch. Referee Uche (CYS) is in charge.", timestamp: "5:00 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
+    if (!loadedCommentary['md3-2'] || loadedCommentary['md3-2'].length === 0) {
+      loadedCommentary['md3-2'] = [
+        { id: 'comm-md3-2-ft', matchId: 'md3-2', minute: "60'", text: "🏁 FULL-TIME! PHS 1 - 2 BCH. Referee Victor (ESM) blows the final whistle! BCH holds off a late PHS surge to secure their historic first ever FUTA Champions League win! An incredible effort from both squads.", timestamp: "12:15 PM", type: 'general' },
+        { id: 'comm-md3-2-card-isreal', matchId: 'md3-2', minute: "45'", text: "🟨 YELLOW CARD! Isreal (PHS) is booked for an aggressive slide tackle.", timestamp: "12:00 PM", type: 'card' },
+        { id: 'comm-md3-2-goal-isreal', matchId: 'md3-2', minute: "42'", text: "⚽ GOAL!!! Isreal pulls one back for PHS with a spectacular header from a deep cross! Dramatic final minutes ahead! PHS 1 - 2 BCH.", timestamp: "11:57 AM", type: 'goal' },
+        { id: 'comm-md3-2-sh', matchId: 'md3-2', minute: "31'", text: "🏁 SECOND HALF gets underway! Both teams are back on the pitch with BCH leading 2-0.", timestamp: "11:46 AM", type: 'general' },
+        { id: 'comm-md3-2-ht', matchId: 'md3-2', minute: "30'", text: "⏸️ HALF-TIME! PHS 0 - 2 BCH. BCH goes into the break with a well-deserved two-goal lead after clinical finishes from Peter and Eagle.", timestamp: "11:45 AM", type: 'general' },
+        { id: 'comm-md3-2-goal-eagle', matchId: 'md3-2', minute: "30'", text: "⚽ GOAL!!! Eagle doubles the lead for BCH! A brilliant direct strike that leaves the keeper with no chance! PHS 0 - 2 BCH.", timestamp: "11:45 AM", type: 'goal' },
+        { id: 'comm-md3-2-goal-peter', matchId: 'md3-2', minute: "25'", text: "⚽ GOAL!!! Peter gives BCH the lead with a wonderful, clinical finish from the edge of the box! Absolute class! PHS 0 - 1 BCH.", timestamp: "11:40 AM", type: 'goal' },
+        { id: 'comm-md3-2-card-peter', matchId: 'md3-2', minute: "20'", text: "🟨 YELLOW CARD! Peter (BCH) is shown a yellow card for a mistimed challenge in the middle park.", timestamp: "11:35 AM", type: 'card' },
+        { id: 'comm-md3-2-kickoff', matchId: 'md3-2', minute: "1'", text: "🏁 KICKOFF! FCL Matchday 3 continues as PHS takes on BCH at the Mini Pitch. Referee Victor (ESM) blows the whistle to start the match.", timestamp: "11:15 AM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
+    if (!loadedCommentary['md3-1'] || loadedCommentary['md3-1'].length === 0) {
+      loadedCommentary['md3-1'] = [
+        { id: 'comm-md3-1-ft', matchId: 'md3-1', minute: "60+2'", text: "🏁 FULL-TIME! PHY 2 - 2 AGP. A breathtaking match ends in a stalemate as Olasunkanmi Michael's late penalty seals a brace and rescues a vital point for AGP! PHY 2 - 2 AGP.", timestamp: "10:46 AM", type: 'general' },
+        { id: 'comm-md3-1-goal-penalty', matchId: 'md3-1', minute: "60'", text: "⚽ GOAL!!! Olasunkanmi Michael (AGP) calmly slot the penalty into the bottom left corner, completely deceptive to the goalie! PHY 2 - 2 AGP.", timestamp: "10:44 AM", type: 'goal' },
+        { id: 'comm-md3-1-goal-christian', matchId: 'md3-1', minute: "42'", text: "⚽ GOAL!!! Iyenagbe Christian (PHY) fires PHY into the lead with an absolute rocket from the edge of the penalty box! Beautiful assist from Uduak Abasi. PHY 2 - 1 AGP.", timestamp: "10:26 AM", type: 'goal' },
+        { id: 'comm-md3-1-sh', matchId: 'md3-1', minute: "31'", text: "🏁 SECOND HALF KICKOFF! Both teams return with no changes to their lineups.", timestamp: "10:15 AM", type: 'general' },
+        { id: 'comm-md3-1-ht', matchId: 'md3-1', minute: "30'", text: "⏸️ HALF-TIME! PHY 1 - 1 AGP. An intensely balanced first half comes to a close after goals from Olasunkanmi Michael and Uduak Abasi.", timestamp: "10:00 AM", type: 'general' },
+        { id: 'comm-md3-1-goal-uduak', matchId: 'md3-1', minute: "25'", text: "⚽ GOAL!!! Uduak Abasi equalizes for PHY with a powerful, curling shot that nests into the top-right corner! Outstanding piece of individual skill! PHY 1 - 1 AGP.", timestamp: "9:55 AM", type: 'goal' },
+        { id: 'comm-md3-1-goal-olasunkanmi', matchId: 'md3-1', minute: "7'", text: "⚽ GOAL!!! Olasunkanmi Michael opens the scoring early for AGP! A slick cross from the wing is tucked away perfectly! PHY 0 - 1 AGP.", timestamp: "9:37 AM", type: 'goal' },
+        { id: 'comm-md3-1-kickoff', matchId: 'md3-1', minute: "1'", text: "🏁 KICKOFF! FCL Matchday 3 kicks off as PHY takes on AGP at the Mini Pitch. Referee Victor (ESM) blows the whistle to start the encounter.", timestamp: "9:30 AM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
     setCommentaries(loadedCommentary);
 
     // 10. Reports
     const storedReports = localStorage.getItem('fcl_admin_reports');
-    setReports(storedReports ? JSON.parse(storedReports) : {});
+    let loadedReports: Record<string, MatchReport> = storedReports ? JSON.parse(storedReports) : {};
+    if (!loadedReports['md3-2']) {
+      loadedReports['md3-2'] = {
+        matchId: 'md3-2',
+        summary: "BCH secures their first ever FCL win but still unable to secure a spot in the next phase.",
+        playerOfMatch: "N/A",
+        tacticalAnalysis: "BCH dominated key parts of the game to secure their historic first victory, while PHS fought hard but fell short in defensive moments.",
+        keyMoments: [
+          "25' - Peter scores to give BCH the lead.",
+          "30' - Eagle doubles the lead with a neat finish.",
+          "42' - Isreal pulls one back for PHS, but BCH hold on."
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+    if (!loadedReports['md3-1']) {
+      loadedReports['md3-1'] = {
+        matchId: 'md3-1',
+        summary: "PHY and AGP play out an entertaining 2-2 draw on Matchday 3.",
+        playerOfMatch: "Olasunkanmi Michael (AGP)",
+        tacticalAnalysis: "An incredibly competitive match where both sides traded blows. AGP's late penalty earned them a deserved point after PHY had staged a second-half comeback.",
+        keyMoments: [
+          "7' - Olasunkanmi Michael opens the scoring early for AGP.",
+          "25' - Uduak Abasi equalizes for PHY with a brilliant curling shot.",
+          "42' - Iyenagbe Christian puts PHY in front with a powerful strike.",
+          "60' - Olasunkanmi Michael converts a late penalty to seal a brace and rescue a draw."
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+    setReports(loadedReports);
 
     // 11. Timer Cache
     const storedTimers = localStorage.getItem('fcl_admin_timers');
@@ -4049,8 +4548,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       loadedTimers['md1-10'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
-    // Matchday 2 Saturday & Sunday Timers as Finished
-    ['md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-9', 'md2-10'].forEach(id => {
+    // Matchday 2 & 3 Saturdays & Sundays Timers as Finished
+    ['md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-9', 'md2-10', 'md3-3', 'md3-4', 'md3-6', 'md3-2', 'md3-1'].forEach(id => {
       if (!loadedTimers[id] || loadedTimers[id].liveMinute !== "FT") {
         loadedTimers[id] = { liveMinute: "FT", isPaused: true };
       }
@@ -4763,7 +5262,7 @@ FUTA Champions League 2026 ⚽🏆`;
   }, [teams, matches, players]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v26');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v28');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -4777,7 +5276,7 @@ FUTA Champions League 2026 ⚽🏆`;
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
       localStorage.removeItem('fcl_admin_news');
-      localStorage.setItem('fcl_reset_2026_ft_v26', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v28', 'true');
     }
 
     loadState();
