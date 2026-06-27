@@ -422,10 +422,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.manOfTheMatch !== official.manOfTheMatch ||
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
-            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1') && m.status !== official.status) // Sync status specifically for matchdays
+            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5') && m.status !== official.status) // Sync status specifically for matchdays
           ) {
             loadedMatches[index] = {
               ...m,
@@ -438,12 +438,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               refereeAssigned: official.refereeAssigned,
               matchApproved: official.matchApproved,
               officialsPanel: official.officialsPanel,
-              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1') ? official.status : m.status,
+              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5') ? official.status : m.status,
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1'].includes(official.id) ? official.awayScore : m.awayScore
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5'].includes(official.id) ? official.awayScore : m.awayScore
             };
             updated = true;
           }
@@ -1143,6 +1143,35 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       awayFreeKicks: 0
     };
 
+    // MCB vs IDD (md3-5)
+    loadedStats['md3-5'] = {
+      matchId: 'md3-5',
+      cornersHome: 0,
+      cornersAway: 0,
+      yellowCardsHome: 0,
+      yellowCardsAway: 0,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      foulsHome: 0,
+      foulsAway: 0,
+      offsidesHome: 0,
+      offsidesAway: 0,
+      freeKicksHome: 0,
+      freeKicksAway: 0,
+      homeCorners: 0,
+      awayCorners: 0,
+      homeYellowCards: 0,
+      awayYellowCards: 0,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 0,
+      awayOffsides: 0,
+      homeFouls: 0,
+      awayFouls: 0,
+      homeFreeKicks: 0,
+      awayFreeKicks: 0
+    };
+
     localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
 
     setDetailedStats(loadedStats);
@@ -1516,6 +1545,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'goal-md3-1-uduak-25', matchId: 'md3-1', playerName: 'Uduak Abasi', team: 'PHY', minute: "25'", type: 'Goal' },
         { id: 'goal-md3-1-christian-42', matchId: 'md3-1', playerName: 'Iyenagbe Christian', team: 'PHY', minute: "42'", type: 'Goal' },
         { id: 'goal-md3-1-olasunkanmi-60', matchId: 'md3-1', playerName: 'Olasunkanmi Michael', team: 'AGP', minute: "60'", type: 'Penalty' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md3-5')) {
+      loadedGoals.push(
+        { id: 'goal-md3-5-emmy-42', matchId: 'md3-5', playerName: 'Emmy', team: 'IDD', minute: "42'", type: 'Goal' },
+        { id: 'goal-md3-5-oni-51', matchId: 'md3-5', playerName: 'Oni Oluwadamilola', team: 'MCB', minute: "51'", type: 'Penalty' }
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
@@ -4467,6 +4504,18 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
+    if (!loadedCommentary['md3-5'] || loadedCommentary['md3-5'].length === 0) {
+      loadedCommentary['md3-5'] = [
+        { id: 'comm-md3-5-ft', matchId: 'md3-5', minute: "60+1'", text: "🏁 FULL-TIME! MCB 1 - 1 IDD. Referee Uche (CYS) blows the final whistle! A well-contested tactical battle ends in a stalemate as both teams settle for a point.", timestamp: "4:46 PM", type: 'general' },
+        { id: 'comm-md3-5-goal-oni', matchId: 'md3-5', minute: "51'", text: "⚽ GOAL!!! Oni Oluwadamilola (MCB) calmly converts the penalty, leveling the score for MCB! Clinical finishing from the spot! MCB 1 - 1 IDD.", timestamp: "4:37 PM", type: 'goal' },
+        { id: 'comm-md3-5-goal-emmy', matchId: 'md3-5', minute: "42'", text: "⚽ GOAL!!! Emmy breaks the deadlock with a brilliant, clinical strike to put IDD ahead! Magnificent play! MCB 0 - 1 IDD.", timestamp: "4:28 PM", type: 'goal' },
+        { id: 'comm-md3-5-sh', matchId: 'md3-5', minute: "31'", text: "🏁 SECOND HALF KICKOFF! Both sides resume play aiming to make their presence felt.", timestamp: "4:15 PM", type: 'general' },
+        { id: 'comm-md3-5-ht', matchId: 'md3-5', minute: "30'", text: "⏸️ HALF-TIME! MCB 0 - 0 IDD. A highly tactical and defensively solid first half ends goalless.", timestamp: "4:00 PM", type: 'general' },
+        { id: 'comm-md3-5-kickoff', matchId: 'md3-5', minute: "1'", text: "🏁 KICKOFF! FCL Matchday 3 continues as MCB takes on IDD at the Mini Pitch. Referee Uche (CYS) blows the whistle to begin.", timestamp: "3:30 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
     setCommentaries(loadedCommentary);
 
     // 10. Reports
@@ -4498,6 +4547,20 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           "25' - Uduak Abasi equalizes for PHY with a brilliant curling shot.",
           "42' - Iyenagbe Christian puts PHY in front with a powerful strike.",
           "60' - Olasunkanmi Michael converts a late penalty to seal a brace and rescue a draw."
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+    if (!loadedReports['md3-5']) {
+      loadedReports['md3-5'] = {
+        matchId: 'md3-5',
+        summary: "MCB and IDD share the points in a highly contested 1-1 draw.",
+        playerOfMatch: "N/A",
+        tacticalAnalysis: "A tight and defensive display from both squads. IDD broke through in the second half but MCB quickly responded with a penalty to earn a draw.",
+        keyMoments: [
+          "42' - Emmy scores to break the deadlock and give IDD the lead.",
+          "51' - Oni Oluwadamilola converts a penalty to bring MCB level."
         ],
         isPublished: true
       };
@@ -4549,7 +4612,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     // Matchday 2 & 3 Saturdays & Sundays Timers as Finished
-    ['md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-9', 'md2-10', 'md3-3', 'md3-4', 'md3-6', 'md3-2', 'md3-1'].forEach(id => {
+    ['md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-9', 'md2-10', 'md3-3', 'md3-4', 'md3-6', 'md3-2', 'md3-1', 'md3-5'].forEach(id => {
       if (!loadedTimers[id] || loadedTimers[id].liveMinute !== "FT") {
         loadedTimers[id] = { liveMinute: "FT", isPaused: true };
       }

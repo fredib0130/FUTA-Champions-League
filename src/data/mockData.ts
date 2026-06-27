@@ -88,6 +88,7 @@ export const PLAYERS: Player[] = [
   { id: 'player-idd-tolu', name: "Tolu", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-tolu' },
   { id: 'player-idd-neymar', name: "Neymar", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-neymar' },
   { id: 'player-idd-enzo', name: "Enzo", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-enzo' },
+  { id: 'player-idd-emmy', name: "Emmy", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'idd', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=idd-emmy' },
  
   // Registration Base Indexes per team
   ...(() => {
@@ -593,7 +594,7 @@ export const MATCHES: Match[] = [
   { id: 'md3-2', homeTeam: 'PHS', awayTeam: 'BCH', date: '2026-06-27', time: '11:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 2, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Victor (ESM)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'N/A' },
   { id: 'md3-3', homeTeam: 'CSP', awayTeam: 'CYS', date: '2026-06-27', time: '12:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 3, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Tosin (MTS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Olabode Victor Oluwatosin' },
   { id: 'md3-4', homeTeam: 'IFS', awayTeam: 'STA', date: '2026-06-27', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 2, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Uche (CYS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Daisi Toluwanimi' },
-  { id: 'md3-5', homeTeam: 'MCB', awayTeam: 'IDD', date: '2026-06-27', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-5', homeTeam: 'MCB', awayTeam: 'IDD', date: '2026-06-27', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Uche (CYS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'N/A' },
   { id: 'md3-6', homeTeam: 'MST', awayTeam: 'SIMT', date: '2026-06-27', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 4, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Uche (CYS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Nkemjika Sydney' },
   { id: 'md3-7', homeTeam: 'ICE', awayTeam: 'FWT', date: '2026-06-28', time: '12:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 3, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3, walkover: true, referee: 'Administrative Walkover', refereeAssigned: true, matchApproved: true, note: 'Walkover due to FWT Disqualification' },
   { id: 'md3-8', homeTeam: 'APH', awayTeam: 'AGE', date: '2026-06-28', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
