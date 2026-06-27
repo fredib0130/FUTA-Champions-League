@@ -1313,42 +1313,42 @@ export const knockoutStructure = {
       id: "PO1",
       stage: "Playoffs",
       dateRange: "18th June 2026 - 20th June 2026",
-      fixture: "Seeds 3/4 vs Seeds 13/14"
+      fixture: "Seed 3 vs Seed 14"
     },
 
     {
       id: "PO2",
       stage: "Playoffs",
       dateRange: "18th June 2026 - 20th June 2026",
-      fixture: "Seeds 5/6 vs Seeds 11/12"
+      fixture: "Seed 4 vs Seed 13"
     },
 
     {
       id: "PO3",
       stage: "Playoffs",
       dateRange: "18th June 2026 - 20th June 2026",
-      fixture: "Seeds 7/8 vs Seeds 9/10"
+      fixture: "Seed 5 vs Seed 12"
     },
 
     {
       id: "PO4",
       stage: "Playoffs",
       dateRange: "18th June 2026 - 20th June 2026",
-      fixture: "Seeds 3/4 vs Seeds 13/14"
+      fixture: "Seed 6 vs Seed 11"
     },
 
     {
       id: "PO5",
       stage: "Playoffs",
       dateRange: "18th June 2026 - 20th June 2026",
-      fixture: "Seeds 5/6 vs Seeds 11/12"
+      fixture: "Seed 7 vs Seed 10"
     },
 
     {
       id: "PO6",
       stage: "Playoffs",
       dateRange: "18th June 2026 - 20th June 2026",
-      fixture: "Seeds 7/8 vs Seeds 9/10"
+      fixture: "Seed 8 vs Seed 9"
     }
   ],
 
@@ -1356,25 +1356,25 @@ export const knockoutStructure = {
     {
       id: "QF1",
       dateRange: "22nd June 2026 - 23rd June 2026",
-      fixture: "Seed 1 vs PO1"
+      fixture: "Seed 1 vs PO6"
     },
 
     {
       id: "QF2",
       dateRange: "22nd June 2026 - 23rd June 2026",
-      fixture: "Seed 2 vs PO2"
+      fixture: "Seed 2 vs PO5"
     },
 
     {
       id: "QF3",
       dateRange: "22nd June 2026 - 23rd June 2026",
-      fixture: "PO3 vs PO5"
+      fixture: "PO1 vs PO4"
     },
 
     {
       id: "QF4",
       dateRange: "22nd June 2026 - 23rd June 2026",
-      fixture: "PO4 vs PO6"
+      fixture: "PO2 vs PO3"
     }
   ],
 
@@ -1419,7 +1419,63 @@ export function Playoffs() {
   const { teams } = useMatchState();
   const [activeStage, setActiveStage] = React.useState<keyof typeof knockoutStructure>('playoffs');
 
-  const sortedTeams = teams;
+  const sortedTeams = React.useMemo(() => {
+    return [...teams].sort((a, b) => {
+      const isDisqA = a.isDisqualified ? 1 : 0;
+      const isDisqB = b.isDisqualified ? 1 : 0;
+      if (isDisqA !== isDisqB) {
+        return isDisqA - isDisqB;
+      }
+      // 1. points DESC
+      if ((b.points || 0) !== (a.points || 0)) {
+        return (b.points || 0) - (a.points || 0);
+      }
+      // 2. goal_difference DESC
+      const gdA = a.goalDifference !== undefined ? a.goalDifference : (a.goalsFor - a.goalsAgainst);
+      const gdB = b.goalDifference !== undefined ? b.goalDifference : (b.goalsFor - b.goalsAgainst);
+      if (gdB !== gdA) {
+        return gdB - gdA;
+      }
+      // 3. goals_for DESC
+      if ((b.goalsFor || 0) !== (a.goalsFor || 0)) {
+        return (b.goalsFor || 0) - (a.goalsFor || 0);
+      }
+      // 4. goals_against ASC
+      if ((a.goalsAgainst || 0) !== (b.goalsAgainst || 0)) {
+        return (a.goalsAgainst || 0) - (b.goalsAgainst || 0);
+      }
+      // 5. played ASC
+      if ((a.played || 0) !== (b.played || 0)) {
+        return (a.played || 0) - (b.played || 0);
+      }
+      // 6. wins DESC
+      if ((b.won || 0) !== (a.won || 0)) {
+        return (b.won || 0) - (a.won || 0);
+      }
+      // 7. draws DESC
+      if ((b.drawn || 0) !== (a.drawn || 0)) {
+        return (b.drawn || 0) - (a.drawn || 0);
+      }
+      // 8. losses ASC
+      if ((a.lost || 0) !== (b.lost || 0)) {
+        return (a.lost || 0) - (b.lost || 0);
+      }
+      // 9. red_cards ASC
+      const rc_a = a.redCards || 0;
+      const rc_b = b.redCards || 0;
+      if (rc_a !== rc_b) {
+        return rc_a - rc_b;
+      }
+      // 10. yellow_cards ASC
+      const yc_a = a.yellowCards || 0;
+      const yc_b = b.yellowCards || 0;
+      if (yc_a !== yc_b) {
+        return yc_a - yc_b;
+      }
+      // 11. team_name ASC
+      return a.id.localeCompare(b.id);
+    });
+  }, [teams]);
 
   interface DisplayEntity {
     name: string;
@@ -1430,69 +1486,25 @@ export function Playoffs() {
   const resolveEntity = (str: string): DisplayEntity => {
     const trimmed = str.trim();
     
-    // Single seeds
-    if (trimmed === "Seed 1") {
-      const t = sortedTeams[0];
-      return { name: t?.name || "Seed 1", sub: "Group Stage Winner", teamIds: t ? [t.id] : [] };
-    }
-    if (trimmed === "Seed 2") {
-      const t = sortedTeams[1];
-      return { name: t?.name || "Seed 2", sub: "Group Stage Runner-Up", teamIds: t ? [t.id] : [] };
-    }
-    
-    // Grouped seeds
-    if (trimmed.includes("3/4")) {
-      const t1 = sortedTeams[2];
-      const t2 = sortedTeams[3];
-      return { 
-        name: `${t1?.name || "Seed 3"} / ${t2?.name || "Seed 4"}`, 
-        sub: "Rank 3/4 Seeding", 
-        teamIds: [t1?.id, t2?.id].filter(Boolean) as string[] 
+    // Parse Seed X
+    const seedMatch = trimmed.match(/^Seed\s+(\d+)$/i);
+    if (seedMatch) {
+      const idx = parseInt(seedMatch[1], 10) - 1;
+      const t = sortedTeams[idx];
+      const ordinal = (n: number) => {
+        const s = ["th", "st", "nd", "rd"];
+        const v = n % 100;
+        return n + (s[(v - 20) % 10] || s[v] || s[0]);
       };
-    }
-    if (trimmed.includes("5/6")) {
-      const t1 = sortedTeams[4];
-      const t2 = sortedTeams[5];
+      
+      let subText = `${ordinal(idx + 1)} Place Finisher`;
+      if (idx === 0) subText = "Group Stage Winner (Direct QF)";
+      else if (idx === 1) subText = "Group Stage Runner-Up (Direct QF)";
+      
       return { 
-        name: `${t1?.name || "Seed 5"} / ${t2?.name || "Seed 6"}`, 
-        sub: "Rank 5/6 Seeding", 
-        teamIds: [t1?.id, t2?.id].filter(Boolean) as string[] 
-      };
-    }
-    if (trimmed.includes("7/8")) {
-      const t1 = sortedTeams[6];
-      const t2 = sortedTeams[7];
-      return { 
-        name: `${t1?.name || "Seed 7"} / ${t2?.name || "Seed 8"}`, 
-        sub: "Rank 7/8 Seeding", 
-        teamIds: [t1?.id, t2?.id].filter(Boolean) as string[] 
-      };
-    }
-    if (trimmed.includes("9/10")) {
-      const t1 = sortedTeams[8];
-      const t2 = sortedTeams[9];
-      return { 
-        name: `${t1?.name || "Seed 9"} / ${t2?.name || "Seed 10"}`, 
-        sub: "Rank 9/10 Seeding", 
-        teamIds: [t1?.id, t2?.id].filter(Boolean) as string[] 
-      };
-    }
-    if (trimmed.includes("11/12")) {
-      const t1 = sortedTeams[10];
-      const t2 = sortedTeams[11];
-      return { 
-        name: `${t1?.name || "Seed 11"} / ${t2?.name || "Seed 12"}`, 
-        sub: "Rank 11/12 Seeding", 
-        teamIds: [t1?.id, t2?.id].filter(Boolean) as string[] 
-      };
-    }
-    if (trimmed.includes("13/14")) {
-      const t1 = sortedTeams[12];
-      const t2 = sortedTeams[13];
-      return { 
-        name: `${t1?.name || "Seed 13"} / ${t2?.name || "Seed 14"}`, 
-        sub: "Rank 13/14 Seeding", 
-        teamIds: [t1?.id, t2?.id].filter(Boolean) as string[] 
+        name: t?.name || `Seed ${seedMatch[1]}`, 
+        sub: subText, 
+        teamIds: t ? [t.id] : [] 
       };
     }
 
@@ -1538,7 +1550,7 @@ export function Playoffs() {
                 <h4 className="text-white font-bold italic uppercase tracking-widest text-xs">Playoff Matchups</h4>
               </div>
               <p className="text-[10px] text-white/40 uppercase tracking-widest leading-relaxed">
-                3rd/4th vs 13th/14th | 5th/6th vs 11th/12th | 7th/8th vs 9th/10th. Six total single-leg elimination duels.
+                3rd vs 14th | 4th vs 13th | 5th vs 12th | 6th vs 11th | 7th vs 10th | 8th vs 9th. Six total single-leg elimination duels.
               </p>
             </div>
             <div className="space-y-4">
