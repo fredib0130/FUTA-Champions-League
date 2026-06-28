@@ -228,16 +228,16 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       goals_conceded: 0,
     }));
 
-    // Find all finished matches (exclude walkovers to prevent player stats from being counted)
+    // Find all finished or interrupted matches (exclude walkovers to prevent player stats from being counted)
     const finishedMatches = matches.filter(m => {
       const s = m.status.trim().toUpperCase();
-      return (s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED') && !m.walkover;
+      return (s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED' || s === 'INTERRUPTED') && !m.walkover;
     });
 
     // 1. Calculate Goals
     goalScorers.forEach(g => {
       if (g.type !== 'Own Goal') {
-        const matchExists = matches.some(m => m.id === g.matchId && ['FINISHED', 'FULL-TIME', 'FULL TIME', 'COMPLETED', 'LIVE'].includes(m.status.trim().toUpperCase()));
+        const matchExists = matches.some(m => m.id === g.matchId && ['FINISHED', 'FULL-TIME', 'FULL TIME', 'COMPLETED', 'LIVE', 'INTERRUPTED'].includes(m.status.trim().toUpperCase()));
         if (matchExists) {
           const playerObj = basePlayers.find(p => p.id === g.playerName || p.name.toLowerCase() === g.playerName.toLowerCase());
           if (playerObj) {
@@ -249,7 +249,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
     // 2. Calculate Cards (Yellow/Red)
     cards.forEach(c => {
-      const matchExists = matches.some(m => m.id === c.matchId && ['FINISHED', 'FULL-TIME', 'FULL TIME', 'COMPLETED', 'LIVE'].includes(m.status.trim().toUpperCase()));
+      const matchExists = matches.some(m => m.id === c.matchId && ['FINISHED', 'FULL-TIME', 'FULL TIME', 'COMPLETED', 'LIVE', 'INTERRUPTED'].includes(m.status.trim().toUpperCase()));
       if (matchExists) {
         const playerObj = basePlayers.find(p => p.id === c.playerName || p.name.toLowerCase() === c.playerName.toLowerCase());
         if (playerObj) {
@@ -394,7 +394,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       ncd.appealAllowed = false;
     }
 
-    const aai = basePlayers.find(p => p.id === 'player-mst-2' || p.name.toLowerCase() === 'adeyemi adedayo ibrahim');
+    const aai = basePlayers.find(p => p.id === 'player-mst-2' || p.name.toLowerCase() === 'adeyemi adedayo ibrahim' || p.name.toLowerCase() === 'adeyemi adebayo ibrahim');
     if (aai) {
       aai.isSuspended = true;
       aai.suspensionDuration = '1 match remaining';
@@ -4761,7 +4761,9 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     }
     // Matchday 2 & 3 Saturdays & Sundays Timers as Finished
     ['md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-9', 'md2-10', 'md3-3', 'md3-4', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].forEach(id => {
-      if (!loadedTimers[id] || loadedTimers[id].liveMinute !== "FT") {
+      if (id === 'md3-8') {
+        loadedTimers[id] = { liveMinute: "Interrupted (50')", isPaused: true };
+      } else if (!loadedTimers[id] || loadedTimers[id].liveMinute !== "FT") {
         loadedTimers[id] = { liveMinute: "FT", isPaused: true };
       }
     });
@@ -4907,174 +4909,6 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
 
-    // Force inject/update the Matchday 2 Saturday Round-Up
-    const existingOfficialRoundupMd2 = loadedNews.find(n => n.id === 'news-official-roundup-md2-sat');
-    const md2RoundupBody = `### 📍 Venue: FUTA Mini Pitch
-
----
-
-# MD2-1: CSP 3 – 2 STA
-**Referee:** Abraham (MEE)
-### ⚽ Goals
-* 15' Agbo Peter (STA)
-* 44' Timilehin Victor (CSP)
-* 55' Akindeko Emmanuel (CSP)
-* 59' Daisi Toluwanimi (STA)
-* 60+1' Akindeko Emmanuel (CSP)
-
-### 🟨 Yellow Cards
-* Nwachukwu Jesse (STA)
-* Akinjogunla Mayowa (STA)
-* Salam Rokeeb Oladimeji (STA)
-
-### 🏅 Man of the Match
-**Akindeko Emmanuel (CSP)**
-
-### 📈 Match Impact
-* CSP remain unbeaten.
-* CSP become the first team to officially qualify for the Knockout Stage.
-* Akindeko Emmanuel records:
-  * APPS: +1
-  * GOALS: +2
-  * Assists (match report): 1
-
----
-
-# MD2-2: APH 0 – 1 IDD
-**Referee:** Abraham (MEE)
-### ⚽ Goal
-* 54' Ikudayisi Oyesola (Penalty)
-
-### 🟨 Yellow Cards
-* Olajide Gabriel (APH)
-* Aremu Stone (APH)
-* Adebamibola Emmanuel (IDD)
-* Awosoji Ifeoluwa Emmanuel (IDD)
-* Ridwan Akinwekomi (APH)
-
-### 🟥 Red Cards
-* Olajide Gabriel (APH) – Second Yellow (38')
-
-### 🏅 Man of the Match
-**Ikudayisi Oyesola (IDD)**
-
-### 📈 Match Impact
-IDD make it:
-* Played: 2
-* Wins: 2
-* Points: 6
-
----
-
-# MD2-3: IFS 2 – 1 MBBS
-**Referee:** Abraham (MEE)
-### ⚽ Goals
-* 3' Adewale Adeola Samuel (IFS)
-* 17' Okoh Chibuike (MBBS)
-* 55' Olorunfunmilayo Gbolaga Emmanuel (IFS)
-
-### 🟨 Yellow Cards
-* Okunola Samuel (MBBS)
-
-### 🏅 Man of the Match
-**Gowon Mathias Monday (IFS)**
-
-### 📈 Match Impact
-IFS secure their first win of the season.
-
----
-
-# MD2-4: ICE 2 – 0 BCH
-**Referee:** Tosin (MTS)
-### ⚽ Goals
-* 43' Bamidele Usman
-* 60+3' Bamidele Usman
-
-### 🟨 Yellow Cards
-**ICE**
-* Adeyemi Damola
-* Six
-
-**BCH**
-* Tunde Akinwande
-* Folorunsho Toluwanimi
-* Miracle
-* Sammy
-
-### 🏅 Man of the Match
-**Adeyemi Prosper (ICE)**
-
-### 📈 Match Impact
-ICE record their first victory of the tournament.
-
----
-
-# MD2-5: PHS 1 – 0 AGP
-**Referee:** Victor (ESM)
-### ⚽ Goal
-* 8' Abimbola Alexander Akinmoyegun
-
-### 🏅 Man of the Match
-**Adeagbo Pelumi (PHS)**
-
-### 📈 Match Impact
-PHS continue their strong campaign with another narrow victory.
-
----
-
-# MD2-6: MST 4 – 4 CYS
-**Referee:** Tosin (MTS)
-### ⚽ Goals
-#### MST
-* 2' Iyare Praise
-* 7' Akintunde Ayomide Oluwaseyifunmi
-* 15' Nkemjika Sydney
-* 60' Iyare Praise
-
-#### CYS
-* 10' Olorunfemi Taiwo James
-* 23' Ajao Alameen Olaide
-* 28' Bello Daniel Damilare
-* 42' Bello Daniel Damilare
-
-### 🟨 Yellow Cards
-**MST**
-* Fabusuyi Daniel Oluwafisayo
-
-**CYS**
-* Adewumi Excel Joshua
-* Akinyede Allen Oluwaferanmi
-
-### 🟨 Technical Area
-* Esezobor Isaac Eromosele (MST Head Coach)
-
-### 🏅 Man of the Match
-**Iyare Praise (MST)**
-
-### 📈 Match Impact
-One of the most entertaining fixtures in FCL history ends in an eight-goal thriller.`;
-
-    if (!existingOfficialRoundupMd2) {
-      loadedNews.unshift({
-        id: 'news-official-roundup-md2-sat',
-        title: '🏆 FUTA CHAMPIONS LEAGUE 2026: MATCHDAY 2 SATURDAY ROUND-UP 🏆',
-        featuredImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
-        author: 'FCL Committee',
-        category: 'Competition Updates',
-        body: md2RoundupBody,
-        tags: ['Matchday 2', 'Round-Up', 'Saturday', 'League Phase'],
-        isPublished: true,
-        createdAt: '2026-06-20 18:30'
-      });
-      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
-    } else {
-      existingOfficialRoundupMd2.title = '🏆 FUTA CHAMPIONS LEAGUE 2026: MATCHDAY 2 SATURDAY ROUND-UP 🏆';
-      existingOfficialRoundupMd2.category = 'Competition Updates';
-      existingOfficialRoundupMd2.body = md2RoundupBody;
-      existingOfficialRoundupMd2.createdAt = '2026-06-20 18:30';
-      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
-    }
-
     // Force inject/update the Disciplinary Committee Decision regarding the BDG vs FWT fixture
     const existingDisciplinaryDecision = loadedNews.find(n => n.id === 'news-disciplinary-fwt');
     const disciplinaryDecisionBody = `Following a thorough review of the incidents that occurred during the FUTA Champions League (FCL) Match Day 2 fixture between Building Technology (BDG) and Forestry and Wood Technology (FWT), the Organizing and Disciplinary Committee has reached the following decisions in accordance with the principles of fair play, sportsmanship, player safety, and the integrity of the competition.
@@ -5095,9 +4929,9 @@ All teams are expected to uphold the highest standards of discipline, respect fo
 
 This decision takes immediate effect.
 
-Thank you.
-
-FUTA Champions League Committee`;
+Signed,
+FCL Disciplinary Committee
+FUTA Champions League 2026 ⚽🏆`;
 
     if (!existingDisciplinaryDecision) {
       loadedNews.unshift({
@@ -5162,29 +4996,33 @@ FUTA Champions League 2026 ⚽🏆`;
 
     // Force inject/update the Disciplinary Committee Decision regarding the MST vs SIMT fixture
     const existingDisciplinaryDecisionMstSimt = loadedNews.find(n => n.id === 'news-disciplinary-mst-simt');
-    const disciplinaryDecisionMstSimtBody = `Following a comprehensive review of the reports and incidents recorded during the Marine Science and Technology (MST) vs Security, Investment and Management Technology (SIMT) fixture, the FCL Disciplinary Committee hereby issues the following decisions:
+    const disciplinaryDecisionMstSimtBody = `Following a thorough review of the reports and incidents recorded during the **Marine Science and Technology (MST)** vs **Security, Investment and Management Technology (SIMT)** fixture, the FCL Disciplinary Committee hereby issues the following decisions:
 
-1. Suspension of Players
+1. SUSPENSION OF PLAYERS
 
-After careful consideration of the reports submitted by match officials and the Disciplinary Committee's findings:
+Nwabunwanne Chibichi Daniel (SIMT) is hereby suspended for two (2) matches, effective immediately. This suspension is not subject to appeal. The sanction is imposed due to his use of abusive and vulgar language towards match officials and opposition players, as well as his unsportsmanlike conduct following MST's second goal.
 
-- Nwabunwanne Chibichi Daniel (SIMT) is hereby suspended for two (2) matches, without the right of appeal. This sanction is imposed for his repeated use of abusive and vulgar language towards both match officials and opposition players, as well as his unsportsmanlike conduct following MST's second goal.
+Adeyemi Adebayo Ibrahim (MST) is hereby suspended for one (1) match, effective immediately. This suspension is not subject to appeal. Upon confirmation from the match officials, the Committee finds that, despite his intention to de-escalate the situation, his conduct during the incident following MST's second goal constituted unsportsmanlike behaviour that contributed to the disorder.
 
-- Adeyemi Adedayo Ibrahim (MST) is hereby suspended for one (1) match, without the right of appeal. This sanction is imposed for conduct deemed unsportsmanlike during the confrontation that followed MST's second goal, despite his apparent attempt to de-escalate the situation.
+2. FINANCIAL SANCTIONS
 
-2. Formal Warning to SIMT
+In view of the misconduct displayed by players of both teams during the fixture, the Committee has imposed a fine of ₦10,000 (Ten Thousand Naira only) on Marine Science and Technology (MST) and Security, Investment and Management Technology (SIMT) respectively.
 
-Security, Investment and Management Technology (SIMT) is hereby issued a final warning regarding the conduct of its players during the fixture. The Committee observed repeated acts of indiscipline and emotional misconduct that negatively affected the spirit of fair play.
+The fines are intended to reinforce the responsibility of teams to maintain discipline and ensure the conduct of their players throughout the competition.
 
-The Committee wishes to make it clear that any future incident involving similar misconduct by SIMT may attract more severe sanctions, including possible expulsion from the FUTA Champions League.
+3. WARNING TO SIMT
 
-The FCL remains committed to promoting discipline, respect, professionalism, and fair play. All players, team officials, and match officials are reminded that actions inconsistent with these values will continue to attract appropriate disciplinary measures.
+Security, Investment and Management Technology (SIMT) is hereby issued a final warning following the general misconduct exhibited by members of the team, who allowed emotions to overshadow the principles of fair play and sportsmanship.
+
+The Committee wishes to make it clear that any future occurrence of a similar nature involving SIMT may attract more severe disciplinary measures, including possible expulsion from the FUTA Champions League.
+
+The FUTA Champions League remains committed to upholding discipline, fairness, respect for match officials, and the spirit of sportsmanship. All participating teams are reminded that misconduct of any form will be met with appropriate disciplinary action in accordance with the FCL Regulations.
 
 This decision takes immediate effect.
 
 Signed,
-
-FCL Disciplinary Committee`;
+FCL Disciplinary Committee
+FUTA Champions League 2026 ⚽🏆`;
 
     if (!existingDisciplinaryDecisionMstSimt) {
       loadedNews.unshift({
@@ -5426,7 +5264,7 @@ FCL Disciplinary Committee`;
         team.isDisqualified = true;
         team.disqualificationReason = "Forestry and Wood Technology (FWT) has been disqualified from the 2026 FUTA Champions League due to incidents of team confrontation and intimidation of Building Technology (BDG) players on Match Day 2.";
       }
-      if (team.id === 'bdg') {
+      if (team.id === 'bdg' || team.id === 'mst' || team.id === 'simt') {
         team.fineAmount = 10000;
         team.finePaid = false;
       }

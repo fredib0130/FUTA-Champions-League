@@ -321,6 +321,10 @@ export default function PublicMatchCenter() {
                   <span className="text-amber-500 font-mono font-bold">ADMINISTRATIVE WALKOVER</span>
                 ) : match.status === 'Finished' ? (
                   <span className="text-white/40 font-mono font-bold">FT - FULL TIME</span>
+                ) : match.status === 'Interrupted' ? (
+                  <span className="text-amber-500 font-mono font-bold flex items-center justify-center gap-1.5 animate-pulse">
+                    🟠 INTERRUPTED (50')
+                  </span>
                 ) : (
                   <span className="text-white/30 font-bold">{match.time} • SCHEDULED</span>
                 )}

@@ -167,6 +167,8 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
               <span className="text-amber-500 font-bold tracking-wider text-[10px]">WALKOVER</span>
             ) : match.status === 'Finished' ? (
               <span className="text-white/40 font-mono">FT</span>
+            ) : match.status === 'Interrupted' ? (
+              <span className="text-amber-500 font-black tracking-wider text-[10px] animate-pulse flex items-center gap-1">🟠 INTERRUPTED (50')</span>
             ) : match.status === 'Postponed' ? (
               <span className="text-amber-500 font-bold tracking-wider animate-pulse text-[10px]">POSTPONED</span>
             ) : match.status === 'Cancelled' ? (
@@ -177,7 +179,7 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
           </div>
           <div className={cn(
              "font-display text-4xl font-bold px-4 tracking-tighter flex flex-col items-center",
-             match.status === 'Finished' ? "text-white" : "text-primary"
+             (match.status === 'Finished' || match.status === 'Interrupted') ? "text-white" : "text-primary"
           )}>
             <span>{(match.status === 'Upcoming' || match.status === 'Postponed' || match.status === 'Cancelled') ? 'VS' : `${match.homeScore} - ${match.awayScore}`}</span>
             {(match.homePenalties !== undefined && match.awayPenalties !== undefined) && (

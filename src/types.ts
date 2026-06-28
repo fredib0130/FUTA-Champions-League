@@ -79,7 +79,7 @@ export interface Match {
   date: string;
   time: string;
   venue: string;
-  status: 'Upcoming' | 'Live' | 'Finished' | 'Postponed' | 'Cancelled' | 'Half Time';
+  status: 'Upcoming' | 'Live' | 'Finished' | 'Postponed' | 'Cancelled' | 'Half Time' | 'Interrupted';
 
   homeScore: number;
   awayScore: number;

@@ -601,7 +601,7 @@ export const MATCHES: Match[] = [
   { id: 'md3-5', homeTeam: 'MCB', awayTeam: 'IDD', date: '2026-06-27', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Uche (CYS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'N/A' },
   { id: 'md3-6', homeTeam: 'MST', awayTeam: 'SIMT', date: '2026-06-27', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 4, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Uche (CYS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Nkemjika Sydney' },
   { id: 'md3-7', homeTeam: 'ICE', awayTeam: 'FWT', date: '2026-06-28', time: '12:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 3, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3, walkover: true, referee: 'Administrative Walkover', refereeAssigned: true, matchApproved: true, note: 'Walkover due to FWT Disqualification' },
-  { id: 'md3-8', homeTeam: 'APH', awayTeam: 'AGE', date: '2026-06-28', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Peter (IFS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'N/A' },
+  { id: 'md3-8', homeTeam: 'APH', awayTeam: 'AGE', date: '2026-06-28', time: '14:00', venue: 'Mini Pitch', status: 'Interrupted', homeScore: 1, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Peter (IFS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'N/A' },
   { id: 'md3-9', homeTeam: 'ENT', awayTeam: 'MBBS', date: '2026-06-28', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 3, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Fatai', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'N/A' },
   { id: 'md3-10', homeTeam: 'BDG', awayTeam: 'ANA', date: '2026-06-28', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 3, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3, walkover: true, referee: 'Administrative Walkover', refereeAssigned: true, matchApproved: true, note: 'Walkover awarded in favour of ANA' },
 ];
@@ -610,32 +610,37 @@ export const NEWS: NewsPost[] = [
   {
     id: 'disciplinary-mst-simt',
     title: '🚨 OFFICIAL STATEMENT ON THE MST vs SIMT FIXTURE',
-    excerpt: 'The FCL Disciplinary Committee has suspended Nwabunwanne Chibichi Daniel (SIMT) for 2 matches and Adeyemi Adedayo Ibrahim (MST) for 1 match following incidents in the MST vs SIMT fixture.',
+    excerpt: 'The FCL Disciplinary Committee has suspended Nwabunwanne Chibichi Daniel (SIMT) for 2 matches and Adeyemi Adebayo Ibrahim (MST) for 1 match, and fined both teams ₦10,000.',
     content: `Published: 28th June, 2026
 Time: 22:30
 
-Following a comprehensive review of the reports and incidents recorded during the Marine Science and Technology (MST) vs Security, Investment and Management Technology (SIMT) fixture, the FCL Disciplinary Committee hereby issues the following decisions:
+Following a thorough review of the reports and incidents recorded during the **Marine Science and Technology (MST)** vs **Security, Investment and Management Technology (SIMT)** fixture, the FCL Disciplinary Committee hereby issues the following decisions:
 
-1. Suspension of Players
+## 1. SUSPENSION OF PLAYERS
 
-After careful consideration of the reports submitted by match officials and the Disciplinary Committee's findings:
+**Nwabunwanne Chibichi Daniel (SIMT)** is hereby suspended for **two (2) matches**, effective immediately. This suspension is **not subject to appeal**. The sanction is imposed due to his use of abusive and vulgar language towards match officials and opposition players, as well as his unsportsmanlike conduct following MST's second goal.
 
-• Nwabunwanne Chibichi Daniel (SIMT) is hereby suspended for two (2) matches, without the right of appeal. This sanction is imposed for his repeated use of abusive and vulgar language towards both match officials and opposition players, as well as his unsportsmanlike conduct following MST's second goal.
+**Adeyemi Adebayo Ibrahim (MST)** is hereby suspended for **one (1) match**, effective immediately. This suspension is **not subject to appeal**. Upon confirmation from the match officials, the Committee finds that, despite his intention to de-escalate the situation, his conduct during the incident following MST's second goal constituted unsportsmanlike behaviour that contributed to the disorder.
 
-• Adeyemi Adedayo Ibrahim (MST) is hereby suspended for one (1) match, without the right of appeal. This sanction is imposed for conduct deemed unsportsmanlike during the confrontation that followed MST's second goal, despite his apparent attempt to de-escalate the situation.
+## 2. FINANCIAL SANCTIONS
 
-2. Formal Warning to SIMT
+In view of the misconduct displayed by players of both teams during the fixture, the Committee has imposed a fine of **₦10,000 (Ten Thousand Naira only)** on **Marine Science and Technology (MST)** and **Security, Investment and Management Technology (SIMT)** respectively.
 
-Security, Investment and Management Technology (SIMT) is hereby issued a final warning regarding the conduct of its players during the fixture. The Committee observed repeated acts of indiscipline and emotional misconduct that negatively affected the spirit of fair play.
+The fines are intended to reinforce the responsibility of teams to maintain discipline and ensure the conduct of their players throughout the competition.
 
-The Committee wishes to make it clear that any future incident involving similar misconduct by SIMT may attract more severe sanctions, including possible expulsion from the FUTA Champions League.
+## 3. WARNING TO SIMT
 
-The FCL remains committed to promoting discipline, respect, professionalism, and fair play. All players, team officials, and match officials are reminded that actions inconsistent with these values will continue to attract appropriate disciplinary measures.
+**Security, Investment and Management Technology (SIMT)** is hereby issued a **final warning** following the general misconduct exhibited by members of the team, who allowed emotions to overshadow the principles of fair play and sportsmanship.
+
+The Committee wishes to make it clear that any future occurrence of a similar nature involving SIMT may attract more severe disciplinary measures, including possible expulsion from the FUTA Champions League.
+
+The FUTA Champions League remains committed to upholding discipline, fairness, respect for match officials, and the spirit of sportsmanship. All participating teams are reminded that misconduct of any form will be met with appropriate disciplinary action in accordance with the FCL Regulations.
 
 This decision takes immediate effect.
 
-Signed,
-FCL Disciplinary Committee`,
+**Signed,**
+
+**FCL Disciplinary Committee**`,
     image: 'https://images.unsplash.com/photo-1518063319789-7217e6706b04?q=80&w=1000',
     date: '2026-06-28',
     category: 'Committee Announcement'

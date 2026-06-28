@@ -344,7 +344,7 @@ export function Home() {
   const completedMatches = React.useMemo(() => {
     return matches.filter(m => {
       const s = m.status.trim().toUpperCase();
-      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED';
+      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED' || s === 'INTERRUPTED';
     });
   }, [matches]);
 
@@ -768,7 +768,7 @@ export function Fixtures() {
     if (fixtureType === 'fixtures') {
       return s === 'UPCOMING' || s === 'SCHEDULED' || s === 'POSTPONED' || s === 'LIVE' || s === 'HALF TIME' || s === 'HALF-TIME' || s === 'DELAYED';
     } else {
-      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED';
+      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED' || s === 'INTERRUPTED';
     }
   });
 
@@ -940,17 +940,46 @@ export function Fixtures() {
 
             <div className="space-y-12">
               {filteredMatches.length > 0 ? (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredMatches.map((match: Match) => (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      key={match.id}
-                    >
-                      <MatchCard match={match} />
-                    </motion.div>
-                  ))}
-                </div>
+                <>
+                  {fixtureType === 'results' && filteredMatches.some(m => m.status === 'Interrupted') && (
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-2 border-b border-white/5 pb-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+                        <h4 className="text-xs font-black uppercase text-amber-500 tracking-[0.2em]">Interrupted Matches (Awaiting Committee Decision)</h4>
+                      </div>
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredMatches.filter(m => m.status === 'Interrupted').map((match: Match) => (
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            key={match.id}
+                          >
+                            <MatchCard match={match} />
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="space-y-6">
+                    {fixtureType === 'results' && filteredMatches.some(m => m.status === 'Interrupted') && filteredMatches.some(m => m.status !== 'Interrupted') && (
+                      <div className="border-b border-white/5 pb-2 pt-4">
+                        <h4 className="text-xs font-black uppercase text-white/40 tracking-[0.2em]">Completed Matches</h4>
+                      </div>
+                    )}
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {filteredMatches.filter(m => fixtureType !== 'results' || m.status !== 'Interrupted').map((match: Match) => (
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          key={match.id}
+                        >
+                          <MatchCard match={match} />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </>
               ) : (
                 <div className="text-center py-20 glass rounded-[40px]">
                   <p className="text-white/30 font-display italic text-2xl uppercase tracking-widest">
