@@ -3981,6 +3981,11 @@ export function TeamProfile() {
                             <span className="px-1.5 py-0.5 bg-red-500/10 text-red-500 border border-red-500/20 rounded-md text-[8px] font-black uppercase tracking-wider animate-pulse flex items-center gap-1">
                               <span>🚫 SUSPENDED ({player.suspensionDuration})</span>
                             </span>
+                            {player.appealAllowed === false && (
+                              <span className="px-1.5 py-0.5 bg-rose-500/10 text-rose-500 border border-rose-500/20 rounded-md text-[8px] font-black uppercase tracking-wider flex items-center gap-1">
+                                <span>🔒 Appeal: Not permitted</span>
+                              </span>
+                            )}
                             {player.fineAmount !== undefined && (
                               <span className="px-1.5 py-0.5 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-md text-[8px] font-black uppercase tracking-wider flex items-center gap-1">
                                 <span>💸 FINE: ₦{player.fineAmount.toLocaleString()} ({player.finePaid ? 'Paid' : 'Unpaid'})</span>
@@ -4077,6 +4082,39 @@ export function TeamProfile() {
                         {TECHNICAL_CREWS[team.id].assistantCoach.phone && (
                           <div className="text-[11px] font-mono text-primary mt-1">📞 {TECHNICAL_CREWS[team.id].assistantCoach.phone}</div>
                         )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Team Disciplinary Status */}
+              {(team.isDisqualified || team.fineAmount !== undefined || team.disciplinaryStatus) && (
+                <div className="border-t border-white/5 pt-6 mt-6">
+                  <h4 className="text-xs font-black uppercase text-red-500 tracking-[0.2em] mb-4 flex items-center gap-2">
+                    <span>🚨 Disciplinary Record</span>
+                  </h4>
+                  <div className="space-y-4 bg-red-950/10 p-4 rounded-2xl border border-red-500/10">
+                    {team.isDisqualified && (
+                      <div>
+                        <span className="px-2 py-0.5 bg-red-500/20 text-red-500 rounded text-[9px] font-black uppercase tracking-wider">Disqualified</span>
+                        <p className="text-xs text-white/70 mt-2 leading-relaxed">{team.disqualificationReason}</p>
+                      </div>
+                    )}
+                    {team.disciplinaryStatus && (
+                      <div>
+                        <span className="px-2 py-0.5 bg-rose-500/20 text-rose-500 rounded text-[9px] font-black uppercase tracking-wider">{team.disciplinaryStatus}</span>
+                        {team.id === 'simt' && (
+                          <p className="text-xs text-white/70 mt-2 leading-relaxed">
+                            Issued a final warning regarding the conduct of its players during the MST vs SIMT fixture. The Committee observed repeated acts of indiscipline and emotional misconduct. Any future incident involving similar misconduct may attract more severe sanctions, including possible expulsion from the FUTA Champions League.
+                          </p>
+                        )}
+                      </div>
+                    )}
+                    {team.fineAmount !== undefined && (
+                      <div className="flex justify-between items-center bg-black/40 p-3 rounded-xl border border-white/5">
+                        <span className="text-xs font-bold text-white/70">Disciplinary Fine</span>
+                        <span className="text-xs font-black text-amber-500">₦{team.fineAmount.toLocaleString()} ({team.finePaid ? 'Paid' : 'Unpaid'})</span>
                       </div>
                     )}
                   </div>

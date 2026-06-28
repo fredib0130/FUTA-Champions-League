@@ -390,13 +390,15 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     const ncd = basePlayers.find(p => p.id === 'player-simt-1' || p.name.toLowerCase() === 'nwabunwanne chibichi daniel');
     if (ncd) {
       ncd.isSuspended = true;
-      ncd.suspensionDuration = '2 Matches';
+      ncd.suspensionDuration = '2 matches remaining';
+      ncd.appealAllowed = false;
     }
 
     const aai = basePlayers.find(p => p.id === 'player-mst-2' || p.name.toLowerCase() === 'adeyemi adedayo ibrahim');
     if (aai) {
       aai.isSuspended = true;
-      aai.suspensionDuration = '1 Match';
+      aai.suspensionDuration = '1 match remaining';
+      aai.appealAllowed = false;
     }
 
     return basePlayers;
@@ -434,10 +436,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.manOfTheMatch !== official.manOfTheMatch ||
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
-            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5') && m.status !== official.status) // Sync status specifically for matchdays
+            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10') && m.status !== official.status) // Sync status specifically for matchdays
           ) {
             loadedMatches[index] = {
               ...m,
@@ -450,12 +452,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               refereeAssigned: official.refereeAssigned,
               matchApproved: official.matchApproved,
               officialsPanel: official.officialsPanel,
-              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5') ? official.status : m.status,
+              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10') ? official.status : m.status,
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5'].includes(official.id) ? official.awayScore : m.awayScore
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].includes(official.id) ? official.awayScore : m.awayScore
             };
             updated = true;
           }
@@ -1184,6 +1186,64 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       awayFreeKicks: 0
     };
 
+    // ENT vs MBBS (md3-9)
+    loadedStats['md3-9'] = {
+      matchId: 'md3-9',
+      cornersHome: 0,
+      cornersAway: 0,
+      yellowCardsHome: 2,
+      yellowCardsAway: 3,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      foulsHome: 0,
+      foulsAway: 0,
+      offsidesHome: 0,
+      offsidesAway: 0,
+      freeKicksHome: 7,
+      freeKicksAway: 5,
+      homeCorners: 0,
+      awayCorners: 0,
+      homeYellowCards: 2,
+      awayYellowCards: 3,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 0,
+      awayOffsides: 0,
+      homeFouls: 0,
+      awayFouls: 0,
+      homeFreeKicks: 7,
+      awayFreeKicks: 5
+    };
+
+    // APH vs AGE (md3-8)
+    loadedStats['md3-8'] = {
+      matchId: 'md3-8',
+      cornersHome: 0,
+      cornersAway: 0,
+      yellowCardsHome: 0,
+      yellowCardsAway: 0,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      foulsHome: 0,
+      foulsAway: 0,
+      offsidesHome: 0,
+      offsidesAway: 0,
+      freeKicksHome: 0,
+      freeKicksAway: 0,
+      homeCorners: 0,
+      awayCorners: 0,
+      homeYellowCards: 0,
+      awayYellowCards: 0,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 0,
+      awayOffsides: 0,
+      homeFouls: 0,
+      awayFouls: 0,
+      homeFreeKicks: 0,
+      awayFreeKicks: 0
+    };
+
     localStorage.setItem('fcl_admin_stats', JSON.stringify(loadedStats));
 
     setDetailedStats(loadedStats);
@@ -1569,6 +1629,23 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
 
+    if (!loadedGoals.some(g => g.matchId === 'md3-9')) {
+      loadedGoals.push(
+        { id: 'goal-md3-9-pelumi-3', matchId: 'md3-9', playerName: 'Pelumi', team: 'ENT', minute: "3'", type: 'Goal' },
+        { id: 'goal-md3-9-bamidele-52', matchId: 'md3-9', playerName: 'Bamidele Fikayo', team: 'MBBS', minute: "52'", type: 'Goal' },
+        { id: 'goal-md3-9-drp-56', matchId: 'md3-9', playerName: 'Dr. P', team: 'MBBS', minute: "56'", type: 'Goal' },
+        { id: 'goal-md3-9-adesola-60', matchId: 'md3-9', playerName: 'Adesola Emmanuel', team: 'MBBS', minute: "60'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'md3-8')) {
+      loadedGoals.push(
+        { id: 'goal-md3-8-fola-15', matchId: 'md3-8', playerName: 'Fola', team: 'APH', minute: "15'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -1686,7 +1763,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
       // PHS vs BCH Cards (md3-2)
       { id: 'card-md3-2-peter-y', matchId: 'md3-2', playerName: 'Peter', teamAbbr: 'BCH', minute: "20'", type: 'Yellow' },
-      { id: 'card-md3-2-isreal-y', matchId: 'md3-2', playerName: 'Isreal', teamAbbr: 'PHS', minute: "45'", type: 'Yellow' }
+      { id: 'card-md3-2-isreal-y', matchId: 'md3-2', playerName: 'Isreal', teamAbbr: 'PHS', minute: "45'", type: 'Yellow' },
+
+      // ENT vs MBBS Cards (md3-9)
+      { id: 'card-md3-9-promise-y', matchId: 'md3-9', playerName: 'Promise', teamAbbr: 'ENT', minute: "15'", type: 'Yellow' },
+      { id: 'card-md3-9-fairy-y', matchId: 'md3-9', playerName: 'Fairy', teamAbbr: 'ENT', minute: "42'", type: 'Yellow' },
+      { id: 'card-md3-9-bamidele-y', matchId: 'md3-9', playerName: 'Bamidele Fikayo', teamAbbr: 'MBBS', minute: "20'", type: 'Yellow' },
+      { id: 'card-md3-9-drp-y', matchId: 'md3-9', playerName: 'Dr. P', teamAbbr: 'MBBS', minute: "33'", type: 'Yellow' },
+      { id: 'card-md3-9-adesola-y', matchId: 'md3-9', playerName: 'Adesola Emmanuel', teamAbbr: 'MBBS', minute: "55'", type: 'Yellow' }
     ];
     officialMd1_5Cards.forEach(c => {
       const existingIdx = loadedCards.findIndex(existing => existing.id === c.id);
@@ -4528,6 +4612,29 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
+    if (!loadedCommentary['md3-9'] || loadedCommentary['md3-9'].length === 0) {
+      loadedCommentary['md3-9'] = [
+        { id: 'comm-md3-9-ft', matchId: 'md3-9', minute: "60'", text: "🏁 FULL-TIME! ENT 1 - 3 MBBS. The referee blows the final whistle! A spectacular match with MBBS staging a superb second-half comeback to claim all three points.", timestamp: "4:30 PM", type: 'general' },
+        { id: 'comm-md3-9-goal-adesola', matchId: 'md3-9', minute: "60'", text: "⚽ GOAL!!! Adesola Emmanuel makes it three for MBBS! What a finish to seal the victory! ENT 1 - 3 MBBS.", timestamp: "4:28 PM", type: 'goal' },
+        { id: 'comm-md3-9-goal-drp', matchId: 'md3-9', minute: "56'", text: "⚽ GOAL!!! Dr. P scores! MBBS takes the lead for the first time in the match! Absolute class! ENT 1 - 2 MBBS.", timestamp: "4:24 PM", type: 'goal' },
+        { id: 'comm-md3-9-goal-bamidele', matchId: 'md3-9', minute: "52'", text: "⚽ GOAL!!! Bamidele Fikayo gets the equalizer for MBBS with a powerful header! ENT 1 - 1 MBBS.", timestamp: "4:20 PM", type: 'goal' },
+        { id: 'comm-md3-9-ht', matchId: 'md3-9', minute: "30'", text: "⏸️ HALF-TIME! ENT 1 - 0 MBBS. ENT heads into the break leading thanks to an early goal from Pelumi.", timestamp: "4:00 PM", type: 'general' },
+        { id: 'comm-md3-9-goal-pelumi', matchId: 'md3-9', minute: "3'", text: "⚽ GOAL!!! Pelumi opens the scoring for ENT in just the 3rd minute of the game! Dynamic start! ENT 1 - 0 MBBS.", timestamp: "3:33 PM", type: 'goal' },
+        { id: 'comm-md3-9-kickoff', matchId: 'md3-9', minute: "1'", text: "🏁 KICKOFF! Matchday 3 fixture ENT vs MBBS is underway! Referee Fatai blows the whistle to start the match.", timestamp: "3:30 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
+    if (!loadedCommentary['md3-8'] || loadedCommentary['md3-8'].length === 0) {
+      loadedCommentary['md3-8'] = [
+        { id: 'comm-md3-8-ft', matchId: 'md3-8', minute: "60'", text: "🏁 FULL-TIME! APH 1 - 0 AGE. The referee blows the final whistle! A hard-fought 1-0 win for APH thanks to Fola's first-half goal.", timestamp: "3:00 PM", type: 'general' },
+        { id: 'comm-md3-8-ht', matchId: 'md3-8', minute: "30'", text: "⏸️ HALF-TIME! APH 1 - 0 AGE. APH leads at the break courtesy of Fola's strike in the 15th minute.", timestamp: "2:30 PM", type: 'general' },
+        { id: 'comm-md3-8-goal-fola', matchId: 'md3-8', minute: "15'", text: "⚽ GOAL!!! Fola scores! APH takes the lead! A clinical finish inside the box puts APH ahead! APH 1 - 0 AGE.", timestamp: "2:15 PM", type: 'goal' },
+        { id: 'comm-md3-8-kickoff', matchId: 'md3-8', minute: "1'", text: "🏁 KICKOFF! Matchday 3 fixture APH vs AGE is underway! Referee Peter (IFS) blows the whistle to start the match.", timestamp: "2:00 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
     setCommentaries(loadedCommentary);
 
     // 10. Reports
@@ -4573,6 +4680,35 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         keyMoments: [
           "42' - Emmy scores to break the deadlock and give IDD the lead.",
           "51' - Oni Oluwadamilola converts a penalty to bring MCB level."
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+    if (!loadedReports['md3-9']) {
+      loadedReports['md3-9'] = {
+        matchId: 'md3-9',
+        summary: "MBBS pulls off a spectacular second-half comeback to defeat ENT 3-1.",
+        playerOfMatch: "N/A",
+        tacticalAnalysis: "ENT started strongly with an early goal, but MBBS showed great resilience in the second half, scoring three goals in eight minutes to secure the victory.",
+        keyMoments: [
+          "3' - Pelumi scores an early opener for ENT.",
+          "52' - Bamidele Fikayo gets the equalizer for MBBS.",
+          "56' - Dr. P puts MBBS in front.",
+          "60' - Adesola Emmanuel seals the win with a brilliant finish."
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+    if (!loadedReports['md3-8']) {
+      loadedReports['md3-8'] = {
+        matchId: 'md3-8',
+        summary: "APH secures a crucial 1-0 victory against AGE.",
+        playerOfMatch: "N/A",
+        tacticalAnalysis: "A solid defensive and tactical performance from APH. Fola scored early in the first half, and APH held on to their lead with great defensive organization.",
+        keyMoments: [
+          "15' - Fola scores the decisive goal for APH."
         ],
         isPublished: true
       };
@@ -4624,7 +4760,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     // Matchday 2 & 3 Saturdays & Sundays Timers as Finished
-    ['md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-9', 'md2-10', 'md3-3', 'md3-4', 'md3-6', 'md3-2', 'md3-1', 'md3-5'].forEach(id => {
+    ['md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-9', 'md2-10', 'md3-3', 'md3-4', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].forEach(id => {
       if (!loadedTimers[id] || loadedTimers[id].liveMinute !== "FT") {
         loadedTimers[id] = { liveMinute: "FT", isPaused: true };
       }
@@ -5024,6 +5160,53 @@ FUTA Champions League 2026 ⚽🏆`;
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
 
+    // Force inject/update the Disciplinary Committee Decision regarding the MST vs SIMT fixture
+    const existingDisciplinaryDecisionMstSimt = loadedNews.find(n => n.id === 'news-disciplinary-mst-simt');
+    const disciplinaryDecisionMstSimtBody = `Following a comprehensive review of the reports and incidents recorded during the Marine Science and Technology (MST) vs Security, Investment and Management Technology (SIMT) fixture, the FCL Disciplinary Committee hereby issues the following decisions:
+
+1. Suspension of Players
+
+After careful consideration of the reports submitted by match officials and the Disciplinary Committee's findings:
+
+- Nwabunwanne Chibichi Daniel (SIMT) is hereby suspended for two (2) matches, without the right of appeal. This sanction is imposed for his repeated use of abusive and vulgar language towards both match officials and opposition players, as well as his unsportsmanlike conduct following MST's second goal.
+
+- Adeyemi Adedayo Ibrahim (MST) is hereby suspended for one (1) match, without the right of appeal. This sanction is imposed for conduct deemed unsportsmanlike during the confrontation that followed MST's second goal, despite his apparent attempt to de-escalate the situation.
+
+2. Formal Warning to SIMT
+
+Security, Investment and Management Technology (SIMT) is hereby issued a final warning regarding the conduct of its players during the fixture. The Committee observed repeated acts of indiscipline and emotional misconduct that negatively affected the spirit of fair play.
+
+The Committee wishes to make it clear that any future incident involving similar misconduct by SIMT may attract more severe sanctions, including possible expulsion from the FUTA Champions League.
+
+The FCL remains committed to promoting discipline, respect, professionalism, and fair play. All players, team officials, and match officials are reminded that actions inconsistent with these values will continue to attract appropriate disciplinary measures.
+
+This decision takes immediate effect.
+
+Signed,
+
+FCL Disciplinary Committee`;
+
+    if (!existingDisciplinaryDecisionMstSimt) {
+      loadedNews.unshift({
+        id: 'news-disciplinary-mst-simt',
+        title: '🚨 OFFICIAL STATEMENT ON THE MST vs SIMT FIXTURE',
+        featuredImage: 'https://images.unsplash.com/photo-1518063319789-7217e6706b04?q=80&w=1000',
+        author: 'FCL Disciplinary Committee',
+        category: 'Disciplinary Updates',
+        body: disciplinaryDecisionMstSimtBody,
+        tags: ['Disciplinary Decision', 'MST vs SIMT', 'Official Statement', 'Suspensions'],
+        isPublished: true,
+        createdAt: '2026-06-28 22:30'
+      });
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    } else {
+      existingDisciplinaryDecisionMstSimt.title = '🚨 OFFICIAL STATEMENT ON THE MST vs SIMT FIXTURE';
+      existingDisciplinaryDecisionMstSimt.category = 'Disciplinary Updates';
+      existingDisciplinaryDecisionMstSimt.body = disciplinaryDecisionMstSimtBody;
+      existingDisciplinaryDecisionMstSimt.createdAt = '2026-06-28 22:30';
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    }
+
     setNewsItems(loadedNews);
 
     // 14. Match Photos Load & Seed
@@ -5246,6 +5429,9 @@ FUTA Champions League 2026 ⚽🏆`;
       if (team.id === 'bdg') {
         team.fineAmount = 10000;
         team.finePaid = false;
+      }
+      if (team.id === 'simt') {
+        team.disciplinaryStatus = 'Final Warning';
       }
     });
 

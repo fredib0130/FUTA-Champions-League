@@ -28,6 +28,7 @@ export interface Team {
   disqualificationReason?: string;
   fineAmount?: number;
   finePaid?: boolean;
+  disciplinaryStatus?: string;
   
   // FCL 2026 Standing Rules
   yellowCards?: number;
@@ -68,6 +69,7 @@ export interface Player {
   suspensionDuration?: string;
   fineAmount?: number;
   finePaid?: boolean;
+  appealAllowed?: boolean;
 }
 
 export interface Match {
