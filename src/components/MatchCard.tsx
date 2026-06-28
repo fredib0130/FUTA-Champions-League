@@ -163,6 +163,8 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
               <span className="text-yellow-400 font-mono">
                 {liveMinute && liveMinute.startsWith('HT') ? `HT • ${liveMinute.replace("HT ", "")}` : 'HALFTIME'}
               </span>
+            ) : match.walkover ? (
+              <span className="text-amber-500 font-bold tracking-wider text-[10px]">WALKOVER</span>
             ) : match.status === 'Finished' ? (
               <span className="text-white/40 font-mono">FT</span>
             ) : match.status === 'Postponed' ? (
@@ -288,6 +290,12 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
             </div>
           </div>
         </motion.div>
+      )}
+
+      {match.note && (
+        <div className="mt-4 px-4 py-2 bg-amber-500/10 border border-amber-500/20 text-[10px] text-amber-400 font-sans font-medium uppercase tracking-wider rounded-xl flex items-center gap-1.5 shadow-sm">
+          <span>⚠️ Note: {match.note}</span>
+        </div>
       )}
 
       {match.manOfTheMatch && (

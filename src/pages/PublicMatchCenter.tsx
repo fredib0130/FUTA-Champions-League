@@ -317,6 +317,8 @@ export default function PublicMatchCenter() {
                   <span className="text-yellow-400 font-mono font-bold">
                     HALF TIME • {timer.liveMinute && timer.liveMinute.startsWith('HT') ? timer.liveMinute.replace("HT ", "") : "10:00"}
                   </span>
+                ) : match.walkover ? (
+                  <span className="text-amber-500 font-mono font-bold">ADMINISTRATIVE WALKOVER</span>
                 ) : match.status === 'Finished' ? (
                   <span className="text-white/40 font-mono font-bold">FT - FULL TIME</span>
                 ) : (
@@ -339,6 +341,11 @@ export default function PublicMatchCenter() {
                 {match.referee && (
                   <div className="text-primary text-[10px] font-black tracking-widest uppercase mt-1">
                     👮 Referee: {match.referee}
+                  </div>
+                )}
+                {match.note && (
+                  <div className="text-amber-400 text-[10px] font-black tracking-widest uppercase mt-1">
+                    ⚠️ Note: {match.note}
                   </div>
                 )}
                 {match.manOfTheMatch && (
@@ -375,6 +382,22 @@ export default function PublicMatchCenter() {
 
           </div>
         </div>
+
+        {match.walkover && (
+          <div className="glass border border-amber-500/30 rounded-[32px] p-6 bg-amber-500/5 mb-8 text-left max-w-4xl mx-auto">
+            <h3 className="text-lg font-display font-black uppercase tracking-wider text-amber-400 flex items-center gap-2 pb-3 border-b border-white/5 mb-4">
+              <span>⚠️ ADMINISTRATIVE WALKOVER AWARDED</span>
+            </h3>
+            <p className="text-sm font-sans font-medium text-white/85 leading-relaxed">
+              This fixture was officially decided via an administrative walkover. Under competition rules, 
+              <strong> {awayTeam.name} ({match.awayTeam})</strong> has been awarded a <strong>3-0 win</strong> over 
+              <strong> {homeTeam.name} ({match.homeTeam})</strong>.
+            </p>
+            <p className="text-xs font-mono text-white/40 mt-3 leading-normal">
+              Note: No individual player statistics (goals, assists, cards, clean sheets, or appearances) are recorded for walkover fixtures. ANA has been awarded 3 League Phase coefficient points, while BDG receives 0.
+            </p>
+          </div>
+        )}
 
         {/* THREE COLUMN GRID: STATS, TIMELINE & LINEUPS, COMMENTARY & REPORT */}
         <div className="grid lg:grid-cols-3 gap-8">

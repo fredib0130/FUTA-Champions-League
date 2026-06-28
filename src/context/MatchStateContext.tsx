@@ -228,10 +228,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       goals_conceded: 0,
     }));
 
-    // Find all finished matches
+    // Find all finished matches (exclude walkovers to prevent player stats from being counted)
     const finishedMatches = matches.filter(m => {
       const s = m.status.trim().toUpperCase();
-      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED';
+      return (s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED') && !m.walkover;
     });
 
     // 1. Calculate Goals
@@ -385,6 +385,18 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       mjd.suspensionDuration = '1 Match';
       mjd.fineAmount = 3000;
       mjd.finePaid = false;
+    }
+
+    const ncd = basePlayers.find(p => p.id === 'player-simt-1' || p.name.toLowerCase() === 'nwabunwanne chibichi daniel');
+    if (ncd) {
+      ncd.isSuspended = true;
+      ncd.suspensionDuration = '2 Matches';
+    }
+
+    const aai = basePlayers.find(p => p.id === 'player-mst-2' || p.name.toLowerCase() === 'adeyemi adedayo ibrahim');
+    if (aai) {
+      aai.isSuspended = true;
+      aai.suspensionDuration = '1 Match';
     }
 
     return basePlayers;

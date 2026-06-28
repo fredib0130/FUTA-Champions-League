@@ -599,10 +599,43 @@ export const MATCHES: Match[] = [
   { id: 'md3-7', homeTeam: 'ICE', awayTeam: 'FWT', date: '2026-06-28', time: '12:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 3, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3, walkover: true, referee: 'Administrative Walkover', refereeAssigned: true, matchApproved: true, note: 'Walkover due to FWT Disqualification' },
   { id: 'md3-8', homeTeam: 'APH', awayTeam: 'AGE', date: '2026-06-28', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
   { id: 'md3-9', homeTeam: 'ENT', awayTeam: 'MBBS', date: '2026-06-28', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
-  { id: 'md3-10', homeTeam: 'BDG', awayTeam: 'ANA', date: '2026-06-28', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3 },
+  { id: 'md3-10', homeTeam: 'BDG', awayTeam: 'ANA', date: '2026-06-28', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 3, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3, walkover: true, referee: 'Administrative Walkover', refereeAssigned: true, matchApproved: true, note: 'Walkover awarded in favour of ANA' },
 ];
 
 export const NEWS: NewsPost[] = [
+  {
+    id: 'disciplinary-mst-simt',
+    title: '🚨 OFFICIAL STATEMENT ON THE MST vs SIMT FIXTURE',
+    excerpt: 'The FCL Disciplinary Committee has suspended Nwabunwanne Chibichi Daniel (SIMT) for 2 matches and Adeyemi Adedayo Ibrahim (MST) for 1 match following incidents in the MST vs SIMT fixture.',
+    content: `Published: 28th June, 2026
+Time: 22:30
+
+Following a comprehensive review of the reports and incidents recorded during the Marine Science and Technology (MST) vs Security, Investment and Management Technology (SIMT) fixture, the FCL Disciplinary Committee hereby issues the following decisions:
+
+1. Suspension of Players
+
+After careful consideration of the reports submitted by match officials and the Disciplinary Committee's findings:
+
+• Nwabunwanne Chibichi Daniel (SIMT) is hereby suspended for two (2) matches, without the right of appeal. This sanction is imposed for his repeated use of abusive and vulgar language towards both match officials and opposition players, as well as his unsportsmanlike conduct following MST's second goal.
+
+• Adeyemi Adedayo Ibrahim (MST) is hereby suspended for one (1) match, without the right of appeal. This sanction is imposed for conduct deemed unsportsmanlike during the confrontation that followed MST's second goal, despite his apparent attempt to de-escalate the situation.
+
+2. Formal Warning to SIMT
+
+Security, Investment and Management Technology (SIMT) is hereby issued a final warning regarding the conduct of its players during the fixture. The Committee observed repeated acts of indiscipline and emotional misconduct that negatively affected the spirit of fair play.
+
+The Committee wishes to make it clear that any future incident involving similar misconduct by SIMT may attract more severe sanctions, including possible expulsion from the FUTA Champions League.
+
+The FCL remains committed to promoting discipline, respect, professionalism, and fair play. All players, team officials, and match officials are reminded that actions inconsistent with these values will continue to attract appropriate disciplinary measures.
+
+This decision takes immediate effect.
+
+Signed,
+FCL Disciplinary Committee`,
+    image: 'https://images.unsplash.com/photo-1518063319789-7217e6706b04?q=80&w=1000',
+    date: '2026-06-28',
+    category: 'Committee Announcement'
+  },
   {
     id: 'postponed-notice',
     title: '🚨 OFFICIAL NOTICE OF POSTPONEMENT 🚨',
@@ -684,12 +717,12 @@ export const COEFFICIENTS: CoefficientRanking[] = [
   { rank: 15, teamId: 'idd', teamName: 'Industrial Design', points2026: 10.00, points2025: 0.00, totalCoefficient: 10.00, isActive: true, movement: '🟢⬆️' },
   { rank: 16, teamId: 'mbbs', teamName: 'Medicine and Surgery', points2026: 6.00, points2025: 4.00, totalCoefficient: 10.00, isActive: true, movement: '🟢⬇️' },
   { rank: 17, teamId: 'phy', teamName: 'Physics', points2026: 9.00, points2025: 0.00, totalCoefficient: 9.00, isActive: true, movement: '🟢⬆️' },
-  { rank: 18, teamId: 'mts', teamName: 'Mathematics', points2026: 0.00, points2025: 9.00, totalCoefficient: 9.00, isActive: false, movement: '🔴⬇️' },
-  { rank: 19, teamId: 'rsg', teamName: 'Remote Sensing & GIS', points2026: 0.00, points2025: 8.00, totalCoefficient: 8.00, isActive: false, movement: '🔴➡️' },
-  { rank: 20, teamId: 'aph', teamName: 'Animal Production and Health', points2026: 7.00, points2025: 0.00, totalCoefficient: 7.00, isActive: true, movement: '🟢➡️' },
-  { rank: 21, teamId: 'simt', teamName: 'Securities and Investment Management Technology', points2026: 7.00, points2025: 0.00, totalCoefficient: 7.00, isActive: true, movement: '🟢➡️' },
-  { rank: 22, teamId: 'agp', teamName: 'Applied Geo-Physics', points2026: 7.00, points2025: 0.00, totalCoefficient: 7.00, isActive: true, movement: '🟢➡️' },
-  { rank: 23, teamId: 'ana', teamName: 'Anatomy', points2026: 6.00, points2025: 0.00, totalCoefficient: 6.00, isActive: true, movement: '🟢➡️' },
+  { rank: 18, teamId: 'ana', teamName: 'Anatomy', points2026: 9.00, points2025: 0.00, totalCoefficient: 9.00, isActive: true, movement: '🟢⬆️' },
+  { rank: 19, teamId: 'mts', teamName: 'Mathematics', points2026: 0.00, points2025: 9.00, totalCoefficient: 9.00, isActive: false, movement: '🔴⬇️' },
+  { rank: 20, teamId: 'rsg', teamName: 'Remote Sensing & GIS', points2026: 0.00, points2025: 8.00, totalCoefficient: 8.00, isActive: false, movement: '🔴➡️' },
+  { rank: 21, teamId: 'aph', teamName: 'Animal Production and Health', points2026: 7.00, points2025: 0.00, totalCoefficient: 7.00, isActive: true, movement: '🟢➡️' },
+  { rank: 22, teamId: 'simt', teamName: 'Securities and Investment Management Technology', points2026: 7.00, points2025: 0.00, totalCoefficient: 7.00, isActive: true, movement: '🟢➡️' },
+  { rank: 23, teamId: 'agp', teamName: 'Applied Geo-Physics', points2026: 7.00, points2025: 0.00, totalCoefficient: 7.00, isActive: true, movement: '🟢➡️' },
   { rank: 24, teamId: 'bch', teamName: 'Bio Chemistry', points2026: 6.00, points2025: 0.00, totalCoefficient: 6.00, isActive: true, movement: '🟢⬆️' },
   { rank: 25, teamId: 'sta', teamName: 'Statistics', points2026: 6.00, points2025: 0.00, totalCoefficient: 6.00, isActive: true, movement: '🟢⬆️' },
   { rank: 26, teamId: 'ltt', teamName: 'Logistics and Transport Technology', points2026: 0.00, points2025: 6.00, totalCoefficient: 6.00, isActive: false, movement: '🔴⬇️' },
