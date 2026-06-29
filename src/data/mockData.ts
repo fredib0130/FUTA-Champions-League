@@ -604,6 +604,27 @@ export const MATCHES: Match[] = [
   { id: 'md3-8', homeTeam: 'APH', awayTeam: 'AGE', date: '2026-06-28', time: '14:00', venue: 'Mini Pitch', status: 'Interrupted', homeScore: 1, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Peter (IFS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'N/A' },
   { id: 'md3-9', homeTeam: 'ENT', awayTeam: 'MBBS', date: '2026-06-28', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 3, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Fatai', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'N/A' },
   { id: 'md3-10', homeTeam: 'BDG', awayTeam: 'ANA', date: '2026-06-28', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 3, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3, walkover: true, referee: 'Administrative Walkover', refereeAssigned: true, matchApproved: true, note: 'Walkover awarded in favour of ANA' },
+
+  // --- PLAYOFF ROUND (June 29 - 30) ---
+  { id: 'PO1', homeTeam: 'SEED3', awayTeam: 'SEED14', date: '2026-06-30', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round' },
+  { id: 'PO2', homeTeam: 'SEED4', awayTeam: 'SEED13', date: '2026-06-30', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round' },
+  { id: 'PO3', homeTeam: 'SEED5', awayTeam: 'SEED12', date: '2026-06-30', time: '12:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
+  { id: 'PO4', homeTeam: 'SEED6', awayTeam: 'SEED11', date: '2026-06-30', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
+  { id: 'PO5', homeTeam: 'SEED7', awayTeam: 'SEED10', date: '2026-07-01', time: '09:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
+  { id: 'PO6', homeTeam: 'SEED8', awayTeam: 'SEED9', date: '2026-07-01', time: '11:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
+
+  // --- QUARTER-FINALS (July 1 - 2) ---
+  { id: 'QF1', homeTeam: 'SEED1', awayTeam: 'PO6_WINNER', date: '2026-07-01', time: '14:00', venue: 'FUTA Football Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
+  { id: 'QF2', homeTeam: 'SEED2', awayTeam: 'PO5_WINNER', date: '2026-07-01', time: '16:00', venue: 'FUTA Football Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
+  { id: 'QF3', homeTeam: 'PO1_WINNER', awayTeam: 'PO4_WINNER', date: '2026-07-02', time: '14:00', venue: 'FUTA Football Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
+  { id: 'QF4', homeTeam: 'PO2_WINNER', awayTeam: 'PO3_WINNER', date: '2026-07-02', time: '16:00', venue: 'FUTA Football Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
+
+  // --- SEMI-FINALS (July 4) ---
+  { id: 'SF1', homeTeam: 'QF1_WINNER', awayTeam: 'QF3_WINNER', date: '2026-07-04', time: '15:00', venue: 'FUTA Football Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
+  { id: 'SF2', homeTeam: 'QF2_WINNER', awayTeam: 'QF4_WINNER', date: '2026-07-04', time: '17:00', venue: 'FUTA Football Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
+
+  // --- FINAL (July 6) ---
+  { id: 'FINAL', homeTeam: 'SF1_WINNER', awayTeam: 'SF2_WINNER', date: '2026-07-06', time: '16:00', venue: 'FUTA Football Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 7, stage: 'Final' },
 ];
 
 export const NEWS: NewsPost[] = [

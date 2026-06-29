@@ -101,6 +101,7 @@ export interface Match {
   manOfTheMatch?: string;
   walkover?: boolean;
   note?: string;
+  stage?: string;
 }
 
 export interface NewsPost {

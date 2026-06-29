@@ -19,12 +19,72 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
   // Fetch from live state list
   const match = matches.find(m => m.id === initialMatch.id) || initialMatch;
 
-  const homeTeam = teams.find(t => t.id === match.homeTeam.toLowerCase());
-  const awayTeam = teams.find(t => t.id === match.awayTeam.toLowerCase());
+  const getDisplayTeam = (teamId: string) => {
+    const existing = teams.find(t => t.id.toLowerCase() === teamId.toLowerCase());
+    if (existing) return existing;
+
+    const idUpper = teamId.toUpperCase();
+    if (idUpper.startsWith('SEED')) {
+      const num = idUpper.replace('SEED', '');
+      return {
+        id: teamId,
+        name: `Seed ${num}`,
+        logoUrl: `https://api.dicebear.com/7.x/initials/svg?seed=S${num}`,
+        group: '',
+        played: 0,
+        won: 0,
+        drawn: 0,
+        lost: 0,
+        goalsFor: 0,
+        goalsAgainst: 0,
+        goalDifference: 0,
+        points: 0,
+        form: [],
+        description: 'Knockout Seed'
+      } as Team;
+    }
+    if (idUpper.endsWith('_WINNER')) {
+      const matchId = idUpper.replace('_WINNER', '');
+      return {
+        id: teamId,
+        name: `Winner of ${matchId}`,
+        logoUrl: `https://api.dicebear.com/7.x/initials/svg?seed=${matchId}`,
+        group: '',
+        played: 0,
+        won: 0,
+        drawn: 0,
+        lost: 0,
+        goalsFor: 0,
+        goalsAgainst: 0,
+        goalDifference: 0,
+        points: 0,
+        form: [],
+        description: 'Tournament Challenger'
+      } as Team;
+    }
+
+    return {
+      id: teamId,
+      name: teamId,
+      logoUrl: null,
+      group: '',
+      played: 0,
+      won: 0,
+      drawn: 0,
+      lost: 0,
+      goalsFor: 0,
+      goalsAgainst: 0,
+      goalDifference: 0,
+      points: 0,
+      form: [],
+      description: 'Placeholder'
+    } as Team;
+  };
+
+  const homeTeam = getDisplayTeam(match.homeTeam);
+  const awayTeam = getDisplayTeam(match.awayTeam);
   const homeCoeff = homeTeam ? COEFFICIENTS.find(c => c.teamId === homeTeam.id) : undefined;
   const awayCoeff = awayTeam ? COEFFICIENTS.find(c => c.teamId === awayTeam.id) : undefined;
-
-  if (!homeTeam || !awayTeam) return null;
 
   const stats = detailedStats[match.id];
   const liveTimer = activeMinAndStatus[match.id];
@@ -90,6 +150,25 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
   const metrics = getMatchMetrics();
   const isOpeningMatch = match.id === 'md1-1';
 
+  const getStageBadge = () => {
+    const idUpper = match.id.toUpperCase();
+    if (idUpper.startsWith('PO') || match.stage === 'Playoff Round') {
+      return { label: 'Playoff Round', emoji: '🟧', class: 'bg-orange-500/10 text-orange-400 border-orange-500/20' };
+    }
+    if (idUpper.startsWith('QF') || match.stage === 'Quarter-finals') {
+      return { label: 'Quarter-finals', emoji: '🟪', class: 'bg-purple-500/10 text-purple-400 border-purple-500/20' };
+    }
+    if (idUpper.startsWith('SF') || match.stage === 'Semi-finals') {
+      return { label: 'Semi-finals', emoji: '🟥', class: 'bg-red-500/10 text-red-400 border-red-500/20' };
+    }
+    if (idUpper === 'FINAL' || match.stage === 'Final') {
+      return { label: 'Final', emoji: '🟨', class: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20' };
+    }
+    return { label: 'League Phase', emoji: '🟦', class: 'bg-blue-500/10 text-blue-400 border-blue-500/20' };
+  };
+
+  const stageBadge = getStageBadge();
+
   return (
     <motion.div 
       whileHover={{ y: -4 }}
@@ -100,6 +179,19 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
     >
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       
+      {stageBadge && (
+        <div className={cn(
+          "absolute top-4 left-4 px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border flex items-center gap-1.5 z-20",
+          stageBadge.class
+        )}>
+          <span>{stageBadge.emoji}</span>
+          <span>{stageBadge.label}</span>
+          {(match.id.startsWith('PO') || match.id.startsWith('QF') || match.id.startsWith('SF')) && (
+            <span className="font-mono font-black opacity-80 border-l border-white/20 pl-1.5 ml-1">{match.id}</span>
+          )}
+        </div>
+      )}
+
       {isOpeningMatch && (
         <div className="absolute top-0 left-1/2 -translate-x-1/2 px-6 py-1.5 bg-primary text-dark rounded-b-2xl text-[10px] font-black uppercase tracking-[0.2em] z-30 shadow-lg">
           Season Opener
@@ -125,7 +217,7 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
         </div>
       )}
 
-      <div className="flex items-center justify-between space-x-4">
+      <div className="flex items-center justify-between space-x-4 mt-8">
         {/* Home Team */}
         <div className="flex flex-col items-center flex-1 text-center">
           <div className="relative mb-3">

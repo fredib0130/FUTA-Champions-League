@@ -5151,6 +5151,10 @@ FUTA Champions League 2026 ⚽🏆`;
 
     // Find matches to include
     const matchesToInclude = allMatches.filter(m => {
+      // Exclude knockout/playoff matches from league standings calculations
+      if (m.id.startsWith('PO') || m.id.startsWith('QF') || m.id.startsWith('SF') || m.id === 'FINAL') {
+        return false;
+      }
       const s = m.status.trim().toUpperCase();
       const isFinished = s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED';
       const isLive = s === 'LIVE' || s === 'FIRST_HALF' || s === 'FIRSTHALF' || s === 'HALF_TIME' || s === 'HALFTIME' || s === 'HALF-TIME' || s === 'SECOND_HALF' || s === 'SECONDHALF';
@@ -5359,6 +5363,83 @@ FUTA Champions League 2026 ⚽🏆`;
       squad: players.filter(p => p.teamId.toLowerCase() === t.id.toLowerCase())
     }));
   }, [teams, matches, players]);
+
+  const resolvedMatches = React.useMemo(() => {
+    // Determine seed values from computedTeams (which holds current active standings)
+    const sortedLeagueTeams = [...computedTeams].sort((a, b) => {
+      // Disqualified teams are sorted to the bottom
+      const isDisqA = a.isDisqualified ? 1 : 0;
+      const isDisqB = b.isDisqualified ? 1 : 0;
+      if (isDisqA !== isDisqB) return isDisqA - isDisqB;
+
+      if ((b.points || 0) !== (a.points || 0)) return (b.points || 0) - (a.points || 0);
+      const gdA = a.goalDifference !== undefined ? a.goalDifference : (a.goalsFor - a.goalsAgainst);
+      const gdB = b.goalDifference !== undefined ? b.goalDifference : (b.goalsFor - b.goalsAgainst);
+      if (gdB !== gdA) return gdB - gdA;
+
+      if ((b.goalsFor || 0) !== (a.goalsFor || 0)) return (b.goalsFor || 0) - (a.goalsFor || 0);
+      if ((a.goalsAgainst || 0) !== (b.goalsAgainst || 0)) return (a.goalsAgainst || 0) - (b.goalsAgainst || 0);
+      if ((a.played || 0) !== (b.played || 0)) return (a.played || 0) - (b.played || 0);
+      if ((b.won || 0) !== (a.won || 0)) return (b.won || 0) - (a.won || 0);
+      return a.id.toUpperCase().localeCompare(b.id.toUpperCase());
+    });
+
+    const getTeamBySeed = (seedNum: number): string => {
+      const idx = seedNum - 1;
+      return sortedLeagueTeams[idx]?.id || `SEED${seedNum}`;
+    };
+
+    // Helper to get winner of a specific match ID
+    const getWinnerOfMatch = (matchId: string): string => {
+      const m = matches.find(match => match.id === matchId);
+      if (!m) return `${matchId}_WINNER`;
+      const s = m.status.trim().toUpperCase();
+      if (s !== 'FINISHED' && s !== 'FULL-TIME' && s !== 'FULL TIME' && s !== 'COMPLETED') {
+        return `${matchId}_WINNER`;
+      }
+      if (m.homeScore > m.awayScore) return m.homeTeam;
+      if (m.awayScore > m.homeScore) return m.awayTeam;
+      if (m.homePenalties !== undefined && m.awayPenalties !== undefined) {
+        return m.homePenalties > m.awayPenalties ? m.homeTeam : m.awayTeam;
+      }
+      return `${matchId}_WINNER`;
+    };
+
+    return matches.map(m => {
+      let homeTeam = m.homeTeam;
+      let awayTeam = m.awayTeam;
+
+      // Resolve Seed placeholders
+      if (homeTeam.startsWith('SEED')) {
+        const seedNum = parseInt(homeTeam.replace('SEED', ''), 10);
+        if (!isNaN(seedNum)) {
+          homeTeam = getTeamBySeed(seedNum);
+        }
+      }
+      if (awayTeam.startsWith('SEED')) {
+        const seedNum = parseInt(awayTeam.replace('SEED', ''), 10);
+        if (!isNaN(seedNum)) {
+          awayTeam = getTeamBySeed(seedNum);
+        }
+      }
+
+      // Resolve Playoff Winner placeholders
+      if (homeTeam.endsWith('_WINNER')) {
+        const matchId = homeTeam.replace('_WINNER', '');
+        homeTeam = getWinnerOfMatch(matchId);
+      }
+      if (awayTeam.endsWith('_WINNER')) {
+        const matchId = awayTeam.replace('_WINNER', '');
+        awayTeam = getWinnerOfMatch(matchId);
+      }
+
+      return {
+        ...m,
+        homeTeam,
+        awayTeam
+      };
+    });
+  }, [matches, computedTeams]);
 
   useEffect(() => {
     const hasReset = localStorage.getItem('fcl_reset_2026_ft_v28');
@@ -6662,7 +6743,7 @@ FUTA Champions League 2026 ⚽🏆`;
   return (
     <MatchStateContext.Provider
       value={{
-        matches,
+        matches: resolvedMatches,
         teams: computedTeams,
         players,
         detailedStats,

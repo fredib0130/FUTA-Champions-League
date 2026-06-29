@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useParams } from 'react-router-dom';
-import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone, Image as ImageIcon, Twitter, ExternalLink, ShieldCheck, Clock, Medal, BookOpen, ChevronRight, Search, Edit2, AlertCircle, Inbox, Trash2, Filter, Check, CheckCheck, AlertTriangle } from 'lucide-react';
+import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone, Image as ImageIcon, Twitter, ExternalLink, ShieldCheck, Clock, Medal, BookOpen, ChevronRight, Search, Edit2, AlertCircle, Inbox, Trash2, Filter, Check, CheckCheck, AlertTriangle, Calendar } from 'lucide-react';
 import { Countdown } from '../components/Countdown';
 import { MatchCard } from '../components/MatchCard';
 import { PageHeader } from '../components/PageHeader';
@@ -744,6 +744,7 @@ export function Home() {
 }
 export function Fixtures() {
   const { matches, editFixture, teams } = useMatchState();
+  const [activeStage, setActiveStage] = React.useState<string>('mw1');
   const [activeMW, setActiveMW] = React.useState(1);
   const [viewTab, setViewTab] = React.useState<'fixtures' | 'referees'>('fixtures');
   const [fixtureType, setFixtureType] = React.useState<'fixtures' | 'results'>('fixtures');
@@ -763,16 +764,67 @@ export function Fixtures() {
   const matchWeeks = [1, 2, 3]; 
 
   const filteredMatches = matches.filter(m => {
-    if (m.matchday !== activeMW) return false;
-    const s = m.status.trim().toUpperCase();
-    if (fixtureType === 'fixtures') {
-      return s === 'UPCOMING' || s === 'SCHEDULED' || s === 'POSTPONED' || s === 'LIVE' || s === 'HALF TIME' || s === 'HALF-TIME' || s === 'DELAYED';
+    // 1. Filter by activeStage
+    if (activeStage === 'mw1') {
+      if (m.matchday !== 1) return false;
+    } else if (activeStage === 'mw2') {
+      if (m.matchday !== 2) return false;
+    } else if (activeStage === 'mw3') {
+      if (m.matchday !== 3) return false;
+    } else if (activeStage === 'playoffs') {
+      if (!m.id.startsWith('PO') && m.stage !== 'Playoff Round') return false;
+    } else if (activeStage === 'qfs') {
+      if (!m.id.startsWith('QF') && m.stage !== 'Quarter-finals') return false;
+    } else if (activeStage === 'sfs') {
+      if (!m.id.startsWith('SF') && m.stage !== 'Semi-finals') return false;
+    } else if (activeStage === 'final') {
+      if (m.id !== 'FINAL' && m.stage !== 'Final') return false;
     } else {
-      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED' || s === 'INTERRUPTED';
+      return false;
+    }
+
+    // 2. Filter by fixtureType
+    const s = m.status.trim().toUpperCase();
+    const isFinished = s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED' || s === 'INTERRUPTED' || m.walkover;
+    const isUpcomingOrLive = s === 'UPCOMING' || s === 'SCHEDULED' || s === 'POSTPONED' || s === 'LIVE' || s === 'HALF TIME' || s === 'HALF-TIME' || s === 'DELAYED';
+
+    if (fixtureType === 'fixtures') {
+      return isUpcomingOrLive;
+    } else {
+      return isFinished;
     }
   });
 
-  const matchdayOpeningLabel = activeMW === 1 ? 'Season Opener & Week 1 (June 5-7)' : activeMW === 2 ? 'Mid-Season Clash (June 10-11)' : 'Final League Push (June 13-15)';
+  const getStageHeaderLabel = () => {
+    switch (activeStage) {
+      case 'mw1': return 'Season Opener & Week 1 (June 5-7)';
+      case 'mw2': return 'Mid-Season Clash (June 10-11)';
+      case 'mw3': return 'Final League Push (June 13-15)';
+      case 'playoffs': return 'Knockout Playoff Round (June 29-30)';
+      case 'qfs': return 'Quarter-finals Knockouts (July 1-2)';
+      case 'sfs': return 'Semi-finals Contests (July 4)';
+      case 'final': return 'FCL 2026 Grand Final (July 6)';
+      default: return '';
+    }
+  };
+
+  const getEmptyStateLabel = () => {
+    const stageName = activeStage.startsWith('mw') 
+      ? `Matchday ${activeStage.replace('mw', '')}` 
+      : activeStage === 'playoffs'
+        ? 'Playoff Round'
+        : activeStage === 'qfs'
+          ? 'Quarter-finals'
+          : activeStage === 'sfs'
+            ? 'Semi-finals'
+            : 'Grand Final';
+
+    return fixtureType === 'fixtures'
+      ? `No upcoming fixtures for ${stageName}`
+      : `No completed results for ${stageName}`;
+  };
+
+  const matchdayOpeningLabel = getStageHeaderLabel();
 
   const isAdmin = !!localStorage.getItem('fcl_admin_user');
 
@@ -845,6 +897,167 @@ export function Fixtures() {
     return matchesSearch && matchesMW && matchesStatus;
   });
 
+  // --- Dedicated Playoff Round Section ---
+  const PlayoffRoundSection = () => {
+    // 1. Compute sorted teams for seed resolution display
+    const sortedLeagueTeams = React.useMemo(() => {
+      return [...teams].sort((a, b) => {
+        const isDisqA = a.isDisqualified ? 1 : 0;
+        const isDisqB = b.isDisqualified ? 1 : 0;
+        if (isDisqA !== isDisqB) return isDisqA - isDisqB;
+
+        if ((b.points || 0) !== (a.points || 0)) return (b.points || 0) - (a.points || 0);
+        const gdA = a.goalDifference !== undefined ? a.goalDifference : ((a.goalsFor || 0) - (a.goalsAgainst || 0));
+        const gdB = b.goalDifference !== undefined ? b.goalDifference : ((b.goalsFor || 0) - (b.goalsAgainst || 0));
+        if (gdB !== gdA) return gdB - gdA;
+
+        if ((b.goalsFor || 0) !== (a.goalsFor || 0)) return (b.goalsFor || 0) - (a.goalsFor || 0);
+        if ((a.goalsAgainst || 0) !== (b.goalsAgainst || 0)) return (a.goalsAgainst || 0) - (b.goalsAgainst || 0);
+        if ((a.played || 0) !== (b.played || 0)) return (a.played || 0) - (b.played || 0);
+        if ((b.won || 0) !== (a.won || 0)) return (b.won || 0) - (a.won || 0);
+        return a.id.toUpperCase().localeCompare(b.id.toUpperCase());
+      });
+    }, [teams]);
+
+    const getTeamByPosition = (pos: number) => {
+      const t = sortedLeagueTeams[pos - 1];
+      return t ? { id: t.id, name: t.name, logoUrl: t.logoUrl } : { id: `SEED${pos}`, name: `${pos}th Place`, logoUrl: null };
+    };
+
+    const playoffDays = [
+      {
+        day: "Tuesday, 30th June, 2026",
+        matches: [
+          { id: "PO1", time: "9:30 AM", homeSeed: 3, awaySeed: 14 },
+          { id: "PO2", time: "11:00 AM", homeSeed: 4, awaySeed: 13 },
+          { id: "PO3", time: "12:30 PM", homeSeed: 5, awaySeed: 12 },
+          { id: "PO4", time: "2:00 PM", homeSeed: 6, awaySeed: 11 },
+        ]
+      },
+      {
+        day: "Wednesday, 1st July, 2026",
+        matches: [
+          { id: "PO5", time: "9:30 AM", homeSeed: 7, awaySeed: 10 },
+          { id: "PO6", time: "11:00 AM", homeSeed: 8, awaySeed: 9 },
+        ]
+      }
+    ];
+
+    return (
+      <div className="mt-16 space-y-12 border-t border-white/5 pt-16" id="playoff-round-section">
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center gap-2 bg-[#00e5ff]/10 text-[#00e5ff] border border-[#00e5ff]/20 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+            <span>🏆 FUTA Champions League 2026</span>
+          </div>
+          <h3 className="text-2xl font-display italic uppercase tracking-tighter text-glow">
+            Playoff Round
+          </h3>
+          <p className="text-white/40 text-xs max-w-lg mx-auto font-medium">
+            Top 2 teams qualify directly to Quarter-finals. Teams ranked 3rd to 14th battle in the Playoff Round for the remaining 6 spots.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-8">
+          {playoffDays.map((dayData, dayIdx) => (
+            <div key={dayIdx} className="glass border border-white/5 bg-navy-dark/40 rounded-3xl p-6 space-y-6">
+              <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+                <Calendar className="text-[#00e5ff] w-4 h-4" />
+                <h4 className="text-sm font-black uppercase text-[#00e5ff] tracking-wider">
+                  {dayData.day}
+                </h4>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/5 text-[10px] font-black uppercase text-white/40 tracking-wider">
+                      <th className="py-3 px-2">Playoff</th>
+                      <th className="py-3 px-2">Time</th>
+                      <th className="py-3 px-2">Fixture</th>
+                      <th className="py-3 px-2 text-right">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {dayData.matches.map((mInfo) => {
+                      const m = matches.find(match => match.id === mInfo.id);
+                      
+                      const homeTeam = m ? teams.find(t => t.id.toLowerCase() === m.homeTeam.toLowerCase()) : null;
+                      const awayTeam = m ? teams.find(t => t.id.toLowerCase() === m.awayTeam.toLowerCase()) : null;
+
+                      const homeSeedTeam = getTeamByPosition(mInfo.homeSeed);
+                      const awaySeedTeam = getTeamByPosition(mInfo.awaySeed);
+
+                      const displayHome = homeTeam || homeSeedTeam;
+                      const displayAway = awayTeam || awaySeedTeam;
+
+                      const isFinished = m ? (m.status.trim().toUpperCase() === 'FINISHED' || m.status.trim().toUpperCase() === 'FULL-TIME' || m.status.trim().toUpperCase() === 'FULL TIME' || m.status.trim().toUpperCase() === 'COMPLETED') : false;
+                      const isLive = m ? (m.status.trim().toUpperCase() === 'LIVE' || m.status.trim().toUpperCase() === 'FIRST_HALF' || m.status.trim().toUpperCase() === 'FIRSTHALF' || m.status.trim().toUpperCase() === 'HALF_TIME' || m.status.trim().toUpperCase() === 'HALFTIME' || m.status.trim().toUpperCase() === 'HALF-TIME' || m.status.trim().toUpperCase() === 'SECOND_HALF' || m.status.trim().toUpperCase() === 'SECONDHALF') : false;
+
+                      return (
+                        <tr key={mInfo.id} className="text-xs text-white/80 hover:bg-white/[0.01] transition-colors">
+                          <td className="py-4 px-2 font-black text-white">{mInfo.id}</td>
+                          <td className="py-4 px-2 font-mono text-white/60">{mInfo.time}</td>
+                          <td className="py-4 px-2">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
+                              {/* Home Team */}
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <TeamLogo teamId={displayHome.id} logoUrl={displayHome.logoUrl} className="w-5 h-5 flex-shrink-0" />
+                                <span className={cn(
+                                  "font-bold truncate",
+                                  isFinished && m && m.homeScore > m.awayScore ? "text-[#00e5ff]" : ""
+                                )}>
+                                  {displayHome.name}
+                                </span>
+                                <span className="text-[9px] font-black uppercase text-white/30 whitespace-nowrap">
+                                  ({mInfo.homeSeed}rd)
+                                </span>
+                              </div>
+
+                              <span className="text-white/30 font-black text-[10px] hidden sm:inline">VS</span>
+
+                              {/* Away Team */}
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <TeamLogo teamId={displayAway.id} logoUrl={displayAway.logoUrl} className="w-5 h-5 flex-shrink-0" />
+                                <span className={cn(
+                                  "font-bold truncate",
+                                  isFinished && m && m.awayScore > m.homeScore ? "text-[#00e5ff]" : ""
+                                )}>
+                                  {displayAway.name}
+                                </span>
+                                <span className="text-[9px] font-black uppercase text-white/30 whitespace-nowrap">
+                                  ({mInfo.awaySeed}th)
+                                </span>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-2 text-right whitespace-nowrap">
+                            {isLive && m ? (
+                              <div className="inline-flex items-center gap-1.5 bg-red-500/10 text-red-400 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-wider animate-pulse border border-red-500/20">
+                                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                                <span>{m.homeScore} - {m.awayScore} LIVE</span>
+                              </div>
+                            ) : isFinished && m ? (
+                              <div className="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-wider border border-emerald-500/20">
+                                <span>{m.homeScore} - {m.awayScore}</span>
+                                <span className="text-[8px] opacity-75 font-bold">FT</span>
+                              </div>
+                            ) : (
+                              <span className="text-[10px] font-black uppercase text-white/30 tracking-wider">UPCOMING</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div>
       <PageHeader 
@@ -886,22 +1099,68 @@ export function Fixtures() {
 
         {viewTab === 'fixtures' ? (
           <>
-            {/* Matchweek Selector */}
-            <div className="flex overflow-x-auto space-x-4 mb-4 py-4 no-scrollbar">
-              {matchWeeks.map((mw) => (
-                <button
-                  key={mw}
-                  onClick={() => setActiveMW(mw)}
-                  className={cn(
-                    "px-8 py-4 rounded-2xl font-black text-xs tracking-widest flex-shrink-0 transition-all border uppercase",
-                    activeMW === mw 
-                      ? "bg-primary text-dark border-primary shadow-[0_0_20px_rgba(0,229,255,0.3)]" 
-                      : "bg-white/5 text-white/50 border-white/10 hover:bg-white/10"
-                  )}
-                >
-                  MATCHDAY {mw < 10 ? `0${mw}` : mw}
-                </button>
-              ))}
+            {/* Modern Grouped Stage Selector */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-navy-dark/40 border border-white/5 rounded-3xl p-6">
+              {/* League Phase Group */}
+              <div>
+                <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] block mb-3">🟦 League Phase</span>
+                <div className="flex flex-wrap gap-2.5">
+                  {[1, 2, 3].map((mw) => {
+                    const key = `mw${mw}`;
+                    const isActive = activeStage === key;
+                    return (
+                      <button
+                        key={mw}
+                        onClick={() => {
+                          setActiveStage(key);
+                          setActiveMW(mw);
+                        }}
+                        className={cn(
+                          "px-5 py-3 rounded-xl font-black text-[10px] tracking-widest transition-all border uppercase cursor-pointer",
+                          isActive 
+                            ? "bg-primary text-dark border-primary shadow-[0_0_15px_rgba(0,229,255,0.35)]" 
+                            : "bg-white/5 text-white/50 border-white/10 hover:bg-white/10 hover:text-white"
+                        )}
+                      >
+                        MATCHDAY {mw < 10 ? `0${mw}` : mw}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Knockout Rounds Group */}
+              <div>
+                <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] block mb-3">🏆 Knockout Stages</span>
+                <div className="flex flex-wrap gap-2.5">
+                  {[
+                    { key: 'playoffs', label: 'Playoffs', icon: '🟧' },
+                    { key: 'qfs', label: 'Quarters', icon: '🟪' },
+                    { key: 'sfs', label: 'Semis', icon: '🟥' },
+                    { key: 'final', label: 'Final', icon: '🟨' }
+                  ].map((stageItem) => {
+                    const isActive = activeStage === stageItem.key;
+                    return (
+                      <button
+                        key={stageItem.key}
+                        onClick={() => {
+                          setActiveStage(stageItem.key);
+                          setActiveMW(-1); // flag for non-league
+                        }}
+                        className={cn(
+                          "px-4.5 py-3 rounded-xl font-black text-[10px] tracking-widest transition-all border uppercase flex items-center gap-1.5 cursor-pointer",
+                          isActive 
+                            ? "bg-[#00e5ff] text-dark border-[#00e5ff] shadow-[0_0_15px_rgba(0,229,255,0.35)]" 
+                            : "bg-white/5 text-white/50 border-white/10 hover:bg-white/10 hover:text-white"
+                        )}
+                      >
+                        <span>{stageItem.icon}</span>
+                        <span>{stageItem.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
 
             {/* Fixtures vs Results sub-toggle */}
@@ -983,14 +1242,15 @@ export function Fixtures() {
               ) : (
                 <div className="text-center py-20 glass rounded-[40px]">
                   <p className="text-white/30 font-display italic text-2xl uppercase tracking-widest">
-                    {fixtureType === 'fixtures' 
-                      ? `No upcoming fixtures for MW${activeMW}` 
-                      : `No completed results for MW${activeMW}`
-                    }
+                    {getEmptyStateLabel()}
                   </p>
                 </div>
               )}
             </div>
+
+            {(activeStage.startsWith('mw') || activeStage === 'playoffs') && (
+              <PlayoffRoundSection />
+            )}
           </>
         ) : (
           <div className="space-y-8">
@@ -1338,114 +1598,30 @@ export function Table() {
 
 export const knockoutStructure = {
   playoffs: [
-    {
-      id: "PO1",
-      stage: "Playoffs",
-      dateRange: "18th June 2026 - 20th June 2026",
-      fixture: "Seed 3 vs Seed 14"
-    },
-
-    {
-      id: "PO2",
-      stage: "Playoffs",
-      dateRange: "18th June 2026 - 20th June 2026",
-      fixture: "Seed 4 vs Seed 13"
-    },
-
-    {
-      id: "PO3",
-      stage: "Playoffs",
-      dateRange: "18th June 2026 - 20th June 2026",
-      fixture: "Seed 5 vs Seed 12"
-    },
-
-    {
-      id: "PO4",
-      stage: "Playoffs",
-      dateRange: "18th June 2026 - 20th June 2026",
-      fixture: "Seed 6 vs Seed 11"
-    },
-
-    {
-      id: "PO5",
-      stage: "Playoffs",
-      dateRange: "18th June 2026 - 20th June 2026",
-      fixture: "Seed 7 vs Seed 10"
-    },
-
-    {
-      id: "PO6",
-      stage: "Playoffs",
-      dateRange: "18th June 2026 - 20th June 2026",
-      fixture: "Seed 8 vs Seed 9"
-    }
+    { id: "PO1", stage: "Playoff Round", dateRange: "29th June 2026", fixture: "IDD vs STA" },
+    { id: "PO2", stage: "Playoff Round", dateRange: "29th June 2026", fixture: "BDG vs APH" },
+    { id: "PO3", stage: "Playoff Round", dateRange: "29th June 2026", fixture: "CSP vs ANA" },
+    { id: "PO4", stage: "Playoff Round", dateRange: "30th June 2026", fixture: "MST vs MBBS" },
+    { id: "PO5", stage: "Playoff Round", dateRange: "30th June 2026", fixture: "PHY vs SIMT" },
+    { id: "PO6", stage: "Playoff Round", dateRange: "30th June 2026", fixture: "MCB vs AGP" }
   ],
-
   quarterFinals: [
-    {
-      id: "QF1",
-      dateRange: "22nd June 2026 - 23rd June 2026",
-      fixture: "Seed 1 vs PO6"
-    },
-
-    {
-      id: "QF2",
-      dateRange: "22nd June 2026 - 23rd June 2026",
-      fixture: "Seed 2 vs PO5"
-    },
-
-    {
-      id: "QF3",
-      dateRange: "22nd June 2026 - 23rd June 2026",
-      fixture: "PO1 vs PO4"
-    },
-
-    {
-      id: "QF4",
-      dateRange: "22nd June 2026 - 23rd June 2026",
-      fixture: "PO2 vs PO3"
-    }
+    { id: "QF1", stage: "Quarter-finals", dateRange: "1st July 2026", fixture: "Seed 1 vs PO6" },
+    { id: "QF2", stage: "Quarter-finals", dateRange: "1st July 2026", fixture: "Seed 2 vs PO5" },
+    { id: "QF3", stage: "Quarter-finals", dateRange: "2nd July 2026", fixture: "PO1 vs PO4" },
+    { id: "QF4", stage: "Quarter-finals", dateRange: "2nd July 2026", fixture: "PO2 vs PO3" }
   ],
-
-  semiFinalsFirstLeg: [
-    {
-      id: "SF1",
-      date: "26th June 2026",
-      fixture: "QF1 vs QF3"
-    },
-
-    {
-      id: "SF2",
-      date: "26th June 2026",
-      fixture: "QF2 vs QF4"
-    }
+  semiFinals: [
+    { id: "SF1", stage: "Semi-finals", dateRange: "4th July 2026", fixture: "QF1 vs QF3" },
+    { id: "SF2", stage: "Semi-finals", dateRange: "4th July 2026", fixture: "QF2 vs QF4" }
   ],
-
-  semiFinalsSecondLeg: [
-    {
-      id: "SF1",
-      date: "28th June 2026",
-      fixture: "QF3 vs QF1"
-    },
-
-    {
-      id: "SF2",
-      date: "28th June 2026",
-      fixture: "QF4 vs QF2"
-    }
-  ],
-
   final: [
-    {
-      id: "FINAL",
-      fixture: "SF1 vs SF2",
-      date: "3rd July 2026"
-    }
+    { id: "FINAL", stage: "Final", dateRange: "6th July 2026", fixture: "SF1 vs SF2" }
   ]
 };
 
 export function Playoffs() {
-  const { teams } = useMatchState();
+  const { teams, matches } = useMatchState();
   const [activeStage, setActiveStage] = React.useState<keyof typeof knockoutStructure>('playoffs');
 
   const sortedTeams = React.useMemo(() => {
@@ -1506,61 +1682,17 @@ export function Playoffs() {
     });
   }, [teams]);
 
-  interface DisplayEntity {
-    name: string;
-    sub: string;
-    teamIds: string[];
-  }
-
-  const resolveEntity = (str: string): DisplayEntity => {
-    const trimmed = str.trim();
-    
-    // Parse Seed X
-    const seedMatch = trimmed.match(/^Seed\s+(\d+)$/i);
-    if (seedMatch) {
-      const idx = parseInt(seedMatch[1], 10) - 1;
-      const t = sortedTeams[idx];
-      const ordinal = (n: number) => {
-        const s = ["th", "st", "nd", "rd"];
-        const v = n % 100;
-        return n + (s[(v - 20) % 10] || s[v] || s[0]);
-      };
-      
-      let subText = `${ordinal(idx + 1)} Place Finisher`;
-      if (idx === 0) subText = "Group Stage Winner (Direct QF)";
-      else if (idx === 1) subText = "Group Stage Runner-Up (Direct QF)";
-      
-      return { 
-        name: t?.name || `Seed ${seedMatch[1]}`, 
-        sub: subText, 
-        teamIds: t ? [t.id] : [] 
-      };
-    }
-
-    // Playoff/Quarter/Semi placeholders
-    if (trimmed.startsWith("PO")) {
-      const matchNum = trimmed.replace("PO", "");
-      return { name: `Winner of Playoff ${matchNum}`, sub: "Knockout Challenger", teamIds: [] };
-    }
-    if (trimmed.startsWith("QF")) {
-      const matchNum = trimmed.replace("QF", "");
-      return { name: `Winner of Quarter ${matchNum}`, sub: "Semi-Final Contender", teamIds: [] };
-    }
-    if (trimmed.startsWith("SF")) {
-      const matchNum = trimmed.replace("SF", "");
-      return { name: `Winner of Semi ${matchNum}`, sub: "Title Finalist", teamIds: [] };
-    }
-
-    return { name: trimmed, sub: "Qualified Squad", teamIds: [] };
-  };
-
   const stageTabs = [
-    { key: 'playoffs', label: 'Playoff Round', date: 'June 18-20' },
-    { key: 'quarterFinals', label: 'Quarter-Finals', date: 'June 22-23' },
-    { key: 'semiFinalsFirstLeg', label: 'Semi-Finals (L1)', date: 'June 26' },
-    { key: 'semiFinalsSecondLeg', label: 'Semi-Finals (L2)', date: 'June 28' },
-    { key: 'final', label: 'Grand Final', date: 'July 3' }
+    { key: 'playoffs', label: 'Playoff Round', date: 'June 29-30' },
+    { key: 'quarterFinals', label: 'Quarter-Finals', date: 'July 1-2' },
+    { key: 'semiFinals', label: 'Semi-Finals', date: 'July 4' },
+    { key: 'final', label: 'Grand Final', date: 'July 6' }
   ] as const;
+
+  const stageMatches = React.useMemo(() => {
+    const ids = knockoutStructure[activeStage].map(m => m.id);
+    return matches.filter(m => ids.includes(m.id));
+  }, [activeStage, matches]);
 
   return (
     <div>
@@ -1579,7 +1711,7 @@ export function Playoffs() {
                 <h4 className="text-white font-bold italic uppercase tracking-widest text-xs">Playoff Matchups</h4>
               </div>
               <p className="text-[10px] text-white/40 uppercase tracking-widest leading-relaxed">
-                3rd vs 14th | 4th vs 13th | 5th vs 12th | 6th vs 11th | 7th vs 10th | 8th vs 9th. Six total single-leg elimination duels.
+                PO1 - PO6. Six single-leg elimination duels to decide who joins the top 2 in the Quarter-finals.
               </p>
             </div>
             <div className="space-y-4">
@@ -1588,16 +1720,16 @@ export function Playoffs() {
                 <h4 className="text-yellow-500 font-bold italic uppercase tracking-widest text-xs">Direct Entries</h4>
               </div>
               <p className="text-[10px] text-white/40 uppercase tracking-widest leading-relaxed">
-                The absolute absolute elite seeds 1 and 2 automatically bypass the Playoff rounds and progress directly into Quarter-Final brackets.
+                The absolute elite seeds 1 and 2 automatically bypass the Playoff rounds and progress directly into Quarter-Final brackets.
               </p>
             </div>
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 rounded-full bg-[#00E5FF]" />
-                <h4 className="text-[#00E5FF] font-bold italic uppercase tracking-widest text-xs">Home and Away Finals</h4>
+                <h4 className="text-[#00E5FF] font-bold italic uppercase tracking-widest text-xs">Knockout Rules</h4>
               </div>
               <p className="text-[10px] text-white/40 uppercase tracking-widest leading-relaxed">
-                Semi-final matches are held over dual home/away legs to test consistent sporting excellence before the single-match Grand Finale.
+                All knockout stage games are single-leg. Penalty shootout rules apply in case of a draw at full-time.
               </p>
             </div>
           </div>
@@ -1612,7 +1744,7 @@ export function Playoffs() {
                 key={tab.key}
                 onClick={() => setActiveStage(tab.key)}
                 className={cn(
-                  "px-6 py-4 rounded-2xl text-xs font-bold uppercase tracking-widest transition-all duration-300 relative flex flex-col items-start min-w-[150px] border",
+                  "px-6 py-4 rounded-2xl text-xs font-bold uppercase tracking-widest transition-all duration-300 relative flex flex-col items-start min-w-[150px] border cursor-pointer",
                   isActive 
                     ? "bg-primary/10 border-primary text-primary shadow-[0_0_15px_rgba(218,26,34,0.15)]"
                     : "bg-white/[0.02] border-white/5 text-white/50 hover:text-white hover:border-white/10"
@@ -1642,7 +1774,7 @@ export function Playoffs() {
                 {stageTabs.find(t => t.key === activeStage)?.label}
               </span>
               <span className="text-xs text-white/40 capitalize font-sans not-italic font-bold tracking-normal px-2.5 py-1 rounded-full bg-white/5 border border-white/5">
-                {knockoutStructure[activeStage].length} Fixture{(knockoutStructure[activeStage].length > 1) ? 's' : ''}
+                {stageMatches.length} Fixture{stageMatches.length !== 1 ? 's' : ''}
               </span>
             </h3>
             <span className="text-[10px] font-mono tracking-widest text-white/30 uppercase font-black">
@@ -1651,94 +1783,16 @@ export function Playoffs() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {knockoutStructure[activeStage].map((match: any, i: number) => {
-              const parts = match.fixture.split(" vs ");
-              const team1 = resolveEntity(parts[0] || "");
-              const team2 = resolveEntity(parts[1] || "");
-
-              return (
-                <motion.div 
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  key={match.id} 
-                  className="glass rounded-[32px] border border-white/10 overflow-hidden group hover:border-primary/40 transition-all duration-300 flex flex-col"
-                >
-                  <div className="bg-white/5 px-6 py-4.5 border-b border-white/5 flex justify-between items-center">
-                    <span className="font-mono text-[9px] font-bold text-white/30 uppercase tracking-widest flex items-center space-x-1">
-                      <ShieldCheck size={11} className="text-primary mr-1" />
-                      <span>MATCH {match.id}</span>
-                    </span>
-                    <span className="text-[9px] font-bold text-primary italic uppercase tracking-wider bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
-                      Upcoming
-                    </span>
-                  </div>
-                  
-                  <div className="p-8 flex-1 flex flex-col justify-between space-y-8">
-                    {/* Team 1 Panel */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4 flex-1">
-                        <div className="flex -space-x-2 flex-shrink-0">
-                          {team1.teamIds.length > 0 ? (
-                            team1.teamIds.map((tid, idx) => (
-                              <TeamLogo key={idx} teamId={tid} logoUrl={TEAMS.find(t => t.id === tid)?.logoUrl} className="w-11 h-11" size="custom" />
-                            ))
-                          ) : (
-                            <div className="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 text-white/30 font-mono text-xs font-black">
-                              ?
-                            </div>
-                          )}
-                        </div>
-                        <div className="truncate">
-                          <h4 className="font-bold text-sm text-white group-hover:text-primary transition-colors leading-tight truncate uppercase tracking-tight">{team1.name}</h4>
-                          <span className="text-[9.5px] font-mono font-medium text-white/40 block mt-0.5 uppercase tracking-wider">{team1.sub}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* VS separator line */}
-                    <div className="relative py-1 flex items-center justify-center">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-dashed border-white/10" />
-                      </div>
-                      <span className="relative z-10 text-xs font-display font-black tracking-widest text-[#00E5FF] px-4.5 py-1.5 bg-[#03050B] border border-white/10 rounded-full italic shadow-lg">
-                        VS
-                      </span>
-                    </div>
-
-                    {/* Team 2 Panel */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4 flex-1">
-                        <div className="flex -space-x-2 flex-shrink-0">
-                          {team2.teamIds.length > 0 ? (
-                            team2.teamIds.map((tid, idx) => (
-                              <TeamLogo key={idx} teamId={tid} logoUrl={TEAMS.find(t => t.id === tid)?.logoUrl} className="w-11 h-11" size="custom" />
-                            ))
-                          ) : (
-                            <div className="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 text-white/30 font-mono text-xs font-black">
-                              ?
-                            </div>
-                          )}
-                        </div>
-                        <div className="truncate">
-                          <h4 className="font-bold text-sm text-white group-hover:text-primary transition-colors leading-tight truncate uppercase tracking-tight">{team2.name}</h4>
-                          <span className="text-[9.5px] font-mono font-medium text-white/40 block mt-0.5 uppercase tracking-wider">{team2.sub}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Match Footer Date / Stage metadata */}
-                  <div className="border-t border-white/5 px-6 py-4.5 bg-black/40 flex items-center justify-between text-white/40 font-mono text-[9px] tracking-wider font-bold">
-                    <span className="flex items-center">
-                      <Clock size={11} className="mr-1.5 text-primary" />
-                      <span>{match.dateRange || match.date || "TO BE SCHEDULED"}</span>
-                    </span>
-                    <span className="uppercase text-white/20">FUTA CL 2026</span>
-                  </div>
-                </motion.div>
-              );
-            })}
+            {stageMatches.map((match: any, i: number) => (
+              <motion.div 
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
+                key={match.id} 
+              >
+                <MatchCard match={match} />
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
