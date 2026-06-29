@@ -1665,17 +1665,17 @@ export function Playoffs() {
       if ((a.lost || 0) !== (b.lost || 0)) {
         return (a.lost || 0) - (b.lost || 0);
       }
-      // 9. red_cards ASC
-      const rc_a = a.redCards || 0;
-      const rc_b = b.redCards || 0;
-      if (rc_a !== rc_b) {
-        return rc_a - rc_b;
-      }
-      // 10. yellow_cards ASC
+      // 9. yellow_cards ASC
       const yc_a = a.yellowCards || 0;
       const yc_b = b.yellowCards || 0;
       if (yc_a !== yc_b) {
         return yc_a - yc_b;
+      }
+      // 10. red_cards ASC
+      const rc_a = a.redCards || 0;
+      const rc_b = b.redCards || 0;
+      if (rc_a !== rc_b) {
+        return rc_a - rc_b;
       }
       // 11. team_name ASC
       return a.id.localeCompare(b.id);
@@ -4195,9 +4195,19 @@ export function TeamProfile() {
                       </div>
                     )}
                     {team.fineAmount !== undefined && (
-                      <div className="flex justify-between items-center bg-black/40 p-3 rounded-xl border border-white/5">
-                        <span className="text-xs font-bold text-white/70">Disciplinary Fine</span>
-                        <span className="text-xs font-black text-amber-500">₦{team.fineAmount.toLocaleString()} ({team.finePaid ? 'Paid' : 'Unpaid'})</span>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center bg-black/40 p-3 rounded-xl border border-white/5">
+                          <span className="text-xs font-bold text-white/70">Disciplinary Fine</span>
+                          <span className={team.finePaid ? "text-emerald-400 text-xs font-black" : "text-amber-500 text-xs font-black"}>
+                            ₦{team.fineAmount.toLocaleString()} ({team.finePaid ? 'Cleared' : 'Pending'})
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center bg-black/40 p-3 rounded-xl border border-white/5">
+                          <span className="text-xs font-bold text-white/70">Outstanding Balance</span>
+                          <span className={team.finePaid ? "text-emerald-400 text-xs font-black font-mono" : "text-amber-500 text-xs font-black font-mono"}>
+                            ₦{team.finePaid ? '0.00' : team.fineAmount.toLocaleString()}
+                          </span>
+                        </div>
                       </div>
                     )}
                   </div>

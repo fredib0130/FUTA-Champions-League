@@ -436,6 +436,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.manOfTheMatch !== official.manOfTheMatch ||
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
+            m.note !== official.note ||
             (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].includes(official.id) && m.homeScore !== official.homeScore) ||
             (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
@@ -456,6 +457,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
+              note: official.note,
               homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].includes(official.id) ? official.homeScore : m.homeScore,
               awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].includes(official.id) ? official.awayScore : m.awayScore
             };
@@ -4761,9 +4763,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     }
     // Matchday 2 & 3 Saturdays & Sundays Timers as Finished
     ['md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-9', 'md2-10', 'md3-3', 'md3-4', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].forEach(id => {
-      if (id === 'md3-8') {
-        loadedTimers[id] = { liveMinute: "Interrupted (50')", isPaused: true };
-      } else if (!loadedTimers[id] || loadedTimers[id].liveMinute !== "FT") {
+      if (!loadedTimers[id] || loadedTimers[id].liveMinute !== "FT") {
         loadedTimers[id] = { liveMinute: "FT", isPaused: true };
       }
     });
@@ -5268,9 +5268,13 @@ FUTA Champions League 2026 ⚽🏆`;
         team.isDisqualified = true;
         team.disqualificationReason = "Forestry and Wood Technology (FWT) has been disqualified from the 2026 FUTA Champions League due to incidents of team confrontation and intimidation of Building Technology (BDG) players on Match Day 2.";
       }
-      if (team.id === 'bdg' || team.id === 'mst' || team.id === 'simt') {
+      if (team.id === 'mst' || team.id === 'simt') {
         team.fineAmount = 10000;
         team.finePaid = false;
+      }
+      if (team.id === 'bdg') {
+        team.fineAmount = 10000;
+        team.finePaid = true;
       }
       if (team.id === 'simt') {
         team.disciplinaryStatus = 'Final Warning';
@@ -5320,17 +5324,17 @@ FUTA Champions League 2026 ⚽🏆`;
       if ((a.lost || 0) !== (b.lost || 0)) {
         return (a.lost || 0) - (b.lost || 0);
       }
-      // 9. red_cards ASC
-      const rc_a = a.redCards || 0;
-      const rc_b = b.redCards || 0;
-      if (rc_a !== rc_b) {
-        return rc_a - rc_b;
-      }
-      // 10. yellow_cards ASC
+      // 9. yellow_cards ASC
       const yc_a = a.yellowCards || 0;
       const yc_b = b.yellowCards || 0;
       if (yc_a !== yc_b) {
         return yc_a - yc_b;
+      }
+      // 10. red_cards ASC
+      const rc_a = a.redCards || 0;
+      const rc_b = b.redCards || 0;
+      if (rc_a !== rc_b) {
+        return rc_a - rc_b;
       }
       // 11. Final Fallback: Sort alphabetically by team abbreviation/id
       return a.id.localeCompare(b.id);

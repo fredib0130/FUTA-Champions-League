@@ -53,17 +53,17 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
       if ((a.lost || 0) !== (b.lost || 0)) {
         return (a.lost || 0) - (b.lost || 0);
       }
-      // 9. red_cards ASC
-      const rc_a = a.redCards || 0;
-      const rc_b = b.redCards || 0;
-      if (rc_a !== rc_b) {
-        return rc_a - rc_b;
-      }
-      // 10. yellow_cards ASC
+      // 9. yellow_cards ASC
       const yc_a = a.yellowCards || 0;
       const yc_b = b.yellowCards || 0;
       if (yc_a !== yc_b) {
         return yc_a - yc_b;
+      }
+      // 10. red_cards ASC
+      const rc_a = a.redCards || 0;
+      const rc_b = b.redCards || 0;
+      if (rc_a !== rc_b) {
+        return rc_a - rc_b;
       }
       // 11. team_name ASC (alphabetical by team abbreviation/id)
       return a.id.localeCompare(b.id);
@@ -111,17 +111,17 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
       if ((a.lost || 0) !== (b.lost || 0)) {
         return (a.lost || 0) - (b.lost || 0);
       }
-      // 9. red_cards ASC
-      const rc_a = a.redCards || 0;
-      const rc_b = b.redCards || 0;
-      if (rc_a !== rc_b) {
-        return rc_a - rc_b;
-      }
-      // 10. yellow_cards ASC
+      // 9. yellow_cards ASC
       const yc_a = a.yellowCards || 0;
       const yc_b = b.yellowCards || 0;
       if (yc_a !== yc_b) {
         return yc_a - yc_b;
+      }
+      // 10. red_cards ASC
+      const rc_a = a.redCards || 0;
+      const rc_b = b.redCards || 0;
+      if (rc_a !== rc_b) {
+        return rc_a - rc_b;
       }
       // 11. team_name ASC (alphabetical by team abbreviation/id)
       return a.id.localeCompare(b.id);
