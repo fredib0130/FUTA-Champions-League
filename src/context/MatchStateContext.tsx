@@ -4996,7 +4996,7 @@ FUTA Champions League 2026 ⚽🏆`;
 
     // Force inject/update the Disciplinary Committee Decision regarding the MST vs SIMT fixture
     const existingDisciplinaryDecisionMstSimt = loadedNews.find(n => n.id === 'news-disciplinary-mst-simt');
-    const disciplinaryDecisionMstSimtBody = `Following a thorough review of the reports and incidents recorded during the **Marine Science and Technology (MST)** vs **Security, Investment and Management Technology (SIMT)** fixture, the FCL Disciplinary Committee hereby issues the following decisions:
+    const disciplinaryDecisionMstSimtBody = `Following a thorough review of the reports and incidents recorded during the Marine Science and Technology (MST) vs Security, Investment and Management Technology (SIMT) fixture, the FCL Disciplinary Committee hereby issues the following decisions:
 
 1. SUSPENSION OF PLAYERS
 
