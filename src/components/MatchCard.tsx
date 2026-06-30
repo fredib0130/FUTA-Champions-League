@@ -81,6 +81,42 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
     } as Team;
   };
 
+  // Aggregate score calculation helper for two-legged semi-finals
+  const getSemiFinalAggregate = () => {
+    if (!match.id.startsWith('SF')) return null;
+    const sfPrefix = match.id.split('_')[0];
+    const leg1 = matches.find(m => m.id === sfPrefix + '_1');
+    const leg2 = matches.find(m => m.id === sfPrefix + '_2');
+    if (!leg1 || !leg2) return null;
+
+    const teamA = getDisplayTeam(leg1.homeTeam);
+    const teamB = getDisplayTeam(leg1.awayTeam);
+
+    const isLeg1Played = leg1.status !== 'Upcoming' && leg1.status !== 'Postponed' && leg1.status !== 'Cancelled';
+    const isLeg2Played = leg2.status !== 'Upcoming' && leg2.status !== 'Postponed' && leg2.status !== 'Cancelled';
+
+    if (!isLeg1Played && !isLeg2Played) return null;
+
+    const scoreA1 = isLeg1Played ? leg1.homeScore : 0;
+    const scoreB1 = isLeg1Played ? leg1.awayScore : 0;
+    const scoreB2 = isLeg2Played ? leg2.homeScore : 0;
+    const scoreA2 = isLeg2Played ? leg2.awayScore : 0;
+
+    const totalA = scoreA1 + scoreA2;
+    const totalB = scoreB1 + scoreB2;
+
+    let aggregateText = `Agg: ${teamA.name} ${totalA} - ${totalB} ${teamB.name}`;
+    
+    const isLeg2Finished = leg2.status === 'Finished' || leg2.status === 'Full Time' || leg2.status === 'Full-Time';
+    if (isLeg2Finished && totalA === totalB && leg2.homePenalties !== undefined && leg2.awayPenalties !== undefined) {
+      aggregateText += ` (${leg2.awayPenalties} - ${leg2.homePenalties} pens)`;
+    }
+
+    return { text: aggregateText, isSecondLeg: match.id.endsWith('_2') };
+  };
+
+  const aggregateInfo = getSemiFinalAggregate();
+
   const homeTeam = getDisplayTeam(match.homeTeam);
   const awayTeam = getDisplayTeam(match.awayTeam);
   const homeCoeff = homeTeam ? COEFFICIENTS.find(c => c.teamId === homeTeam.id) : undefined;
@@ -279,8 +315,18 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
                 ({match.homePenalties}-{match.awayPenalties} pens)
               </span>
             )}
+            {aggregateInfo && (
+              <span className={cn(
+                "text-[9px] font-sans font-black tracking-widest uppercase mt-2 px-2.5 py-1 rounded-md text-center inline-block",
+                aggregateInfo.isSecondLeg ? "bg-[#00e5ff]/20 text-[#00e5ff] border border-[#00e5ff]/20" : "bg-white/5 text-white/40 border border-white/5"
+              )}>
+                {aggregateInfo.text}
+              </span>
+            )}
           </div>
-          <div className="text-[10px] font-bold text-white/20 mt-2 tracking-widest">{match.venue}</div>
+          <div className="text-[10px] font-bold text-white/20 mt-2 tracking-widest">
+            {match.date === 'TBA' ? 'DATE: TBA' : match.date} • {match.venue}
+          </div>
           
           {match.referee && (
             <div className="mt-1.5 px-2 py-0.5 bg-primary/10 border border-primary/20 rounded-md text-[8px] font-black tracking-widest text-primary uppercase inline-block">

@@ -5395,16 +5395,83 @@ FUTA Champions League 2026 ⚽🏆`;
 
     // Helper to get winner of a specific match ID
     const getWinnerOfMatch = (matchId: string): string => {
+      if (matchId === 'SF1' || matchId === 'SF2') {
+        const leg1 = matches.find(match => match.id === `${matchId}_1`);
+        const leg2 = matches.find(match => match.id === `${matchId}_2`);
+        if (!leg1 || !leg2) return `${matchId}_WINNER`;
+
+        // The teams of SF1 are the winners of QF1 and QF3 (or QF2 and QF4 for SF2)
+        const qfAId = matchId === 'SF1' ? 'QF1' : 'QF2';
+        const qfBId = matchId === 'SF1' ? 'QF3' : 'QF4';
+
+        const teamA = getWinnerOfMatch(qfAId);
+        const teamB = getWinnerOfMatch(qfBId);
+
+        if (teamA.endsWith('_WINNER') || teamB.endsWith('_WINNER')) {
+          return `${matchId}_WINNER`;
+        }
+
+        const s1 = leg1.status.trim().toUpperCase();
+        const s2 = leg2.status.trim().toUpperCase();
+
+        const isLeg1Finished = s1 === 'FINISHED' || s1 === 'FULL-TIME' || s1 === 'FULL TIME' || s1 === 'COMPLETED';
+        const isLeg2Finished = s2 === 'FINISHED' || s2 === 'FULL-TIME' || s2 === 'FULL TIME' || s2 === 'COMPLETED';
+
+        // We can only determine the winner if at least leg 2 is finished
+        if (!isLeg2Finished) {
+          return `${matchId}_WINNER`;
+        }
+
+        const scoreA = (leg1.homeScore ?? 0) + (leg2.awayScore ?? 0);
+        const scoreB = (leg1.awayScore ?? 0) + (leg2.homeScore ?? 0);
+
+        if (scoreA > scoreB) return teamA;
+        if (scoreB > scoreA) return teamB;
+
+        // Level on aggregate -> check penalties in leg 2
+        if (leg2.homePenalties !== undefined && leg2.awayPenalties !== undefined) {
+          // leg2.homeTeam is teamB, leg2.awayTeam is teamA
+          if (leg2.awayPenalties > leg2.homePenalties) return teamA;
+          if (leg2.homePenalties > leg2.awayPenalties) return teamB;
+        }
+
+        return `${matchId}_WINNER`;
+      }
+
       const m = matches.find(match => match.id === matchId);
       if (!m) return `${matchId}_WINNER`;
       const s = m.status.trim().toUpperCase();
       if (s !== 'FINISHED' && s !== 'FULL-TIME' && s !== 'FULL TIME' && s !== 'COMPLETED') {
         return `${matchId}_WINNER`;
       }
-      if (m.homeScore > m.awayScore) return m.homeTeam;
-      if (m.awayScore > m.homeScore) return m.awayTeam;
+      
+      let homeTeam = m.homeTeam;
+      let awayTeam = m.awayTeam;
+
+      if (homeTeam.startsWith('SEED')) {
+        const seedNum = parseInt(homeTeam.replace('SEED', ''), 10);
+        if (!isNaN(seedNum)) {
+          homeTeam = getTeamBySeed(seedNum);
+        }
+      }
+      if (awayTeam.startsWith('SEED')) {
+        const seedNum = parseInt(awayTeam.replace('SEED', ''), 10);
+        if (!isNaN(seedNum)) {
+          awayTeam = getTeamBySeed(seedNum);
+        }
+      }
+
+      if (homeTeam.endsWith('_WINNER')) {
+        homeTeam = getWinnerOfMatch(homeTeam.replace('_WINNER', ''));
+      }
+      if (awayTeam.endsWith('_WINNER')) {
+        awayTeam = getWinnerOfMatch(awayTeam.replace('_WINNER', ''));
+      }
+
+      if (m.homeScore > m.awayScore) return homeTeam;
+      if (m.awayScore > m.homeScore) return awayTeam;
       if (m.homePenalties !== undefined && m.awayPenalties !== undefined) {
-        return m.homePenalties > m.awayPenalties ? m.homeTeam : m.awayTeam;
+        return m.homePenalties > m.awayPenalties ? homeTeam : awayTeam;
       }
       return `${matchId}_WINNER`;
     };
