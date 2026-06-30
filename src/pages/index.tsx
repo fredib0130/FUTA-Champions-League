@@ -1616,76 +1616,207 @@ export const knockoutStructure = {
 export function Playoffs() {
   const { teams, matches } = useMatchState();
   const [activeStage, setActiveStage] = React.useState<keyof typeof knockoutStructure>('playoffs');
+  const [semiSubTab, setSemiSubTab] = React.useState<'first' | 'second'>('first');
 
-  const sortedTeams = React.useMemo(() => {
-    return [...teams].sort((a, b) => {
-      const isDisqA = a.isDisqualified ? 1 : 0;
-      const isDisqB = b.isDisqualified ? 1 : 0;
-      if (isDisqA !== isDisqB) {
-        return isDisqA - isDisqB;
-      }
-      // 1. points DESC
-      if ((b.points || 0) !== (a.points || 0)) {
-        return (b.points || 0) - (a.points || 0);
-      }
-      // 2. goal_difference DESC
-      const gdA = a.goalDifference !== undefined ? a.goalDifference : (a.goalsFor - a.goalsAgainst);
-      const gdB = b.goalDifference !== undefined ? b.goalDifference : (b.goalsFor - b.goalsAgainst);
-      if (gdB !== gdA) {
-        return gdB - gdA;
-      }
-      // 3. goals_for DESC
-      if ((b.goalsFor || 0) !== (a.goalsFor || 0)) {
-        return (b.goalsFor || 0) - (a.goalsFor || 0);
-      }
-      // 4. goals_against ASC
-      if ((a.goalsAgainst || 0) !== (b.goalsAgainst || 0)) {
-        return (a.goalsAgainst || 0) - (b.goalsAgainst || 0);
-      }
-      // 5. played ASC
-      if ((a.played || 0) !== (b.played || 0)) {
-        return (a.played || 0) - (b.played || 0);
-      }
-      // 6. wins DESC
-      if ((b.won || 0) !== (a.won || 0)) {
-        return (b.won || 0) - (a.won || 0);
-      }
-      // 7. draws DESC
-      if ((b.drawn || 0) !== (a.drawn || 0)) {
-        return (b.drawn || 0) - (a.drawn || 0);
-      }
-      // 8. losses ASC
-      if ((a.lost || 0) !== (b.lost || 0)) {
-        return (a.lost || 0) - (b.lost || 0);
-      }
-      // 9. yellow_cards ASC
-      const yc_a = a.yellowCards || 0;
-      const yc_b = b.yellowCards || 0;
-      if (yc_a !== yc_b) {
-        return yc_a - yc_b;
-      }
-      // 10. red_cards ASC
-      const rc_a = a.redCards || 0;
-      const rc_b = b.redCards || 0;
-      if (rc_a !== rc_b) {
-        return rc_a - rc_b;
-      }
-      // 11. team_name ASC
-      return a.id.localeCompare(b.id);
+  const isLeaguePhaseConcluded = React.useMemo(() => {
+    const leagueMatches = matches.filter(m => m.matchday <= 3);
+    return leagueMatches.length > 0 && leagueMatches.every(m => {
+      const s = m.status.trim().toUpperCase();
+      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED' || m.walkover;
     });
-  }, [teams]);
+  }, [matches]);
+
+  const getStageStatusLabel = (stageKey: keyof typeof knockoutStructure) => {
+    const ids = knockoutStructure[stageKey].map(m => m.id);
+    const stageM = matches.filter(m => ids.includes(m.id));
+    const anyStarted = stageM.some(m => m.status !== 'Upcoming');
+    if (anyStarted) {
+      const allFinished = stageM.every(m => {
+        const s = m.status.trim().toUpperCase();
+        return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED' || m.walkover;
+      });
+      return allFinished ? "Completed" : "In Progress";
+    }
+
+    if (stageKey === 'playoffs') return "Fixtures Pending";
+    if (stageKey === 'quarterFinals') return "Fixtures Pending";
+    if (stageKey === 'semiFinals') return "Fixtures Pending";
+    if (stageKey === 'final') return "Fixture Pending";
+    return "Fixtures Pending";
+  };
+
+  const getMatchFormula = (matchId: string) => {
+    switch (matchId) {
+      case 'PO1': return '3rd Place vs 14th Place';
+      case 'PO2': return '4th Place vs 13th Place';
+      case 'PO3': return '5th Place vs 12th Place';
+      case 'PO4': return '6th Place vs 11th Place';
+      case 'PO5': return '7th Place vs 10th Place';
+      case 'PO6': return '8th Place vs 9th Place';
+      case 'QF1': return 'League 1st Position vs Winner of PO6';
+      case 'QF2': return 'League 2nd Position vs Winner of PO5';
+      case 'QF3': return 'Winner of PO2 vs Winner of PO4';
+      case 'QF4': return 'Winner of PO1 vs Winner of PO3';
+      case 'SF1_1': return 'Winner of QF1 vs Winner of QF3';
+      case 'SF1_2': return 'Winner of QF3 vs Winner of QF1';
+      case 'SF2_1': return 'Winner of QF2 vs Winner of QF4';
+      case 'SF2_2': return 'Winner of QF4 vs Winner of QF2';
+      case 'FINAL': return 'Winner of SF1 vs Winner of SF2';
+      default: return '';
+    }
+  };
+
+  const getTieDetails = (tieId: 'SF1' | 'SF2') => {
+    const leg1Id = `${tieId}_1`;
+    const leg2Id = `${tieId}_2`;
+
+    const leg1 = matches.find(m => m.id === leg1Id);
+    const leg2 = matches.find(m => m.id === leg2Id);
+
+    let teamAId = leg1 ? leg1.homeTeam : (tieId === 'SF1' ? 'QF1_WINNER' : 'QF2_WINNER');
+    let teamBId = leg1 ? leg1.awayTeam : (tieId === 'SF1' ? 'QF3_WINNER' : 'QF4_WINNER');
+
+    const getTeamName = (id: string) => {
+      const t = teams.find(team => team.id.toLowerCase() === id.toLowerCase());
+      if (t) return t.name;
+      if (id.endsWith('_WINNER')) {
+        const matchPrefix = id.replace('_WINNER', '');
+        return `Winner of ${matchPrefix}`;
+      }
+      return id;
+    };
+
+    const getTeamLogoUrl = (id: string) => {
+      const t = teams.find(team => team.id.toLowerCase() === id.toLowerCase());
+      return t?.logoUrl || null;
+    };
+
+    const teamAName = getTeamName(teamAId);
+    const teamBName = getTeamName(teamBId);
+    const teamALogo = getTeamLogoUrl(teamAId);
+    const teamBLogo = getTeamLogoUrl(teamBId);
+
+    const leg1Played = leg1 && (leg1.status === 'Finished' || leg1.status === 'Full Time' || leg1.status === 'Full-Time' || leg1.status === 'Completed' || leg1.walkover);
+    const leg2Played = leg2 && (leg2.status === 'Finished' || leg2.status === 'Full Time' || leg2.status === 'Full-Time' || leg2.status === 'Completed' || leg2.walkover);
+
+    const leg1Result = leg1Played ? `${leg1.homeScore} - ${leg1.awayScore}` : 'Not Played';
+    const leg2Result = leg2Played ? `${leg2.homeScore} - ${leg2.awayScore}` : 'Not Played';
+
+    const totalA = (leg1Played ? (leg1.homeScore ?? 0) : 0) + (leg2Played ? (leg2.awayScore ?? 0) : 0);
+    const totalB = (leg1Played ? (leg1.awayScore ?? 0) : 0) + (leg2Played ? (leg2.homeScore ?? 0) : 0);
+
+    let aggregateText = `${totalA} - ${totalB}`;
+    if (!leg1Played && !leg2Played) {
+      aggregateText = '0 - 0';
+    }
+
+    let penaltiesText = '';
+    let qualifiedTeam = 'TBD';
+
+    if (leg2Played) {
+      if (totalA > totalB) {
+        qualifiedTeam = teamAName;
+      } else if (totalB > totalA) {
+        qualifiedTeam = teamBName;
+      } else {
+        if (leg2.homePenalties !== undefined && leg2.awayPenalties !== undefined) {
+          if (leg2.awayPenalties > leg2.homePenalties) {
+            qualifiedTeam = teamAName;
+            penaltiesText = ` (${leg2.awayPenalties} - ${leg2.homePenalties} pens)`;
+          } else if (leg2.homePenalties > leg2.awayPenalties) {
+            qualifiedTeam = teamBName;
+            penaltiesText = ` (${leg2.homePenalties} - ${leg2.awayPenalties} pens)`;
+          } else {
+            qualifiedTeam = 'TBD (Level on Pens)';
+          }
+        } else {
+          qualifiedTeam = 'TBD (Level)';
+        }
+      }
+    }
+
+    return {
+      tieId,
+      teamAId,
+      teamBId,
+      teamAName,
+      teamBName,
+      teamALogo,
+      teamBLogo,
+      leg1,
+      leg2,
+      leg1Result,
+      leg2Result,
+      aggregateText,
+      penaltiesText,
+      qualifiedTeam,
+      leg1Played,
+      leg2Played
+    };
+  };
 
   const stageTabs = [
-    { key: 'playoffs', label: 'Playoff Round', date: 'TBA' },
-    { key: 'quarterFinals', label: 'Quarter-Finals', date: 'July 1-2' },
-    { key: 'semiFinals', label: 'Semi-Finals', date: 'July 4-5' },
-    { key: 'final', label: 'Grand Final', date: 'July 6' }
+    { key: 'playoffs', label: 'Playoffs', desc: 'Playoff Round' },
+    { key: 'quarterFinals', label: 'Quarter-finals', desc: 'Quarter-finals' },
+    { key: 'semiFinals', label: 'Semi-finals', desc: 'Semi-finals' },
+    { key: 'final', label: 'Final', desc: 'Grand Final' }
   ] as const;
 
   const stageMatches = React.useMemo(() => {
-    const ids = knockoutStructure[activeStage].map(m => m.id);
-    return matches.filter(m => ids.includes(m.id));
-  }, [activeStage, matches]);
+    if (activeStage === 'playoffs') {
+      return matches.filter(m => m.id.startsWith('PO'));
+    }
+    if (activeStage === 'quarterFinals') {
+      return matches.filter(m => m.id.startsWith('QF'));
+    }
+    if (activeStage === 'semiFinals') {
+      if (semiSubTab === 'first') {
+        return matches.filter(m => m.id === 'SF1_1' || m.id === 'SF2_1');
+      } else {
+        return matches.filter(m => m.id === 'SF1_2' || m.id === 'SF2_2');
+      }
+    }
+    if (activeStage === 'final') {
+      return matches.filter(m => m.id === 'FINAL');
+    }
+    return [];
+  }, [activeStage, semiSubTab, matches]);
+
+  const renderTeamSlot = (teamId: string, fallbackLabel: string) => {
+    const isPlaceholder = teamId.startsWith('SEED') || teamId.endsWith('_WINNER') || teamId === 'TBD';
+    const team = !isPlaceholder ? teams.find(t => t.id.toLowerCase() === teamId.toLowerCase()) : null;
+
+    if (team) {
+      return (
+        <div className="flex items-center gap-2">
+          <TeamLogo teamId={team.id} logoUrl={team.logoUrl} className="w-5 h-5 flex-shrink-0" />
+          <span className="font-bold text-white text-xs sm:text-sm">{team.name}</span>
+          <span className="text-[10px] text-[#00e5ff] font-mono font-bold">({team.id})</span>
+        </div>
+      );
+    }
+
+    let icon = "🛡";
+    let label = fallbackLabel;
+    if (teamId.startsWith('SEED')) {
+      const seedNum = teamId.replace('SEED', '');
+      icon = "👑";
+      label = `${seedNum}th Place Seed`;
+    } else if (teamId.endsWith('_WINNER')) {
+      const matchId = teamId.replace('_WINNER', '');
+      icon = "⚡";
+      label = `Winner of ${matchId}`;
+    }
+
+    return (
+      <div className="flex items-center gap-2 opacity-50">
+        <span className="text-xs">{icon}</span>
+        <span className="font-mono text-[11px] font-bold tracking-tight text-white/50 italic">{label}</span>
+      </div>
+    );
+  };
+
+  const currentStageStatus = getStageStatusLabel(activeStage);
 
   return (
     <div>
@@ -1722,7 +1853,7 @@ export function Playoffs() {
                 <h4 className="text-[#00E5FF] font-bold italic uppercase tracking-widest text-xs">Knockout Rules</h4>
               </div>
               <p className="text-[10px] text-white/40 uppercase tracking-widest leading-relaxed">
-                All knockout stage games are single-leg. Penalty shootout rules apply in case of a draw at full-time.
+                Playoffs & Quarter-Finals are single-leg. Semi-Finals are played over two legs with Aggregate scores. Final is single-leg.
               </p>
             </div>
           </div>
@@ -1747,7 +1878,9 @@ export function Playoffs() {
                 <span className={cn(
                   "text-[8px] font-mono tracking-wider mt-1 font-semibold",
                   isActive ? "text-primary/80" : "text-white/30"
-                )}>{tab.date}</span>
+                )}>
+                  {getStageStatusLabel(tab.key)}
+                </span>
                 {isActive && (
                   <motion.div 
                     layoutId="activeStageGlow" 
@@ -1759,33 +1892,261 @@ export function Playoffs() {
           })}
         </div>
 
-        {/* Current Active Stage Grid matches */}
+        {/* Status Dashboard and Schedule Tabular Layout */}
         <div className="space-y-8 animate-fadeIn">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-display font-bold italic uppercase tracking-tight text-white flex items-center space-x-2">
-              <span className="text-glow text-primary">
-                {stageTabs.find(t => t.key === activeStage)?.label}
-              </span>
-              <span className="text-xs text-white/40 capitalize font-sans not-italic font-bold tracking-normal px-2.5 py-1 rounded-full bg-white/5 border border-white/5">
-                {stageMatches.length} Fixture{stageMatches.length !== 1 ? 's' : ''}
-              </span>
-            </h3>
-            <span className="text-[10px] font-mono tracking-widest text-white/30 uppercase font-black">
-              {stageTabs.find(t => t.key === activeStage)?.date} • 2026 EDITION
-            </span>
+          {/* Header Status & Sub-tabs if Semi-final */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div>
+              <h3 className="text-2xl font-display font-bold italic uppercase tracking-tight text-white flex items-center space-x-3">
+                <span className="text-glow text-primary">
+                  {stageTabs.find(t => t.key === activeStage)?.label}
+                </span>
+                <span className={cn(
+                  "text-[10px] font-sans not-italic font-black tracking-widest px-3 py-1 rounded-full uppercase border",
+                  currentStageStatus.includes("Pending") 
+                    ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                    : currentStageStatus.includes("In Progress")
+                      ? "bg-sky-500/10 text-[#00e5ff] border-sky-500/20"
+                      : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                )}>
+                  {currentStageStatus}
+                </span>
+              </h3>
+              <p className="text-xs text-white/40 mt-1 font-semibold uppercase tracking-wider font-mono">
+                FCL 2026 OFFICIAL BRACKET STAGE
+              </p>
+            </div>
+
+            {/* Render Semi-final sub-tabs if active */}
+            {activeStage === 'semiFinals' && (
+              <div className="flex items-center gap-2 bg-white/[0.02] border border-white/5 p-1 rounded-xl">
+                <button
+                  onClick={() => setSemiSubTab('first')}
+                  className={cn(
+                    "px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer",
+                    semiSubTab === 'first'
+                      ? "bg-primary text-white shadow-[0_0_10px_rgba(218,26,34,0.3)]"
+                      : "text-white/40 hover:text-white"
+                  )}
+                >
+                  First Leg
+                </button>
+                <button
+                  onClick={() => setSemiSubTab('second')}
+                  className={cn(
+                    "px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer",
+                    semiSubTab === 'second'
+                      ? "bg-primary text-white shadow-[0_0_10px_rgba(218,26,34,0.3)]"
+                      : "text-white/40 hover:text-white"
+                  )}
+                >
+                  Second Leg
+                </button>
+              </div>
+            )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {stageMatches.map((match: any, i: number) => (
-              <motion.div 
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                key={match.id} 
-              >
-                <MatchCard match={match} />
-              </motion.div>
-            ))}
+          {/* Semi-final Ties aggregate summaries if in semi-finals stage */}
+          {activeStage === 'semiFinals' && (
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              {['SF1', 'SF2'].map((tieId) => {
+                const tie = getTieDetails(tieId as 'SF1' | 'SF2');
+                return (
+                  <div key={tieId} className="glass border border-white/5 rounded-3xl p-6 bg-navy/40 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -z-10" />
+                    
+                    <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
+                      <span className="text-[10px] font-mono text-[#00e5ff] font-bold tracking-widest uppercase">
+                        Semi-Final Tie {tieId === 'SF1' ? '1' : '2'}
+                      </span>
+                      <span className="text-[10px] bg-white/5 px-2.5 py-1 rounded-full text-white/50 font-bold uppercase tracking-wider">
+                        Two-Legged Aggregate
+                      </span>
+                    </div>
+
+                    {/* Tie Grid */}
+                    <div className="grid grid-cols-3 gap-4 items-center mb-4 py-2">
+                      <div className="text-left space-y-1">
+                        {tie.teamALogo && <TeamLogo teamId={tie.teamAId} logoUrl={tie.teamALogo} size="md" className="mb-2" />}
+                        <p className="font-display font-bold text-sm text-white line-clamp-2">{tie.teamAName}</p>
+                        <p className="text-[9px] font-mono text-white/30 uppercase tracking-widest">Team A</p>
+                      </div>
+
+                      <div className="text-center space-y-2">
+                        <div className="text-[10px] font-mono text-white/30 uppercase font-black tracking-wider">Aggregate</div>
+                        <div className="text-2xl font-mono font-black text-white bg-white/5 py-1 px-3 rounded-xl border border-white/5 inline-block">
+                          {tie.aggregateText}
+                        </div>
+                        {tie.penaltiesText && (
+                          <div className="text-[8px] font-bold text-yellow-500 leading-tight">
+                            {tie.penaltiesText}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="text-right space-y-1 flex flex-col items-end">
+                        {tie.teamBLogo && <TeamLogo teamId={tie.teamBId} logoUrl={tie.teamBLogo} size="md" className="mb-2" />}
+                        <p className="font-display font-bold text-sm text-white line-clamp-2">{tie.teamBName}</p>
+                        <p className="text-[9px] font-mono text-white/30 uppercase tracking-widest">Team B</p>
+                      </div>
+                    </div>
+
+                    {/* Details Panel */}
+                    <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4 grid grid-cols-3 gap-2 text-center text-[10px] font-bold">
+                      <div>
+                        <div className="text-white/30 uppercase tracking-widest font-mono mb-1">1st Leg</div>
+                        <div className="text-white font-mono text-xs">{tie.leg1Result}</div>
+                      </div>
+                      <div>
+                        <div className="text-white/30 uppercase tracking-widest font-mono mb-1">2nd Leg</div>
+                        <div className="text-white font-mono text-xs">{tie.leg2Result}</div>
+                      </div>
+                      <div>
+                        <div className="text-[#00e5ff] uppercase tracking-widest font-mono mb-1">Qualified</div>
+                        <div className="text-emerald-400 text-xs font-black truncate max-w-full">
+                          {tie.qualifiedTeam}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Table Layout */}
+          <div className="glass border border-white/5 rounded-3xl overflow-hidden bg-navy/20">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[700px]">
+                <thead>
+                  <tr className="border-b border-white/5 text-[9px] font-black uppercase text-white/40 tracking-widest bg-white/[0.01]">
+                    <th className="py-4 px-6">Match</th>
+                    <th className="py-4 px-6">Fixture Reference</th>
+                    <th className="py-4 px-6">Team Matchup</th>
+                    <th className="py-4 px-6 text-center">Date</th>
+                    <th className="py-4 px-6 text-center">Time</th>
+                    <th className="py-4 px-6 text-center">Venue</th>
+                    <th className="py-4 px-6 text-right">Status / Score</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5 font-semibold text-xs">
+                  {stageMatches.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="py-12 text-center text-white/40">
+                        No matches configured for this stage.
+                      </td>
+                    </tr>
+                  ) : (
+                    stageMatches.map((match: any) => {
+                      const mFormula = getMatchFormula(match.id);
+                      const isFinished = ['FINISHED', 'FULL-TIME', 'FULL TIME', 'COMPLETED'].includes(match.status.toUpperCase()) || match.walkover;
+                      const isLive = ['LIVE', 'FIRST_HALF', 'SECOND_HALF', 'HALF_TIME'].includes(match.status.toUpperCase());
+                      
+                      return (
+                        <tr key={match.id} className="hover:bg-white/[0.01] transition-colors">
+                          {/* Match ID */}
+                          <td className="py-4 px-6 font-mono font-black text-[#00e5ff]">
+                            {match.id.replace('_1', ' (1st Leg)').replace('_2', ' (2nd Leg)')}
+                          </td>
+
+                          {/* Fixture Formula */}
+                          <td className="py-4 px-6">
+                            <span className="px-2.5 py-1 rounded-md bg-white/5 text-white/50 font-mono text-[10px] tracking-tight uppercase font-bold border border-white/5">
+                              {mFormula}
+                            </span>
+                          </td>
+
+                          {/* Team Matchup */}
+                          <td className="py-4 px-6">
+                            <div className="flex flex-col space-y-2">
+                              {renderTeamSlot(match.homeTeam, match.homeTeam)}
+                              <div className="text-[9px] text-white/20 font-mono font-bold tracking-widest uppercase pl-7">vs</div>
+                              {renderTeamSlot(match.awayTeam, match.awayTeam)}
+                            </div>
+                          </td>
+
+                          {/* Date */}
+                          <td className="py-4 px-6 text-center font-mono">
+                            {match.date === 'TBA' ? (
+                              <span className="text-amber-500 font-bold bg-amber-500/5 border border-amber-500/10 px-2 py-0.5 rounded-md">TBA</span>
+                            ) : (
+                              <span className="text-white/80">{match.date}</span>
+                            )}
+                          </td>
+
+                          {/* Time */}
+                          <td className="py-4 px-6 text-center font-mono">
+                            {match.time === 'TBA' ? (
+                              <span className="text-amber-500 font-bold bg-amber-500/5 border border-amber-500/10 px-2 py-0.5 rounded-md">TBA</span>
+                            ) : (
+                              <span className="text-white/80">{match.time}</span>
+                            )}
+                          </td>
+
+                          {/* Venue */}
+                          <td className="py-4 px-6 text-center font-mono">
+                            {match.venue === 'TBA' ? (
+                              <span className="text-amber-500 font-bold bg-amber-500/5 border border-amber-500/10 px-2 py-0.5 rounded-md">TBA</span>
+                            ) : (
+                              <span className="text-white/80">{match.venue}</span>
+                            )}
+                          </td>
+
+                          {/* Status / Score */}
+                          <td className="py-4 px-6 text-right font-mono">
+                            {isFinished ? (
+                              <div className="flex flex-col items-end gap-1">
+                                <span className="font-black text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2.5 py-1 rounded-lg text-xs">
+                                  {match.homeScore} - {match.awayScore} FT
+                                </span>
+                                {match.walkover && (
+                                  <span className="text-[8px] text-red-400 font-bold uppercase tracking-widest">
+                                    Walkover
+                                  </span>
+                                )}
+                                {match.homePenalties !== undefined && match.awayPenalties !== undefined && (
+                                  <span className="text-[9px] text-yellow-500 font-bold">
+                                    ({match.homePenalties} - {match.awayPenalties} pens)
+                                  </span>
+                                )}
+                              </div>
+                            ) : isLive ? (
+                              <span className="font-black text-[#00e5ff] bg-[#00e5ff]/10 border border-[#00e5ff]/20 px-2.5 py-1 rounded-lg text-xs animate-pulse flex items-center gap-1.5 justify-end">
+                                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                                {match.homeScore} - {match.awayScore} LIVE
+                              </span>
+                            ) : (
+                              <span className="text-white/40 font-bold uppercase tracking-wider text-[10px] bg-white/5 border border-white/5 px-2 py-1 rounded-md">
+                                Scheduled
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Interactive Match Cards Section for detail viewing, lineups, commentary, etc */}
+          <div className="space-y-4 pt-4 border-t border-white/5">
+            <h4 className="text-sm font-display font-black uppercase tracking-wider text-white/50">
+              Interactive Match Centers
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {stageMatches.map((match: any, i: number) => (
+                <motion.div 
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  key={`card-${match.id}`} 
+                >
+                  <MatchCard match={match} />
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
