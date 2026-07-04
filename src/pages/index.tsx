@@ -1589,12 +1589,12 @@ export function Table() {
 
 export const knockoutStructure = {
   playoffs: [
-    { id: "PO1", stage: "Playoff Round", dateRange: "TBA", fixture: "3rd Place vs 14th Place" },
-    { id: "PO2", stage: "Playoff Round", dateRange: "TBA", fixture: "4th Place vs 13th Place" },
-    { id: "PO3", stage: "Playoff Round", dateRange: "TBA", fixture: "5th Place vs 12th Place" },
-    { id: "PO4", stage: "Playoff Round", dateRange: "TBA", fixture: "6th Place vs 11th Place" },
-    { id: "PO5", stage: "Playoff Round", dateRange: "TBA", fixture: "7th Place vs 10th Place" },
-    { id: "PO6", stage: "Playoff Round", dateRange: "TBA", fixture: "8th Place vs 9th Place" }
+    { id: "PO1", stage: "Playoff Round", dateRange: "5th July 2026", fixture: "3rd Place vs 14th Place" },
+    { id: "PO2", stage: "Playoff Round", dateRange: "5th July 2026", fixture: "4th Place vs 13th Place" },
+    { id: "PO3", stage: "Playoff Round", dateRange: "5th July 2026", fixture: "5th Place vs 12th Place" },
+    { id: "PO4", stage: "Playoff Round", dateRange: "5th July 2026", fixture: "6th Place vs 11th Place" },
+    { id: "PO5", stage: "Playoff Round", dateRange: "5th July 2026", fixture: "7th Place vs 10th Place" },
+    { id: "PO6", stage: "Playoff Round", dateRange: "5th July 2026", fixture: "8th Place vs 9th Place" }
   ],
   quarterFinals: [
     { id: "QF1", stage: "Quarter-finals", dateRange: "1st July 2026", fixture: "Seed 1 vs Winner of PO6" },
