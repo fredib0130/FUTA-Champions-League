@@ -215,10 +215,14 @@ export const CoefficientTable: React.FC<CoefficientTableProps> = ({ data, limit,
           <div className="p-2 bg-primary/10 rounded-lg shrink-0">
             <Info className="text-primary w-5 h-5" />
           </div>
-          <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest leading-relaxed">
-            *FCL Team Coefficient Ranking is updated live since the commencement of the 2026 Tournament. <br />
-            Higher coefficient = stronger performance and elite seeding.
-          </p>
+          <div className="space-y-1.5">
+            <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest leading-relaxed">
+              *FCL Team Coefficient Ranking is updated live throughout the competition in accordance with the official FUTA Champions League Coefficient Regulations.
+            </p>
+            <p className="text-[9px] font-black uppercase text-primary tracking-widest">
+              Last Updated: 4th July 2026, 17:00
+            </p>
+          </div>
         </div>
         <div className="flex flex-col gap-2.5 max-w-md w-full md:w-auto">
           <span className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1 block">Movement Legend</span>
