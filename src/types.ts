@@ -70,6 +70,8 @@ export interface Player {
   fineAmount?: number;
   finePaid?: boolean;
   appealAllowed?: boolean;
+  isFormer?: boolean;
+  isInactive?: boolean;
 }
 
 export interface Match {

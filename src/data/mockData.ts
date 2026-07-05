@@ -280,9 +280,9 @@ export const PLAYERS: Player[] = [
   // STA Official Squad (Statistics department squad list)
   ...[
     { name: "Rotimi Joseph Folahan", position: "GK" as const, level: "100L", jerseyNo: 1, matricNumber: "STA/25/1591" },
-    { name: "Okusi Edward", position: "GK" as const, level: "300L", jerseyNo: 13, matricNumber: "STA/23/6720" },
+    { name: "Okusi Edward", position: "MID" as const, level: "300L", jerseyNo: 16, matricNumber: "STA/23/6720" },
     { name: "Emmanuel Olaoluwa Akintayo", position: "DEF" as const, level: "300L", jerseyNo: 2, matricNumber: "STA/23/6687" },
-    { name: "Adewumi Micclinton Adegoke", position: "DEF" as const, level: "200L", jerseyNo: 6, matricNumber: "STA/24/2807" },
+    { name: "Adewumi MicClinton Adegoke", position: "DEF" as const, level: "200L", jerseyNo: 6, matricNumber: "STA/24/2807" },
     { name: "Afilaka Praise Temidayo", position: "DEF" as const, level: "300L", jerseyNo: 5, matricNumber: "STA/23/6682" },
     { name: "Omowole Adebusuyi Abraham", position: "DEF" as const, level: "200L", jerseyNo: 29, matricNumber: "STA/24/2890" },
     { name: "Aminu Moses Vincent", position: "DEF" as const, level: "100L", jerseyNo: 20, matricNumber: "STA/25/0920" },
@@ -294,14 +294,17 @@ export const PLAYERS: Player[] = [
     { name: "Agbo Peter", position: "MID" as const, level: "100L", jerseyNo: 19, matricNumber: "STA/25/0906" },
     { name: "Johnson Emmanuel Olaoluwa", position: "MID" as const, level: "300L", jerseyNo: 7, matricNumber: "STA/23/6711" },
     { name: "Akinjogunla Mayowa", position: "MID" as const, level: "300L", jerseyNo: 14, matricNumber: "STA/23/6686" },
-    { name: "Akinsowon Gbenga Ejiro", position: "MID" as const, level: "500L", jerseyNo: 16, matricNumber: "STA/20/7167" },
-    { name: "Ayetan Samuel Precious", position: "MID" as const, level: "500L", jerseyNo: 24, matricNumber: "STA/20/7178" },
+    { name: "Akinsowon Gbenga Ejiro", position: "MID" as const, level: "500L", jerseyNo: 16, matricNumber: "STA/20/7167", isFormer: true, isInactive: true },
+    { name: "Ayetan Samuel Precious", position: "MID" as const, level: "500L", jerseyNo: 24, matricNumber: "STA/20/7178", isFormer: true, isInactive: true },
     { name: "Salam Rokeeb Oladimeji", position: "MID" as const, level: "200L", jerseyNo: 8, matricNumber: "STA/24/2898" },
-    { name: "Daisi Toluwanimi", position: "FWD" as const, level: "300L", jerseyNo: 11, matricNumber: "STA/23/6695" },
+    { name: "Daisi Tioluwanimi", position: "FWD" as const, level: "300L", jerseyNo: 11, matricNumber: "STA/23/6695" },
     { name: "Akintunde Samuel", position: "FWD" as const, level: "200L", jerseyNo: 18, matricNumber: "STA/24/2822" },
-    { name: "Precious", position: "FWD" as const, level: "100L", jerseyNo: 21, matricNumber: "STA/25/0890" },
+    { name: "Precious", position: "FWD" as const, level: "100L", jerseyNo: 21, matricNumber: "STA/25/0890", isFormer: true, isInactive: true },
     { name: "Bello Riliwan Remilekun", position: "FWD" as const, level: "200L", jerseyNo: 9, matricNumber: "STA/24/2843" },
-    { name: "Nwachukwu Jesse", position: "FWD" as const, level: "300L", jerseyNo: 10, matricNumber: "STA/23/6713" }
+    { name: "Nwachukwu Jesse", position: "FWD" as const, level: "300L", jerseyNo: 10, matricNumber: "STA/23/6713" },
+    { name: "Emmanuel", position: "GK" as const, level: "200L", jerseyNo: 13, matricNumber: "STA/24/2740" },
+    { name: "Faith", position: "MID" as const, level: "500L", jerseyNo: 24, matricNumber: "STA/20/7178" },
+    { name: "Bashiru Taofeek Olanrewaju", position: "FWD" as const, level: "100L", jerseyNo: 21, matricNumber: "STA/25/0890" }
   ].map((p, idx) => ({
     id: `player-sta-${idx + 1}`,
     name: p.name,
@@ -313,7 +316,9 @@ export const PLAYERS: Player[] = [
     played: 0,
     cleanSheets: 0,
     teamId: 'sta',
-    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=sta-player-${idx + 1}`
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=sta-player-${idx + 1}`,
+    isFormer: p.isFormer,
+    isInactive: p.isInactive
   })),
 
   // IFS Official Squad (Information Systems department squad list)
@@ -597,7 +602,7 @@ export const MATCHES: Match[] = [
   { id: 'md3-1', homeTeam: 'PHY', awayTeam: 'AGP', date: '2026-06-27', time: '09:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 2, awayScore: 2, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Victor (ESM)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Olasunkanmi Michael' },
   { id: 'md3-2', homeTeam: 'PHS', awayTeam: 'BCH', date: '2026-06-27', time: '11:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 2, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Victor (ESM)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'N/A' },
   { id: 'md3-3', homeTeam: 'CSP', awayTeam: 'CYS', date: '2026-06-27', time: '12:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 3, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Tosin (MTS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Olabode Victor Oluwatosin' },
-  { id: 'md3-4', homeTeam: 'IFS', awayTeam: 'STA', date: '2026-06-27', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 2, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Uche (CYS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Daisi Toluwanimi' },
+  { id: 'md3-4', homeTeam: 'IFS', awayTeam: 'STA', date: '2026-06-27', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 2, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Uche (CYS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Daisi Tioluwanimi' },
   { id: 'md3-5', homeTeam: 'MCB', awayTeam: 'IDD', date: '2026-06-27', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Uche (CYS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'N/A' },
   { id: 'md3-6', homeTeam: 'MST', awayTeam: 'SIMT', date: '2026-06-27', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 4, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 3, referee: 'Uche (CYS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Nkemjika Sydney' },
   { id: 'md3-7', homeTeam: 'ICE', awayTeam: 'FWT', date: '2026-06-28', time: '12:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 3, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3, walkover: true, referee: 'Administrative Walkover', refereeAssigned: true, matchApproved: true, note: 'Walkover due to FWT Disqualification' },

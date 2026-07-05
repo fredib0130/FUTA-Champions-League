@@ -4306,6 +4306,8 @@ export function TeamProfile() {
   const [selectedAccreditationPlayer, setSelectedAccreditationPlayer] = React.useState<any | null>(null);
   const team = teams.find(t => t.id === id) || TEAMS.find(t => t.id === id);
   const teamPlayers = players.filter(p => p.teamId === id);
+  const activePlayers = teamPlayers.filter(p => !p.isFormer && !p.isInactive);
+  const formerPlayers = teamPlayers.filter(p => p.isFormer || p.isInactive);
   const teamCoefficient = COEFFICIENTS.find(c => c.teamId === id);
 
   if (!team) return <div>Team not found</div>;
@@ -4382,7 +4384,7 @@ export function TeamProfile() {
             <div>
               <h2 className="text-2xl font-display italic mb-8 border-b border-white/10 pb-4 uppercase">THE SQUAD</h2>
               <div className="grid sm:grid-cols-2 gap-4">
-                {teamPlayers.map((player) => (
+                {activePlayers.map((player) => (
                   <div key={player.id} className="glass p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center space-x-4">
                       <img src={player.image || null} alt={player.name} className="w-12 h-12 rounded-xl object-cover bg-white/5" />
@@ -4466,6 +4468,75 @@ export function TeamProfile() {
                 ))}
               </div>
             </div>
+
+            {formerPlayers.length > 0 && (
+              <div>
+                <h3 className="text-xl font-display italic mb-6 border-b border-white/5 pb-3 text-white/50 uppercase">FORMER / INACTIVE PLAYERS</h3>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {formerPlayers.map((player) => (
+                    <div key={player.id} className="glass p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/[0.01]">
+                      <div className="flex items-center space-x-4">
+                        <img src={player.image || null} alt={player.name} className="w-12 h-12 rounded-xl object-cover bg-white/5 grayscale opacity-60" />
+                        <div>
+                          <h4 className="font-bold leading-tight text-white/60">{player.name}</h4>
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1">
+                            <span className="text-[10px] font-bold text-white/40 uppercase italic">{player.position}</span>
+                            {player.jerseyNo !== undefined && (
+                              <span className="text-[9px] font-mono font-black bg-white/10 text-white/40 px-1 py-0.5 rounded border border-white/5">
+                                #{player.jerseyNo}
+                              </span>
+                            )}
+                            {player.level && (
+                              <span className="text-[9px] font-mono text-white/30 bg-white/[0.04] px-1 py-0.5 rounded">
+                                {player.level}
+                              </span>
+                            )}
+                            <span className="text-[8px] font-bold text-amber-500/75 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/15 uppercase tracking-wider">
+                              Former STA Player
+                            </span>
+                          </div>
+                          {player.regNumber && (
+                            <span className="text-[9px] font-mono text-white/30 block mt-1 tracking-wider uppercase">
+                              REG NO: {player.regNumber}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3 justify-end bg-navy-dark/20 px-3 py-1.5 rounded-xl border border-white/5">
+                        <div className="text-center px-1">
+                          <div className="text-xs font-bold text-white/50">{player.played ?? 0}</div>
+                          <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">Apps</div>
+                        </div>
+                        <div className="w-px h-5 bg-white/10" />
+                        {player.position === 'GK' && (
+                          <>
+                            <div className="text-center px-1">
+                              <div className="text-xs font-bold text-emerald-500/50">{player.cleanSheets ?? 0}</div>
+                              <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">CS</div>
+                            </div>
+                            <div className="w-px h-5 bg-white/10" />
+                          </>
+                        )}
+                        <div className="text-center px-1">
+                          <div className="text-xs font-bold text-primary/50">{player.goals ?? 0}</div>
+                          <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">Goals</div>
+                        </div>
+                        <div className="w-px h-5 bg-white/10" />
+                        <div className="text-center px-1">
+                          <div className="text-xs font-bold text-yellow-500/50">{player.yellowCards ?? 0}</div>
+                          <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">YC</div>
+                        </div>
+                        <div className="w-px h-5 bg-white/10" />
+                        <div className="text-center px-1">
+                          <div className="text-xs font-bold text-red-500/50">{player.redCards ?? 0}</div>
+                          <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">RC</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="space-y-8">

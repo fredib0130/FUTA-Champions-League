@@ -1467,7 +1467,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         {
           id: 'goal-md1-9-tioluwanimi-15',
           matchId: 'md1-9',
-          playerName: 'Daisi Toluwanimi',
+          playerName: 'Daisi Tioluwanimi',
           team: 'STA',
           minute: "15'",
           type: 'Goal'
@@ -1490,7 +1490,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'goal-md2-1-agbo-15', matchId: 'md2-1', playerName: 'Agbo Peter', team: 'STA', minute: "15'", type: 'Goal' },
         { id: 'goal-md2-1-timilehin-44', matchId: 'md2-1', playerName: 'Timilehin Victor', team: 'CSP', minute: "44'", type: 'Goal' },
         { id: 'goal-md2-1-akindeko-55', matchId: 'md2-1', playerName: 'Akindeko Emmanuel', team: 'CSP', minute: "55'", type: 'Goal' },
-        { id: 'goal-md2-1-daisi-59', matchId: 'md2-1', playerName: 'Daisi Toluwanimi', team: 'STA', minute: "59'", type: 'Goal' },
+        { id: 'goal-md2-1-daisi-59', matchId: 'md2-1', playerName: 'Daisi Tioluwanimi', team: 'STA', minute: "59'", type: 'Goal' },
         { id: 'goal-md2-1-akindeko-60', matchId: 'md2-1', playerName: 'Akindeko Emmanuel', team: 'CSP', minute: "60+1'", type: 'Goal' }
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
@@ -2173,7 +2173,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'RCM': 'player-sta-14', // Johnson Emmanuel Olaoluwa
           'LW': 'player-sta-23',  // Nwachukwu Jesse
           'CF': 'player-sta-22',  // Bello Riliwan Remilekun
-          'RW': 'player-sta-19'   // Daisi Toluwanimi
+          'RW': 'player-sta-19'   // Daisi Tioluwanimi
         },
         bench: [
           'Okusi Edward',
@@ -4196,7 +4196,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           id: 'comm-goal-md1-9-toluwanimi',
           matchId: 'md1-9',
           minute: "15'",
-          text: "⚽ GOAL!!! Daisi Toluwanimi replies instantly for STA! A majestic team move, sliced through MBBS lines, and finished with precision! Back on level terms! MBBS 1 - 1 STA.",
+          text: "⚽ GOAL!!! Daisi Tioluwanimi replies instantly for STA! A majestic team move, sliced through MBBS lines, and finished with precision! Back on level terms! MBBS 1 - 1 STA.",
           timestamp: "4:15 PM",
           type: 'goal'
         },
@@ -4230,7 +4230,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'comm-md2-1-goal-csp-5', matchId: 'md2-1', minute: "60+1'", text: "⚽ GOAL!!! Akindeko Emmanuel scores again! He restores the lead with a sublime effort to bring the score to CSP 3 - 2 STA!", timestamp: "10:31 AM", type: 'goal' },
         { id: 'comm-md2-1-sub-sta-3', matchId: 'md2-1', minute: "60'", text: "🔄 Substitution (STA): Emmanuel Olaoluwa Akintayo makes way for Eki Kelvin Aghoghomena.", timestamp: "10:30 AM", type: 'general' },
         { id: 'comm-md2-1-foul-csp-5', matchId: 'md2-1', minute: "60'", text: "CSP wins a free kick in their own half after a rough tackle.", timestamp: "10:30 AM", type: 'general' },
-        { id: 'comm-md2-1-goal-sta-2', matchId: 'md2-1', minute: "59'", text: "⚽ GOAL!!! Daisi Toluwanimi gets STA back on level terms with a marvelous strike following a brief CSP corner kick! CSP 2 - 2 STA.", timestamp: "10:29 AM", type: 'goal' },
+        { id: 'comm-md2-1-goal-sta-2', matchId: 'md2-1', minute: "59'", text: "⚽ GOAL!!! Daisi Tioluwanimi gets STA back on level terms with a marvelous strike following a brief CSP corner kick! CSP 2 - 2 STA.", timestamp: "10:29 AM", type: 'goal' },
         { id: 'comm-md2-1-corner-csp-4', matchId: 'md2-1', minute: "59'", text: "📐 Corner to CSP.", timestamp: "10:29 AM", type: 'general' },
         { id: 'comm-md2-1-sub-csp-4', matchId: 'md2-1', minute: "56'", text: "🔄 Substitution (CSP): Star man Timilehin Victor walks off to a standing ovation as Omowaye Timothy replaces him.", timestamp: "10:26 AM", type: 'general' },
         { id: 'comm-md2-1-goal-csp-2', matchId: 'md2-1', minute: "55'", text: "⚽ GOAL!!! Akindeko Emmanuel taps it home to put CSP in front! Spectacular goal, CSP 2 - 1 STA.", timestamp: "10:25 AM", type: 'goal' },
@@ -4595,7 +4595,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
     if (!loadedCommentary['md3-4'] || loadedCommentary['md3-4'].length === 0) {
       loadedCommentary['md3-4'] = [
-        { id: 'comm-md3-4-ft', matchId: 'md3-4', minute: "60+2'", text: "🏁 FULL-TIME! IFS 1 - 2 STA. Referee Uche (CYS) blows the final whistle! An excellent performance by Statistics (STA) as they secure a hard-fought 2-1 victory over Information Systems (IFS). Daisi Toluwanimi (STA) is named the Man of the Match!", timestamp: "3:05 PM", type: 'general' },
+        { id: 'comm-md3-4-ft', matchId: 'md3-4', minute: "60+2'", text: "🏁 FULL-TIME! IFS 1 - 2 STA. Referee Uche (CYS) blows the final whistle! An excellent performance by Statistics (STA) as they secure a hard-fought 2-1 victory over Information Systems (IFS). Daisi Tioluwanimi (STA) is named the Man of the Match!", timestamp: "3:05 PM", type: 'general' },
         { id: 'comm-md3-4-foul-11', matchId: 'md3-4', minute: "60+1'", text: "IFS wins a foul - freekick given. IFS wins a foul in a dangerous midfield area.", timestamp: "3:03 PM", type: 'general' },
         { id: 'comm-md3-4-handball-2', matchId: 'md3-4', minute: "60+1'", text: "Handball to STA - freekick given to IFS. The referee spotted a deliberate handball.", timestamp: "3:02 PM", type: 'general' },
         { id: 'comm-md3-4-corner-5', matchId: 'md3-4', minute: "60'", text: "📐 Corner to STA. Pressure builds up for the final minutes of the match.", timestamp: "3:00 PM", type: 'general' },
