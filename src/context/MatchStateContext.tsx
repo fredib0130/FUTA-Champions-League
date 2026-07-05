@@ -2982,6 +2982,62 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       }
     };
 
+    // Ensure PO6 lineup is always perfectly set up for CSP vs MST with the correct starting XI and 4-2-4 formation
+    loadedLineups['PO6'] = {
+      home: {
+        matchId: 'PO6',
+        teamAbbr: 'CSP',
+        formation: '4-3-3',
+        captainId: 'player-csp-akindeko',
+        players: {
+          'GK': 'player-csp-gk',
+          'LB': 'player-csp-lb',
+          'CB1': 'player-csp-cb1',
+          'CB2': 'player-csp-cb2',
+          'RB': 'player-csp-rb',
+          'DM': 'player-csp-pelumi',
+          'CM1': 'player-csp-cm1',
+          'CM2': 'player-csp-cm2',
+          'LW': 'player-csp-ademide',
+          'ST': 'player-csp-akindeko',
+          'RW': 'player-csp-adedara'
+        },
+        bench: [],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'PO6',
+        teamAbbr: 'MST',
+        formation: '4-2-4',
+        captainId: 'player-mst-15', // Nkemjika Sydney (Captain)
+        players: {
+          'GK': 'player-mst-1',  // Ogundeji Feyitunmise Hezekiah
+          'RB': 'player-mst-7',  // Adeniyi Ademola Daniel
+          'CB1': 'player-mst-5', // Bernard Augustine Obioma
+          'CB2': 'player-mst-6', // Philip Believe Oluwashina
+          'LB': 'player-mst-3',  // Akinnayajo Irewale
+          'DM': 'player-mst-9',  // Adediran Olanrewaju Abeeb
+          'CM': 'player-mst-10', // Iyare Praise
+          'RW': 'player-mst-19', // Akintunde Ayomide Oluwaseyifunmi
+          'ST1': 'player-mst-18',// Fabusuyi Daniel Oluwafisayo
+          'ST2': 'player-mst-15',// Nkemjika Sydney (Captain)
+          'LW': 'player-mst-17'  // Boyede Joseph Ayomide
+        },
+        bench: [
+          'player-mst-2',  // Adeyemi Adedayo Ibrahim
+          'player-mst-4',  // Ojoisimi Bright Agbomizi
+          'player-mst-8',  // Ademisoye Segun
+          'player-mst-11', // Akinyo Boluwatife Precious
+          'player-mst-12', // Adekunle Ayomide Mubarak
+          'player-mst-13', // Olagunju Moses Temitope
+          'player-mst-14', // Ayeni Ayobami
+          'player-mst-16', // Shomuyiwa Lateef Babatunde
+          'player-mst-20'  // Ekwe Fortune
+        ],
+        status: 'Approved'
+      }
+    };
+
     localStorage.setItem('fcl_admin_lineups', JSON.stringify(loadedLineups));
     setLineups(loadedLineups);
 
@@ -5756,6 +5812,9 @@ FUTA Champions League 2026 ⚽🏆`;
       } else if (m.id === 'PO4') {
         homeTeam = 'MBBS';
         awayTeam = 'MCB';
+      } else if (m.id === 'PO6') {
+        homeTeam = 'CSP';
+        awayTeam = 'MST';
       } else {
         // Resolve Seed placeholders
         if (homeTeam.startsWith('SEED')) {
@@ -5791,7 +5850,7 @@ FUTA Champions League 2026 ⚽🏆`;
   }, [matches, computedTeams]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v28');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v29');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -5805,7 +5864,7 @@ FUTA Champions League 2026 ⚽🏆`;
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
       localStorage.removeItem('fcl_admin_news');
-      localStorage.setItem('fcl_reset_2026_ft_v28', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v29', 'true');
     }
 
     loadState();
