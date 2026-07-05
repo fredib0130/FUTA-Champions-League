@@ -29,6 +29,21 @@ export default function PublicMatchCenter() {
   const prevMatchesRef = useRef<any[]>([]);
   const isFirstMountRef = useRef(true);
 
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const isMcbReleased = () => {
+    // Release at 2:30 PM on match day 2026-07-05 (which is 14:30:00 UTC-7 or PDT)
+    const releaseTime = new Date('2026-07-05T14:30:00-07:00');
+    return currentTime >= releaseTime;
+  };
+
   const getTeamName = (teamIdCode: string) => {
     const t = teams.find(team => team.id.toLowerCase() === teamIdCode.toLowerCase() || team.name.toLowerCase() === teamIdCode.toLowerCase());
     return t ? t.name : teamIdCode.toUpperCase();
@@ -699,34 +714,43 @@ export default function PublicMatchCenter() {
                           {lineups[match.id].away.formation}
                         </span>
                       </div>
-                      <div className="space-y-1.5 font-sans">
-                        {Object.entries(lineups[match.id].away.players).map(([pos, pid]) => {
-                          const playerObj = PLAYERS.find(p => p.id === pid);
-                          const isCaptain = lineups[match.id].away.captainId === pid;
-                          return (
-                            <div key={pos} className="bg-white/[0.02] hover:bg-white/[0.04] p-1.5 px-3 rounded-xl text-[10px] text-white/80 flex items-center justify-between gap-2 border border-white/5 transition-all">
-                              <div className="flex items-center gap-2 min-w-0 truncate font-sans">
-                                <span className="text-yellow-400 font-mono font-bold tracking-wider shrink-0 w-8">{pos}</span>
-                                <div className="flex flex-col min-w-0">
-                                  <span className="truncate font-medium text-white/90">
-                                    {playerObj ? playerObj.name : pid}
-                                  </span>
-                                  {playerObj?.regNumber && (
-                                    <span className="text-[7.5px] font-mono text-white/35 tracking-wider uppercase">
-                                      {playerObj.regNumber}
+                      {match.id === 'PO4' && match.awayTeam === 'MCB' && !isMcbReleased() ? (
+                        <div className="bg-yellow-500/5 border border-yellow-500/15 p-4 rounded-2xl text-center space-y-2 py-8">
+                          <Clock size={20} className="mx-auto text-yellow-400 animate-pulse" />
+                          <p className="text-[10px] font-bold text-yellow-400 uppercase tracking-widest leading-normal">
+                            MCB Starting XI will be released at 2:30 PM.
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="space-y-1.5 font-sans">
+                          {Object.entries(lineups[match.id].away.players).map(([pos, pid]) => {
+                            const playerObj = PLAYERS.find(p => p.id === pid);
+                            const isCaptain = lineups[match.id].away.captainId === pid;
+                            return (
+                              <div key={pos} className="bg-white/[0.02] hover:bg-white/[0.04] p-1.5 px-3 rounded-xl text-[10px] text-white/80 flex items-center justify-between gap-2 border border-white/5 transition-all">
+                                <div className="flex items-center gap-2 min-w-0 truncate font-sans">
+                                  <span className="text-yellow-400 font-mono font-bold tracking-wider shrink-0 w-8">{pos}</span>
+                                  <div className="flex flex-col min-w-0">
+                                    <span className="truncate font-medium text-white/90">
+                                      {playerObj ? playerObj.name : pid}
                                     </span>
-                                  )}
+                                    {playerObj?.regNumber && (
+                                      <span className="text-[7.5px] font-mono text-white/35 tracking-wider uppercase">
+                                        {playerObj.regNumber}
+                                      </span>
+                                    )}
+                                  </div>
                                 </div>
+                                {isCaptain && (
+                                  <span className="text-[7px] font-black bg-yellow-500/20 text-yellow-400 border border-yellow-500/35 px-1 py-0.2 rounded font-mono uppercase tracking-widest shrink-0 animate-pulse">
+                                    C
+                                  </span>
+                                )}
                               </div>
-                              {isCaptain && (
-                                <span className="text-[7px] font-black bg-yellow-500/20 text-yellow-400 border border-yellow-500/35 px-1 py-0.2 rounded font-mono uppercase tracking-widest shrink-0 animate-pulse">
-                                  C
-                                </span>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -748,16 +772,22 @@ export default function PublicMatchCenter() {
 
                     <div className="space-y-1.5">
                       <span className="font-bold tracking-wider text-white/40 block pb-1 uppercase font-display">SUBS / BENCH</span>
-                      <div className="flex flex-wrap gap-1 leading-normal">
-                        {lineups[match.id].away.bench.map((benchPlayer, idx) => {
-                          const resolvedName = PLAYERS.find(p => p.id === benchPlayer)?.name || benchPlayer;
-                          return (
-                            <span key={idx} className="bg-white/[0.02] border border-white/5 text-white/60 px-2 py-1 rounded-sm text-[9px]">
-                              {resolvedName}
-                            </span>
-                          );
-                        })}
-                      </div>
+                      {match.id === 'PO4' && match.awayTeam === 'MCB' && !isMcbReleased() ? (
+                        <div className="bg-white/[0.01] border border-white/5 text-white/30 text-[9px] p-3 rounded-xl italic text-center">
+                          Bench rosters are locked until release.
+                        </div>
+                      ) : (
+                        <div className="flex flex-wrap gap-1 leading-normal">
+                          {lineups[match.id].away.bench.map((benchPlayer, idx) => {
+                            const resolvedName = PLAYERS.find(p => p.id === benchPlayer)?.name || benchPlayer;
+                            return (
+                              <span key={idx} className="bg-white/[0.02] border border-white/5 text-white/60 px-2 py-1 rounded-sm text-[9px]">
+                                {resolvedName}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

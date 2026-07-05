@@ -2715,6 +2715,122 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       }
     };
 
+    loadedLineups['PO2'] = {
+      home: {
+        matchId: 'PO2',
+        teamAbbr: 'ANA',
+        formation: '4-3-3',
+        captainId: 'ana-cap',
+        players: {
+          'GK': 'Aina John',
+          'LB': 'Adewole Ola',
+          'CB1': 'Alade Joshua',
+          'CB2': 'Ayeni Femi',
+          'RB': 'Akinola Tunde',
+          'DM': 'Arowolo Segun',
+          'CM1': 'Dele Adejumo',
+          'CM2': 'Ayodele Isaac',
+          'LW': 'Adebanjo Blessing',
+          'ST': 'Arogundade David',
+          'RW': 'Adebayo Samuel'
+        },
+        bench: ['Anthony Kolade', 'Kolawole Femi'],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'PO2',
+        teamAbbr: 'SIMT',
+        formation: '4-3-3',
+        captainId: 'player-simt-14', // Oweazim Chukwudumebi (Captain)
+        players: {
+          'GK': 'player-simt-2',  // Divine Gabriel Ibrahim
+          'RB': 'player-simt-6',  // Aderiye Joshua Adekunle
+          'CB1': 'player-simt-4', // Adeniyi Opeyemi Israel
+          'CB2': 'player-simt-17', // Adewopo Feranmi
+          'LB': 'player-simt-20', // Emmanuel Oluwapamilerin Joshua
+          'DM': 'player-simt-14', // Oweazim Chukwudumebi (Captain)
+          'CM1': 'player-simt-18', // Omowale Ridwan Gbolahun
+          'AM': 'player-simt-22', // Ipinlaye Samuel Fisayo
+          'RW': 'player-simt-15', // Okoye Philip C.
+          'ST': 'player-simt-21', // Ogboye Samuel Oluwaponmile
+          'LW': 'player-simt-19'  // Oladapo Isaac Ayomide
+        },
+        bench: [
+          'player-simt-1', // Nwabunwanne Chibichi Daniel
+          'player-simt-3', // Adebayo Samuel Ayobami
+          'player-simt-5', // Momoh Joshua David
+          'player-simt-7', // Adewale Uthman Boluwatife
+          'player-simt-8', // Omolayo Precious Ayomide
+          'player-simt-9', // Yusuf Soliu Okikiola
+          'player-simt-10', // Ajiwoye Oluwalonimi Israel
+          'player-simt-11', // Afolabi Abdulmuheez
+          'player-simt-12', // Olabamiji Eric Ayokunle
+          'player-simt-13', // Kolawole Emmanuel Timilehin
+          'player-simt-16', // Adeniyi Temitope Oluwadamilare
+          'player-simt-23'  // Amure Matthew
+        ],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['PO4'] = {
+      home: {
+        matchId: 'PO4',
+        teamAbbr: 'MBBS',
+        formation: '4-3-3',
+        captainId: 'player-mbbs-6', // SK (Captain)
+        players: {
+          'GK': 'player-mbbs-1',  // Afolabi Yusuf
+          'RB': 'player-mbbs-2',  // Ojo Daniel
+          'CB1': 'player-mbbs-3', // Chinedu Nelson
+          'CB2': 'player-mbbs-4', // Eze Joshua
+          'LB': 'player-mbbs-5',  // Olumide Olamide
+          'DM': 'player-mbbs-6',  // SK (Captain)
+          'CM1': 'player-mbbs-7', // Balogun Victor
+          'CM2': 'player-mbbs-8', // Adeniyi Samuel
+          'LW': 'player-mbbs-9',  // Bamidele Fikayo
+          'ST': 'player-mbbs-10', // Olawale Ibrahim
+          'RW': 'player-mbbs-11'  // Okonkwo Charles
+        },
+        bench: [],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'PO4',
+        teamAbbr: 'MCB',
+        formation: '4-3-3',
+        captainId: 'player-mcb-6', // Oni Oluwadamilola (Captain)
+        players: {
+          'GK': 'player-mcb-1',  // Adesuyi Oluwasegun
+          'RB': 'player-mcb-12', // Adameji Isaac
+          'CB1': 'player-mcb-14', // Adeleye Blessing
+          'CB2': 'player-mcb-2',  // Ayeni Opeyemi
+          'LB': 'player-mcb-4',  // Osowo Taiwo
+          'DM': 'player-mcb-6',  // Oni Oluwadamilola (Captain)
+          'CM': 'player-mcb-7',  // Lawal Favour Ben
+          'AM': 'player-mcb-11', // Alowonle Clement
+          'RW': 'player-mcb-21', // Adenoye Paul
+          'ST': 'player-mcb-10', // Ameh Lucky
+          'LW': 'player-mcb-9'   // Olaniran Oluwatimilehin
+        },
+        bench: [
+          'player-mcb-3',  // Alagbe Jeremiah Kehinde
+          'player-mcb-5',  // Favour
+          'player-mcb-8',  // Olowu Dennis
+          'player-mcb-13', // Wasiu Ismaeel
+          'player-mcb-15', // Tallest
+          'player-mcb-16', // Arogunrerin Abdulsalam
+          'player-mcb-17', // Olaoye Festus
+          'player-mcb-18', // Dyno
+          'player-mcb-19', // Olanipekun Alfred
+          'player-mcb-20', // Fayipe Christopher
+          'player-mcb-22', // Oyelakin Fawaz
+          'player-mcb-23'  // Abdullattef Solah
+        ],
+        status: 'Approved'
+      }
+    };
+
     localStorage.setItem('fcl_admin_lineups', JSON.stringify(loadedLineups));
     setLineups(loadedLineups);
 
