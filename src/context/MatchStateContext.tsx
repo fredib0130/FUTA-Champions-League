@@ -234,6 +234,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       return (s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED' || s === 'INTERRUPTED') && !m.walkover;
     });
 
+    // Find all live, finished or interrupted matches for matches played (APPS) calculation
+    const liveOrFinishedMatches = matches.filter(m => {
+      const s = m.status.trim().toUpperCase();
+      return (s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED' || s === 'INTERRUPTED' || s === 'LIVE') && !m.walkover;
+    });
+
     // 1. Calculate Goals
     goalScorers.forEach(g => {
       if (g.type !== 'Own Goal') {
@@ -265,7 +271,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     });
 
     // 3. Calculate Matches Played
-    finishedMatches.forEach(m => {
+    liveOrFinishedMatches.forEach(m => {
       // Look at lineups
       const matchLineup = lineups[m.id];
       const hasLineup = !!matchLineup;
@@ -2743,6 +2749,64 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       }
     };
 
+    loadedLineups['PO1'] = {
+      home: {
+        matchId: 'PO1',
+        teamAbbr: 'IDD',
+        formation: '4-3-3',
+        captainId: 'player-idd-sola',
+        players: {
+          'GK': 'Idowu David',
+          'LB': 'Babatunde Daniel',
+          'CB1': 'player-idd-tolu',
+          'CB2': 'Ojo Sunday',
+          'RB': 'Adebayo Mujeeb',
+          'DM': 'player-idd-enzo',
+          'CM1': 'player-idd-emmy',
+          'CM2': 'Adebami Ola',
+          'LW': 'player-idd-soji',
+          'ST': 'player-idd-sola',
+          'RW': 'player-idd-neymar'
+        },
+        bench: ['Aribaba Inioluwa', 'Sunday John', 'Oladejo Kehinde', 'Ademoyegun Oluwatimilehin'],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'PO1',
+        teamAbbr: 'STA',
+        formation: '4-3-3',
+        captainId: 'player-sta-3',
+        players: {
+          'GK': 'player-sta-1',
+          'RB': 'player-sta-3',
+          'CB1': 'player-sta-8',
+          'CB2': 'player-sta-4',
+          'LB': 'player-sta-9',
+          'LCM': 'player-sta-18',
+          'CM': 'player-sta-25',
+          'RCM': 'player-sta-13',
+          'RW': 'player-sta-23',
+          'ST': 'player-sta-26',
+          'LW': 'player-sta-19'
+        },
+        bench: [
+          'player-sta-2',
+          'player-sta-5',
+          'player-sta-6',
+          'player-sta-7',
+          'player-sta-10',
+          'player-sta-11',
+          'player-sta-12',
+          'player-sta-14',
+          'player-sta-15',
+          'player-sta-20',
+          'player-sta-22',
+          'player-sta-24'
+        ],
+        status: 'Approved'
+      }
+    };
+
     loadedLineups['PO2'] = {
       home: {
         matchId: 'PO2',
@@ -2854,6 +2918,65 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'player-mcb-20', // Fayipe Christopher
           'player-mcb-22', // Oyelakin Fawaz
           'player-mcb-23'  // Abdullattef Solah
+        ],
+        status: 'Approved'
+      }
+    };
+
+    // Ensure PO1 lineup is always perfectly set up for IDD vs STA with the correct starting XI
+    loadedLineups['PO1'] = {
+      home: {
+        matchId: 'PO1',
+        teamAbbr: 'IDD',
+        formation: '4-3-3',
+        captainId: 'player-idd-sola',
+        players: {
+          'GK': 'Idowu David',
+          'LB': 'Babatunde Daniel',
+          'CB1': 'player-idd-tolu',
+          'CB2': 'Ojo Sunday',
+          'RB': 'Adebayo Mujeeb',
+          'DM': 'player-idd-enzo',
+          'CM1': 'player-idd-emmy',
+          'CM2': 'Adebami Ola',
+          'LW': 'player-idd-soji',
+          'ST': 'player-idd-sola',
+          'RW': 'player-idd-neymar'
+        },
+        bench: ['Aribaba Inioluwa', 'Sunday John', 'Oladejo Kehinde', 'Ademoyegun Oluwatimilehin'],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'PO1',
+        teamAbbr: 'STA',
+        formation: '4-3-3',
+        captainId: 'player-sta-3',
+        players: {
+          'GK': 'player-sta-1',
+          'RB': 'player-sta-3',
+          'CB1': 'player-sta-8',
+          'CB2': 'player-sta-4',
+          'LB': 'player-sta-9',
+          'LCM': 'player-sta-18',
+          'CM': 'player-sta-25',
+          'RCM': 'player-sta-13',
+          'RW': 'player-sta-23',
+          'ST': 'player-sta-26',
+          'LW': 'player-sta-19'
+        },
+        bench: [
+          'player-sta-2',
+          'player-sta-5',
+          'player-sta-6',
+          'player-sta-7',
+          'player-sta-10',
+          'player-sta-11',
+          'player-sta-12',
+          'player-sta-14',
+          'player-sta-15',
+          'player-sta-20',
+          'player-sta-22',
+          'player-sta-24'
         ],
         status: 'Approved'
       }
@@ -5624,17 +5747,28 @@ FUTA Champions League 2026 ⚽🏆`;
       let homeTeam = m.homeTeam;
       let awayTeam = m.awayTeam;
 
-      // Resolve Seed placeholders
-      if (homeTeam.startsWith('SEED')) {
-        const seedNum = parseInt(homeTeam.replace('SEED', ''), 10);
-        if (!isNaN(seedNum)) {
-          homeTeam = getTeamBySeed(seedNum);
+      if (m.id === 'PO1') {
+        homeTeam = 'IDD';
+        awayTeam = 'STA';
+      } else if (m.id === 'PO2') {
+        homeTeam = 'ANA';
+        awayTeam = 'SIMT';
+      } else if (m.id === 'PO4') {
+        homeTeam = 'MBBS';
+        awayTeam = 'MCB';
+      } else {
+        // Resolve Seed placeholders
+        if (homeTeam.startsWith('SEED')) {
+          const seedNum = parseInt(homeTeam.replace('SEED', ''), 10);
+          if (!isNaN(seedNum)) {
+            homeTeam = getTeamBySeed(seedNum);
+          }
         }
-      }
-      if (awayTeam.startsWith('SEED')) {
-        const seedNum = parseInt(awayTeam.replace('SEED', ''), 10);
-        if (!isNaN(seedNum)) {
-          awayTeam = getTeamBySeed(seedNum);
+        if (awayTeam.startsWith('SEED')) {
+          const seedNum = parseInt(awayTeam.replace('SEED', ''), 10);
+          if (!isNaN(seedNum)) {
+            awayTeam = getTeamBySeed(seedNum);
+          }
         }
       }
 
