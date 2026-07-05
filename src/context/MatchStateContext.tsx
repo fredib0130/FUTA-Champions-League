@@ -408,6 +408,34 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
   // Helper to load all state from localStorage or seed initial data
   const loadState = () => {
+    // Migrate any legacy "Daisi Toluwanimi" references in localStorage to "Daisi Tioluwanimi"
+    const keysToMigrate = [
+      'fcl_admin_matches',
+      'fcl_admin_teams',
+      'fcl_admin_goals',
+      'fcl_admin_cards',
+      'fcl_admin_subs',
+      'fcl_admin_lineups',
+      'fcl_admin_commentaries',
+      'fcl_admin_reports',
+      'fcl_admin_news',
+      'fcl_admin_stats'
+    ];
+    keysToMigrate.forEach(key => {
+      try {
+        const val = localStorage.getItem(key);
+        if (val && (val.includes('Daisi Toluwanimi') || val.includes('daisi toluwanimi') || val.includes('Daisi Toluwanimi'.toLowerCase()))) {
+          let updatedVal = val
+            .replace(/Daisi Toluwanimi/g, 'Daisi Tioluwanimi')
+            .replace(/daisi toluwanimi/g, 'daisi tioluwanimi')
+            .replace(/DAISI TOLUWANIMI/g, 'DAISI TIOLUWANIMI');
+          localStorage.setItem(key, updatedVal);
+        }
+      } catch (e) {
+        console.error(`Error migrating legacy player name in localStorage for key: ${key}`, e);
+      }
+    });
+
     // 1. Matches
     const storedMatches = localStorage.getItem('fcl_admin_matches');
     let loadedMatches: Match[] = [];
