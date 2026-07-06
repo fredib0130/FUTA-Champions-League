@@ -2281,6 +2281,28 @@ export function Stats() {
       });
   }, [players]);
 
+  const psGoalsRankings = React.useMemo(() => {
+    return [...players]
+      .filter(p => (p.penaltyShootoutGoals ?? 0) > 0)
+      .sort((a, b) => {
+        if ((b.penaltyShootoutGoals ?? 0) !== (a.penaltyShootoutGoals ?? 0)) {
+          return (b.penaltyShootoutGoals ?? 0) - (a.penaltyShootoutGoals ?? 0);
+        }
+        return a.name.localeCompare(b.name);
+      });
+  }, [players]);
+
+  const psMissesRankings = React.useMemo(() => {
+    return [...players]
+      .filter(p => (p.penaltyShootoutMisses ?? 0) > 0)
+      .sort((a, b) => {
+        if ((b.penaltyShootoutMisses ?? 0) !== (a.penaltyShootoutMisses ?? 0)) {
+          return (b.penaltyShootoutMisses ?? 0) - (a.penaltyShootoutMisses ?? 0);
+        }
+        return a.name.localeCompare(b.name);
+      });
+  }, [players]);
+
   // Compute aggregated team stats for the FUTA Champions League
   const teamStats = React.useMemo(() => {
     const statsMap: Record<string, {
@@ -2515,6 +2537,75 @@ export function Stats() {
                 {cleanSheetRankings.length === 0 && (
                   <div className="text-center text-white/40 py-8">No goalkeeper clean sheet data available.</div>
                 )}
+              </div>
+            </div>
+
+            {/* 4. PENALTY SHOOTOUT STATISTICS */}
+            <div className="space-y-8 max-w-7xl mx-auto">
+              <div className="flex items-center space-x-3 border-b border-[#00e5ff] pb-4">
+                <h2 className="text-2xl font-display italic uppercase">PENALTY SHOOTOUT STATISTICS</h2>
+                <Trophy className="text-[#00e5ff] w-6 h-6" />
+              </div>
+              <div className="grid md:grid-cols-2 gap-12">
+                {/* Penalty Shootout Goals Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between border-b border-[#00e5ff]/35 pb-3">
+                    <h3 className="text-lg font-bold text-white/95 uppercase tracking-wide">🎯 SHOOTOUT GOALS (SUCCESSES)</h3>
+                  </div>
+                  <div className="space-y-4">
+                    {psGoalsRankings.map((player, i) => (
+                      <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
+                        <div className="flex items-center space-x-4">
+                          <span className="text-lg font-mono font-bold text-white/20 w-8 text-center">{i + 1}</span>
+                          <img src={player.image || null} className="w-10 h-10 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
+                          <div>
+                            <h4 className="font-bold group-hover:text-[#00e5ff] transition-colors text-sm">{player.name}</h4>
+                            <p className="text-[10px] text-white/40 uppercase tracking-widest">
+                              {TEAMS.find(t => t.id === player.teamId)?.name || player.teamId}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right bg-[#00e5ff]/10 px-3 py-1 border border-[#00e5ff]/20 rounded-xl">
+                          <div className="text-lg font-mono font-bold text-[#00e5ff]">{player.penaltyShootoutGoals}</div>
+                          <div className="text-[7px] font-bold text-[#00e5ff]/60 uppercase tracking-widest mt-0.5">PS Goals</div>
+                        </div>
+                      </div>
+                    ))}
+                    {psGoalsRankings.length === 0 && (
+                      <div className="text-center text-white/30 py-8 text-xs">No penalty shootout goals recorded.</div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Penalty Shootout Misses Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between border-b border-rose-500/35 pb-3">
+                    <h3 className="text-lg font-bold text-white/95 uppercase tracking-wide">❌ SHOOTOUT MISSES</h3>
+                  </div>
+                  <div className="space-y-4">
+                    {psMissesRankings.map((player, i) => (
+                      <div key={player.id} className="glass rounded-2xl p-4 flex items-center justify-between group hover:bg-white/10 transition-colors">
+                        <div className="flex items-center space-x-4">
+                          <span className="text-lg font-mono font-bold text-white/20 w-8 text-center">{i + 1}</span>
+                          <img src={player.image || null} className="w-10 h-10 rounded-full border-2 border-white/10 object-cover" alt={player.name} />
+                          <div>
+                            <h4 className="font-bold group-hover:text-rose-500 transition-colors text-sm">{player.name}</h4>
+                            <p className="text-[10px] text-white/40 uppercase tracking-widest">
+                              {TEAMS.find(t => t.id === player.teamId)?.name || player.teamId}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right bg-rose-500/10 px-3 py-1 border border-rose-500/20 rounded-xl">
+                          <div className="text-lg font-mono font-bold text-rose-500">{player.penaltyShootoutMisses}</div>
+                          <div className="text-[7px] font-bold text-rose-500/60 uppercase tracking-widest mt-0.5">PS Misses</div>
+                        </div>
+                      </div>
+                    ))}
+                    {psMissesRankings.length === 0 && (
+                      <div className="text-center text-white/30 py-8 text-xs">No penalty shootout misses recorded.</div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -4454,6 +4545,20 @@ export function TeamProfile() {
                         <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">Goals</div>
                       </div>
                       <div className="w-px h-5 bg-white/10" />
+                      {((player.penaltyShootoutGoals || 0) > 0 || (player.penaltyShootoutMisses || 0) > 0) && (
+                        <>
+                          <div className="text-center px-1" title="Penalty Shootout Goals">
+                            <div className="text-xs font-bold text-[#00e5ff]">{player.penaltyShootoutGoals ?? 0}</div>
+                            <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">PSG</div>
+                          </div>
+                          <div className="w-px h-5 bg-white/10" />
+                          <div className="text-center px-1" title="Penalty Shootout Misses">
+                            <div className="text-xs font-bold text-rose-400">{player.penaltyShootoutMisses ?? 0}</div>
+                            <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">PSM</div>
+                          </div>
+                          <div className="w-px h-5 bg-white/10" />
+                        </>
+                      )}
                       <div className="text-center px-1">
                         <div className="text-xs font-bold text-yellow-500">{player.yellowCards ?? 0}</div>
                         <div className="text-[7.5px] text-white/30 font-black uppercase tracking-wider">YC</div>

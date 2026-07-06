@@ -226,7 +226,41 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       clean_sheets: 0,
       goalsConceded: 0,
       goals_conceded: 0,
+      penaltyShootoutGoals: 0,
+      penaltyShootoutMisses: 0,
     }));
+
+    // Calculate Penalty Shootout Goals & Misses
+    matches.forEach(m => {
+      const s = m.status.trim().toUpperCase();
+      const isFinished = s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED';
+      if (isFinished) {
+        if (m.penaltyShootoutHome) {
+          m.penaltyShootoutHome.forEach(pAttempt => {
+            const playerObj = basePlayers.find(p => p.name.toLowerCase() === pAttempt.playerName.toLowerCase());
+            if (playerObj) {
+              if (pAttempt.isScored) {
+                playerObj.penaltyShootoutGoals = (playerObj.penaltyShootoutGoals || 0) + 1;
+              } else {
+                playerObj.penaltyShootoutMisses = (playerObj.penaltyShootoutMisses || 0) + 1;
+              }
+            }
+          });
+        }
+        if (m.penaltyShootoutAway) {
+          m.penaltyShootoutAway.forEach(pAttempt => {
+            const playerObj = basePlayers.find(p => p.name.toLowerCase() === pAttempt.playerName.toLowerCase());
+            if (playerObj) {
+              if (pAttempt.isScored) {
+                playerObj.penaltyShootoutGoals = (playerObj.penaltyShootoutGoals || 0) + 1;
+              } else {
+                playerObj.penaltyShootoutMisses = (playerObj.penaltyShootoutMisses || 0) + 1;
+              }
+            }
+          });
+        }
+      }
+    });
 
     // Find all finished or interrupted matches (exclude walkovers to prevent player stats from being counted)
     const finishedMatches = matches.filter(m => {
@@ -471,10 +505,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.lineupSubmittedHome !== official.lineupSubmittedHome ||
             m.lineupSubmittedAway !== official.lineupSubmittedAway ||
             m.note !== official.note ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            m.homePenalties !== official.homePenalties ||
+            m.awayPenalties !== official.awayPenalties ||
+            JSON.stringify(m.penaltyShootoutHome) !== JSON.stringify(official.penaltyShootoutHome) ||
+            JSON.stringify(m.penaltyShootoutAway) !== JSON.stringify(official.penaltyShootoutAway) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
-            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10') && m.status !== official.status) // Sync status specifically for matchdays
+            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6') && m.status !== official.status) // Sync status specifically for matchdays and PO6
           ) {
             loadedMatches[index] = {
               ...m,
@@ -487,13 +525,17 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               refereeAssigned: official.refereeAssigned,
               matchApproved: official.matchApproved,
               officialsPanel: official.officialsPanel,
-              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10') ? official.status : m.status,
+              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6') ? official.status : m.status,
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
               note: official.note,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10'].includes(official.id) ? official.awayScore : m.awayScore
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6'].includes(official.id) ? official.awayScore : m.awayScore,
+              homePenalties: official.homePenalties,
+              awayPenalties: official.awayPenalties,
+              penaltyShootoutHome: official.penaltyShootoutHome,
+              penaltyShootoutAway: official.penaltyShootoutAway
             };
             updated = true;
           }
@@ -510,7 +552,9 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         homeScore: m.homeScore ?? 0,
         awayScore: m.awayScore ?? 0,
         lineupSubmittedHome: m.lineupSubmittedHome ?? false,
-        lineupSubmittedAway: m.lineupSubmittedAway ?? false
+        lineupSubmittedAway: m.lineupSubmittedAway ?? false,
+        penaltyShootoutHome: m.penaltyShootoutHome,
+        penaltyShootoutAway: m.penaltyShootoutAway
       }));
     }
 
@@ -1682,6 +1726,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
 
+    if (!loadedGoals.some(g => g.matchId === 'PO6')) {
+      loadedGoals.push(
+        { id: 'goal-po6-iyare-49', matchId: 'PO6', playerName: 'Iyare Praise', team: 'MST', minute: "49'", type: 'Goal' },
+        { id: 'goal-po6-michael-54', matchId: 'PO6', playerName: 'Michael', team: 'CSP', minute: "54'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -1906,7 +1958,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
       // BDG vs FWT Subs (md2-9)
       { id: 'sub-md2-9-bdg-1', matchId: 'md2-9', teamAbbr: 'BDG', playerOut: 'Praise', playerIn: 'Olawuyi Moses', minute: 45 },
-      { id: 'sub-md2-9-fwt-1', matchId: 'md2-9', teamAbbr: 'FWT', playerOut: 'Adegoke Blessing Moses', playerIn: 'Olalekan Hammed Olajuwon', minute: 40 }
+      { id: 'sub-md2-9-fwt-1', matchId: 'md2-9', teamAbbr: 'FWT', playerOut: 'Adegoke Blessing Moses', playerIn: 'Olalekan Hammed Olajuwon', minute: 40 },
+
+      // PO6 Subs
+      { id: 'sub-po6-mst-gk', matchId: 'PO6', teamAbbr: 'MST', playerOut: 'Ogundeji Feyitunmise Hezekiah', playerIn: 'Ikwue David Oche', minute: 55 }
     ];
 
     let subsUpdated = false;
@@ -3032,7 +3087,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'player-mst-13', // Olagunju Moses Temitope
           'player-mst-14', // Ayeni Ayobami
           'player-mst-16', // Shomuyiwa Lateef Babatunde
-          'player-mst-20'  // Ekwe Fortune
+          'player-mst-20', // Ekwe Fortune
+          'player-mst-21'  // Ikwue David Oche
         ],
         status: 'Approved'
       }
@@ -5771,16 +5827,30 @@ FUTA Champions League 2026 ⚽🏆`;
       let homeTeam = m.homeTeam;
       let awayTeam = m.awayTeam;
 
-      if (homeTeam.startsWith('SEED')) {
-        const seedNum = parseInt(homeTeam.replace('SEED', ''), 10);
-        if (!isNaN(seedNum)) {
-          homeTeam = getTeamBySeed(seedNum);
+      if (m.id === 'PO1') {
+        homeTeam = 'IDD';
+        awayTeam = 'STA';
+      } else if (m.id === 'PO2') {
+        homeTeam = 'ANA';
+        awayTeam = 'SIMT';
+      } else if (m.id === 'PO4') {
+        homeTeam = 'MBBS';
+        awayTeam = 'MCB';
+      } else if (m.id === 'PO6') {
+        homeTeam = 'CSP';
+        awayTeam = 'MST';
+      } else {
+        if (homeTeam.startsWith('SEED')) {
+          const seedNum = parseInt(homeTeam.replace('SEED', ''), 10);
+          if (!isNaN(seedNum)) {
+            homeTeam = getTeamBySeed(seedNum);
+          }
         }
-      }
-      if (awayTeam.startsWith('SEED')) {
-        const seedNum = parseInt(awayTeam.replace('SEED', ''), 10);
-        if (!isNaN(seedNum)) {
-          awayTeam = getTeamBySeed(seedNum);
+        if (awayTeam.startsWith('SEED')) {
+          const seedNum = parseInt(awayTeam.replace('SEED', ''), 10);
+          if (!isNaN(seedNum)) {
+            awayTeam = getTeamBySeed(seedNum);
+          }
         }
       }
 
@@ -5850,7 +5920,7 @@ FUTA Champions League 2026 ⚽🏆`;
   }, [matches, computedTeams]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v29');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v31');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -5864,7 +5934,7 @@ FUTA Champions League 2026 ⚽🏆`;
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
       localStorage.removeItem('fcl_admin_news');
-      localStorage.setItem('fcl_reset_2026_ft_v29', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v31', 'true');
     }
 
     loadState();

@@ -72,6 +72,8 @@ export interface Player {
   appealAllowed?: boolean;
   isFormer?: boolean;
   isInactive?: boolean;
+  penaltyShootoutGoals?: number;
+  penaltyShootoutMisses?: number;
 }
 
 export interface Match {
@@ -95,6 +97,8 @@ export interface Match {
   secondHalfAddedTime?: number;
   homePenalties?: number;
   awayPenalties?: number;
+  penaltyShootoutHome?: { playerName: string; isScored: boolean }[];
+  penaltyShootoutAway?: { playerName: string; isScored: boolean }[];
 
   referee?: string;
   refereeAssigned?: boolean;

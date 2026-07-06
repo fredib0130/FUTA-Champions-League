@@ -316,6 +316,28 @@ export default function PublicMatchCenter() {
                     ))}
                   </div>
                 )}
+                
+                {/* Penalty Shootout Home */}
+                {match.penaltyShootoutHome && match.penaltyShootoutHome.length > 0 && (
+                  <div className="text-[10px] text-white/60 space-y-1 mt-4 font-mono border-t border-white/5 pt-2 text-left">
+                    <div className="text-[9px] font-bold uppercase text-[#00e5ff] tracking-widest mb-1.5 flex items-center gap-1.5">
+                      <span>🎯 Shootout Takers</span>
+                    </div>
+                    {match.penaltyShootoutHome.map((attempt, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5 py-0.5">
+                        <span className="w-4 text-center">{attempt.isScored ? '⚽' : '❌'}</span>
+                        <span className={attempt.isScored ? 'text-white/90 font-medium' : 'text-white/30 line-through'}>
+                          {attempt.playerName}
+                        </span>
+                        {!attempt.isScored && (
+                          <span className="text-[7px] font-black uppercase text-red-400 bg-red-400/10 px-1 py-0.2 rounded tracking-wider border border-red-400/20">
+                            Missed
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <TeamLogo teamId={match.homeTeam} logoUrl={homeTeam.logoUrl} size="lg" className="w-20 h-20 object-contain flex-shrink-0" />
             </div>
@@ -392,6 +414,28 @@ export default function PublicMatchCenter() {
                     {awayScorers.map((scorer, idx) => (
                       <div key={idx}>
                         ⚽ {scorer.playerName} {formatMinuteDisplay(scorer.minute)}{scorer.type === 'Penalty' ? ' (P)' : scorer.type === 'Own Goal' ? ' (OG)' : ''}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Penalty Shootout Away */}
+                {match.penaltyShootoutAway && match.penaltyShootoutAway.length > 0 && (
+                  <div className="text-[10px] text-white/60 space-y-1 mt-4 font-mono border-t border-white/5 pt-2 text-left">
+                    <div className="text-[9px] font-bold uppercase text-[#00e5ff] tracking-widest mb-1.5 flex items-center gap-1.5">
+                      <span>🎯 Shootout Takers</span>
+                    </div>
+                    {match.penaltyShootoutAway.map((attempt, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5 py-0.5">
+                        <span className="w-4 text-center">{attempt.isScored ? '⚽' : '❌'}</span>
+                        <span className={attempt.isScored ? 'text-white/90 font-medium' : 'text-white/30 line-through'}>
+                          {attempt.playerName}
+                        </span>
+                        {!attempt.isScored && (
+                          <span className="text-[7px] font-black uppercase text-red-400 bg-red-400/10 px-1 py-0.2 rounded tracking-wider border border-red-400/20">
+                            Missed
+                          </span>
+                        )}
                       </div>
                     ))}
                   </div>

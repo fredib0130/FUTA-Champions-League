@@ -80,6 +80,10 @@ export const PLAYERS: Player[] = [
   { id: 'player-csp-adedara', name: "Adedara", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'csp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=csp-adedara' },
   { id: 'player-csp-akindeko', name: "Akindeko Emmanuel", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'csp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=csp-akindeko' },
   { id: 'player-csp-pelumi', name: "Pelumi", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'csp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=csp-pelumi' },
+  { id: 'player-csp-michael', name: "Michael", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'csp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=csp-michael' },
+  { id: 'player-csp-soj', name: "SOJ", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'csp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=csp-soj' },
+  { id: 'player-csp-goodness', name: "Goodness", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'csp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=csp-goodness' },
+  { id: 'player-csp-amos', name: "Amos", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'csp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=csp-amos' },
   { id: 'player-ice-usman', name: "Bamidele Usman", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-usman' },
   { id: 'player-ice-prosper', name: "Adeyemi Prosper", position: "GK" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-prosper' },
   { id: 'player-ice-samson', name: "Olayiwola Samson", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-samson' },
@@ -146,7 +150,8 @@ export const PLAYERS: Player[] = [
     { name: "Boyede Joseph Ayomide", position: "FWD" as const, level: "300L", jerseyNo: 10, regNumber: "FCL/MST/26/1017" },
     { name: "Fabusuyi Daniel Oluwafisayo", position: "FWD" as const, level: "500L", regNumber: "FCL/MST/26/1018" },
     { name: "Akintunde Ayomide Oluwaseyifunmi", position: "FWD" as const, level: "100L", jerseyNo: 30, regNumber: "FCL/MST/26/1019" },
-    { name: "Ekwe Fortune", position: "FWD" as const, level: "500L", regNumber: "FCL/MST/26/1020" }
+    { name: "Ekwe Fortune", position: "FWD" as const, level: "500L", regNumber: "FCL/MST/26/1020" },
+    { name: "Ikwue David Oche", position: "GK" as const, level: "100L", jerseyNo: 12, regNumber: "FCL/MST/26/1021" }
   ].map((p, idx) => ({
     id: `player-mst-${idx + 1}`,
     name: p.name,
@@ -616,7 +621,18 @@ export const MATCHES: Match[] = [
   { id: 'PO3', homeTeam: 'SEED5', awayTeam: 'SEED12', date: '2026-07-05', time: '15:30', venue: 'Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
   { id: 'PO4', homeTeam: 'SEED6', awayTeam: 'SEED11', date: '2026-07-05', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
   { id: 'PO5', homeTeam: 'SEED7', awayTeam: 'SEED10', date: '2026-07-05', time: '17:00', venue: 'Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
-  { id: 'PO6', homeTeam: 'SEED8', awayTeam: 'SEED9', date: '2026-07-05', time: '17:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
+  { id: 'PO6', homeTeam: 'SEED8', awayTeam: 'SEED9', date: '2026-07-05', time: '17:00', venue: 'Main Pitch', status: 'Finished', homeScore: 1, awayScore: 1, homePenalties: 3, awayPenalties: 5, penaltyShootoutHome: [
+    { playerName: 'SOJ', isScored: true },
+    { playerName: 'Akindeko Emmanuel', isScored: false },
+    { playerName: 'Goodness', isScored: true },
+    { playerName: 'Amos', isScored: true }
+  ], penaltyShootoutAway: [
+    { playerName: 'Olagunju Moses Temitope', isScored: true },
+    { playerName: 'Adediran Olanrewaju Abeeb', isScored: true },
+    { playerName: 'Boyede Joseph Ayomide', isScored: true },
+    { playerName: 'Nkemjika Sydney', isScored: true },
+    { playerName: 'Iyare Praise', isScored: true }
+  ], lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round', referee: 'Jones (AGE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Ikwue David Oche' },
 
   // --- QUARTER-FINALS (July 1 - 2) ---
   { id: 'QF1', homeTeam: 'SEED1', awayTeam: 'PO6_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
