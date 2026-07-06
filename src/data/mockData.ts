@@ -534,10 +534,66 @@ export const PLAYERS: Player[] = [
     image: `https://api.dicebear.com/7.x/avataaars/svg?seed=age-player-${idx + 1}`
   })),
 
+  // ANA Official Squad (Anatomy)
+  ...[
+    { name: "Aina John", position: "GK" as const, level: "300L", jerseyNo: 1 },
+    { name: "Adewole Ola", position: "DEF" as const, level: "400L", jerseyNo: 2 },
+    { name: "Alade Joshua", position: "DEF" as const, level: "200L", jerseyNo: 3 },
+    { name: "Ayeni Femi", position: "DEF" as const, level: "500L", jerseyNo: 4 },
+    { name: "Akinola Tunde", position: "DEF" as const, level: "300L", jerseyNo: 5 },
+    { name: "Arowolo Segun", position: "MID" as const, level: "200L", jerseyNo: 6 },
+    { name: "Dele Adejumo", position: "MID" as const, level: "400L", jerseyNo: 8 },
+    { name: "Ayodele Isaac", position: "MID" as const, level: "300L", jerseyNo: 10 },
+    { name: "Adebanjo Blessing", position: "FWD" as const, level: "400L", jerseyNo: 7 },
+    { name: "Arogundade David", position: "FWD" as const, level: "500L", jerseyNo: 9 },
+    { name: "Adebayo Samuel", position: "FWD" as const, level: "100L", jerseyNo: 11 },
+    { name: "Success Bayode", position: "FWD" as const, level: "300L", jerseyNo: 17 },
+    { name: "Isreal", position: "FWD" as const, level: "200L", jerseyNo: 14 },
+    { name: "Ademola Paul", position: "MID" as const, level: "300L", jerseyNo: 15 }
+  ].map((p, idx) => ({
+    id: `player-ana-${idx + 1}`,
+    name: p.name,
+    position: p.position,
+    level: p.level,
+    jerseyNo: p.jerseyNo,
+    regNumber: (globalThis as any).getPlayerRegNumber('ana', idx),
+    goals: 0,
+    played: 0,
+    cleanSheets: 0,
+    teamId: 'ana',
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=ana-player-${idx + 1}`
+  })),
+
+  // AGP Official Squad (Applied Geo-Physics)
+  ...[
+    { name: "Olatunde Segun", position: "GK" as const, level: "300L", jerseyNo: 1 },
+    { name: "Adeyeye Femi", position: "DEF" as const, level: "400L", jerseyNo: 2 },
+    { name: "Arowolo Tunde", position: "DEF" as const, level: "200L", jerseyNo: 3 },
+    { name: "Alabi Joshua", position: "DEF" as const, level: "500L", jerseyNo: 4 },
+    { name: "Ayeni Blessing", position: "DEF" as const, level: "300L", jerseyNo: 5 },
+    { name: "Adebayo Ola", position: "MID" as const, level: "200L", jerseyNo: 6 },
+    { name: "Adejumo David", position: "MID" as const, level: "400L", jerseyNo: 8 },
+    { name: "Ayodele Samuel", position: "MID" as const, level: "300L", jerseyNo: 10 },
+    { name: "Akinola Segun", position: "FWD" as const, level: "400L", jerseyNo: 11 },
+    { name: "Adewole Isaac", position: "FWD" as const, level: "500L", jerseyNo: 12 }
+  ].map((p, idx) => ({
+    id: `player-agp-${idx + 3}`,
+    name: p.name,
+    position: p.position,
+    level: p.level,
+    jerseyNo: p.jerseyNo,
+    regNumber: (globalThis as any).getPlayerRegNumber('agp', idx + 2),
+    goals: 0,
+    played: 0,
+    cleanSheets: 0,
+    teamId: 'agp',
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=agp-player-${idx + 3}`
+  })),
+
   // Auto-generate helper players for other teams to keep rosters occupied
   ...Array.from({ length: 150 }, (_, i) => {
     const team = TEAMS[i % TEAMS.length];
-    if (team.id === 'mst' || team.id === 'fwt' || team.id === 'cys' || team.id === 'simt' || team.id === 'sta' || team.id === 'ifs' || team.id === 'mcb' || team.id === 'phy' || team.id === 'age' || team.id === 'mbbs' || team.id === 'bdg') {
+    if (team.id === 'mst' || team.id === 'fwt' || team.id === 'cys' || team.id === 'simt' || team.id === 'sta' || team.id === 'ifs' || team.id === 'mcb' || team.id === 'phy' || team.id === 'age' || team.id === 'mbbs' || team.id === 'bdg' || team.id === 'ana' || team.id === 'agp') {
       return null;
     }
     return {
@@ -616,9 +672,9 @@ export const MATCHES: Match[] = [
   { id: 'md3-10', homeTeam: 'BDG', awayTeam: 'ANA', date: '2026-06-28', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 3, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 3, walkover: true, referee: 'Administrative Walkover', refereeAssigned: true, matchApproved: true, note: 'Walkover awarded in favour of ANA' },
 
   // --- PLAYOFF ROUND (July 5) ---
-  { id: 'PO1', homeTeam: 'SEED3', awayTeam: 'SEED14', date: '2026-07-05', time: '14:00', venue: 'Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round' },
-  { id: 'PO2', homeTeam: 'SEED4', awayTeam: 'SEED13', date: '2026-07-05', time: '14:00', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round' },
-  { id: 'PO3', homeTeam: 'SEED5', awayTeam: 'SEED12', date: '2026-07-05', time: '15:30', venue: 'Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
+  { id: 'PO1', homeTeam: 'SEED3', awayTeam: 'SEED14', date: '2026-07-05', time: '14:00', venue: 'Main Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round', referee: 'Jones (AGE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Agbo Peter' },
+  { id: 'PO2', homeTeam: 'SEED4', awayTeam: 'SEED13', date: '2026-07-05', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 3, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round', referee: 'Tosin (MTS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Success Bayode' },
+  { id: 'PO3', homeTeam: 'SEED5', awayTeam: 'SEED12', date: '2026-07-05', time: '15:30', venue: 'Main Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round', referee: 'Jones (AGE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Michael' },
   { id: 'PO4', homeTeam: 'SEED6', awayTeam: 'SEED11', date: '2026-07-05', time: '15:30', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
   { id: 'PO5', homeTeam: 'SEED7', awayTeam: 'SEED10', date: '2026-07-05', time: '17:00', venue: 'Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
   { id: 'PO6', homeTeam: 'SEED8', awayTeam: 'SEED9', date: '2026-07-05', time: '17:00', venue: 'Main Pitch', status: 'Finished', homeScore: 1, awayScore: 1, homePenalties: 3, awayPenalties: 5, penaltyShootoutHome: [

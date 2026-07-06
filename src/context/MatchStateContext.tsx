@@ -509,10 +509,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.awayPenalties !== official.awayPenalties ||
             JSON.stringify(m.penaltyShootoutHome) !== JSON.stringify(official.penaltyShootoutHome) ||
             JSON.stringify(m.penaltyShootoutAway) !== JSON.stringify(official.penaltyShootoutAway) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
-            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6') && m.status !== official.status) // Sync status specifically for matchdays and PO6
+            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3') && m.status !== official.status) // Sync status specifically for matchdays and PO6, PO1, PO2, PO3
           ) {
             loadedMatches[index] = {
               ...m,
@@ -525,13 +525,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               refereeAssigned: official.refereeAssigned,
               matchApproved: official.matchApproved,
               officialsPanel: official.officialsPanel,
-              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6') ? official.status : m.status,
+              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3') ? official.status : m.status,
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
               note: official.note,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6'].includes(official.id) ? official.awayScore : m.awayScore,
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3'].includes(official.id) ? official.awayScore : m.awayScore,
               homePenalties: official.homePenalties,
               awayPenalties: official.awayPenalties,
               penaltyShootoutHome: official.penaltyShootoutHome,
@@ -1734,6 +1734,29 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
 
+    if (!loadedGoals.some(g => g.matchId === 'PO1')) {
+      loadedGoals.push(
+        { id: 'goal-po1-agbo-52', matchId: 'PO1', playerName: 'Agbo Peter', team: 'STA', minute: "52'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'PO2')) {
+      loadedGoals.push(
+        { id: 'goal-po2-isreal-15', matchId: 'PO2', playerName: 'Isreal', team: 'ANA', minute: "15'", type: 'Goal' },
+        { id: 'goal-po2-ademola-20', matchId: 'PO2', playerName: 'Ademola Paul', team: 'ANA', minute: "20'", type: 'Goal' },
+        { id: 'goal-po2-success-25', matchId: 'PO2', playerName: 'Success Bayode', team: 'ANA', minute: "25'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'PO3')) {
+      loadedGoals.push(
+        { id: 'goal-po3-michael-64', matchId: 'PO3', playerName: 'Michael', team: 'AGP', minute: "60+4'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -2867,21 +2890,21 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         matchId: 'PO2',
         teamAbbr: 'ANA',
         formation: '4-3-3',
-        captainId: 'ana-cap',
+        captainId: 'player-ana-12',
         players: {
-          'GK': 'Aina John',
-          'LB': 'Adewole Ola',
-          'CB1': 'Alade Joshua',
-          'CB2': 'Ayeni Femi',
-          'RB': 'Akinola Tunde',
-          'DM': 'Arowolo Segun',
-          'CM1': 'Dele Adejumo',
-          'CM2': 'Ayodele Isaac',
-          'LW': 'Adebanjo Blessing',
-          'ST': 'Arogundade David',
-          'RW': 'Adebayo Samuel'
+          'GK': 'player-ana-1',
+          'LB': 'player-ana-2',
+          'CB1': 'player-ana-3',
+          'CB2': 'player-ana-4',
+          'RB': 'player-ana-5',
+          'DM': 'player-ana-6',
+          'CM1': 'player-ana-14',
+          'CM2': 'player-ana-8',
+          'LW': 'player-ana-13',
+          'ST': 'player-ana-12',
+          'RW': 'player-ana-11'
         },
-        bench: ['Anthony Kolade', 'Kolawole Femi'],
+        bench: ['player-ana-7', 'player-ana-9', 'player-ana-10'],
         status: 'Approved'
       },
       away: {
@@ -2916,6 +2939,51 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'player-simt-16', // Adeniyi Temitope Oluwadamilare
           'player-simt-23'  // Amure Matthew
         ],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['PO3'] = {
+      home: {
+        matchId: 'PO3',
+        teamAbbr: 'BDG',
+        formation: '4-3-3',
+        captainId: 'player-bdg-6',
+        players: {
+          'GK': 'player-bdg-1',
+          'LB': 'player-bdg-2',
+          'CB1': 'player-bdg-3',
+          'CB2': 'player-bdg-4',
+          'RB': 'player-bdg-5',
+          'DM': 'player-bdg-6',
+          'CM1': 'player-bdg-7',
+          'CM2': 'player-bdg-praise',
+          'LW': 'player-bdg-tofunmi',
+          'ST': 'player-bdg-desmond',
+          'RW': 'player-bdg-9'
+        },
+        bench: ['player-bdg-12', 'player-bdg-13'],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'PO3',
+        teamAbbr: 'AGP',
+        formation: '4-3-3',
+        captainId: 'player-agp-michael',
+        players: {
+          'GK': 'player-agp-3',
+          'LB': 'player-agp-4',
+          'CB1': 'player-agp-5',
+          'CB2': 'player-agp-6',
+          'RB': 'player-agp-7',
+          'DM': 'player-agp-8',
+          'CM1': 'player-agp-9',
+          'CM2': 'player-agp-10',
+          'LW': 'player-agp-roland',
+          'ST': 'player-agp-michael',
+          'RW': 'player-agp-11'
+        },
+        bench: ['player-agp-12'],
         status: 'Approved'
       }
     };
@@ -5016,6 +5084,41 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
+    if (!loadedCommentary['PO1'] || loadedCommentary['PO1'].length === 0) {
+      loadedCommentary['PO1'] = [
+        { id: 'comm-po1-ft', matchId: 'PO1', minute: "60'", text: "🏁 FULL-TIME! IDD 0 - 1 STA. Statistics (STA) are through to the Quarter-finals of the FUTA Champions League! Agbo Peter's 52nd-minute strike is the difference!", timestamp: "3:00 PM", type: 'general' },
+        { id: 'comm-po1-def', matchId: 'PO1', minute: "57'", text: "STA is defending with everything! Resolute blocks from their backline to preserve their precious lead.", timestamp: "2:57 PM", type: 'general' },
+        { id: 'comm-po1-goal-agbo', matchId: 'PO1', minute: "52'", text: "⚽ GOAL!!! Agbo Peter opens the scoring for STA! A wonderful team play finds Peter inside the box and he buries it past the IDD goalkeeper! IDD 0 - 1 STA.", timestamp: "2:52 PM", type: 'goal' },
+        { id: 'comm-po1-ht', matchId: 'PO1', minute: "30'", text: "⏸️ HALF-TIME! IDD 0 - 0 STA. A cagey and tense first half comes to a close. Both teams have canceled each other out so far.", timestamp: "2:30 PM", type: 'general' },
+        { id: 'comm-po1-chance', matchId: 'PO1', minute: "18'", text: "Chance! Sola of IDD takes a snapshot from distance but it sails just over the crossbar.", timestamp: "2:18 PM", type: 'general' },
+        { id: 'comm-po1-kickoff', matchId: 'PO1', minute: "1'", text: "🏁 KICKOFF! The Playoff Round match PO1 between IDD and STA is underway! Jones (AGE) is the referee.", timestamp: "2:00 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
+    if (!loadedCommentary['PO2'] || loadedCommentary['PO2'].length === 0) {
+      loadedCommentary['PO2'] = [
+        { id: 'comm-po2-ft', matchId: 'PO2', minute: "60'", text: "🏁 FULL-TIME! ANA 3 - 0 SIMT. A masterclass display from Anatomy (ANA) to defeat SIMT and secure their place in the FUTA Champions League Quarter-finals! Success Bayode is named Man of the Match!", timestamp: "3:00 PM", type: 'general' },
+        { id: 'comm-po2-goal-success', matchId: 'PO2', minute: "25'", text: "⚽ GOAL!!! Success Bayode makes it three! An exquisite chip over the keeper to finish off a dazzling counter-attack! ANA 3 - 0 SIMT.", timestamp: "2:25 PM", type: 'goal' },
+        { id: 'comm-po2-goal-paul', matchId: 'PO2', minute: "20'", text: "⚽ GOAL!!! Ademola Paul doubles the advantage! A thunderous strike from outside the box leaves the keeper with no chance! ANA 2 - 0 SIMT.", timestamp: "2:20 PM", type: 'goal' },
+        { id: 'comm-po2-goal-isreal', matchId: 'PO2', minute: "15'", text: "⚽ GOAL!!! Isreal breaks the deadlock! A brilliant run and a clinical finish inside the box puts Anatomy ahead! ANA 1 - 0 SIMT.", timestamp: "2:15 PM", type: 'goal' },
+        { id: 'comm-po2-ht', matchId: 'PO2', minute: "30'", text: "⏸️ HALF-TIME! ANA 3 - 0 SIMT. A dominant first-half performance from Anatomy puts them in a commanding position.", timestamp: "2:30 PM", type: 'general' },
+        { id: 'comm-po2-kickoff', matchId: 'PO2', minute: "1'", text: "🏁 KICKOFF! The Playoff Round match PO2 between ANA and SIMT is underway! Tosin (MTS) is the referee.", timestamp: "2:00 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
+    if (!loadedCommentary['PO3'] || loadedCommentary['PO3'].length === 0) {
+      loadedCommentary['PO3'] = [
+        { id: 'comm-po3-ft', matchId: 'PO3', minute: "60+4'", text: "🏁 FULL-TIME! BDG 0 - 1 AGP. Dramatic finish! Agricultural and Environmental Engineering (AGP) books their place in the Quarter-finals with a late 1-0 victory over Building (BDG)! Michael is the hero and wins Man of the Match!", timestamp: "4:34 PM", type: 'general' },
+        { id: 'comm-po3-goal-michael', matchId: 'PO3', minute: "60+4'", text: "⚽ GOAL!!! Michael strikes in stoppage time! Unbelievable scenes as Michael finds the back of the net with a dramatic finish at the death! BDG 0 - 1 AGP.", timestamp: "4:34 PM", type: 'goal' },
+        { id: 'comm-po3-chance', matchId: 'PO3', minute: "50'", text: "Chance! Desmond (BDG) with a header from a corner, but it's saved superbly by the AGP goalkeeper!", timestamp: "4:20 PM", type: 'general' },
+        { id: 'comm-po3-ht', matchId: 'PO3', minute: "30'", text: "⏸️ HALF-TIME! BDG 0 - 0 AGP. A very tight and physical contest in the first half with both defenses holding strong.", timestamp: "4:00 PM", type: 'general' },
+        { id: 'comm-po3-kickoff', matchId: 'PO3', minute: "1'", text: "🏁 KICKOFF! The Playoff Round match PO3 between BDG and AGP is underway! Jones (AGE) is the referee.", timestamp: "3:30 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
     setCommentaries(loadedCommentary);
 
     // 10. Reports
@@ -5095,11 +5198,70 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       };
       localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
     }
+    if (!loadedReports['PO1']) {
+      loadedReports['PO1'] = {
+        matchId: 'PO1',
+        summary: "Statistics (STA) books their place in the Quarter-finals with a disciplined 1–0 victory over Industrial Design (IDD).",
+        playerOfMatch: "Agbo Peter (STA)",
+        tacticalAnalysis: "After a tightly contested first half with both sides cancelling each other out, Agbo Peter scored the decisive finish in the 52nd minute. STA defended resolutely to protect their lead.",
+        keyMoments: [
+          "1' - KICKOFF! The match gets underway with both teams eager to secure a Quarter-final spot.",
+          "18' - Sola (IDD) fires a snapshot from distance that goes just over the crossbar.",
+          "30' - HALF-TIME! High-stakes defensive organization keeps the game scoreless.",
+          "52' - GOAL! Agbo Peter finds the back of the net with a beautiful finish! IDD 0 - 1 STA.",
+          "60' - FULL-TIME! Statistics (STA) celebrates a 1-0 win and advances to the Quarter-finals."
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+    if (!loadedReports['PO2']) {
+      loadedReports['PO2'] = {
+        matchId: 'PO2',
+        summary: "Anatomy (ANA) produced a commanding display to defeat Security, Investment and Management Technology (SIMT) 3–0 and secure qualification to the FUTA Champions League Quarter-finals.",
+        playerOfMatch: "Success Bayode (ANA)",
+        tacticalAnalysis: "ANA wasted little time asserting their dominance. ANA played a fluid attacking 4-3-3 with Success Bayode, Ademola Paul, and Isreal spearheading the attack. SIMT struggled to cope with the high-tempo passing and movement of the ANA forward line, which yielded three goals in the first 25 minutes of play.",
+        keyMoments: [
+          "15' - Isreal opens the scoring with a brilliant run and finish.",
+          "20' - Ademola Paul doubles the lead with a spectacular strike.",
+          "25' - Success Bayode completes the scoring with a delicate chip over the goalkeeper.",
+          "30' - HALF-TIME! ANA goes into the break with a comfortable 3-0 lead.",
+          "60' - FULL-TIME! ANA clinches a resounding 3-0 victory and qualifies for the Quarter-finals."
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+    if (!loadedReports['PO3']) {
+      loadedReports['PO3'] = {
+        matchId: 'PO3',
+        summary: "Agricultural and Environmental Engineering (AGP) secured a hard-fought 1–0 victory over Building Technology (BDG) with a late stoppage-time goal to book their place in the FUTA Champions League Quarter-finals.",
+        playerOfMatch: "Michael (AGP)",
+        tacticalAnalysis: "A highly physical and tactical battle with both sides cancelling each other out. BDG had some great chances, particularly from set-pieces, but AGP's defense remained resolute. The breakthrough finally arrived in the 4th minute of stoppage time when Michael capitalized on a loose ball in the box to seal the win.",
+        keyMoments: [
+          "1' - KICKOFF! The play-off round match is underway with high tension.",
+          "30' - HALF-TIME! Scoreless first half with both teams organized defensively.",
+          "50' - Chance! Desmond of BDG hits a powerful header from a corner, but it's kept out by a sensational reflex save.",
+          "60+4' - GOAL! Michael scores a dramatic stoppage-time winner for AGP! BDG 0 - 1 AGP.",
+          "60+4' - FULL-TIME! AGP holds on to progress to the Quarter-finals."
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
     setReports(loadedReports);
 
     // 11. Timer Cache
     const storedTimers = localStorage.getItem('fcl_admin_timers');
     let loadedTimers: Record<string, { liveMinute: string; isPaused: boolean }> = storedTimers ? JSON.parse(storedTimers) : {};
+    if (!loadedTimers['PO2']) {
+      loadedTimers['PO2'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['PO3']) {
+      loadedTimers['PO3'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
     if (!loadedTimers['md1-1'] || loadedTimers['md1-1'].liveMinute !== "FT") {
       loadedTimers['md1-1'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
@@ -5833,6 +5995,9 @@ FUTA Champions League 2026 ⚽🏆`;
       } else if (m.id === 'PO2') {
         homeTeam = 'ANA';
         awayTeam = 'SIMT';
+      } else if (m.id === 'PO3') {
+        homeTeam = 'BDG';
+        awayTeam = 'AGP';
       } else if (m.id === 'PO4') {
         homeTeam = 'MBBS';
         awayTeam = 'MCB';
@@ -5879,6 +6044,9 @@ FUTA Champions League 2026 ⚽🏆`;
       } else if (m.id === 'PO2') {
         homeTeam = 'ANA';
         awayTeam = 'SIMT';
+      } else if (m.id === 'PO3') {
+        homeTeam = 'BDG';
+        awayTeam = 'AGP';
       } else if (m.id === 'PO4') {
         homeTeam = 'MBBS';
         awayTeam = 'MCB';
