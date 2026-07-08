@@ -2952,7 +2952,6 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'LW': 'player-simt-19'  // Oladapo Isaac Ayomide
         },
         bench: [
-          'player-simt-1', // Nwabunwanne Chibichi Daniel
           'player-simt-3', // Adebayo Samuel Ayobami
           'player-simt-5', // Momoh Joshua David
           'player-simt-7', // Adewale Uthman Boluwatife
@@ -3173,7 +3172,6 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'LW': 'player-mst-17'  // Boyede Joseph Ayomide
         },
         bench: [
-          'player-mst-2',  // Adeyemi Adedayo Ibrahim
           'player-mst-4',  // Ojoisimi Bright Agbomizi
           'player-mst-8',  // Ademisoye Segun
           'player-mst-11', // Akinyo Boluwatife Precious

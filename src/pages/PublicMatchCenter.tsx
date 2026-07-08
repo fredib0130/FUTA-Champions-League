@@ -936,11 +936,11 @@ export default function PublicMatchCenter() {
             </h3>
             <p className="text-sm font-sans font-medium text-white/85 leading-relaxed">
               This fixture was officially decided via an administrative walkover. Under competition rules, 
-              <strong> {awayTeam.name} ({match.awayTeam})</strong> has been awarded a <strong>3-0 win</strong> over 
-              <strong> {homeTeam.name} ({match.homeTeam})</strong>.
+              <strong> {match.homeScore === 3 ? homeTeam.name : awayTeam.name}</strong> has been awarded a <strong>3-0 win</strong> over 
+              <strong> {match.homeScore === 3 ? awayTeam.name : homeTeam.name}</strong>.
             </p>
             <p className="text-xs font-mono text-white/40 mt-3 leading-normal">
-              Note: No individual player statistics (goals, assists, cards, clean sheets, or appearances) are recorded for walkover fixtures. ANA has been awarded 3 League Phase coefficient points, while BDG receives 0.
+              Note: No individual player statistics (goals, assists, cards, clean sheets, or appearances) are recorded for walkover fixtures. {match.homeScore === 3 ? match.homeTeam : match.awayTeam} has been awarded 3 League Phase coefficient points, while {match.homeScore === 3 ? match.awayTeam : match.homeTeam} receives 0.
             </p>
           </div>
         )}
@@ -1134,9 +1134,11 @@ export default function PublicMatchCenter() {
 
                           // Format outcome nicely
                           const isHCurrent = m.homeTeam.toLowerCase() === match.homeTeam.toLowerCase();
+                          const homeWonPens = m.homePenalties !== undefined && m.awayPenalties !== undefined && m.homePenalties > m.awayPenalties;
+                          const penaltyWinner = homeWonPens ? m.homeTeam : m.awayTeam;
                           const resultDisplay = `${isHCurrent ? m.homeTeam : m.awayTeam} ${m.homeScore}–${m.awayScore} ${isHCurrent ? m.awayTeam : m.homeTeam}${
                             (m.homePenalties !== undefined && m.awayPenalties !== undefined) 
-                              ? ` (${isHCurrent ? m.homeTeam : m.awayTeam} won ${m.homePenalties}–${m.awayPenalties} on penalties)` 
+                              ? ` (${penaltyWinner} won ${m.homePenalties}–${m.awayPenalties} on penalties)` 
                               : ''
                           }`;
 
