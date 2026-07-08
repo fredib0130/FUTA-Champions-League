@@ -677,7 +677,7 @@ export const MATCHES: Match[] = [
   { id: 'PO3', homeTeam: 'SEED5', awayTeam: 'SEED12', date: '2026-07-05', time: '15:30', venue: 'Main Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round', referee: 'Jones (AGE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Olasunkanmi Michael' },
   { id: 'PO4', homeTeam: 'SEED6', awayTeam: 'SEED11', date: '2026-07-05', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 3, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round', referee: 'Tosin (MTS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Oni Oluwadamilola' },
   { id: 'PO5', homeTeam: 'SEED7', awayTeam: 'SEED10', date: '2026-07-05', time: '17:00', venue: 'Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
-  { id: 'PO6', homeTeam: 'SEED8', awayTeam: 'SEED9', date: '2026-07-05', time: '17:00', venue: 'Main Pitch', status: 'Finished', homeScore: 1, awayScore: 1, homePenalties: 3, awayPenalties: 5, penaltyShootoutHome: [
+  { id: 'PO6', homeTeam: 'SEED8', awayTeam: 'SEED9', date: '2026-07-05', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 1, homePenalties: 3, awayPenalties: 5, penaltyShootoutHome: [
     { playerName: 'SOJ', isScored: true },
     { playerName: 'Akindeko Emmanuel', isScored: false },
     { playerName: 'Goodness', isScored: true },
