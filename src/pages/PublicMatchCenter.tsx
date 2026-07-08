@@ -247,7 +247,7 @@ export default function PublicMatchCenter() {
       const oppScore = isHome ? m.awayScore : m.homeScore;
 
       let outcome: 'W' | 'D' | 'L' = 'D';
-      let outcomeCircle = '🟡';
+      let outcomeCircle = '🟨';
       let detail = '';
 
       if (teamScore > oppScore) {
@@ -257,18 +257,21 @@ export default function PublicMatchCenter() {
         outcome = 'L';
         outcomeCircle = '🔴';
       } else {
-        outcome = 'D';
-        outcomeCircle = '🟡';
         if (m.homePenalties !== undefined && m.awayPenalties !== undefined) {
           const teamPens = isHome ? m.homePenalties : m.awayPenalties;
           const oppPens = isHome ? m.awayPenalties : m.homePenalties;
           if (teamPens > oppPens) {
-            outcomeCircle = '🟢';
+            outcome = 'W';
+            outcomeCircle = '🟩';
             detail = ` (Won ${teamPens}–${oppPens} Pens)`;
           } else {
-            outcomeCircle = '🔴';
+            outcome = 'L';
+            outcomeCircle = '🟧';
             detail = ` (Lost ${oppPens}–${teamPens} Pens)`;
           }
+        } else {
+          outcome = 'D';
+          outcomeCircle = '🟨';
         }
       }
 
@@ -974,12 +977,26 @@ export default function PublicMatchCenter() {
                             key={idx} 
                             className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px] ${
                               circle === '🟢' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                              circle === '🟡' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                              circle === '🟨' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                              circle === '🟩' ? 'bg-[#a3e635]/20 text-[#a3e635] border border-[#a3e635]/30' :
+                              circle === '🟧' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' :
                               'bg-red-500/20 text-red-400 border border-red-500/30'
                             }`}
-                            title={circle === '🟢' ? 'Win' : circle === '🟡' ? 'Draw' : 'Loss'}
+                            title={
+                              circle === '🟢' ? 'Win in regulation/full-time' :
+                              circle === '🟨' ? 'Draw (League Phase only)' :
+                              circle === '🟩' ? 'Won after a penalty shootout' :
+                              circle === '🟧' ? 'Lost after a penalty shootout' :
+                              'Loss in regulation/full-time'
+                            }
                           >
-                            {circle === '🟢' ? 'W' : circle === '🟡' ? 'D' : 'L'}
+                            {
+                              circle === '🟢' ? 'W' :
+                              circle === '🟨' ? 'D' :
+                              circle === '🟩' ? 'W' :
+                              circle === '🟧' ? 'L' :
+                              'L'
+                            }
                           </span>
                         ))
                       )}
@@ -1006,7 +1023,10 @@ export default function PublicMatchCenter() {
                                 {row.circle && (
                                   <span className={`w-2 h-2 rounded-full ${
                                     row.circle === '🟢' ? 'bg-emerald-400' :
-                                    row.circle === '🟡' ? 'bg-yellow-400' : 'bg-red-400'
+                                    row.circle === '🟨' ? 'bg-yellow-400' :
+                                    row.circle === '🟩' ? 'bg-[#a3e635]' :
+                                    row.circle === '🟧' ? 'bg-orange-400' :
+                                    'bg-red-400'
                                   }`} />
                                 )}
                               </span>
@@ -1035,12 +1055,26 @@ export default function PublicMatchCenter() {
                             key={idx} 
                             className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px] ${
                               circle === '🟢' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                              circle === '🟡' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                              circle === '🟨' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                              circle === '🟩' ? 'bg-[#a3e635]/20 text-[#a3e635] border border-[#a3e635]/30' :
+                              circle === '🟧' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' :
                               'bg-red-500/20 text-red-400 border border-red-500/30'
                             }`}
-                            title={circle === '🟢' ? 'Win' : circle === '🟡' ? 'Draw' : 'Loss'}
+                            title={
+                              circle === '🟢' ? 'Win in regulation/full-time' :
+                              circle === '🟨' ? 'Draw (League Phase only)' :
+                              circle === '🟩' ? 'Won after a penalty shootout' :
+                              circle === '🟧' ? 'Lost after a penalty shootout' :
+                              'Loss in regulation/full-time'
+                            }
                           >
-                            {circle === '🟢' ? 'W' : circle === '🟡' ? 'D' : 'L'}
+                            {
+                              circle === '🟢' ? 'W' :
+                              circle === '🟨' ? 'D' :
+                              circle === '🟩' ? 'W' :
+                              circle === '🟧' ? 'L' :
+                              'L'
+                            }
                           </span>
                         ))
                       )}
@@ -1067,7 +1101,10 @@ export default function PublicMatchCenter() {
                                 {row.circle && (
                                   <span className={`w-2 h-2 rounded-full ${
                                     row.circle === '🟢' ? 'bg-emerald-400' :
-                                    row.circle === '🟡' ? 'bg-yellow-400' : 'bg-red-400'
+                                    row.circle === '🟨' ? 'bg-yellow-400' :
+                                    row.circle === '🟩' ? 'bg-[#a3e635]' :
+                                    row.circle === '🟧' ? 'bg-orange-400' :
+                                    'bg-red-400'
                                   }`} />
                                 )}
                               </span>
@@ -1081,15 +1118,21 @@ export default function PublicMatchCenter() {
               </div>
             </div>
 
-            <div className="mt-4 pt-4 border-t border-white/5 flex gap-4 text-[9px] font-mono text-white/40">
+            <div className="mt-4 pt-4 border-t border-white/5 flex flex-wrap gap-x-4 gap-y-2 text-[9px] font-mono text-white/40">
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" /> 🟢 Win / Shootout Win
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" /> 🟢 Win (Regulation)
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 inline-block" /> 🟡 Draw
+                <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 inline-block" /> 🟨 Draw (League Phase)
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 inline-block" /> 🔴 Loss / Shootout Loss
+                <span className="w-1.5 h-1.5 rounded-full bg-[#a3e635] inline-block" /> 🟩 Won pens
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-orange-400 inline-block" /> 🟧 Lost pens
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 inline-block" /> 🔴 Loss (Regulation)
               </span>
             </div>
           </div>

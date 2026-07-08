@@ -273,16 +273,30 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
                   <>
                     <td className="px-4 py-4">
                       <div className="flex items-center justify-center space-x-1">
-                        {team.form.map((res, i) => (
-                          <span
-                            key={i}
-                            className={`w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold text-white
-                              ${res === 'W' ? 'bg-green-500' : res === 'D' ? 'bg-gray-500' : 'bg-red-500'}
-                            `}
-                          >
-                            {res}
-                          </span>
-                        ))}
+                        {team.form.map((res, i) => {
+                          let bgClass = 'bg-red-500';
+                          if (res === 'W') bgClass = 'bg-green-500';
+                          else if (res === 'D') bgClass = 'bg-yellow-500';
+                          else if (res === 'WP') bgClass = 'bg-[#a3e635] text-black';
+                          else if (res === 'LP') bgClass = 'bg-orange-500';
+                          else if (res === 'L') bgClass = 'bg-red-500';
+
+                          return (
+                            <span
+                              key={i}
+                              className={`w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold text-white ${bgClass}`}
+                              title={
+                                res === 'W' ? 'Win' :
+                                res === 'D' ? 'Draw' :
+                                res === 'WP' ? 'Won after penalties' :
+                                res === 'LP' ? 'Lost after penalties' :
+                                'Loss'
+                              }
+                            >
+                              {res === 'WP' ? 'W' : res === 'LP' ? 'L' : res}
+                            </span>
+                          );
+                        })}
                       </div>
                     </td>
                     <td className="px-4 py-4">
