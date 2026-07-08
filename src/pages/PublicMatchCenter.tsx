@@ -21,7 +21,7 @@ interface Toast {
 export default function PublicMatchCenter() {
   const { matchId } = useParams<{ matchId: string }>();
   const { 
-    matches, teams, detailedStats, goalScorers, cards, subs, commentaries, reports, activeMinAndStatus, lineups
+    matches, teams, detailedStats, goalScorers, cards, subs, commentaries, reports, activeMinAndStatus, lineups, players
   } = useMatchState();
 
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -207,6 +207,470 @@ export default function PublicMatchCenter() {
   });
 
   // Structural details
+  const getMatchChronologicalWeight = React.useCallback((m: any): number => {
+    let stageWeight = 0;
+    if (m.stage === 'Playoff Round' || m.id.startsWith('PO')) stageWeight = 4;
+    else if (m.stage === 'Quarter-finals' || m.id.startsWith('QF')) stageWeight = 5;
+    else if (m.stage === 'Semi-finals' || m.id.startsWith('SF')) stageWeight = 6;
+    else if (m.stage === 'Third Place' || m.id === 'TP') stageWeight = 7;
+    else if (m.stage === 'Final' || m.id === 'FINAL' || m.id === 'F') stageWeight = 8;
+    else stageWeight = m.matchday || 1;
+
+    let subWeight = 0;
+    if (m.id.startsWith('md1-')) subWeight = parseInt(m.id.split('-')[1]) || 0;
+    else if (m.id.startsWith('md2-')) subWeight = parseInt(m.id.split('-')[1]) || 0;
+    else if (m.id.startsWith('md3-')) subWeight = parseInt(m.id.split('-')[1]) || 0;
+    else if (m.id.startsWith('PO')) subWeight = parseInt(m.id.replace('PO', '')) || 0;
+    else if (m.id.startsWith('QF')) subWeight = parseInt(m.id.replace('QF', '')) || 0;
+    else if (m.id.startsWith('SF')) subWeight = parseInt(m.id.replace('SF', '')) || 0;
+
+    return stageWeight * 1000 + subWeight;
+  }, []);
+
+  const sortedFinishedMatches = React.useMemo(() => {
+    return [...matches]
+      .filter(m => m.status === 'Finished')
+      .sort((a, b) => getMatchChronologicalWeight(b) - getMatchChronologicalWeight(a));
+  }, [matches, getMatchChronologicalWeight]);
+
+  const getFormForTeam = React.useCallback((teamId: string) => {
+    const teamMatches = sortedFinishedMatches.filter(m => 
+      m.homeTeam.toLowerCase() === teamId.toLowerCase() || 
+      m.awayTeam.toLowerCase() === teamId.toLowerCase()
+    );
+
+    const rows = teamMatches.slice(0, 5).map(m => {
+      const isHome = m.homeTeam.toLowerCase() === teamId.toLowerCase();
+      const opponentId = isHome ? m.awayTeam : m.homeTeam;
+      const opponentName = getTeamName(opponentId);
+      const teamScore = isHome ? m.homeScore : m.awayScore;
+      const oppScore = isHome ? m.awayScore : m.homeScore;
+
+      let outcome: 'W' | 'D' | 'L' = 'D';
+      let outcomeCircle = '🟡';
+      let detail = '';
+
+      if (teamScore > oppScore) {
+        outcome = 'W';
+        outcomeCircle = '🟢';
+      } else if (teamScore < oppScore) {
+        outcome = 'L';
+        outcomeCircle = '🔴';
+      } else {
+        outcome = 'D';
+        outcomeCircle = '🟡';
+        if (m.homePenalties !== undefined && m.awayPenalties !== undefined) {
+          const teamPens = isHome ? m.homePenalties : m.awayPenalties;
+          const oppPens = isHome ? m.awayPenalties : m.homePenalties;
+          if (teamPens > oppPens) {
+            outcomeCircle = '🟢';
+            detail = ` (Won ${teamPens}–${oppPens} Pens)`;
+          } else {
+            outcomeCircle = '🔴';
+            detail = ` (Lost ${oppPens}–${teamPens} Pens)`;
+          }
+        }
+      }
+
+      let compDisplay = m.stage || '';
+      if (m.id.startsWith('md')) {
+        compDisplay = `MD${m.matchday}`;
+      } else if (m.id.startsWith('PO')) {
+        compDisplay = m.id;
+      } else if (m.id.startsWith('QF')) {
+        compDisplay = m.id;
+      } else if (m.id.startsWith('SF')) {
+        compDisplay = m.id;
+      } else if (m.id === 'FINAL' || m.id === 'F') {
+        compDisplay = 'FINAL';
+      }
+
+      return {
+        comp: compDisplay,
+        opponent: opponentName,
+        opponentId: opponentId,
+        resultText: `${outcome} ${teamScore}–${oppScore}${detail}`,
+        circle: outcomeCircle
+      };
+    });
+
+    const displayRows = [...rows];
+    while (displayRows.length < 5) {
+      displayRows.push({
+        comp: '—',
+        opponent: '—',
+        opponentId: '',
+        resultText: '—',
+        circle: ''
+      });
+    }
+
+    const activeCircles = rows.map(r => r.circle);
+
+    return { rows: displayRows, formCircles: activeCircles };
+  }, [sortedFinishedMatches, getTeamName]);
+
+  const homeForm = React.useMemo(() => getFormForTeam(match.homeTeam), [getFormForTeam, match.matchday, match.homeTeam]);
+  const awayForm = React.useMemo(() => getFormForTeam(match.awayTeam), [getFormForTeam, match.matchday, match.awayTeam]);
+
+  const sortedStandings = React.useMemo(() => {
+    return [...teams].sort((a, b) => {
+      const isDisqA = a.isDisqualified ? 1 : 0;
+      const isDisqB = b.isDisqualified ? 1 : 0;
+      if (isDisqA !== isDisqB) return isDisqA - isDisqB;
+
+      if ((b.points || 0) !== (a.points || 0)) return (b.points || 0) - (a.points || 0);
+      const gdA = a.goalDifference !== undefined ? a.goalDifference : ((a.goalsFor || 0) - (a.goalsAgainst || 0));
+      const gdB = b.goalDifference !== undefined ? b.goalDifference : ((b.goalsFor || 0) - (b.goalsAgainst || 0));
+      if (gdB !== gdA) return gdB - gdA;
+
+      if ((b.goalsFor || 0) !== (a.goalsFor || 0)) return (b.goalsFor || 0) - (a.goalsFor || 0);
+      if ((a.goalsAgainst || 0) !== (b.goalsAgainst || 0)) return (a.goalsAgainst || 0) - (b.goalsAgainst || 0);
+      if ((a.played || 0) !== (b.played || 0)) return (a.played || 0) - (b.played || 0);
+      if ((b.won || 0) !== (a.won || 0)) return (b.won || 0) - (a.won || 0);
+      return a.id.toUpperCase().localeCompare(b.id.toUpperCase());
+    });
+  }, [teams]);
+
+  const getStandingIndex = React.useCallback((teamIdCode: string) => {
+    const idx = sortedStandings.findIndex(t => t.id.toLowerCase() === teamIdCode.toLowerCase());
+    return idx !== -1 ? idx + 1 : '—';
+  }, [sortedStandings]);
+
+  const liveImpactData = React.useMemo(() => {
+    const homeId = match.homeTeam.toLowerCase();
+    const awayId = match.awayTeam.toLowerCase();
+
+    const simulateRank = (targetTeamId: string) => {
+      const simulatedTeams = sortedStandings.map(t => {
+        if (t.id.toLowerCase() === targetTeamId) {
+          const currentPts = t.points || 0;
+          const currentGF = t.goalsFor || 0;
+          const currentGA = t.goalsAgainst || 0;
+          const currentPlayed = t.played || 0;
+          const currentWon = t.won || 0;
+
+          return {
+            ...t,
+            points: currentPts + 3,
+            played: currentPlayed + 1,
+            won: currentWon + 1,
+            goalsFor: currentGF + 1,
+            goalsAgainst: currentGA,
+            goalDifference: (currentGF + 1) - currentGA
+          };
+        } else {
+          const otherTeamId = targetTeamId === homeId ? awayId : homeId;
+          if (t.id.toLowerCase() === otherTeamId) {
+            const currentPts = t.points || 0;
+            const currentGF = t.goalsFor || 0;
+            const currentGA = t.goalsAgainst || 0;
+            const currentPlayed = t.played || 0;
+            const currentLost = t.lost || 0;
+
+            return {
+              ...t,
+              played: currentPlayed + 1,
+              lost: currentLost + 1,
+              goalsFor: currentGF,
+              goalsAgainst: currentGA + 1,
+              goalDifference: currentGF - (currentGA + 1)
+            };
+          }
+        }
+        return t;
+      });
+
+      const sortedSim = [...simulatedTeams].sort((a, b) => {
+        const isDisqA = a.isDisqualified ? 1 : 0;
+        const isDisqB = b.isDisqualified ? 1 : 0;
+        if (isDisqA !== isDisqB) return isDisqA - isDisqB;
+
+        if ((b.points || 0) !== (a.points || 0)) return (b.points || 0) - (a.points || 0);
+        const gdA = a.goalDifference !== undefined ? a.goalDifference : ((a.goalsFor || 0) - (a.goalsAgainst || 0));
+        const gdB = b.goalDifference !== undefined ? b.goalDifference : ((b.goalsFor || 0) - (b.goalsAgainst || 0));
+        if (gdB !== gdA) return gdB - gdA;
+
+        if ((b.goalsFor || 0) !== (a.goalsFor || 0)) return (b.goalsFor || 0) - (a.goalsFor || 0);
+        if ((a.goalsAgainst || 0) !== (b.goalsAgainst || 0)) return (a.goalsAgainst || 0) - (b.goalsAgainst || 0);
+        if ((a.played || 0) !== (b.played || 0)) return (a.played || 0) - (b.played || 0);
+        if ((b.won || 0) !== (a.won || 0)) return (b.won || 0) - (a.won || 0);
+        return a.id.toUpperCase().localeCompare(b.id.toUpperCase());
+      });
+
+      const newIndex = sortedSim.findIndex(t => t.id.toLowerCase() === targetTeamId);
+      return newIndex !== -1 ? newIndex + 1 : '—';
+    };
+
+    const homeSimRank = simulateRank(homeId);
+    const awaySimRank = simulateRank(awayId);
+
+    return {
+      homeSimRank,
+      awaySimRank
+    };
+  }, [sortedStandings, match.homeTeam, match.awayTeam]);
+
+  const getQualificationScenario = React.useCallback(() => {
+    if (match.stage === 'Playoff Round' || match.id.startsWith('PO')) {
+      let opponentText = "the Quarter-finals";
+      if (match.id === 'PO4') opponentText = "Anatomy (ANA) in the Quarter-finals";
+      else if (match.id === 'PO6') opponentText = "the Quarter-finals";
+      
+      return `Knockout tie: The winner of this match qualifies directly to face ${opponentText}. In case of a draw at full-time, the tie will be decided by a penalty shootout.`;
+    }
+    
+    if (match.stage === 'Quarter-finals' || match.id.startsWith('QF')) {
+      return "Knockout tie: The winner of this match qualifies directly for the Semi-finals. In case of a draw at full-time, the tie will be decided by a penalty shootout.";
+    }
+    
+    if (match.stage === 'Semi-finals' || match.id.startsWith('SF')) {
+      return "Knockout tie: The winner of this match qualifies directly for the Final. In case of a draw at full-time, the tie will be decided by a penalty shootout.";
+    }
+    
+    if (match.stage === 'Final' || match.id === 'FINAL' || match.id === 'F' || match.id === 'FT') {
+      return "Championship match: The winner of this match is crowned the FUTA Champions League 2026 Champion! In case of a draw at full-time, a penalty shootout will decide the champion.";
+    }
+    
+    const homePos = getStandingIndex(match.homeTeam);
+    const awayPos = getStandingIndex(match.awayTeam);
+    
+    let scenario = "League Phase: Teams are competing for positions in the FCL Standings. ";
+    scenario += "The Top 2 teams qualify directly to the Quarter-finals, while teams ranked 3rd to 14th will enter the Playoff Round.";
+    
+    if (homePos !== '—' && awayPos !== '—') {
+      scenario += ` Currently, ${homeTeam.name} is ranked #${homePos} and ${awayTeam.name} is ranked #${awayPos}.`;
+      if (liveImpactData) {
+        scenario += ` LIVE IMPACT: A win for ${homeTeam.name} would elevate them to #${liveImpactData.homeSimRank} in the standings, while a win for ${awayTeam.name} would hoist them to #${liveImpactData.awaySimRank}.`;
+      }
+    }
+    return scenario;
+  }, [match.id, match.stage, match.homeTeam, match.awayTeam, homeTeam.name, awayTeam.name, getStandingIndex, liveImpactData]);
+
+  const topScorersData = React.useMemo(() => {
+    const homeTeamId = match.homeTeam.toLowerCase();
+    const awayTeamId = match.awayTeam.toLowerCase();
+
+    const homeList = players.filter(p => p.teamId.toLowerCase() === homeTeamId && p.goals > 0)
+      .sort((a, b) => b.goals - a.goals)
+      .slice(0, 3)
+      .map(p => ({ name: p.name, goals: p.goals }));
+
+    const awayList = players.filter(p => p.teamId.toLowerCase() === awayTeamId && p.goals > 0)
+      .sort((a, b) => b.goals - a.goals)
+      .slice(0, 3)
+      .map(p => ({ name: p.name, goals: p.goals }));
+
+    return { homeList, awayList };
+  }, [match.homeTeam, match.awayTeam, players]);
+
+  const goalkeeperCleanSheets = React.useMemo(() => {
+    const homeTeamId = match.homeTeam.toLowerCase();
+    const awayTeamId = match.awayTeam.toLowerCase();
+
+    const homeGKs = players.filter(p => p.teamId.toLowerCase() === homeTeamId && p.position === 'GK')
+      .map(p => ({ name: p.name, cleanSheets: p.cleanSheets || p.clean_sheets || 0 }));
+      
+    const awayGKs = players.filter(p => p.teamId.toLowerCase() === awayTeamId && p.position === 'GK')
+      .map(p => ({ name: p.name, cleanSheets: p.cleanSheets || p.clean_sheets || 0 }));
+
+    return { homeGKs, awayGKs };
+  }, [match.homeTeam, match.awayTeam, players]);
+
+  const teamDisciplineAndMedical = React.useMemo(() => {
+    const homeTeamId = match.homeTeam.toLowerCase();
+    const awayTeamId = match.awayTeam.toLowerCase();
+
+    const currentWeight = getMatchChronologicalWeight(match);
+    const prevMatchesList = matches.filter(m => 
+      m.status === 'Finished' && getMatchChronologicalWeight(m) < currentWeight
+    );
+    const prevMatchIds = new Set(prevMatchesList.map(m => m.id));
+
+    const homeYellowCount: Record<string, number> = {};
+    const awayYellowCount: Record<string, number> = {};
+
+    cards.forEach(c => {
+      if (!prevMatchIds.has(c.matchId)) return;
+      
+      const pName = c.playerName;
+      if (c.teamAbbr.toLowerCase() === homeTeamId && c.type === 'Yellow') {
+        homeYellowCount[pName] = (homeYellowCount[pName] || 0) + 1;
+      } else if (c.teamAbbr.toLowerCase() === awayTeamId && c.type === 'Yellow') {
+        awayYellowCount[pName] = (awayYellowCount[pName] || 0) + 1;
+      }
+    });
+
+    const homeOneBookingAway = Object.entries(homeYellowCount)
+      .filter(([_, count]) => count === 1)
+      .map(([name]) => name);
+
+    const awayOneBookingAway = Object.entries(awayYellowCount)
+      .filter(([_, count]) => count === 1)
+      .map(([name]) => name);
+
+    const homeInjured = players.filter(p => p.teamId.toLowerCase() === homeTeamId && (p.isInactive || p.isFormer))
+      .map(p => p.name);
+
+    const awayInjured = players.filter(p => p.teamId.toLowerCase() === awayTeamId && (p.isInactive || p.isFormer))
+      .map(p => p.name);
+
+    return {
+      homeOneBookingAway,
+      awayOneBookingAway,
+      homeInjured,
+      awayInjured
+    };
+  }, [matches, match, cards, getMatchChronologicalWeight, players]);
+
+  const headToHeadData = React.useMemo(() => {
+    const hId = match.homeTeam.toLowerCase();
+    const aId = match.awayTeam.toLowerCase();
+
+    const h2hMatches = matches.filter(m => 
+      m.status === 'Finished' &&
+      ((m.homeTeam.toLowerCase() === hId && m.awayTeam.toLowerCase() === aId) ||
+       (m.homeTeam.toLowerCase() === aId && m.awayTeam.toLowerCase() === hId))
+    ).sort((a, b) => getMatchChronologicalWeight(b) - getMatchChronologicalWeight(a)); // sorted newest first
+
+    let played = h2hMatches.length;
+    let homeWins = 0;
+    let awayWins = 0;
+    let draws = 0;
+    let homePensWins = 0;
+    let awayPensWins = 0;
+    let homeGoals = 0;
+    let awayGoals = 0;
+
+    h2hMatches.forEach(m => {
+      const isHomeForM = m.homeTeam.toLowerCase() === hId;
+      const scoreH = isHomeForM ? m.homeScore : m.awayScore;
+      const scoreA = isHomeForM ? m.awayScore : m.homeScore;
+
+      homeGoals += scoreH;
+      awayGoals += scoreA;
+
+      if (scoreH > scoreA) {
+        homeWins++;
+      } else if (scoreA > scoreH) {
+        awayWins++;
+      } else {
+        draws++;
+        if (m.homePenalties !== undefined && m.awayPenalties !== undefined) {
+          const pensH = isHomeForM ? m.homePenalties : m.awayPenalties;
+          const pensA = isHomeForM ? m.awayPenalties : m.homePenalties;
+          if (pensH > pensA) {
+            homePensWins++;
+          } else if (pensA > pensH) {
+            awayPensWins++;
+          }
+        }
+      }
+    });
+
+    return {
+      matchesList: h2hMatches,
+      played,
+      homeWins,
+      awayWins,
+      draws,
+      homePensWins,
+      awayPensWins,
+      homeGoals,
+      awayGoals
+    };
+  }, [matches, match.homeTeam, match.awayTeam, getMatchChronologicalWeight]);
+
+  const suspensionsData = React.useMemo(() => {
+    const homeTeamId = match.homeTeam.toLowerCase();
+    const awayTeamId = match.awayTeam.toLowerCase();
+
+    // Get all finished matches sorted chronologically oldest to newest
+    const cronMatches = [...matches]
+      .filter(m => m.status === 'Finished')
+      .sort((a, b) => getMatchChronologicalWeight(a) - getMatchChronologicalWeight(b));
+
+    // Find the chronological weight of the current match
+    const currentWeight = getMatchChronologicalWeight(match);
+
+    // Filter matches played by home/away teams BEFORE the current match
+    const prevHomeMatches = cronMatches.filter(m => 
+      getMatchChronologicalWeight(m) < currentWeight &&
+      (m.homeTeam.toLowerCase() === homeTeamId || m.awayTeam.toLowerCase() === homeTeamId)
+    );
+
+    const prevAwayMatches = cronMatches.filter(m => 
+      getMatchChronologicalWeight(m) < currentWeight &&
+      (m.homeTeam.toLowerCase() === awayTeamId || m.awayTeam.toLowerCase() === awayTeamId)
+    );
+
+    // Immediate previous match for each team
+    const lastHomeMatch = prevHomeMatches[prevHomeMatches.length - 1];
+    const lastAwayMatch = prevAwayMatches[prevAwayMatches.length - 1];
+
+    const homeSuspensions: { playerName: string; reason: string }[] = [];
+    const awaySuspensions: { playerName: string; reason: string }[] = [];
+
+    // Map of playerName -> cumulative yellow cards (before current match)
+    const homeYellows: Record<string, number> = {};
+    const awayYellows: Record<string, number> = {};
+
+    // Map of playerName -> got red in last match
+    const homeRedInLast = new Set<string>();
+    const awayRedInLast = new Set<string>();
+
+    // Process all cards in previous matches
+    cards.forEach(c => {
+      const cardMatch = matches.find(m => m.id === c.matchId);
+      if (!cardMatch || getMatchChronologicalWeight(cardMatch) >= currentWeight) return;
+
+      const isHomeTeam = c.teamAbbr.toLowerCase() === homeTeamId;
+      const isAwayTeam = c.teamAbbr.toLowerCase() === awayTeamId;
+
+      if (isHomeTeam) {
+        if (c.type === 'Yellow') {
+          homeYellows[c.playerName] = (homeYellows[c.playerName] || 0) + 1;
+        }
+        if (c.type === 'Red' && lastHomeMatch && c.matchId === lastHomeMatch.id) {
+          homeRedInLast.add(c.playerName);
+        }
+      } else if (isAwayTeam) {
+        if (c.type === 'Yellow') {
+          awayYellows[c.playerName] = (awayYellows[c.playerName] || 0) + 1;
+        }
+        if (c.type === 'Red' && lastAwayMatch && c.matchId === lastAwayMatch.id) {
+          awayRedInLast.add(c.playerName);
+        }
+      }
+    });
+
+    // Check home suspensions (cumulative 2 Yellows or last-match Red)
+    Object.keys(homeYellows).forEach(player => {
+      if (homeYellows[player] >= 2) {
+        homeSuspensions.push({ playerName: player, reason: `Suspended (Accumulated ${homeYellows[player]} Yellow Cards)` });
+      }
+    });
+    homeRedInLast.forEach(player => {
+      if (!homeSuspensions.some(s => s.playerName === player)) {
+        homeSuspensions.push({ playerName: player, reason: "Suspended (Red Card in previous fixture)" });
+      }
+    });
+
+    // Check away suspensions
+    Object.keys(awayYellows).forEach(player => {
+      if (awayYellows[player] >= 2) {
+        awaySuspensions.push({ playerName: player, reason: `Suspended (Accumulated ${awayYellows[player]} Yellow Cards)` });
+      }
+    });
+    awayRedInLast.forEach(player => {
+      if (!awaySuspensions.some(s => s.playerName === player)) {
+        awaySuspensions.push({ playerName: player, reason: "Suspended (Red Card in previous fixture)" });
+      }
+    });
+
+    return { homeSuspensions, awaySuspensions };
+  }, [matches, match, cards, getMatchChronologicalWeight]);
+
   const getProgressWidths = (h: number, a: number) => {
     const total = h + a;
     if (total === 0) return { homePercent: 50, awayPercent: 50 };
@@ -304,7 +768,9 @@ export default function PublicMatchCenter() {
             <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-right flex-1 justify-end">
               <div>
                 <h2 className="text-2xl font-display font-black leading-tight uppercase">{homeTeam.name}</h2>
-                <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mt-1">Defending Rank: #1</p>
+                <p className="text-[10px] font-bold text-white/45 uppercase tracking-widest mt-1">
+                  FCL Standings Rank: #{getStandingIndex(match.homeTeam)}
+                </p>
                 
                 {/* Scorers on Home */}
                 {homeScorers.length > 0 && (
@@ -406,7 +872,9 @@ export default function PublicMatchCenter() {
               <TeamLogo teamId={match.awayTeam} logoUrl={awayTeam.logoUrl} size="lg" className="w-20 h-20 object-contain flex-shrink-0" />
               <div>
                 <h2 className="text-2xl font-display font-black leading-tight uppercase">{awayTeam.name}</h2>
-                <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mt-1">Status: Registered</p>
+                <p className="text-[10px] font-bold text-white/45 uppercase tracking-widest mt-1">
+                  FCL Standings Rank: #{getStandingIndex(match.awayTeam)}
+                </p>
                 
                 {/* Scorers on Away */}
                 {awayScorers.length > 0 && (
@@ -446,6 +914,21 @@ export default function PublicMatchCenter() {
           </div>
         </div>
 
+        {/* 🏆 QUALIFICATION SCENARIO & RULESET BANNER */}
+        <div className="glass border border-[#00E5FF]/20 rounded-[28px] p-5 bg-[#00E5FF]/5 text-left flex items-start gap-4 shadow-lg mb-8">
+          <div className="p-2.5 rounded-2xl bg-[#00E5FF]/10 text-[#00E5FF] shrink-0">
+            <Trophy size={20} className="animate-pulse" />
+          </div>
+          <div className="space-y-1">
+            <span className="text-[10px] font-black uppercase text-[#00E5FF] tracking-widest font-mono">
+              FUTA Champions League • Tournament Qualification Scenario
+            </span>
+            <p className="text-xs text-white/85 leading-relaxed font-medium">
+              {getQualificationScenario()}
+            </p>
+          </div>
+        </div>
+
         {match.walkover && (
           <div className="glass border border-amber-500/30 rounded-[32px] p-6 bg-amber-500/5 mb-8 text-left max-w-4xl mx-auto">
             <h3 className="text-lg font-display font-black uppercase tracking-wider text-amber-400 flex items-center gap-2 pb-3 border-b border-white/5 mb-4">
@@ -461,6 +944,273 @@ export default function PublicMatchCenter() {
             </p>
           </div>
         )}
+
+        {/* 📊 TEAM FORM & 🤝 HEAD-TO-HEAD PRE-MATCH ANALYSIS SECTION */}
+        <div className="grid md:grid-cols-2 gap-8 mb-8">
+          
+          {/* 📊 TEAM FORM (LAST FIVE MATCHES) CARD */}
+          <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60 text-left flex flex-col justify-between">
+            <div>
+              <h3 className="text-sm font-display font-black uppercase tracking-wider text-white mb-6 flex items-center gap-2 pb-4 border-b border-white/5">
+                <Sparkles size={15} className="text-primary" />
+                <span>📊 TEAM FORM (LAST FIVE COMPETITIVE MATCHES)</span>
+              </h3>
+
+              <div className="space-y-6">
+                {/* Home Team Form */}
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-black uppercase text-primary tracking-wider flex items-center gap-2">
+                      <TeamLogo teamId={match.homeTeam} logoUrl={homeTeam.logoUrl} size="sm" className="w-5 h-5 object-contain" />
+                      <span>{homeTeam.name}</span>
+                    </span>
+                    <div className="flex items-center gap-1.5 font-mono">
+                      <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider mr-1">Form:</span>
+                      {homeForm.formCircles.length === 0 ? (
+                        <span className="text-[10px] text-white/30 italic">No matches played</span>
+                      ) : (
+                        homeForm.formCircles.map((circle, idx) => (
+                          <span 
+                            key={idx} 
+                            className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px] ${
+                              circle === '🟢' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                              circle === '🟡' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                              'bg-red-500/20 text-red-400 border border-red-500/30'
+                            }`}
+                            title={circle === '🟢' ? 'Win' : circle === '🟡' ? 'Draw' : 'Loss'}
+                          >
+                            {circle === '🟢' ? 'W' : circle === '🟡' ? 'D' : 'L'}
+                          </span>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="overflow-hidden rounded-2xl border border-white/5 bg-white/[0.01]">
+                    <table className="w-full text-left text-[11px] font-sans">
+                      <thead>
+                        <tr className="bg-white/5 border-b border-white/5 text-[8px] font-black uppercase tracking-widest text-white/30">
+                          <th className="py-2 px-3">Comp</th>
+                          <th className="py-2 px-3">Opponent</th>
+                          <th className="py-2 px-3 text-right">Result</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-white/5 text-white/80">
+                        {homeForm.rows.map((row, idx) => (
+                          <tr key={idx} className="hover:bg-white/[0.02]">
+                            <td className="py-2 px-3 font-mono font-bold text-[10px] text-white/50">{row.comp}</td>
+                            <td className="py-2 px-3 font-medium text-white/80">{row.opponent}</td>
+                            <td className="py-2 px-3 text-right font-mono font-bold text-white/95">
+                              <span className="inline-flex items-center gap-1.5">
+                                <span>{row.resultText}</span>
+                                {row.circle && (
+                                  <span className={`w-2 h-2 rounded-full ${
+                                    row.circle === '🟢' ? 'bg-emerald-400' :
+                                    row.circle === '🟡' ? 'bg-yellow-400' : 'bg-red-400'
+                                  }`} />
+                                )}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Away Team Form */}
+                <div className="space-y-3 pt-4 border-t border-white/5">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-black uppercase text-yellow-400 tracking-wider flex items-center gap-2">
+                      <TeamLogo teamId={match.awayTeam} logoUrl={awayTeam.logoUrl} size="sm" className="w-5 h-5 object-contain" />
+                      <span>{awayTeam.name}</span>
+                    </span>
+                    <div className="flex items-center gap-1.5 font-mono">
+                      <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider mr-1">Form:</span>
+                      {awayForm.formCircles.length === 0 ? (
+                        <span className="text-[10px] text-white/30 italic">No matches played</span>
+                      ) : (
+                        awayForm.formCircles.map((circle, idx) => (
+                          <span 
+                            key={idx} 
+                            className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px] ${
+                              circle === '🟢' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                              circle === '🟡' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                              'bg-red-500/20 text-red-400 border border-red-500/30'
+                            }`}
+                            title={circle === '🟢' ? 'Win' : circle === '🟡' ? 'Draw' : 'Loss'}
+                          >
+                            {circle === '🟢' ? 'W' : circle === '🟡' ? 'D' : 'L'}
+                          </span>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="overflow-hidden rounded-2xl border border-white/5 bg-white/[0.01]">
+                    <table className="w-full text-left text-[11px] font-sans">
+                      <thead>
+                        <tr className="bg-white/5 border-b border-white/5 text-[8px] font-black uppercase tracking-widest text-white/30">
+                          <th className="py-2 px-3">Comp</th>
+                          <th className="py-2 px-3">Opponent</th>
+                          <th className="py-2 px-3 text-right">Result</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-white/5 text-white/80">
+                        {awayForm.rows.map((row, idx) => (
+                          <tr key={idx} className="hover:bg-white/[0.02]">
+                            <td className="py-2 px-3 font-mono font-bold text-[10px] text-white/50">{row.comp}</td>
+                            <td className="py-2 px-3 font-medium text-white/80">{row.opponent}</td>
+                            <td className="py-2 px-3 text-right font-mono font-bold text-white/95">
+                              <span className="inline-flex items-center gap-1.5">
+                                <span>{row.resultText}</span>
+                                {row.circle && (
+                                  <span className={`w-2 h-2 rounded-full ${
+                                    row.circle === '🟢' ? 'bg-emerald-400' :
+                                    row.circle === '🟡' ? 'bg-yellow-400' : 'bg-red-400'
+                                  }`} />
+                                )}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-white/5 flex gap-4 text-[9px] font-mono text-white/40">
+              <span className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" /> 🟢 Win / Shootout Win
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 inline-block" /> 🟡 Draw
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 inline-block" /> 🔴 Loss / Shootout Loss
+              </span>
+            </div>
+          </div>
+
+          {/* 🤝 HEAD-TO-HEAD CARD */}
+          <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60 text-left flex flex-col justify-between">
+            <div>
+              <h3 className="text-sm font-display font-black uppercase tracking-wider text-white mb-6 flex items-center gap-2 pb-4 border-b border-white/5">
+                <Users size={15} className="text-primary" />
+                <span>🤝 HEAD-TO-HEAD HISTORIC MEETINGS</span>
+              </h3>
+
+              <div className="space-y-4">
+                <div className="text-xs font-black uppercase tracking-wider text-white/60 mb-2 flex justify-between items-center">
+                  <span>PREVIOUS FCL MEETINGS</span>
+                  <span className="text-[10px] font-mono bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded">
+                    {headToHeadData.played} Played
+                  </span>
+                </div>
+
+                {headToHeadData.matchesList.length === 0 ? (
+                  <div className="text-center py-8 border border-dashed border-white/10 rounded-2xl text-white/40 italic font-medium text-xs">
+                    No previous FCL competitive meetings recorded.<br />
+                    <span className="text-[10px] text-primary not-italic font-black uppercase tracking-widest mt-1 block">First Ever Meeting</span>
+                  </div>
+                ) : (
+                  <div className="overflow-hidden rounded-2xl border border-white/5 bg-white/[0.01] max-h-[140px] overflow-y-auto">
+                    <table className="w-full text-left text-[11px] font-sans">
+                      <thead>
+                        <tr className="bg-white/5 border-b border-white/5 text-[8px] font-black uppercase tracking-widest text-white/30">
+                          <th className="py-2 px-3">Season</th>
+                          <th className="py-2 px-3">Stage</th>
+                          <th className="py-2 px-3">Result</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-white/5 text-white/80">
+                        {headToHeadData.matchesList.map((m, idx) => {
+                          let stageDisplay = m.stage || '';
+                          if (m.id.startsWith('md')) stageDisplay = `MD${m.matchday}`;
+                          else if (m.id.startsWith('PO')) stageDisplay = m.id;
+                          else if (m.id.startsWith('QF')) stageDisplay = m.id;
+
+                          // Format outcome nicely
+                          const isHCurrent = m.homeTeam.toLowerCase() === match.homeTeam.toLowerCase();
+                          const resultDisplay = `${isHCurrent ? m.homeTeam : m.awayTeam} ${m.homeScore}–${m.awayScore} ${isHCurrent ? m.awayTeam : m.homeTeam}${
+                            (m.homePenalties !== undefined && m.awayPenalties !== undefined) 
+                              ? ` (${isHCurrent ? m.homeTeam : m.awayTeam} won ${m.homePenalties}–${m.awayPenalties} on penalties)` 
+                              : ''
+                          }`;
+
+                          return (
+                            <tr key={idx} className="hover:bg-white/[0.02]">
+                              <td className="py-2 px-3 font-mono font-bold text-[10px] text-white/50">2026</td>
+                              <td className="py-2 px-3 font-semibold text-primary">{stageDisplay}</td>
+                              <td className="py-2 px-3 font-mono font-bold text-white/90">{resultDisplay}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* Overall H2H stats block */}
+                <div className="pt-4 border-t border-white/5 space-y-3">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white/40 block">
+                    OVERALL HEAD-TO-HEAD STATISTICS
+                  </span>
+
+                  <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+                    <div className="space-y-1.5 bg-white/[0.01] border border-white/5 p-3 rounded-2xl">
+                      <div className="flex justify-between items-center text-white/60">
+                        <span>Played:</span>
+                        <span className="text-white font-black">{headToHeadData.played}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-white/60">
+                        <span>{match.homeTeam} Wins:</span>
+                        <span className="text-emerald-400 font-black">{headToHeadData.homeWins}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-white/60">
+                        <span>{match.awayTeam} Wins:</span>
+                        <span className="text-yellow-400 font-black">{headToHeadData.awayWins}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-white/60">
+                        <span>Draws:</span>
+                        <span className="text-white/80 font-black">{headToHeadData.draws}</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5 bg-white/[0.01] border border-white/5 p-3 rounded-2xl">
+                      <div className="text-[8px] font-black text-white/30 uppercase tracking-widest pb-0.5 border-b border-white/5">
+                        Penalty Shootouts
+                      </div>
+                      <div className="flex justify-between items-center text-[10px] text-white/60 pt-0.5">
+                        <span>{match.homeTeam} Wins:</span>
+                        <span className="text-emerald-400 font-black">{headToHeadData.homePensWins}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-[10px] text-white/60">
+                        <span>{match.awayTeam} Wins:</span>
+                        <span className="text-yellow-400 font-black">{headToHeadData.awayPensWins}</span>
+                      </div>
+                      
+                      <div className="text-[8px] font-black text-white/30 uppercase tracking-widest pb-0.5 border-b border-white/5 pt-1.5">
+                        Goals Scored
+                      </div>
+                      <div className="flex justify-between items-center text-[10px] text-white/60 pt-0.5">
+                        <span>{match.homeTeam}:</span>
+                        <span className="text-white font-black">{headToHeadData.homeGoals}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-[10px] text-white/60">
+                        <span>{match.awayTeam}:</span>
+                        <span className="text-white font-black">{headToHeadData.awayGoals}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
 
         {/* THREE COLUMN GRID: STATS, TIMELINE & LINEUPS, COMMENTARY & REPORT */}
         <div className="grid lg:grid-cols-3 gap-8">
@@ -720,7 +1470,7 @@ export default function PublicMatchCenter() {
                       </div>
                       <div className="space-y-1.5 font-sans">
                         {Object.entries(lineups[match.id].home.players).map(([pos, pid]) => {
-                          const playerObj = PLAYERS.find(p => p.id === pid);
+                          const playerObj = players.find(p => p.id === pid);
                           const isCaptain = lineups[match.id].home.captainId === pid;
                           return (
                             <div key={pos} className="bg-white/[0.02] hover:bg-white/[0.04] p-1.5 px-3 rounded-xl text-[10px] text-white/80 flex items-center justify-between gap-2 border border-white/5 transition-all">
@@ -768,7 +1518,7 @@ export default function PublicMatchCenter() {
                       ) : (
                         <div className="space-y-1.5 font-sans">
                           {Object.entries(lineups[match.id].away.players).map(([pos, pid]) => {
-                            const playerObj = PLAYERS.find(p => p.id === pid);
+                            const playerObj = players.find(p => p.id === pid);
                             const isCaptain = lineups[match.id].away.captainId === pid;
                             return (
                               <div key={pos} className="bg-white/[0.02] hover:bg-white/[0.04] p-1.5 px-3 rounded-xl text-[10px] text-white/80 flex items-center justify-between gap-2 border border-white/5 transition-all">
@@ -804,7 +1554,7 @@ export default function PublicMatchCenter() {
                       <span className="font-bold tracking-wider text-white/40 block pb-1 uppercase font-display">SUBS / BENCH</span>
                       <div className="flex flex-wrap gap-1 leading-normal">
                         {lineups[match.id].home.bench.map((benchPlayer, idx) => {
-                          const resolvedName = PLAYERS.find(p => p.id === benchPlayer)?.name || benchPlayer;
+                          const resolvedName = players.find(p => p.id === benchPlayer)?.name || benchPlayer;
                           return (
                             <span key={idx} className="bg-white/[0.02] border border-white/5 text-white/60 px-2 py-1 rounded-sm text-[9px]">
                               {resolvedName}
@@ -823,7 +1573,7 @@ export default function PublicMatchCenter() {
                       ) : (
                         <div className="flex flex-wrap gap-1 leading-normal">
                           {lineups[match.id].away.bench.map((benchPlayer, idx) => {
-                            const resolvedName = PLAYERS.find(p => p.id === benchPlayer)?.name || benchPlayer;
+                            const resolvedName = players.find(p => p.id === benchPlayer)?.name || benchPlayer;
                             return (
                               <span key={idx} className="bg-white/[0.02] border border-white/5 text-white/60 px-2 py-1 rounded-sm text-[9px]">
                                 {resolvedName}
@@ -839,7 +1589,7 @@ export default function PublicMatchCenter() {
                 <div className="grid grid-cols-2 gap-4">
                   {/* Home starting */}
                   <div className="space-y-2">
-                    <span className="text-[9px] font-black tracking-widest uppercase text-primary font-display">{match.homeTeam} XI</span>
+                    <span className="text-[9px] font-black tracking-widest uppercase text-primary font-display">{match.homeTeam} PREDICTED XI (PENDING CONFIRMATION)</span>
                     <div className="space-y-1">
                       {['GK', 'LB', 'CB1', 'CB2', 'RB', 'LW', 'ST', 'RW'].map(s => (
                         <div key={s} className="bg-white/5 p-1 px-2 rounded font-mono text-[10px] text-white/70 truncate border border-white/5">
@@ -852,7 +1602,7 @@ export default function PublicMatchCenter() {
 
                   {/* Away starting */}
                   <div className="space-y-2">
-                    <span className="text-[9px] font-black tracking-widest uppercase text-yellow-400 font-display">{match.awayTeam} XI</span>
+                    <span className="text-[9px] font-black tracking-widest uppercase text-yellow-400 font-display">{match.awayTeam} PREDICTED XI (PENDING CONFIRMATION)</span>
                     <div className="space-y-1">
                       {['GK', 'LB', 'CB1', 'CB2', 'RB', 'LM', 'CM1', 'RM', 'ST1'].map(s => (
                         <div key={s} className="bg-white/5 p-1 px-2 rounded font-mono text-[10px] text-white/70 truncate border border-white/5">
@@ -864,6 +1614,173 @@ export default function PublicMatchCenter() {
                   </div>
                 </div>
               )}
+
+              {/* Combined Medical, Disciplinary & Leaderboards section */}
+              <div className="pt-5 border-t border-white/5 mt-5 space-y-6">
+                <div>
+                  <span className="text-[10px] font-black uppercase text-red-400 tracking-widest block font-mono mb-3">
+                    🏥 TEAM DISCIPLINARY & MEDICAL REPORT
+                  </span>
+                  
+                  <div className="space-y-4">
+                    {/* 1. SUSPENDED / BANNED PLAYERS */}
+                    <div className="space-y-2">
+                      <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider block">
+                        🚨 Active Disciplinary Bans
+                      </span>
+                      {(suspensionsData.homeSuspensions.length === 0 && suspensionsData.awaySuspensions.length === 0) ? (
+                        <p className="text-[9px] text-white/35 italic">
+                          No active suspensions or bans recorded for either squad.
+                        </p>
+                      ) : (
+                        <div className="space-y-1.5">
+                          {suspensionsData.homeSuspensions.map((susp, idx) => (
+                            <div key={idx} className="bg-red-500/5 border border-red-500/10 p-2 rounded-lg text-[9.5px] flex justify-between items-center gap-2">
+                              <span className="font-bold text-white/90">{susp.playerName} ({match.homeTeam})</span>
+                              <span className="text-[8px] font-bold text-red-400 font-mono text-right">{susp.reason}</span>
+                            </div>
+                          ))}
+                          {suspensionsData.awaySuspensions.map((susp, idx) => (
+                            <div key={idx} className="bg-red-500/5 border border-red-500/10 p-2 rounded-lg text-[9.5px] flex justify-between items-center gap-2">
+                              <span className="font-bold text-white/90">{susp.playerName} ({match.awayTeam})</span>
+                              <span className="text-[8px] font-bold text-red-400 font-mono text-right">{susp.reason}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 2. PLAYERS ONE BOOKING AWAY FROM BAN */}
+                    <div className="space-y-2">
+                      <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider block">
+                        🟨 One Yellow Card From Suspension
+                      </span>
+                      {(teamDisciplineAndMedical.homeOneBookingAway.length === 0 && teamDisciplineAndMedical.awayOneBookingAway.length === 0) ? (
+                        <p className="text-[9px] text-white/35 italic">
+                          No players are currently one warning away from suspension.
+                        </p>
+                      ) : (
+                        <div className="space-y-1.5">
+                          {teamDisciplineAndMedical.homeOneBookingAway.map((name, idx) => (
+                            <div key={idx} className="bg-yellow-500/5 border border-yellow-500/10 p-2 rounded-lg text-[9.5px] flex justify-between items-center gap-2">
+                              <span className="font-bold text-white/90">{name} ({match.homeTeam})</span>
+                              <span className="text-[8.5px] font-bold text-yellow-400 font-mono">1 Yellow Card (Suspension on next booking)</span>
+                            </div>
+                          ))}
+                          {teamDisciplineAndMedical.awayOneBookingAway.map((name, idx) => (
+                            <div key={idx} className="bg-yellow-500/5 border border-yellow-500/10 p-2 rounded-lg text-[9.5px] flex justify-between items-center gap-2">
+                              <span className="font-bold text-white/90">{name} ({match.awayTeam})</span>
+                              <span className="text-[8.5px] font-bold text-yellow-400 font-mono">1 Yellow Card (Suspension on next booking)</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 3. INJURY & AVAILABILITY REPORT */}
+                    <div className="space-y-2">
+                      <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider block">
+                        🤕 Medical & Availability Report
+                      </span>
+                      {(teamDisciplineAndMedical.homeInjured.length === 0 && teamDisciplineAndMedical.awayInjured.length === 0) ? (
+                        <p className="text-[9px] text-white/35 italic">
+                          No medical exclusions or long-term unavailable players listed.
+                        </p>
+                      ) : (
+                        <div className="space-y-1.5">
+                          {teamDisciplineAndMedical.homeInjured.map((name, idx) => (
+                            <div key={idx} className="bg-white/[0.02] border border-white/5 p-2 rounded-lg text-[9.5px] flex justify-between items-center gap-2">
+                              <span className="font-medium text-white/70">{name} ({match.homeTeam})</span>
+                              <span className="text-[8px] font-bold text-white/40 font-mono uppercase">Inactive / Out</span>
+                            </div>
+                          ))}
+                          {teamDisciplineAndMedical.awayInjured.map((name, idx) => (
+                            <div key={idx} className="bg-white/[0.02] border border-white/5 p-2 rounded-lg text-[9.5px] flex justify-between items-center gap-2">
+                              <span className="font-medium text-white/70">{name} ({match.awayTeam})</span>
+                              <span className="text-[8px] font-bold text-white/40 font-mono uppercase">Inactive / Out</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* SCORERS & GOALKEEPERS LEADERBOARD BOX */}
+                <div className="pt-5 border-t border-white/5 space-y-4">
+                  <span className="text-[10px] font-black uppercase text-primary tracking-widest block font-mono">
+                    📊 FIXTURE METRICS & LEADERBOARD
+                  </span>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Top Scorers */}
+                    <div className="space-y-2 bg-white/[0.01] border border-white/5 p-3 rounded-2xl">
+                      <span className="text-[8.5px] font-bold text-white/40 uppercase tracking-wider block pb-1 border-b border-white/5">
+                        ⚽ Top Squad Scorers
+                      </span>
+                      
+                      <div className="space-y-1.5">
+                        <span className="text-[7.5px] font-mono text-primary font-bold block uppercase">{match.homeTeam} Goals:</span>
+                        {topScorersData.homeList.length === 0 ? (
+                          <span className="text-[8px] text-white/30 italic block">No goals recorded</span>
+                        ) : (
+                          topScorersData.homeList.map((sc, idx) => (
+                            <div key={idx} className="text-[9px] flex justify-between text-white/80">
+                              <span className="truncate pr-1">{sc.name}</span>
+                              <span className="font-bold text-primary font-mono">{sc.goals}</span>
+                            </div>
+                          ))
+                        )}
+
+                        <span className="text-[7.5px] font-mono text-yellow-400 font-bold block uppercase mt-2">{match.awayTeam} Goals:</span>
+                        {topScorersData.awayList.length === 0 ? (
+                          <span className="text-[8px] text-white/30 italic block">No goals recorded</span>
+                        ) : (
+                          topScorersData.awayList.map((sc, idx) => (
+                            <div key={idx} className="text-[9px] flex justify-between text-white/80">
+                              <span className="truncate pr-1">{sc.name}</span>
+                              <span className="font-bold text-yellow-400 font-mono">{sc.goals}</span>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+
+                    {/* GK Clean Sheets */}
+                    <div className="space-y-2 bg-white/[0.01] border border-white/5 p-3 rounded-2xl">
+                      <span className="text-[8.5px] font-bold text-white/40 uppercase tracking-wider block pb-1 border-b border-white/5">
+                        🧤 Goalkeeper Sheets
+                      </span>
+                      
+                      <div className="space-y-1.5">
+                        <span className="text-[7.5px] font-mono text-primary font-bold block uppercase">{match.homeTeam} GKs:</span>
+                        {goalkeeperCleanSheets.homeGKs.length === 0 ? (
+                          <span className="text-[8px] text-white/30 italic block">No GKs listed</span>
+                        ) : (
+                          goalkeeperCleanSheets.homeGKs.map((gk, idx) => (
+                            <div key={idx} className="text-[9px] flex justify-between text-white/80">
+                              <span className="truncate pr-1">{gk.name}</span>
+                              <span className="font-bold text-primary font-mono">{gk.cleanSheets}</span>
+                            </div>
+                          ))
+                        )}
+
+                        <span className="text-[7.5px] font-mono text-yellow-400 font-bold block uppercase mt-2">{match.awayTeam} GKs:</span>
+                        {goalkeeperCleanSheets.awayGKs.length === 0 ? (
+                          <span className="text-[8px] text-white/30 italic block">No GKs listed</span>
+                        ) : (
+                          goalkeeperCleanSheets.awayGKs.map((gk, idx) => (
+                            <div key={idx} className="text-[9px] flex justify-between text-white/80">
+                              <span className="truncate pr-1">{gk.name}</span>
+                              <span className="font-bold text-yellow-400 font-mono">{gk.cleanSheets}</span>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>

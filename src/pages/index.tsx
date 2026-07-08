@@ -2444,6 +2444,129 @@ export function Stats() {
                 <h2 className="text-2xl font-display italic uppercase">DISCIPLINE STATISTICS</h2>
                 <AlertTriangle className="text-amber-500 w-6 h-6" />
               </div>
+
+              {/* Tournament Disciplinary & Fines Tracker Dashboard */}
+              <div className="bg-[#0B0F19]/60 border border-white/10 rounded-2xl p-6 space-y-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-4">
+                  <div>
+                    <h3 className="text-lg font-bold text-white uppercase tracking-wider">⚖️ Official Disciplinary & Financial Ledger</h3>
+                    <p className="text-xs text-white/40">Real-time status of suspensions, fines, and eligibility clearances as decided by the FCL Disciplinary Committee.</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="text-[10px] font-mono bg-red-500/10 text-red-400 border border-red-500/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">
+                      1 Active Suspension
+                    </span>
+                    <span className="text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">
+                      ₦13,000 Outstanding
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-6">
+                  {/* Column 1: Outstanding Fines Dashboard */}
+                  <div className="bg-white/[0.02] border border-white/5 p-4 rounded-xl space-y-4">
+                    <div className="flex items-center space-x-2 text-amber-500 font-bold text-xs uppercase tracking-wider">
+                      <AlertCircle className="w-4 h-4" />
+                      <span>💰 Outstanding Fines Ledger</span>
+                    </div>
+                    <div className="space-y-3">
+                      {/* SIMT Team Fine */}
+                      <div className="bg-white/[0.02] border border-white/5 p-3 rounded-lg space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-bold text-white">SIMT Team Fine</span>
+                          <span className="text-[9px] font-mono bg-red-500/20 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded uppercase font-black">UNPAID</span>
+                        </div>
+                        <p className="text-[10px] text-white/50 leading-relaxed">₦10,000 fine imposed for team misconduct and involvement in Match Day 2 incident.</p>
+                        <div className="text-right text-xs font-mono font-bold text-red-400">₦10,000</div>
+                      </div>
+
+                      {/* Momoh Joshua David Fine */}
+                      <div className="bg-white/[0.02] border border-white/5 p-3 rounded-lg space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-bold text-white">Momoh Joshua David</span>
+                          <span className="text-[9px] font-mono bg-red-500/20 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded uppercase font-black">UNPAID</span>
+                        </div>
+                        <p className="text-[10px] text-white/50 leading-relaxed">SIMT defender fined ₦3,000 for unsporting language/conduct. Cleared to play but fine remains active.</p>
+                        <div className="text-right text-xs font-mono font-bold text-red-400">₦3,000</div>
+                      </div>
+
+                      {/* MST Team Fine (Cleared) */}
+                      <div className="bg-white/[0.01] border border-white/5 p-3 rounded-lg space-y-2 opacity-60">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-bold text-white/80">MST Team Fine</span>
+                          <span className="text-[9px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded uppercase font-black">PAID</span>
+                        </div>
+                        <p className="text-[10px] text-white/40 leading-relaxed">₦10,000 fine paid in full. Disciplinary balance settled.</p>
+                        <div className="text-right text-xs font-mono font-bold text-emerald-400">₦0 (Paid)</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Column 2: Active Suspensions */}
+                  <div className="bg-white/[0.02] border border-white/5 p-4 rounded-xl space-y-4">
+                    <div className="flex items-center space-x-2 text-red-500 font-bold text-xs uppercase tracking-wider">
+                      <AlertTriangle className="w-4 h-4 animate-pulse" />
+                      <span>🚨 Active Suspensions</span>
+                    </div>
+                    <div className="space-y-3">
+                      {/* Nwabunwanne Chibichi Daniel */}
+                      <div className="bg-red-500/[0.02] border border-red-500/10 p-3 rounded-lg space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center font-bold text-[10px] text-red-400">NC</div>
+                          <div>
+                            <h4 className="text-xs font-bold text-white">Nwabunwanne C. Daniel</h4>
+                            <p className="text-[9px] text-white/40">SIMT • Defender</p>
+                          </div>
+                        </div>
+                        <p className="text-[10px] text-white/50 leading-relaxed">Serving remaining suspension for red card/infractions.</p>
+                        <div className="flex justify-between items-center text-[9px] font-mono border-t border-white/5 pt-2 mt-1">
+                          <span className="text-white/40">REMAINING BANS</span>
+                          <span className="text-red-400 font-bold">1 MATCH</span>
+                        </div>
+                      </div>
+
+                      {/* No other active bans placeholder */}
+                      <p className="text-[9px] text-white/30 italic text-center pt-4">No other competitive suspensions are currently active in the league.</p>
+                    </div>
+                  </div>
+
+                  {/* Column 3: Eligibility & Clearances */}
+                  <div className="bg-white/[0.02] border border-white/5 p-4 rounded-xl space-y-4">
+                    <div className="flex items-center space-x-2 text-emerald-500 font-bold text-xs uppercase tracking-wider">
+                      <ShieldCheck className="w-4 h-4" />
+                      <span>✅ Re-Eligible & Cleared</span>
+                    </div>
+                    <div className="space-y-3">
+                      {/* Adeyemi Adedayo Ibrahim */}
+                      <div className="bg-emerald-500/[0.02] border border-emerald-500/10 p-3 rounded-lg space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center font-bold text-[10px] text-emerald-400">AI</div>
+                          <div>
+                            <h4 className="text-xs font-bold text-white">Adeyemi Adedayo Ibrahim</h4>
+                            <p className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest font-mono">MST Captain</p>
+                          </div>
+                        </div>
+                        <p className="text-[10px] text-white/50 leading-relaxed">One-match suspension fully served. Cleared of all active bans and available for selection in MST's next fixture.</p>
+                        <span className="inline-block text-[8px] font-mono font-bold uppercase bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">ELIGIBLE</span>
+                      </div>
+
+                      {/* Momoh Joshua David eligibility */}
+                      <div className="bg-emerald-500/[0.02] border border-emerald-500/10 p-3 rounded-lg space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center font-bold text-[10px] text-emerald-400">MD</div>
+                          <div>
+                            <h4 className="text-xs font-bold text-white">Momoh Joshua David</h4>
+                            <p className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest font-mono">SIMT Defender</p>
+                          </div>
+                        </div>
+                        <p className="text-[10px] text-white/50 leading-relaxed">Suspension lifted/cleared. Eligible to play immediately, although outstanding disciplinary fine of ₦3,000 remains unpaid.</p>
+                        <span className="inline-block text-[8px] font-mono font-bold uppercase bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">ELIGIBLE (WITH FINE)</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="grid md:grid-cols-2 gap-12">
                 {/* Yellow Cards Section */}
                 <div className="space-y-6">
@@ -3039,7 +3162,7 @@ export function Media() {
                           <h3 className="text-sm font-bold text-white uppercase tracking-tight leading-tight truncate">
                             {selectedAccreditationPlayer.name}
                           </h3>
-                          <div className="flex items-center gap-1.5 mt-0.5">
+                          <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
                             <span className="text-[8.5px] font-black text-white/60 uppercase italic bg-white/5 border border-white/10 px-1.5 py-0.5 rounded leading-none shrink-0">
                               {selectedAccreditationPlayer.position}
                             </span>
@@ -3049,6 +3172,20 @@ export function Media() {
                               </span>
                             )}
                           </div>
+                          {(selectedAccreditationPlayer.isSuspended || selectedAccreditationPlayer.fineAmount !== undefined) && (
+                            <div className="mt-1 flex flex-wrap gap-1 text-left">
+                              {selectedAccreditationPlayer.isSuspended && (
+                                <span className="px-1 py-0.5 bg-red-500/20 text-red-400 border border-red-500/30 rounded text-[7px] font-black uppercase tracking-wider block">
+                                  🚫 SUSPENDED
+                                </span>
+                              )}
+                              {selectedAccreditationPlayer.fineAmount !== undefined && (
+                                <span className={`px-1 py-0.5 border rounded text-[7px] font-black uppercase tracking-wider block ${selectedAccreditationPlayer.finePaid ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border-amber-500/30'}`}>
+                                  💸 ₦{selectedAccreditationPlayer.fineAmount} FINE ({selectedAccreditationPlayer.finePaid ? 'PAID' : 'UNPAID'})
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
 
@@ -4506,12 +4643,14 @@ export function TeamProfile() {
                             REG NO: {player.regNumber}
                           </span>
                         )}
-                        {player.isSuspended && (
+                        {(player.isSuspended || player.fineAmount !== undefined) && (
                           <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                            <span className="px-1.5 py-0.5 bg-red-500/10 text-red-500 border border-red-500/20 rounded-md text-[8px] font-black uppercase tracking-wider animate-pulse flex items-center gap-1">
-                              <span>🚫 SUSPENDED ({player.suspensionDuration})</span>
-                            </span>
-                            {player.appealAllowed === false && (
+                            {player.isSuspended && (
+                              <span className="px-1.5 py-0.5 bg-red-500/10 text-red-500 border border-red-500/20 rounded-md text-[8px] font-black uppercase tracking-wider animate-pulse flex items-center gap-1">
+                                <span>🚫 SUSPENDED ({player.suspensionDuration})</span>
+                              </span>
+                            )}
+                            {player.isSuspended && player.appealAllowed === false && (
                               <span className="px-1.5 py-0.5 bg-rose-500/10 text-rose-500 border border-rose-500/20 rounded-md text-[8px] font-black uppercase tracking-wider flex items-center gap-1">
                                 <span>🔒 Appeal: Not permitted</span>
                               </span>
@@ -4803,7 +4942,7 @@ export function TeamProfile() {
                     <h3 className="text-sm font-bold text-white uppercase tracking-tight leading-tight truncate">
                       {selectedAccreditationPlayer.name}
                     </h3>
-                    <div className="flex items-center gap-1.5 mt-0.5">
+                    <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
                       <span className="text-[8.5px] font-black text-white/60 uppercase italic bg-white/5 border border-white/10 px-1.5 py-0.5 rounded leading-none shrink-0">
                         {selectedAccreditationPlayer.position}
                       </span>
@@ -4813,6 +4952,20 @@ export function TeamProfile() {
                         </span>
                       )}
                     </div>
+                    {(selectedAccreditationPlayer.isSuspended || selectedAccreditationPlayer.fineAmount !== undefined) && (
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {selectedAccreditationPlayer.isSuspended && (
+                          <span className="px-1 py-0.5 bg-red-500/20 text-red-400 border border-red-500/30 rounded text-[7px] font-black uppercase tracking-wider block">
+                            🚫 SUSPENDED
+                          </span>
+                        )}
+                        {selectedAccreditationPlayer.fineAmount !== undefined && (
+                          <span className={`px-1 py-0.5 border rounded text-[7px] font-black uppercase tracking-wider block ${selectedAccreditationPlayer.finePaid ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border-amber-500/30'}`}>
+                            💸 ₦{selectedAccreditationPlayer.fineAmount} FINE ({selectedAccreditationPlayer.finePaid ? 'PAID' : 'UNPAID'})
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
 

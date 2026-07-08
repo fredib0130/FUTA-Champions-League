@@ -421,8 +421,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
     const mjd = basePlayers.find(p => p.id === 'player-simt-5' || p.name.toLowerCase() === 'momoh joshua david');
     if (mjd) {
-      mjd.isSuspended = true;
-      mjd.suspensionDuration = '1 Match';
+      mjd.isSuspended = false;
+      mjd.suspensionDuration = '';
       mjd.fineAmount = 3000;
       mjd.finePaid = false;
     }
@@ -430,14 +430,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     const ncd = basePlayers.find(p => p.id === 'player-simt-1' || p.name.toLowerCase() === 'nwabunwanne chibichi daniel');
     if (ncd) {
       ncd.isSuspended = true;
-      ncd.suspensionDuration = '2 matches remaining';
+      ncd.suspensionDuration = '1 match remaining';
       ncd.appealAllowed = false;
     }
 
     const aai = basePlayers.find(p => p.id === 'player-mst-2' || p.name.toLowerCase() === 'adeyemi adedayo ibrahim' || p.name.toLowerCase() === 'adeyemi adebayo ibrahim');
     if (aai) {
-      aai.isSuspended = true;
-      aai.suspensionDuration = '1 match remaining';
+      aai.isSuspended = false;
+      aai.suspensionDuration = '';
       aai.appealAllowed = false;
     }
 
@@ -509,10 +509,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.awayPenalties !== official.awayPenalties ||
             JSON.stringify(m.penaltyShootoutHome) !== JSON.stringify(official.penaltyShootoutHome) ||
             JSON.stringify(m.penaltyShootoutAway) !== JSON.stringify(official.penaltyShootoutAway) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
-            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3') && m.status !== official.status) // Sync status specifically for matchdays and PO6, PO1, PO2, PO3
+            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4') && m.status !== official.status) // Sync status specifically for matchdays and PO6, PO1, PO2, PO3, PO4
           ) {
             loadedMatches[index] = {
               ...m,
@@ -525,13 +525,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               refereeAssigned: official.refereeAssigned,
               matchApproved: official.matchApproved,
               officialsPanel: official.officialsPanel,
-              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3') ? official.status : m.status,
+              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4') ? official.status : m.status,
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
               note: official.note,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3'].includes(official.id) ? official.awayScore : m.awayScore,
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4'].includes(official.id) ? official.awayScore : m.awayScore,
               homePenalties: official.homePenalties,
               awayPenalties: official.awayPenalties,
               penaltyShootoutHome: official.penaltyShootoutHome,
@@ -1333,17 +1333,34 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     let loadedGoals: GoalScorer[] = [];
     if (storedGoals) {
       loadedGoals = JSON.parse(storedGoals);
+      // Migrate AGP Michael goals to Olasunkanmi Michael
+      let goalsChanged = false;
+      loadedGoals = loadedGoals.map(g => {
+        if (g.team === 'AGP' && g.playerName === 'Michael') {
+          goalsChanged = true;
+          return {
+            ...g,
+            playerName: 'Olasunkanmi Michael',
+            minute: g.matchId === 'md1-2' ? "26'" : g.minute,
+            id: g.matchId === 'md1-2' ? 'goal-md1-2-michael-26' : g.id
+          };
+        }
+        return g;
+      });
+      if (goalsChanged) {
+        localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+      }
     } else {
       loadedGoals = [];
     }
 
-    if (!loadedGoals.some(g => g.matchId === 'md1-2' && g.playerName === 'Michael')) {
+    if (!loadedGoals.some(g => g.matchId === 'md1-2' && g.playerName === 'Olasunkanmi Michael')) {
       loadedGoals.unshift({
-        id: 'goal-md1-2-michael-20',
+        id: 'goal-md1-2-michael-26',
         matchId: 'md1-2',
-        playerName: 'Michael',
+        playerName: 'Olasunkanmi Michael',
         team: 'AGP',
-        minute: "20'",
+        minute: "26'",
         type: 'Goal'
       });
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
@@ -1752,7 +1769,16 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
     if (!loadedGoals.some(g => g.matchId === 'PO3')) {
       loadedGoals.push(
-        { id: 'goal-po3-michael-64', matchId: 'PO3', playerName: 'Michael', team: 'AGP', minute: "60+4'", type: 'Goal' }
+        { id: 'goal-po3-michael-64', matchId: 'PO3', playerName: 'Olasunkanmi Michael', team: 'AGP', minute: "60+4'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'PO4')) {
+      loadedGoals.push(
+        { id: 'goal-po4-lucky-22', matchId: 'PO4', playerName: 'Ameh Lucky', team: 'MCB', minute: "22'", type: 'Goal' },
+        { id: 'goal-po4-timilehin-30', matchId: 'PO4', playerName: 'Olaniran Oluwatimilehin', team: 'MCB', minute: "30'", type: 'Goal' },
+        { id: 'goal-po4-damilola-54', matchId: 'PO4', playerName: 'Oni Oluwadamilola', team: 'MCB', minute: "54'", type: 'Goal' }
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
@@ -3170,6 +3196,27 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     let loadedCommentary: Record<string, CommentaryItem[]> = {};
     if (storedCommentary) {
       loadedCommentary = JSON.parse(storedCommentary);
+      let commentaryChanged = false;
+      Object.keys(loadedCommentary).forEach(matchId => {
+        if (['md1-2', 'PO3'].includes(matchId)) {
+          loadedCommentary[matchId] = loadedCommentary[matchId].map(comm => {
+            let newText = comm.text;
+            let newMinute = comm.minute;
+            if (comm.text.includes('Michael') && !comm.text.includes('Olasunkanmi Michael')) {
+              newText = comm.text.replace(/Michael/g, 'Olasunkanmi Michael');
+              commentaryChanged = true;
+            }
+            if (matchId === 'md1-2' && comm.id === 'comm-goal-md1-2') {
+              newMinute = "26'";
+              commentaryChanged = true;
+            }
+            return { ...comm, text: newText, minute: newMinute };
+          });
+        }
+      });
+      if (commentaryChanged) {
+        localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+      }
     } else {
       loadedMatches.forEach(m => {
         loadedCommentary[m.id] = [
@@ -3573,9 +3620,9 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         {
           id: 'comm-goal-md1-2',
           matchId: 'md1-2',
-          minute: "20'",
-          text: "⚽ GOAL! Michael scores for AGP with a sensational shot to give AGP a 1–0 lead! Outstanding play by the home side.",
-          timestamp: "9:50 AM",
+          minute: "26'",
+          text: "⚽ GOAL! Olasunkanmi Michael scores for AGP with a sensational shot to give AGP a 1–0 lead! Outstanding play by the home side.",
+          timestamp: "9:56 AM",
           type: 'goal'
         },
         {
@@ -5110,11 +5157,23 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
     if (!loadedCommentary['PO3'] || loadedCommentary['PO3'].length === 0) {
       loadedCommentary['PO3'] = [
-        { id: 'comm-po3-ft', matchId: 'PO3', minute: "60+4'", text: "🏁 FULL-TIME! BDG 0 - 1 AGP. Dramatic finish! Agricultural and Environmental Engineering (AGP) books their place in the Quarter-finals with a late 1-0 victory over Building (BDG)! Michael is the hero and wins Man of the Match!", timestamp: "4:34 PM", type: 'general' },
-        { id: 'comm-po3-goal-michael', matchId: 'PO3', minute: "60+4'", text: "⚽ GOAL!!! Michael strikes in stoppage time! Unbelievable scenes as Michael finds the back of the net with a dramatic finish at the death! BDG 0 - 1 AGP.", timestamp: "4:34 PM", type: 'goal' },
+        { id: 'comm-po3-ft', matchId: 'PO3', minute: "60+4'", text: "🏁 FULL-TIME! BDG 0 - 1 AGP. Dramatic finish! Applied Geo-Physics (AGP) books their place in the Quarter-finals with a late 1-0 victory over Building (BDG)! Olasunkanmi Michael is the hero and wins Man of the Match!", timestamp: "4:34 PM", type: 'general' },
+        { id: 'comm-po3-goal-michael', matchId: 'PO3', minute: "60+4'", text: "⚽ GOAL!!! Olasunkanmi Michael strikes in stoppage time! Unbelievable scenes as Olasunkanmi Michael finds the back of the net with a dramatic finish at the death! BDG 0 - 1 AGP.", timestamp: "4:34 PM", type: 'goal' },
         { id: 'comm-po3-chance', matchId: 'PO3', minute: "50'", text: "Chance! Desmond (BDG) with a header from a corner, but it's saved superbly by the AGP goalkeeper!", timestamp: "4:20 PM", type: 'general' },
         { id: 'comm-po3-ht', matchId: 'PO3', minute: "30'", text: "⏸️ HALF-TIME! BDG 0 - 0 AGP. A very tight and physical contest in the first half with both defenses holding strong.", timestamp: "4:00 PM", type: 'general' },
         { id: 'comm-po3-kickoff', matchId: 'PO3', minute: "1'", text: "🏁 KICKOFF! The Playoff Round match PO3 between BDG and AGP is underway! Jones (AGE) is the referee.", timestamp: "3:30 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
+    if (!loadedCommentary['PO4'] || loadedCommentary['PO4'].length === 0) {
+      loadedCommentary['PO4'] = [
+        { id: 'comm-po4-ft', matchId: 'PO4', minute: "60'", text: "🏁 FULL-TIME! MBBS 0 - 3 MCB. Microbiology (MCB) produced a dominant performance to defeat MBBS 3–0, sealing an emphatic qualification to the FUTA Champions League Quarter-finals! Oni Oluwadamilola is named Man of the Match!", timestamp: "4:30 PM", type: 'general' },
+        { id: 'comm-po4-goal-oni', matchId: 'PO4', minute: "54'", text: "⚽ GOAL!!! Captain Oni Oluwadamilola scores a third! MCB wraps up the victory in style! MBBS 0 - 3 MCB.", timestamp: "4:24 PM", type: 'goal' },
+        { id: 'comm-po4-ht', matchId: 'PO4', minute: "30'", text: "⏸️ HALF-TIME! MBBS 0 - 2 MCB. A dominant showing by MCB in the first half with goals from Ameh Lucky and Olaniran Oluwatimilehin!", timestamp: "4:00 PM", type: 'general' },
+        { id: 'comm-po4-goal-olaniran', matchId: 'PO4', minute: "30'", text: "⚽ GOAL!!! Olaniran Oluwatimilehin doubles the lead! Magnificent strike to put MCB in a commanding position! MBBS 0 - 2 MCB.", timestamp: "4:00 PM", type: 'goal' },
+        { id: 'comm-po4-goal-ameh', matchId: 'PO4', minute: "22'", text: "⚽ GOAL!!! Ameh Lucky breaks the deadlock for MCB! Clinical finish to put Microbiology ahead! MBBS 0 - 1 MCB.", timestamp: "3:52 PM", type: 'goal' },
+        { id: 'comm-po4-kickoff', matchId: 'PO4', minute: "1'", text: "🏁 KICKOFF! The Playoff Round match PO4 between MBBS and MCB is underway! Tosin (MTS) is the referee.", timestamp: "3:30 PM", type: 'general' }
       ];
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
@@ -5124,6 +5183,32 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     // 10. Reports
     const storedReports = localStorage.getItem('fcl_admin_reports');
     let loadedReports: Record<string, MatchReport> = storedReports ? JSON.parse(storedReports) : {};
+    // Migrate AGP Michael reports to Olasunkanmi Michael
+    let reportsChanged = false;
+    Object.keys(loadedReports).forEach(matchId => {
+      if (matchId === 'PO3') {
+        const rep = loadedReports[matchId];
+        if (rep.playerOfMatch === 'Michael (AGP)') {
+          rep.playerOfMatch = 'Olasunkanmi Michael (AGP)';
+          reportsChanged = true;
+        }
+        if (rep.tacticalAnalysis.includes('when Michael capitalized')) {
+          rep.tacticalAnalysis = rep.tacticalAnalysis.replace('when Michael capitalized', 'when Olasunkanmi Michael capitalized');
+          reportsChanged = true;
+        }
+        rep.keyMoments = rep.keyMoments.map(moment => {
+          if (moment.includes('GOAL! Michael scores')) {
+            reportsChanged = true;
+            return moment.replace('GOAL! Michael scores', 'GOAL! Olasunkanmi Michael scores');
+          }
+          return moment;
+        });
+      }
+    });
+    if (reportsChanged) {
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+
     if (!loadedReports['md3-2']) {
       loadedReports['md3-2'] = {
         matchId: 'md3-2',
@@ -5235,15 +5320,33 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     if (!loadedReports['PO3']) {
       loadedReports['PO3'] = {
         matchId: 'PO3',
-        summary: "Agricultural and Environmental Engineering (AGP) secured a hard-fought 1–0 victory over Building Technology (BDG) with a late stoppage-time goal to book their place in the FUTA Champions League Quarter-finals.",
-        playerOfMatch: "Michael (AGP)",
-        tacticalAnalysis: "A highly physical and tactical battle with both sides cancelling each other out. BDG had some great chances, particularly from set-pieces, but AGP's defense remained resolute. The breakthrough finally arrived in the 4th minute of stoppage time when Michael capitalized on a loose ball in the box to seal the win.",
+        summary: "Applied Geo-Physics (AGP) secured a hard-fought 1–0 victory over Building Technology (BDG) with a late stoppage-time goal to book their place in the FUTA Champions League Quarter-finals.",
+        playerOfMatch: "Olasunkanmi Michael (AGP)",
+        tacticalAnalysis: "A highly physical and tactical battle with both sides cancelling each other out. BDG had some great chances, particularly from set-pieces, but AGP's defense remained resolute. The breakthrough finally arrived in the 4th minute of stoppage time when Olasunkanmi Michael capitalized on a loose ball in the box to seal the win.",
         keyMoments: [
           "1' - KICKOFF! The play-off round match is underway with high tension.",
           "30' - HALF-TIME! Scoreless first half with both teams organized defensively.",
           "50' - Chance! Desmond of BDG hits a powerful header from a corner, but it's kept out by a sensational reflex save.",
-          "60+4' - GOAL! Michael scores a dramatic stoppage-time winner for AGP! BDG 0 - 1 AGP.",
+          "60+4' - GOAL! Olasunkanmi Michael scores a dramatic stoppage-time winner for AGP! BDG 0 - 1 AGP.",
           "60+4' - FULL-TIME! AGP holds on to progress to the Quarter-finals."
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+    if (!loadedReports['PO4']) {
+      loadedReports['PO4'] = {
+        matchId: 'PO4',
+        summary: "Micro Biology (MCB) produced a dominant performance to defeat Medicine and Surgery (MBBS) 3–0 in Playoff 4, sealing an emphatic qualification to the FUTA Champions League Quarter-finals.",
+        playerOfMatch: "Oni Oluwadamilola (MCB)",
+        tacticalAnalysis: "MCB took control of the contest in the first half as Ameh Lucky broke the deadlock in the 22nd minute before Olaniran Oluwatimilehin doubled the advantage on the half-hour mark. Despite MBBS attempting to respond after the interval, MCB remained composed and wrapped up the victory in the 54th minute when captain Oni Oluwadamilola added a third goal to complete a convincing display. The clean-sheet victory sends MCB into the last eight, where they will face Anatomy (ANA) in the Quarter-finals.",
+        keyMoments: [
+          "1' - KICKOFF! Playoff 4 between MBBS and MCB is underway with high intensity.",
+          "22' - GOAL! Ameh Lucky scores for MCB! Clinical finish from close range to make it 1-0.",
+          "30' - GOAL! Olaniran Oluwatimilehin doubles the lead with a magnificent finish. MBBS 0 - 2 MCB.",
+          "30' - HALF-TIME! MCB leads 2-0 with a dominant first-half performance.",
+          "54' - GOAL! Captain Oni Oluwadamilola grabs a third for MCB! Clinical play. MBBS 0 - 3 MCB.",
+          "60' - FULL-TIME! MCB 3 - 0 MBBS. Microbiology is through to the Quarter-finals!"
         ],
         isPublished: true
       };
@@ -5260,6 +5363,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     }
     if (!loadedTimers['PO3']) {
       loadedTimers['PO3'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['PO4']) {
+      loadedTimers['PO4'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     if (!loadedTimers['md1-1'] || loadedTimers['md1-1'].liveMinute !== "FT") {
@@ -5320,12 +5427,12 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       loadedArticles = [
         {
           id: 'art-1',
-          title: 'Titan Clash: MST vs IFS Preview',
+          title: 'Titan Clash: MST vs ICE Preview',
           featuredImage: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?q=80&w=1000',
           author: 'Fabrizio',
           category: 'Match Preview',
-          body: 'The undisputed titans of the FUTA Champions League, defending champions MST and Information Systems (IFS) are set to lock horns in a match that will define the early leadership of the tournament. Both teams possess unyielding midfields and lightning-fast wingers. Pundits expect a tight, tactical battle of wits.',
-          tags: ['MST', 'IFS', 'Preview', 'Titans'],
+          body: 'The undisputed titans of the FUTA Champions League, defending champions MST and Information Commmunication Engineering (ICE) are set to lock horns in a match that will define the early leadership of the tournament. Both teams possess unyielding midfields and lightning-fast wingers. Pundits expect a tight, tactical battle of wits.',
+          tags: ['MST', 'ICE', 'Preview', 'Titans'],
           isPublished: true,
           createdAt: '2026-06-03 14:00',
           matchId: 'md1-1'
@@ -5809,7 +5916,11 @@ FUTA Champions League 2026 ⚽🏆`;
         team.isDisqualified = true;
         team.disqualificationReason = "Forestry and Wood Technology (FWT) has been disqualified from the 2026 FUTA Champions League due to incidents of team confrontation and intimidation of Building Technology (BDG) players on Match Day 2.";
       }
-      if (team.id === 'mst' || team.id === 'simt') {
+      if (team.id === 'mst') {
+        team.fineAmount = 10000;
+        team.finePaid = true;
+      }
+      if (team.id === 'simt') {
         team.fineAmount = 10000;
         team.finePaid = false;
       }
@@ -6088,7 +6199,7 @@ FUTA Champions League 2026 ⚽🏆`;
   }, [matches, computedTeams]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v31');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v32');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -6102,7 +6213,7 @@ FUTA Champions League 2026 ⚽🏆`;
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
       localStorage.removeItem('fcl_admin_news');
-      localStorage.setItem('fcl_reset_2026_ft_v31', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v32', 'true');
     }
 
     loadState();
