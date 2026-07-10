@@ -417,8 +417,12 @@ export default function PublicMatchCenter() {
   const getQualificationScenario = React.useCallback(() => {
     if (match.stage === 'Playoff Round' || match.id.startsWith('PO')) {
       let opponentText = "the Quarter-finals";
-      if (match.id === 'PO4') opponentText = "Anatomy (ANA) in the Quarter-finals";
-      else if (match.id === 'PO6') opponentText = "the Quarter-finals";
+      if (match.id === 'PO1') opponentText = "the Winner of Playoff 3 (in QF3)";
+      else if (match.id === 'PO2') opponentText = "the Winner of Playoff 6 (in QF4)";
+      else if (match.id === 'PO3') opponentText = "the Winner of Playoff 1 (in QF3)";
+      else if (match.id === 'PO4') opponentText = "Anatomy (ANA) (League 2nd Position in QF2)";
+      else if (match.id === 'PO5') opponentText = "League 1st Position (in QF1)";
+      else if (match.id === 'PO6') opponentText = "the Winner of Playoff 2 (in QF4)";
       
       return `Knockout tie: The winner of this match qualifies directly to face ${opponentText}. In case of a draw at full-time, the tie will be decided by a penalty shootout.`;
     }

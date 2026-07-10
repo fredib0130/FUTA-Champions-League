@@ -1597,19 +1597,19 @@ export const knockoutStructure = {
     { id: "PO6", stage: "Playoff Round", dateRange: "5th July 2026", fixture: "8th Place vs 9th Place" }
   ],
   quarterFinals: [
-    { id: "QF1", stage: "Quarter-finals", dateRange: "1st July 2026", fixture: "Seed 1 vs Winner of PO6" },
-    { id: "QF2", stage: "Quarter-finals", dateRange: "1st July 2026", fixture: "Seed 2 vs Winner of PO5" },
-    { id: "QF3", stage: "Quarter-finals", dateRange: "2nd July 2026", fixture: "Winner of PO2 vs Winner of PO4" },
-    { id: "QF4", stage: "Quarter-finals", dateRange: "2nd July 2026", fixture: "Winner of PO1 vs Winner of PO3" }
+    { id: "QF1", stage: "Quarter-finals", dateRange: "12th July 2026", fixture: "League 1st Position vs Winner of PO5" },
+    { id: "QF2", stage: "Quarter-finals", dateRange: "11th July 2026", fixture: "League 2nd Position vs Winner of PO4" },
+    { id: "QF3", stage: "Quarter-finals", dateRange: "12th July 2026", fixture: "Winner of PO1 vs Winner of PO3" },
+    { id: "QF4", stage: "Quarter-finals", dateRange: "11th July 2026", fixture: "Winner of PO2 vs Winner of PO6" }
   ],
   semiFinals: [
-    { id: "SF1_1", stage: "Semi-finals", dateRange: "4th July 2026", fixture: "Winner of QF1 vs Winner of QF3 (Leg 1)" },
-    { id: "SF1_2", stage: "Semi-finals", dateRange: "5th July 2026", fixture: "Winner of QF3 vs Winner of QF1 (Leg 2)" },
-    { id: "SF2_1", stage: "Semi-finals", dateRange: "4th July 2026", fixture: "Winner of QF2 vs Winner of QF4 (Leg 1)" },
-    { id: "SF2_2", stage: "Semi-finals", dateRange: "5th July 2026", fixture: "Winner of QF4 vs Winner of QF2 (Leg 2)" }
+    { id: "SF1_1", stage: "Semi-finals", dateRange: "TBA", fixture: "Winner of QF1 vs Winner of QF3 (Leg 1)" },
+    { id: "SF1_2", stage: "Semi-finals", dateRange: "TBA", fixture: "Winner of QF3 vs Winner of QF1 (Leg 2)" },
+    { id: "SF2_1", stage: "Semi-finals", dateRange: "TBA", fixture: "Winner of QF2 vs Winner of QF4 (Leg 1)" },
+    { id: "SF2_2", stage: "Semi-finals", dateRange: "TBA", fixture: "Winner of QF4 vs Winner of QF2 (Leg 2)" }
   ],
   final: [
-    { id: "FINAL", stage: "Final", dateRange: "6th July 2026", fixture: "Winner of SF1 vs Winner of SF2" }
+    { id: "FINAL", stage: "Final", dateRange: "TBA", fixture: "Winner of SF1 vs Winner of SF2" }
   ]
 };
 
@@ -1653,10 +1653,10 @@ export function Playoffs() {
       case 'PO4': return '6th Place vs 11th Place';
       case 'PO5': return '7th Place vs 10th Place';
       case 'PO6': return '8th Place vs 9th Place';
-      case 'QF1': return 'League 1st Position vs Winner of PO6';
-      case 'QF2': return 'League 2nd Position vs Winner of PO5';
-      case 'QF3': return 'Winner of PO2 vs Winner of PO4';
-      case 'QF4': return 'Winner of PO1 vs Winner of PO3';
+      case 'QF1': return 'League 1st Position vs Winner of PO5';
+      case 'QF2': return 'League 2nd Position vs Winner of PO4';
+      case 'QF3': return 'Winner of PO1 vs Winner of PO3';
+      case 'QF4': return 'Winner of PO2 vs Winner of PO6';
       case 'SF1_1': return 'Winner of QF1 vs Winner of QF3';
       case 'SF1_2': return 'Winner of QF3 vs Winner of QF1';
       case 'SF2_1': return 'Winner of QF2 vs Winner of QF4';

@@ -6197,7 +6197,7 @@ FUTA Champions League 2026 ⚽🏆`;
   }, [matches, computedTeams]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v32');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v33');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -6211,7 +6211,7 @@ FUTA Champions League 2026 ⚽🏆`;
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
       localStorage.removeItem('fcl_admin_news');
-      localStorage.setItem('fcl_reset_2026_ft_v32', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v33', 'true');
     }
 
     loadState();

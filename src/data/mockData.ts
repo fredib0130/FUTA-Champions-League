@@ -690,23 +690,75 @@ export const MATCHES: Match[] = [
     { playerName: 'Iyare Praise', isScored: true }
   ], lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round', referee: 'Jones (AGE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Ikwue David Oche' },
 
-  // --- QUARTER-FINALS (July 1 - 2) ---
-  { id: 'QF1', homeTeam: 'SEED1', awayTeam: 'PO6_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
-  { id: 'QF2', homeTeam: 'SEED2', awayTeam: 'PO5_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
-  { id: 'QF3', homeTeam: 'PO2_WINNER', awayTeam: 'PO4_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
-  { id: 'QF4', homeTeam: 'PO1_WINNER', awayTeam: 'PO3_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
+  // --- QUARTER-FINALS (July 11 - 12) ---
+  { id: 'QF1', homeTeam: 'SEED1', awayTeam: 'PO5_WINNER', date: 'Sunday, 12th July, 2026', time: '2:00 PM', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
+  { id: 'QF2', homeTeam: 'SEED2', awayTeam: 'PO4_WINNER', date: 'Saturday, 11th July, 2026', time: '2:00 PM', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
+  { id: 'QF3', homeTeam: 'PO1_WINNER', awayTeam: 'PO3_WINNER', date: 'Sunday, 12th July, 2026', time: '3:30 PM', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
+  { id: 'QF4', homeTeam: 'PO2_WINNER', awayTeam: 'PO6_WINNER', date: 'Saturday, 11th July, 2026', time: '3:30 PM', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
 
-  // --- SEMI-FINALS (July 4 - 5, Two-legged Home & Away Aggregate) ---
+  // --- SEMI-FINALS (Two-legged Home & Away Aggregate) ---
   { id: 'SF1_1', homeTeam: 'QF1_WINNER', awayTeam: 'QF3_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
   { id: 'SF1_2', homeTeam: 'QF3_WINNER', awayTeam: 'QF1_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
   { id: 'SF2_1', homeTeam: 'QF2_WINNER', awayTeam: 'QF4_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
   { id: 'SF2_2', homeTeam: 'QF4_WINNER', awayTeam: 'QF2_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
 
-  // --- FINAL (July 6) ---
+  // --- FINAL ---
   { id: 'FINAL', homeTeam: 'SF1_WINNER', awayTeam: 'SF2_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 7, stage: 'Final' },
 ];
 
 export const NEWS: NewsPost[] = [
+  {
+    id: 'official-quarter-final-draw-2026',
+    title: '🏆 OFFICIAL FCL 2026 QUARTER-FINAL DRAW & KNOCKOUT BRACKET RELEASED!',
+    excerpt: 'The FCL Committee has officially confirmed the Quarter-final pairings and schedules for the 11th and 12th of July 2026 at the Mini Pitch.',
+    content: `Published: 10th July, 2026
+Time: 12:00 PM
+
+The FUTA Champions League Committee is thrilled to announce the official draw, match schedules, and complete competition bracket for the highly anticipated **2026 Knockout Stage**!
+
+After an intense Group Phase and thrilling Playoff matches, the final eight elite departmental squads have been locked in. The battle for the ultimate crown of FUTA's premium inter-departmental tournament moves to the legendary **Mini Pitch** this weekend!
+
+---
+
+### 📅 THE QUARTER-FINAL FIXTURES
+
+Here is the officially confirmed schedule for the Quarter-finals:
+
+#### 🔹 Saturday, 11th July, 2026
+*   **Quarter-final 2 (2:00 PM):**  
+    **League 2nd Position** 🆚 **Winner of PO4 (Microbiology - MCB)**  
+    *Anatomy (ANA), having secured direct qualification, awaits the rampant MCB squad in what promises to be a masterclass duel.*
+*   **Quarter-final 4 (3:30 PM):**  
+    **Winner of PO2** 🆚 **Winner of PO6**  
+    *A high-octane clash featuring tactical giants fighting for a spot in the final four.*
+
+#### 🔹 Sunday, 12th July, 2026
+*   **Quarter-final 1 (2:00 PM):**  
+    **League 1st Position** 🆚 **Winner of PO5**  
+    *The league leaders take center stage, set to defend their seed against the hungry victors of Playoff 5.*
+*   **Quarter-final 3 (3:30 PM):**  
+    **Winner of PO1** 🆚 **Winner of PO3**  
+    *Two powerhouse contenders collide in a single-elimination face-off where only one can survive.*
+
+---
+
+### 🔄 ROAD TO THE GRAND FINAL
+
+The tournament now follows a revamped knockout structure designed to test tactical endurance and squad depth:
+
+1.  **Quarter-finals:** Single-leg elimination duels scheduled for **11–12 July 2026** at the Mini Pitch.
+2.  **Semi-finals:** A gruelling **two-legged (home and away aggregate)** format. If teams are tied on aggregate score at full-time of the second leg, the tie will proceed directly to a dramatic penalty shootout to determine the finalist.
+3.  **Grand Final:** A prestigious single-match championship showdown at the FUTA Main Pitch to crown the ultimate champion of FCL 2026!
+
+Stay tuned to the **Match Center** for live commentaries, instant score updates, tactical analyses, and official lineups as they are submitted!
+
+**Signed,**  
+**FUTA Champions League Organizing Committee**  
+*Building the Premier Inter-Departmental Football Competition in FUTA*`,
+    image: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
+    date: '2026-07-10',
+    category: 'Tournament Announcement'
+  },
   {
     id: 'disciplinary-mst-simt',
     title: '🚨 OFFICIAL STATEMENT ON THE MST vs SIMT FIXTURE',
