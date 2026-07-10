@@ -509,10 +509,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.awayPenalties !== official.awayPenalties ||
             JSON.stringify(m.penaltyShootoutHome) !== JSON.stringify(official.penaltyShootoutHome) ||
             JSON.stringify(m.penaltyShootoutAway) !== JSON.stringify(official.penaltyShootoutAway) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
-            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4') && m.status !== official.status) // Sync status specifically for matchdays and PO6, PO1, PO2, PO3, PO4
+            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4' || official.id === 'PO5') && m.status !== official.status) // Sync status specifically for matchdays and PO6, PO1, PO2, PO3, PO4, PO5
           ) {
             loadedMatches[index] = {
               ...m,
@@ -525,13 +525,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               refereeAssigned: official.refereeAssigned,
               matchApproved: official.matchApproved,
               officialsPanel: official.officialsPanel,
-              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4') ? official.status : m.status,
+              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4' || official.id === 'PO5') ? official.status : m.status,
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
               note: official.note,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4'].includes(official.id) ? official.awayScore : m.awayScore,
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5'].includes(official.id) ? official.awayScore : m.awayScore,
               homePenalties: official.homePenalties,
               awayPenalties: official.awayPenalties,
               penaltyShootoutHome: official.penaltyShootoutHome,
@@ -1779,6 +1779,17 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'goal-po4-lucky-22', matchId: 'PO4', playerName: 'Ameh Lucky', team: 'MCB', minute: "22'", type: 'Goal' },
         { id: 'goal-po4-timilehin-30', matchId: 'PO4', playerName: 'Olaniran Oluwatimilehin', team: 'MCB', minute: "30'", type: 'Goal' },
         { id: 'goal-po4-damilola-54', matchId: 'PO4', playerName: 'Oni Oluwadamilola', team: 'MCB', minute: "54'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'PO5')) {
+      loadedGoals.push(
+        { id: 'goal-po5-fola-15', matchId: 'PO5', playerName: 'Fola', team: 'APH', minute: "15'", type: 'Penalty' },
+        { id: 'goal-po5-toni-26', matchId: 'PO5', playerName: 'Toni', team: 'APH', minute: "26'", type: 'Penalty' },
+        { id: 'goal-po5-kunlex-35', matchId: 'PO5', playerName: 'Kunlex', team: 'APH', minute: "35'", type: 'Goal' },
+        { id: 'goal-po5-emmy-47', matchId: 'PO5', playerName: 'Emmy', team: 'APH', minute: "47'", type: 'Goal' },
+        { id: 'goal-po5-emmy-58', matchId: 'PO5', playerName: 'Emmy', team: 'APH', minute: "58'", type: 'Goal' }
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
@@ -5176,6 +5187,20 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
+    if (!loadedCommentary['PO5'] || loadedCommentary['PO5'].length === 0) {
+      loadedCommentary['PO5'] = [
+        { id: 'comm-po5-ft', matchId: 'PO5', minute: "60'", text: "🏁 FULL-TIME! APH 5 - 0 PHY. Animal Production and Health (APH) produced an absolute masterclass to defeat Physics (PHY) 5–0, earning a massive Quarter-final spot against the League 1st position! Emmy is named Man of the Match!", timestamp: "6:00 PM", type: 'general' },
+        { id: 'comm-po5-goal-emmy2', matchId: 'PO5', minute: "58'", text: "⚽ GOAL!!! Emmy scores again to secure his brace and make it five! A breathtaking performance! APH 5 - 0 PHY.", timestamp: "5:58 PM", type: 'goal' },
+        { id: 'comm-po5-goal-emmy1', matchId: 'PO5', minute: "47'", text: "⚽ GOAL!!! Emmy finds the back of the net with a clinical finish to extend the lead! APH 4 - 0 PHY.", timestamp: "5:47 PM", type: 'goal' },
+        { id: 'comm-po5-ht', matchId: 'PO5', minute: "30'", text: "⏸️ HALF-TIME! APH 3 - 0 PHY. A rampant first-half display from APH with goals from Fola, Toni, and Kunlex!", timestamp: "5:30 PM", type: 'general' },
+        { id: 'comm-po5-goal-kunlex', matchId: 'PO5', minute: "35'", text: "⚽ GOAL!!! Kunlex adds a third for APH with a fantastic finish! APH 3 - 0 PHY.", timestamp: "5:35 PM", type: 'goal' },
+        { id: 'comm-po5-goal-toni', matchId: 'PO5', minute: "26'", text: "⚽ GOAL!!! Toni converts another penalty! APH is in absolute dreamland! APH 2 - 0 PHY.", timestamp: "5:26 PM", type: 'goal' },
+        { id: 'comm-po5-goal-fola', matchId: 'PO5', minute: "15'", text: "⚽ GOAL!!! Fola steps up and slots the penalty home to open the scoring! APH 1 - 0 PHY.", timestamp: "5:15 PM", type: 'goal' },
+        { id: 'comm-po5-kickoff', matchId: 'PO5', minute: "1'", text: "🏁 KICKOFF! The Playoff Round match PO5 between APH and PHY gets underway at the Main Pitch! Tommy (URP) is the referee.", timestamp: "5:00 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
     setCommentaries(loadedCommentary);
 
     // 10. Reports
@@ -5350,6 +5375,26 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       };
       localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
     }
+    if (!loadedReports['PO5']) {
+      loadedReports['PO5'] = {
+        matchId: 'PO5',
+        summary: "Animal Production and Health (APH) qualifies for the Quarter-finals after a dominant 5–0 victory over Physics (PHY).",
+        playerOfMatch: "Emmy (APH)",
+        tacticalAnalysis: "APH completely controlled the tempo of this Playoff encounter from start to finish. APH's front line proved too hot to handle, earning two penalties early in the match which Fola and Toni clinically dispatched. Kunlex added a third before the break. In the second half, Emmy turned on the style, scoring a brilliant brace to seal a massive 5-0 win. PHY struggled to create any real danger against APH's resolute defensive lines.",
+        keyMoments: [
+          "1' - KICKOFF! Playoff 5 between APH and PHY gets underway at the Main Pitch under the supervision of referee Tommy (URP).",
+          "15' - GOAL! Fola opens the scoring for APH from the penalty spot! APH 1 - 0 PHY.",
+          "26' - GOAL! Toni converts another penalty to double the lead! APH 2 - 0 PHY.",
+          "35' - GOAL! Kunlex adds a third with a clinical finish! APH 3 - 0 PHY.",
+          "30' - HALF-TIME! APH 3 - 0 PHY. A dominant first-half performance from APH.",
+          "47' - GOAL! Emmy scores the fourth for APH with a precise strike! APH 4 - 0 PHY.",
+          "58' - GOAL! Emmy seals his brace with another brilliant finish to make it 5-0! APH 5 - 0 PHY.",
+          "60' - FULL-TIME! APH 5 - 0 PHY. Animal Production and Health advances to the Quarter-finals in stunning fashion, while Physics is eliminated from the competition."
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
     setReports(loadedReports);
 
     // 11. Timer Cache
@@ -5365,6 +5410,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     }
     if (!loadedTimers['PO4']) {
       loadedTimers['PO4'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['PO5']) {
+      loadedTimers['PO5'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     if (!loadedTimers['md1-1'] || loadedTimers['md1-1'].liveMinute !== "FT") {
@@ -6110,6 +6159,9 @@ FUTA Champions League 2026 ⚽🏆`;
       } else if (m.id === 'PO4') {
         homeTeam = 'MBBS';
         awayTeam = 'MCB';
+      } else if (m.id === 'PO5') {
+        homeTeam = 'APH';
+        awayTeam = 'PHY';
       } else if (m.id === 'PO6') {
         homeTeam = 'CSP';
         awayTeam = 'MST';
@@ -6159,6 +6211,9 @@ FUTA Champions League 2026 ⚽🏆`;
       } else if (m.id === 'PO4') {
         homeTeam = 'MBBS';
         awayTeam = 'MCB';
+      } else if (m.id === 'PO5') {
+        homeTeam = 'APH';
+        awayTeam = 'PHY';
       } else if (m.id === 'PO6') {
         homeTeam = 'CSP';
         awayTeam = 'MST';
@@ -6197,7 +6252,7 @@ FUTA Champions League 2026 ⚽🏆`;
   }, [matches, computedTeams]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v33');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v34');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -6211,7 +6266,7 @@ FUTA Champions League 2026 ⚽🏆`;
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
       localStorage.removeItem('fcl_admin_news');
-      localStorage.setItem('fcl_reset_2026_ft_v33', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v34', 'true');
     }
 
     loadState();

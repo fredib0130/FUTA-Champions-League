@@ -76,6 +76,9 @@ export const PLAYERS: Player[] = [
   { id: 'player-aph-kunlex', name: "Kunlex", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'aph', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=aph-kunlex' },
   { id: 'player-aph-emmanuel', name: "Emmanuel", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'aph', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=aph-emmanuel' },
   { id: 'player-aph-fola', name: "Fola", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'aph', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=aph-fola' },
+  { id: 'player-aph-toni', name: "Toni", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'aph', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=aph-toni' },
+  { id: 'player-aph-emmy', name: "Emmy", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'aph', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=aph-emmy' },
+  { id: 'player-aph-gk', name: "Adegoke", position: "GK" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'aph', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=aph-gk' },
   { id: 'player-csp-ademide', name: "Ademide", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'csp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=csp-ademide' },
   { id: 'player-csp-adedara', name: "Adedara", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'csp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=csp-adedara' },
   { id: 'player-csp-akindeko', name: "Akindeko Emmanuel", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'csp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=csp-akindeko' },
@@ -676,7 +679,7 @@ export const MATCHES: Match[] = [
   { id: 'PO2', homeTeam: 'SEED4', awayTeam: 'SEED13', date: '2026-07-05', time: '14:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 3, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round', referee: 'Tosin (MTS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Success Bayode' },
   { id: 'PO3', homeTeam: 'SEED5', awayTeam: 'SEED12', date: '2026-07-05', time: '15:30', venue: 'Main Pitch', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round', referee: 'Jones (AGE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Olasunkanmi Michael' },
   { id: 'PO4', homeTeam: 'SEED6', awayTeam: 'SEED11', date: '2026-07-05', time: '15:30', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 3, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round', referee: 'Tosin (MTS)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Oni Oluwadamilola' },
-  { id: 'PO5', homeTeam: 'SEED7', awayTeam: 'SEED10', date: '2026-07-05', time: '17:00', venue: 'Main Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 4, stage: 'Playoff Round' },
+  { id: 'PO5', homeTeam: 'SEED7', awayTeam: 'SEED10', date: '2026-07-05', time: '17:00', venue: 'Main Pitch', status: 'Finished', homeScore: 5, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 4, stage: 'Playoff Round', referee: 'Tommy (URP)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Emmy' },
   { id: 'PO6', homeTeam: 'SEED8', awayTeam: 'SEED9', date: '2026-07-05', time: '17:00', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 1, homePenalties: 3, awayPenalties: 5, penaltyShootoutHome: [
     { playerName: 'SOJ', isScored: true },
     { playerName: 'Akindeko Emmanuel', isScored: false },
@@ -996,6 +999,29 @@ export const MOCK_MATCH_STATS: MatchStats[] = MATCHES.map((match) => {
       awayFouls: 8,
       homeFreeKicks: 8,
       awayFreeKicks: 4
+    };
+  }
+  if (match.id === 'PO5') {
+    return {
+      matchId: match.id,
+      cornersHome: 0,
+      cornersAway: 0,
+      yellowCardsHome: 0,
+      yellowCardsAway: 0,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      homeCorners: 0,
+      awayCorners: 0,
+      homeYellowCards: 0,
+      awayYellowCards: 0,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 0,
+      awayOffsides: 0,
+      homeFouls: 0,
+      awayFouls: 0,
+      homeFreeKicks: 0,
+      awayFreeKicks: 0
     };
   }
   const charSum = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
