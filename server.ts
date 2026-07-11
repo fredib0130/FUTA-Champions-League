@@ -1485,6 +1485,126 @@ function seedAppearancesDB() {
     fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
     fs.writeFileSync(APPEARANCES_FILE, JSON.stringify(dbAppearances, null, 2), "utf-8");
   }
+
+  // Ensure QF2 appearances are seeded
+  if (dbPlayers.length > 0 && !dbAppearances.some(app => app.match_id === "QF2")) {
+    console.log("[Appearances DB] Seeding QF2 (CYS vs MCB) match appearances...");
+    let appearanceId = Math.max(0, ...dbAppearances.map(a => a.id)) + 1;
+    
+    const addRecord = (playerName: string, team: string, isStarting: boolean) => {
+      const foundInDb = dbPlayers.find(p => p.name.toLowerCase() === playerName.toLowerCase() || String(p.id) === playerName);
+      const cleanName = foundInDb ? foundInDb.name : playerName;
+
+      dbAppearances.push({
+        id: appearanceId++,
+        match_id: "QF2",
+        player_name: cleanName,
+        team: team.toUpperCase(),
+        is_starting: isStarting,
+        minutes_played: isStarting ? 90 : 30
+      });
+
+      if (foundInDb) {
+        foundInDb.appearances += 1;
+      }
+    };
+
+    const cysStarters = [
+      "Olabode Victor Oluwatosin",
+      "Adewumi Excel Joshua",
+      "Kadri Taofeek Akorede",
+      "Raji Jubril Olarewaju",
+      "Fashola Oluwatobi Joshua",
+      "Nwoke Isaac Honour",
+      "Ayeni Babatunde Paul",
+      "Onah Caleb Igoche",
+      "Jegede Daniel Kolawole",
+      "Olorunfemi Taiwo James",
+      "Akinyede Allen Oluwaferanmi"
+    ];
+    const cysSubs = ["Bello Daniel Damilare"];
+
+    const mcbStarters = [
+      "Adesuyi Oluwasegun",
+      "Adameji Isaac",
+      "Adeleye Blessing",
+      "Ayeni Opeyemi",
+      "Osowo Taiwo",
+      "Oni Oluwadamilola",
+      "Lawal Favour Ben",
+      "Alowonle Clement",
+      "Adenoye Paul",
+      "Ameh Lucky",
+      "Olaniran Oluwatimilehin"
+    ];
+    const mcbSubs = ["Olowu Dennis"];
+
+    cysStarters.forEach(p => addRecord(p, "CYS", true));
+    cysSubs.forEach(p => addRecord(p, "CYS", false));
+    mcbStarters.forEach(p => addRecord(p, "MCB", true));
+    mcbSubs.forEach(p => addRecord(p, "MCB", false));
+
+    fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
+    fs.writeFileSync(APPEARANCES_FILE, JSON.stringify(dbAppearances, null, 2), "utf-8");
+  }
+
+  // Ensure QF4 appearances are seeded
+  if (dbPlayers.length > 0 && !dbAppearances.some(app => app.match_id === "QF4")) {
+    console.log("[Appearances DB] Seeding QF4 (ANA vs MST) match appearances...");
+    let appearanceId = Math.max(0, ...dbAppearances.map(a => a.id)) + 1;
+    
+    const addRecord = (playerName: string, team: string, isStarting: boolean) => {
+      const foundInDb = dbPlayers.find(p => p.name.toLowerCase() === playerName.toLowerCase() || String(p.id) === playerName);
+      const cleanName = foundInDb ? foundInDb.name : playerName;
+
+      dbAppearances.push({
+        id: appearanceId++,
+        match_id: "QF4",
+        player_name: cleanName,
+        team: team.toUpperCase(),
+        is_starting: isStarting,
+        minutes_played: 90
+      });
+
+      if (foundInDb) {
+        foundInDb.appearances += 1;
+      }
+    };
+
+    const anaStarters = [
+      "Aina John",
+      "Adewole Ola",
+      "Alade Joshua",
+      "Ayeni Femi",
+      "Akinola Tunde",
+      "Arowolo Segun",
+      "Dele Adejumo",
+      "Ayodele Isaac",
+      "Adebanjo Blessing",
+      "Arogundade David",
+      "Success Bayode"
+    ];
+
+    const mstStarters = [
+      "Ogundeji Feyitunmise Hezekiah",
+      "Adeniyi Ademola Daniel",
+      "Bernard Augustine Obioma",
+      "Philip Believe Oluwashina",
+      "Akinnayajo Irewale",
+      "Adediran Olanrewaju Abeeb",
+      "Iyare Praise",
+      "Akintunde Ayomide Oluwaseyifunmi",
+      "Fabusuyi Daniel Oluwafisayo",
+      "Nkemjika Sydney",
+      "Boyede Joseph Ayomide"
+    ];
+
+    anaStarters.forEach(p => addRecord(p, "ANA", true));
+    mstStarters.forEach(p => addRecord(p, "MST", true));
+
+    fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
+    fs.writeFileSync(APPEARANCES_FILE, JSON.stringify(dbAppearances, null, 2), "utf-8");
+  }
 }
 
 // Invoke seeded check right away

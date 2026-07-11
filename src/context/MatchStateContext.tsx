@@ -509,10 +509,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.awayPenalties !== official.awayPenalties ||
             JSON.stringify(m.penaltyShootoutHome) !== JSON.stringify(official.penaltyShootoutHome) ||
             JSON.stringify(m.penaltyShootoutAway) !== JSON.stringify(official.penaltyShootoutAway) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'QF1', 'QF2', 'QF3', 'QF4'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'QF1', 'QF2', 'QF3', 'QF4'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
-            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4' || official.id === 'PO5') && m.status !== official.status) // Sync status specifically for matchdays and PO6, PO1, PO2, PO3, PO4, PO5
+            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4' || official.id === 'PO5' || official.id === 'QF1' || official.id === 'QF2' || official.id === 'QF3' || official.id === 'QF4') && m.status !== official.status) // Sync status specifically for matchdays, PO, and QF matches
           ) {
             loadedMatches[index] = {
               ...m,
@@ -525,13 +525,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               refereeAssigned: official.refereeAssigned,
               matchApproved: official.matchApproved,
               officialsPanel: official.officialsPanel,
-              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4' || official.id === 'PO5') ? official.status : m.status,
+              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4' || official.id === 'PO5' || official.id === 'QF1' || official.id === 'QF2' || official.id === 'QF3' || official.id === 'QF4') ? official.status : m.status,
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
               note: official.note,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5'].includes(official.id) ? official.awayScore : m.awayScore,
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'QF1', 'QF2', 'QF3', 'QF4'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'QF1', 'QF2', 'QF3', 'QF4'].includes(official.id) ? official.awayScore : m.awayScore,
               homePenalties: official.homePenalties,
               awayPenalties: official.awayPenalties,
               penaltyShootoutHome: official.penaltyShootoutHome,
@@ -1790,6 +1790,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'goal-po5-kunlex-35', matchId: 'PO5', playerName: 'Kunlex', team: 'APH', minute: "35'", type: 'Goal' },
         { id: 'goal-po5-emmy-47', matchId: 'PO5', playerName: 'Emmy', team: 'APH', minute: "47'", type: 'Goal' },
         { id: 'goal-po5-emmy-58', matchId: 'PO5', playerName: 'Emmy', team: 'APH', minute: "58'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'QF2')) {
+      loadedGoals.push(
+        { id: 'goal-qf2-ameh-25', matchId: 'QF2', playerName: 'Ameh Lucky', team: 'MCB', minute: "25'", type: 'Goal' },
+        { id: 'goal-qf2-taiwo-30', matchId: 'QF2', playerName: 'Olorunfemi Taiwo James', team: 'CYS', minute: "30'", type: 'Goal' }
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
@@ -3166,6 +3174,128 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       },
       away: {
         matchId: 'PO6',
+        teamAbbr: 'MST',
+        formation: '4-2-4',
+        captainId: 'player-mst-15', // Nkemjika Sydney (Captain)
+        players: {
+          'GK': 'player-mst-1',  // Ogundeji Feyitunmise Hezekiah
+          'RB': 'player-mst-7',  // Adeniyi Ademola Daniel
+          'CB1': 'player-mst-5', // Bernard Augustine Obioma
+          'CB2': 'player-mst-6', // Philip Believe Oluwashina
+          'LB': 'player-mst-3',  // Akinnayajo Irewale
+          'DM': 'player-mst-9',  // Adediran Olanrewaju Abeeb
+          'CM': 'player-mst-10', // Iyare Praise
+          'RW': 'player-mst-19', // Akintunde Ayomide Oluwaseyifunmi
+          'ST1': 'player-mst-18',// Fabusuyi Daniel Oluwafisayo
+          'ST2': 'player-mst-15',// Nkemjika Sydney (Captain)
+          'LW': 'player-mst-17'  // Boyede Joseph Ayomide
+        },
+        bench: [
+          'player-mst-4',  // Ojoisimi Bright Agbomizi
+          'player-mst-8',  // Ademisoye Segun
+          'player-mst-11', // Akinyo Boluwatife Precious
+          'player-mst-12', // Adekunle Ayomide Mubarak
+          'player-mst-13', // Olagunju Moses Temitope
+          'player-mst-14', // Ayeni Ayobami
+          'player-mst-16', // Shomuyiwa Lateef Babatunde
+          'player-mst-20', // Ekwe Fortune
+          'player-mst-21'  // Ikwue David Oche
+        ],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['QF2'] = {
+      home: {
+        matchId: 'QF2',
+        teamAbbr: 'CYS',
+        formation: '4-3-3',
+        captainId: 'player-cys-22', // Olorunfemi Taiwo James
+        players: {
+          'GK': 'player-cys-1',  // Olabode Victor Oluwatosin
+          'RB': 'player-cys-2',  // Adewumi Excel Joshua
+          'CB1': 'player-cys-3', // Kadri Taofeek Akorede
+          'CB2': 'player-cys-4', // Raji Jubril Olarewaju
+          'LB': 'player-cys-5',  // Fashola Oluwatobi Joshua
+          'DM': 'player-cys-6',  // Nwoke Isaac Honour
+          'CM1': 'player-cys-7', // Ayeni Babatunde Paul
+          'CM2': 'player-cys-8', // Onah Caleb Igoche
+          'LW': 'player-cys-10', // Jegede Daniel Kolawole
+          'ST': 'player-cys-22', // Olorunfemi Taiwo James
+          'RW': 'player-cys-11'  // Akinyede Allen Oluwaferanmi
+        },
+        bench: [
+          'player-cys-9', 'player-cys-12', 'player-cys-13', 'player-cys-14',
+          'player-cys-15', 'player-cys-16', 'player-cys-17', 'player-cys-18',
+          'player-cys-19', 'player-cys-20', 'player-cys-21', 'player-cys-23',
+          'player-cys-24'
+        ],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'QF2',
+        teamAbbr: 'MCB',
+        formation: '4-3-3',
+        captainId: 'player-mcb-6', // Oni Oluwadamilola (Captain)
+        players: {
+          'GK': 'player-mcb-1',  // Adesuyi Oluwasegun
+          'RB': 'player-mcb-12', // Adameji Isaac
+          'CB1': 'player-mcb-14', // Adeleye Blessing
+          'CB2': 'player-mcb-2',  // Ayeni Opeyemi
+          'LB': 'player-mcb-4',  // Osowo Taiwo
+          'DM': 'player-mcb-6',  // Oni Oluwadamilola (Captain)
+          'CM': 'player-mcb-7',  // Lawal Favour Ben
+          'AM': 'player-mcb-11', // Alowonle Clement
+          'RW': 'player-mcb-21', // Adenoye Paul
+          'ST': 'player-mcb-10', // Ameh Lucky
+          'LW': 'player-mcb-9'   // Olaniran Oluwatimilehin
+        },
+        bench: [
+          'player-mcb-3',  // Alagbe Jeremiah Kehinde
+          'player-mcb-5',  // Favour
+          'player-mcb-8',  // Olowu Dennis
+          'player-mcb-13', // Wasiu Ismaeel
+          'player-mcb-15', // Tallest
+          'player-mcb-16', // Arogunrerin Abdulsalam
+          'player-mcb-17', // Olaoye Festus
+          'player-mcb-18', // Dyno
+          'player-mcb-19', // Olanipekun Alfred
+          'player-mcb-20', // Fayipe Christopher
+          'player-mcb-22', // Oyelakin Fawaz
+          'player-mcb-23'  // Abdullattef Solah
+        ],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['QF4'] = {
+      home: {
+        matchId: 'QF4',
+        teamAbbr: 'ANA',
+        formation: '4-3-3',
+        captainId: 'player-ana-7', // Dele Adejumo
+        players: {
+          'GK': 'player-ana-1',  // Aina John
+          'RB': 'player-ana-2',  // Adewole Ola
+          'CB1': 'player-ana-3', // Alade Joshua
+          'CB2': 'player-ana-4', // Ayeni Femi
+          'LB': 'player-ana-5',  // Akinola Tunde
+          'DM': 'player-ana-6',  // Arowolo Segun
+          'CM1': 'player-ana-7', // Dele Adejumo (Captain)
+          'CM2': 'player-ana-8', // Ayodele Isaac
+          'RW': 'player-ana-9',  // Adebanjo Blessing
+          'ST': 'player-ana-12', // Success Bayode
+          'LW': 'player-ana-10'  // Arogundade David
+        },
+        bench: [
+          'player-ana-11', // Adebayo Samuel
+          'player-ana-13', // Isreal
+          'player-ana-14'  // Ademola Paul
+        ],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'QF4',
         teamAbbr: 'MST',
         formation: '4-2-4',
         captainId: 'player-mst-15', // Nkemjika Sydney (Captain)
@@ -5198,6 +5328,22 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'comm-po5-goal-fola', matchId: 'PO5', minute: "15'", text: "⚽ GOAL!!! Fola steps up and slots the penalty home to open the scoring! APH 1 - 0 PHY.", timestamp: "5:15 PM", type: 'goal' },
         { id: 'comm-po5-kickoff', matchId: 'PO5', minute: "1'", text: "🏁 KICKOFF! The Playoff Round match PO5 between APH and PHY gets underway at the Main Pitch! Tommy (URP) is the referee.", timestamp: "5:00 PM", type: 'general' }
       ];
+      loadedCommentary['QF2'] = [
+        { id: 'comm-qf2-ft', matchId: 'QF2', minute: "60'", text: "🏁 FULL-TIME! CYS 1 - 1 MCB (CYS wins 4-2 on penalties). Cyber Security (CYS) secures their place in the FUTA Champions League Semi-finals after a tense penalty shootout victory following a hard-fought 1-1 draw in regulation time! Olorunfemi Taiwo James is named Man of the Match!", timestamp: "4:00 PM", type: 'general' },
+        { id: 'comm-qf2-pens', matchId: 'QF2', minute: "60'", text: "🎯 PENALTY SHOOTOUT! CYS wins 4-2 on penalties. Olorunfemi Taiwo James, Jegede Daniel Kolawole, Akinyede Allen Oluwaferanmi, and Bello Daniel Damilare converted for CYS. For MCB, Oni Oluwadamilola and Olaniran Oluwatimilehin converted but Ameh Lucky and Olowu Dennis missed.", timestamp: "3:55 PM", type: 'general' },
+        { id: 'comm-qf2-goal-taiwo', matchId: 'QF2', minute: "30'", text: "⚽ GOAL!!! Olorunfemi Taiwo James scores the equalizer for CYS! Spectacular finish in the box to bring CYS level! CYS 1 - 1 MCB.", timestamp: "3:30 PM", type: 'goal' },
+        { id: 'comm-qf2-ht', matchId: 'QF2', minute: "30'", text: "⏸️ HALF-TIME! CYS 1 - 1 MCB. A fast-paced and highly tactical half ends level with goals from Ameh Lucky and Olorunfemi Taiwo James.", timestamp: "3:00 PM", type: 'general' },
+        { id: 'comm-qf2-goal-ameh', matchId: 'QF2', minute: "25'", text: "⚽ GOAL!!! Ameh Lucky breaks the deadlock for MCB! Clinical finish to put Microbiology ahead! CYS 0 - 1 MCB.", timestamp: "2:55 PM", type: 'goal' },
+        { id: 'comm-qf2-kickoff', matchId: 'QF2', minute: "1'", text: "🏁 KICKOFF! The high-stakes Quarter-final 2 between Cyber Security (CYS) and Microbiology (MCB) is underway at the Mini Pitch! Kizzy is the referee.", timestamp: "2:00 PM", type: 'general' }
+      ];
+      loadedCommentary['QF4'] = [
+        { id: 'comm-qf4-ft', matchId: 'QF4', minute: "60'", text: "🏁 FULL-TIME! ANA 0 - 0 MST (MST wins 4-2 on penalties). Marine Science and Technology (MST) advances to the FUTA Champions League Semi-finals after winning a highly intense penalty shootout 4–2 following a goalless draw in regulation time! Ogundeji Feyitunmise Hezekiah is named Man of the Match!", timestamp: "5:00 PM", type: 'general' },
+        { id: 'comm-qf4-pens', matchId: 'QF4', minute: "60'", text: "🎯 PENALTY SHOOTOUT! MST wins 4-2 on penalties. MST was clinical, converting all four of their spot-kicks, while ANA missed two of theirs to seal MST's passage into the last four!", timestamp: "4:55 PM", type: 'general' },
+        { id: 'comm-qf4-chance-ana', matchId: 'QF4', minute: "54'", text: "Chance! Success Bayode of ANA cuts inside and fires a curling effort, but Ogundeji Feyitunmise Hezekiah makes a stunning flying save to keep MST level!", timestamp: "4:40 PM", type: 'general' },
+        { id: 'comm-qf4-ht', matchId: 'QF4', minute: "30'", text: "⏸️ HALF-TIME! ANA 0 - 0 MST. An extremely disciplined and tactical first half ends goalless. Both defenses are refusing to yield.", timestamp: "4:00 PM", type: 'general' },
+        { id: 'comm-qf4-chance-mst', matchId: 'QF4', minute: "12'", text: "Chance! Nkemjika Sydney of MST fires from the edge of the area but it goes inches wide of the post.", timestamp: "3:42 PM", type: 'general' },
+        { id: 'comm-qf4-kickoff', matchId: 'QF4', minute: "1'", text: "🏁 KICKOFF! The crucial Quarter-final 4 match between Anatomy (ANA) and Marine Science and Technology (MST) is underway at the Mini Pitch! Kizzy is the referee.", timestamp: "3:30 PM", type: 'general' }
+      ];
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
@@ -5395,6 +5541,42 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       };
       localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
     }
+    if (!loadedReports['QF2']) {
+      loadedReports['QF2'] = {
+        matchId: 'QF2',
+        summary: "Cyber Security (CYS) secured their place in the FUTA Champions League Semi-finals after defeating Microbiology (MCB) 4–2 on penalties following an entertaining 1–1 draw in regulation time.",
+        playerOfMatch: "Olorunfemi Taiwo James (CYS)",
+        tacticalAnalysis: "Cyber Security (CYS) secured their place in the FUTA Champions League Semi-finals after defeating Microbiology (MCB) 4–2 on penalties following an entertaining 1–1 draw in regulation time. MCB struck first through Ameh Lucky in the 25th minute, but CYS responded five minutes later when Olorunfemi Taiwo James found the equaliser to send the contest into a penalty shootout. CYS held their nerve from twelve yards, converting all four of their spot-kicks, while MCB failed to convert two of theirs. The composed shootout performance ensured CYS progressed to the last four, where they await the winner of QF4.",
+        keyMoments: [
+          "1' - KICKOFF! The high-stakes Quarter-final 2 between CYS and MCB gets underway under the supervision of referee Kizzy.",
+          "25' - GOAL! Ameh Lucky scores for MCB with a clinical finish! CYS 0 - 1 MCB.",
+          "30' - GOAL! Olorunfemi Taiwo James equalizes for CYS! CYS 1 - 1 MCB.",
+          "30' - HALF-TIME! CYS 1 - 1 MCB. A fast-paced and highly tactical half ends level.",
+          "60' - FULL-TIME! CYS 1 - 1 MCB. The match goes straight to a penalty shootout!",
+          "60' - PENALTY SHOOTOUT! CYS wins 4-2 on penalties! CYS was clinical, converting all four of their five spot-kicks, while MCB missed two of theirs to seal CYS's passage into the last four!"
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+    if (!loadedReports['QF4']) {
+      loadedReports['QF4'] = {
+        matchId: 'QF4',
+        summary: "Marine Science and Technology (MST) secured their place in the FUTA Champions League Semi-finals after defeating Anatomy (ANA) 4–2 on penalties following a scoreless 0–0 draw in regulation time.",
+        playerOfMatch: "Ogundeji Feyitunmise Hezekiah (MST)",
+        tacticalAnalysis: "After 60 minutes of disciplined defending and few clear-cut chances, Marine Science and Technology (MST) and Anatomy (ANA) played out a goalless draw in regulation time. The contest was ultimately decided by a penalty shootout, where MST displayed remarkable composure by converting all four of their spot-kicks. ANA, however, failed to capitalize on two of their attempts, allowing MST to claim a 4–2 penalty shootout victory and secure a place in the FUTA Champions League Semi-finals. The victory marks MST's second consecutive knockout triumph via penalties, underlining their resilience in high-pressure situations.",
+        keyMoments: [
+          "1' - KICKOFF! The high-stakes Quarter-final 4 between Anatomy (ANA) and Marine Science and Technology (MST) gets underway under the supervision of referee Kizzy.",
+          "12' - CHANCE! Nkemjika Sydney of MST fires from the edge of the area but it goes inches wide of the post.",
+          "30' - HALF-TIME! ANA 0 - 0 MST. An extremely disciplined first half ends level.",
+          "54' - CHANCE! Success Bayode of ANA cuts inside and fires a curling effort, but Ogundeji Feyitunmise Hezekiah makes a stunning flying save to keep MST level!",
+          "60' - FULL-TIME! ANA 0 - 0 MST. The match goes straight to a penalty shootout!",
+          "60' - PENALTY SHOOTOUT! MST wins 4-2 on penalties! MST was clinical, converting all four of their spot-kicks, while ANA missed two of theirs to seal MST's passage into the last four!"
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
     setReports(loadedReports);
 
     // 11. Timer Cache
@@ -5414,6 +5596,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     }
     if (!loadedTimers['PO5']) {
       loadedTimers['PO5'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['QF2']) {
+      loadedTimers['QF2'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['QF4']) {
+      loadedTimers['QF4'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     if (!loadedTimers['md1-1'] || loadedTimers['md1-1'].liveMinute !== "FT") {
@@ -6252,7 +6442,7 @@ FUTA Champions League 2026 ⚽🏆`;
   }, [matches, computedTeams]);
 
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v34');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v35');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -6266,7 +6456,7 @@ FUTA Champions League 2026 ⚽🏆`;
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
       localStorage.removeItem('fcl_admin_news');
-      localStorage.setItem('fcl_reset_2026_ft_v34', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v35', 'true');
     }
 
     loadState();

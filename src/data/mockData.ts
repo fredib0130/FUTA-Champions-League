@@ -695,9 +695,30 @@ export const MATCHES: Match[] = [
 
   // --- QUARTER-FINALS (July 11 - 12) ---
   { id: 'QF1', homeTeam: 'SEED1', awayTeam: 'PO5_WINNER', date: 'Sunday, 12th July, 2026', time: '2:00 PM', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
-  { id: 'QF2', homeTeam: 'SEED2', awayTeam: 'PO4_WINNER', date: 'Saturday, 11th July, 2026', time: '2:00 PM', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
+  { id: 'QF2', homeTeam: 'SEED2', awayTeam: 'PO4_WINNER', date: 'Saturday, 11th July, 2026', time: '2:00 PM', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 1, homePenalties: 4, awayPenalties: 2, penaltyShootoutHome: [
+    { playerName: 'Penalty Scorer', isScored: true },
+    { playerName: 'Penalty Scorer', isScored: true },
+    { playerName: 'Penalty Scorer', isScored: true },
+    { playerName: 'Penalty Scorer', isScored: false },
+    { playerName: 'Penalty Scorer', isScored: true }
+  ], penaltyShootoutAway: [
+    { playerName: 'Penalty Scorer', isScored: false },
+    { playerName: 'Penalty Scorer', isScored: true },
+    { playerName: 'Penalty Scorer', isScored: true },
+    { playerName: 'Penalty Scorer', isScored: false }
+  ], lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 5, stage: 'Quarter-finals', referee: 'Kizzy', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Olorunfemi Taiwo James' },
   { id: 'QF3', homeTeam: 'PO1_WINNER', awayTeam: 'PO3_WINNER', date: 'Sunday, 12th July, 2026', time: '3:30 PM', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
-  { id: 'QF4', homeTeam: 'PO2_WINNER', awayTeam: 'PO6_WINNER', date: 'Saturday, 11th July, 2026', time: '3:30 PM', venue: 'Mini Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 5, stage: 'Quarter-finals' },
+  { id: 'QF4', homeTeam: 'PO2_WINNER', awayTeam: 'PO6_WINNER', date: 'Saturday, 11th July, 2026', time: '3:30 PM', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 0, homePenalties: 2, awayPenalties: 4, penaltyShootoutHome: [
+    { playerName: 'Penalty Scorer', isScored: true },
+    { playerName: 'Penalty Scorer', isScored: true },
+    { playerName: 'Penalty Scorer', isScored: false },
+    { playerName: 'Penalty Scorer', isScored: false }
+  ], penaltyShootoutAway: [
+    { playerName: 'Penalty Scorer', isScored: true },
+    { playerName: 'Penalty Scorer', isScored: true },
+    { playerName: 'Penalty Scorer', isScored: true },
+    { playerName: 'Penalty Scorer', isScored: true }
+  ], lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 5, stage: 'Quarter-finals', referee: 'Kizzy', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Ogundeji Feyitunmise Hezekiah' },
 
   // --- SEMI-FINALS (Two-legged Home & Away Aggregate) ---
   { id: 'SF1_1', homeTeam: 'QF1_WINNER', awayTeam: 'QF3_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
@@ -864,13 +885,13 @@ export const SPONSORS: Sponsor[] = [
 ];
 
 export const COEFFICIENTS: CoefficientRanking[] = [
-  { rank: 1, teamId: 'mst', teamName: 'Marine Science and Technology', points2026: 10.00, points2025: 16.00, totalCoefficient: 26.00, isActive: true, movement: '🟢➡️' },
+  { rank: 1, teamId: 'mst', teamName: 'Marine Science and Technology', points2026: 12.00, points2025: 16.00, totalCoefficient: 28.00, isActive: true, movement: '🟢➡️' },
   { rank: 2, teamId: 'bdg', teamName: 'Building Technology', points2026: 11.00, points2025: 13.00, totalCoefficient: 24.00, isActive: true, movement: '🟢➡️' },
   { rank: 3, teamId: 'ifs', teamName: 'Information Systems', points2026: 7.00, points2025: 16.00, totalCoefficient: 23.00, isActive: true, movement: '🟢➡️' },
-  { rank: 4, teamId: 'mcb', teamName: 'Micro Biology', points2026: 9.00, points2025: 11.00, totalCoefficient: 20.00, isActive: true, movement: '🟢➡️' },
+  { rank: 4, teamId: 'mcb', teamName: 'Micro Biology', points2026: 10.00, points2025: 11.00, totalCoefficient: 21.00, isActive: true, movement: '🟢➡️' },
   { rank: 5, teamId: 'csp', teamName: 'Crop Soil and Pest Management', points2026: 10.00, points2025: 8.00, totalCoefficient: 18.00, isActive: true, movement: '🟢➡️' },
   { rank: 6, teamId: 'ipe', teamName: 'Industrial and Production Engineering', points2026: 0.00, points2025: 17.00, totalCoefficient: 17.00, isActive: false, movement: '🔴➡️' },
-  { rank: 7, teamId: 'cys', teamName: 'Cyber Security', points2026: 13.00, points2025: 3.00, totalCoefficient: 16.00, isActive: true, movement: '🟢⬆️' },
+  { rank: 7, teamId: 'cys', teamName: 'Cyber Security', points2026: 15.00, points2025: 3.00, totalCoefficient: 18.00, isActive: true, movement: '🟢⬆️' },
   { rank: 8, teamId: 'agy', teamName: 'Applied Geology', points2026: 0.00, points2025: 15.00, totalCoefficient: 15.00, isActive: false, movement: '🔴⬇️' },
   { rank: 9, teamId: 'ice', teamName: 'Information and Communication Engineering', points2026: 14.00, points2025: 0.00, totalCoefficient: 14.00, isActive: true, movement: '🟢⬆️' },
   { rank: 10, teamId: 'mbbs', teamName: 'Medicine and Surgery', points2026: 10.00, points2025: 4.00, totalCoefficient: 14.00, isActive: true, movement: '🟢⬆️' },
@@ -881,7 +902,7 @@ export const COEFFICIENTS: CoefficientRanking[] = [
   { rank: 15, teamId: 'ent', teamName: 'Entrepreneurship', points2026: 4.00, points2025: 7.00, totalCoefficient: 11.00, isActive: true, movement: '🟢⬇️' },
   { rank: 16, teamId: 'mme', teamName: 'Metallurgical and Materials Engineering', points2026: 0.00, points2025: 11.00, totalCoefficient: 11.00, isActive: false, movement: '🔴⬇️' },
   { rank: 17, teamId: 'mne', teamName: 'Mining Engineering', points2026: 0.00, points2025: 11.00, totalCoefficient: 11.00, isActive: false, movement: '🔴⬇️' },
-  { rank: 18, teamId: 'ana', teamName: 'Anatomy', points2026: 10.00, points2025: 0.00, totalCoefficient: 10.00, isActive: true, movement: '🟢➡️' },
+  { rank: 18, teamId: 'ana', teamName: 'Anatomy', points2026: 11.00, points2025: 0.00, totalCoefficient: 11.00, isActive: true, movement: '🟢➡️' },
   { rank: 19, teamId: 'phy', teamName: 'Physics', points2026: 10.00, points2025: 0.00, totalCoefficient: 10.00, isActive: true, movement: '🟢⬇️' },
   { rank: 20, teamId: 'mts', teamName: 'Mathematics', points2026: 0.00, points2025: 9.00, totalCoefficient: 9.00, isActive: false, movement: '🔴⬇️' },
   { rank: 21, teamId: 'agp', teamName: 'Applied Geo-Physics', points2026: 8.00, points2025: 0.00, totalCoefficient: 8.00, isActive: true, movement: '🟢⬆️' },
