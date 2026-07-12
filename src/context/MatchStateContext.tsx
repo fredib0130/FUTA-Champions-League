@@ -1794,10 +1794,26 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
 
+    if (!loadedGoals.some(g => g.matchId === 'QF1')) {
+      loadedGoals.push(
+        { id: 'goal-qf1-onana-19-og', matchId: 'QF1', playerName: 'Onana', team: 'APH', minute: "19'", type: 'Own Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
     if (!loadedGoals.some(g => g.matchId === 'QF2')) {
       loadedGoals.push(
         { id: 'goal-qf2-ameh-25', matchId: 'QF2', playerName: 'Ameh Lucky', team: 'MCB', minute: "25'", type: 'Goal' },
         { id: 'goal-qf2-taiwo-30', matchId: 'QF2', playerName: 'Olorunfemi Taiwo James', team: 'CYS', minute: "30'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'QF3')) {
+      loadedGoals.push(
+        { id: 'goal-qf3-oluwafemi-9', matchId: 'QF3', playerName: 'Onileowo Oluwafemi', team: 'AGP', minute: "9'", type: 'Goal' },
+        { id: 'goal-qf3-michael-19', matchId: 'QF3', playerName: 'Olasunkanmi Michael', team: 'AGP', minute: "19'", type: 'Penalty' },
+        { id: 'goal-qf3-jesse-41', matchId: 'QF3', playerName: 'Nwachukwu Jesse', team: 'STA', minute: "41'", type: 'Penalty' }
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
@@ -1828,6 +1844,16 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
     let cardsUpdated_md1_5 = false;
     const officialMd1_5Cards: CardEvent[] = [
+      // QF1 Cards (ICE vs APH)
+      { id: 'card-qf1-muller-33', matchId: 'QF1', playerName: 'Muller', teamAbbr: 'ICE', minute: "33'", type: 'Yellow' },
+      { id: 'card-qf1-bigsam-50', matchId: 'QF1', playerName: 'Big Sam', teamAbbr: 'ICE', minute: "50'", type: 'Yellow' },
+      { id: 'card-qf1-unnamed-7', matchId: 'QF1', playerName: 'Unnamed player', teamAbbr: 'APH', minute: "7'", type: 'Yellow' },
+      { id: 'card-qf1-kunlex-9', matchId: 'QF1', playerName: 'Kunlex', teamAbbr: 'APH', minute: "9'", type: 'Yellow' },
+      { id: 'card-qf1-fola-17', matchId: 'QF1', playerName: 'Fola', teamAbbr: 'APH', minute: "17'", type: 'Yellow' },
+      { id: 'card-qf1-unnamed-26', matchId: 'QF1', playerName: 'Unnamed player', teamAbbr: 'APH', minute: "26'", type: 'Yellow' },
+      { id: 'card-qf1-unnamed-46', matchId: 'QF1', playerName: 'Unnamed player', teamAbbr: 'APH', minute: "46'", type: 'Yellow' },
+      { id: 'card-qf1-chosen-50', matchId: 'QF1', playerName: 'Chosen', teamAbbr: 'APH', minute: "50'", type: 'Yellow' },
+
       { id: 'card-md1-5-praise', matchId: 'md1-5', playerName: 'Praise', teamAbbr: 'BDG', minute: "38'", type: 'Yellow' },
       { id: 'card-md1-5-promise', matchId: 'md1-5', playerName: 'Promise', teamAbbr: 'ENT', minute: "15'", type: 'Yellow' },
       { id: 'card-md1-5-fairy', matchId: 'md1-5', playerName: 'Fairy', teamAbbr: 'ENT', minute: "55'", type: 'Yellow' },
@@ -1926,7 +1952,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'card-md3-9-fairy-y', matchId: 'md3-9', playerName: 'Fairy', teamAbbr: 'ENT', minute: "42'", type: 'Yellow' },
       { id: 'card-md3-9-bamidele-y', matchId: 'md3-9', playerName: 'Bamidele Fikayo', teamAbbr: 'MBBS', minute: "20'", type: 'Yellow' },
       { id: 'card-md3-9-drp-y', matchId: 'md3-9', playerName: 'Dr. P', teamAbbr: 'MBBS', minute: "33'", type: 'Yellow' },
-      { id: 'card-md3-9-adesola-y', matchId: 'md3-9', playerName: 'Adesola Emmanuel', teamAbbr: 'MBBS', minute: "55'", type: 'Yellow' }
+      { id: 'card-md3-9-adesola-y', matchId: 'md3-9', playerName: 'Adesola Emmanuel', teamAbbr: 'MBBS', minute: "55'", type: 'Yellow' },
+
+      // QF3 Cards (STA vs AGP)
+      { id: 'card-qf3-obafemi-48', matchId: 'QF3', playerName: 'Obafemi', teamAbbr: 'AGP', minute: "48'", type: 'Yellow' }
     ];
     officialMd1_5Cards.forEach(c => {
       const existingIdx = loadedCards.findIndex(existing => existing.id === c.id);
@@ -3205,6 +3234,51 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       }
     };
 
+    loadedLineups['QF1'] = {
+      home: {
+        matchId: 'QF1',
+        teamAbbr: 'ICE',
+        formation: '4-3-3',
+        captainId: 'player-ice-samson',
+        players: {
+          'GK': 'player-ice-prosper',
+          'RB': 'player-ice-bigsam',
+          'CB1': 'player-ice-farooq',
+          'CB2': 'player-ice-muller',
+          'LB': 'player-ice-usman',
+          'DM': 'player-ice-samson',
+          'CM1': 'player-ice-samson',
+          'CM2': 'player-ice-farooq',
+          'LW': 'player-ice-usman',
+          'ST': 'player-ice-farooq',
+          'RW': 'player-ice-muller'
+        },
+        bench: [],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'QF1',
+        teamAbbr: 'APH',
+        formation: '4-3-3',
+        captainId: 'player-aph-kunlex',
+        players: {
+          'GK': 'player-aph-gk',
+          'RB': 'player-aph-onana',
+          'CB1': 'player-aph-fola',
+          'CB2': 'player-aph-chosen',
+          'LB': 'player-aph-emmy',
+          'DM': 'player-aph-emmanuel',
+          'CM1': 'player-aph-toni',
+          'CM2': 'player-aph-emmy',
+          'LW': 'player-aph-fola',
+          'ST': 'player-aph-kunlex',
+          'RW': 'player-aph-emmanuel'
+        },
+        bench: [],
+        status: 'Approved'
+      }
+    };
+
     loadedLineups['QF2'] = {
       home: {
         matchId: 'QF2',
@@ -3264,6 +3338,51 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'player-mcb-22', // Oyelakin Fawaz
           'player-mcb-23'  // Abdullattef Solah
         ],
+        status: 'Approved'
+      }
+    };
+
+    loadedLineups['QF3'] = {
+      home: {
+        matchId: 'QF3',
+        teamAbbr: 'STA',
+        formation: '4-3-3',
+        captainId: 'player-sta-13', // Agbo Peter
+        players: {
+          'GK': 'player-sta-1',
+          'RB': 'player-sta-3',
+          'CB1': 'player-sta-4',
+          'CB2': 'player-sta-5',
+          'LB': 'player-sta-6',
+          'DM': 'player-sta-13',
+          'CM1': 'player-sta-2',
+          'CM2': 'player-sta-14',
+          'LW': 'player-sta-15',
+          'ST': 'player-sta-23', // Nwachukwu Jesse
+          'RW': 'player-sta-19'
+        },
+        bench: [],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'QF3',
+        teamAbbr: 'AGP',
+        formation: '4-3-3',
+        captainId: 'player-agp-14', // Akinyode Oluwaseun
+        players: {
+          'GK': 'player-agp-3',
+          'RB': 'player-agp-4',
+          'CB1': 'player-agp-5',
+          'CB2': 'player-agp-15', // Obafemi
+          'LB': 'player-agp-7',
+          'DM': 'player-agp-14', // Akinyode Oluwaseun
+          'CM1': 'player-agp-8',
+          'CM2': 'player-agp-9',
+          'LW': 'player-agp-10',
+          'ST': 'player-agp-13', // Onileowo Oluwafemi
+          'RW': 'player-agp-michael' // Olasunkanmi Michael
+        },
+        bench: [],
         status: 'Approved'
       }
     };
@@ -5328,6 +5447,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'comm-po5-goal-fola', matchId: 'PO5', minute: "15'", text: "⚽ GOAL!!! Fola steps up and slots the penalty home to open the scoring! APH 1 - 0 PHY.", timestamp: "5:15 PM", type: 'goal' },
         { id: 'comm-po5-kickoff', matchId: 'PO5', minute: "1'", text: "🏁 KICKOFF! The Playoff Round match PO5 between APH and PHY gets underway at the Main Pitch! Tommy (URP) is the referee.", timestamp: "5:00 PM", type: 'general' }
       ];
+      loadedCommentary['QF1'] = [
+        { id: 'comm-qf1-ft', matchId: 'QF1', minute: "60'", text: "🏁 FULL-TIME! ICE 1 - 0 APH. Information and Communication Engineering (ICE) booked their place in the FUTA Champions League Semi-finals after a disciplined 1-0 victory over Animal Production and Health (APH)! Kolade Farooq is named Man of the Match!", timestamp: "3:00 PM", type: 'general' },
+        { id: 'comm-qf1-defense', matchId: 'QF1', minute: "52'", text: "ICE is defending deep and compact. APH is throwing everything forward but cannot find a breakthrough against ICE's solid defensive wall.", timestamp: "2:52 PM", type: 'general' },
+        { id: 'comm-qf1-ht', matchId: 'QF1', minute: "30'", text: "⏸️ HALF-TIME! ICE 1 - 0 APH. A fast-paced half comes to a close with ICE leading courtesy of Onana's 19th-minute own goal.", timestamp: "2:30 PM", type: 'general' },
+        { id: 'comm-qf1-goal-og', matchId: 'QF1', minute: "19'", text: "⚽ OWN GOAL!!! Onana of APH turns the ball into his own net while attempting to clear! Tragic moment for APH, but ICE has the breakthrough! ICE 1 - 0 APH.", timestamp: "2:19 PM", type: 'goal' },
+        { id: 'comm-qf1-kickoff', matchId: 'QF1', minute: "1'", text: "🏁 KICKOFF! The highly-anticipated Quarter-final 1 between Information and Communication Engineering (ICE) and Animal Production and Health (APH) is underway at the Mini Pitch! Frank is the referee.", timestamp: "2:00 PM", type: 'general' }
+      ];
       loadedCommentary['QF2'] = [
         { id: 'comm-qf2-ft', matchId: 'QF2', minute: "60'", text: "🏁 FULL-TIME! CYS 1 - 1 MCB (CYS wins 4-2 on penalties). Cyber Security (CYS) secures their place in the FUTA Champions League Semi-finals after a tense penalty shootout victory following a hard-fought 1-1 draw in regulation time! Olorunfemi Taiwo James is named Man of the Match!", timestamp: "4:00 PM", type: 'general' },
         { id: 'comm-qf2-pens', matchId: 'QF2', minute: "60'", text: "🎯 PENALTY SHOOTOUT! CYS wins 4-2 on penalties. Olorunfemi Taiwo James, Jegede Daniel Kolawole, Akinyede Allen Oluwaferanmi, and Bello Daniel Damilare converted for CYS. For MCB, Oni Oluwadamilola and Olaniran Oluwatimilehin converted but Ameh Lucky and Olowu Dennis missed.", timestamp: "3:55 PM", type: 'general' },
@@ -5335,6 +5461,15 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'comm-qf2-ht', matchId: 'QF2', minute: "30'", text: "⏸️ HALF-TIME! CYS 1 - 1 MCB. A fast-paced and highly tactical half ends level with goals from Ameh Lucky and Olorunfemi Taiwo James.", timestamp: "3:00 PM", type: 'general' },
         { id: 'comm-qf2-goal-ameh', matchId: 'QF2', minute: "25'", text: "⚽ GOAL!!! Ameh Lucky breaks the deadlock for MCB! Clinical finish to put Microbiology ahead! CYS 0 - 1 MCB.", timestamp: "2:55 PM", type: 'goal' },
         { id: 'comm-qf2-kickoff', matchId: 'QF2', minute: "1'", text: "🏁 KICKOFF! The high-stakes Quarter-final 2 between Cyber Security (CYS) and Microbiology (MCB) is underway at the Mini Pitch! Kizzy is the referee.", timestamp: "2:00 PM", type: 'general' }
+      ];
+      loadedCommentary['QF3'] = [
+        { id: 'comm-qf3-ft', matchId: 'QF3', minute: "60'", text: "🏁 FULL-TIME! STA 1 - 2 AGP. Applied Geo-Physics (AGP) books their place in the FUTA Champions League Semi-finals with a hard-fought 2-1 victory over Statistics (STA)! Akinyode Oluwaseun is named Man of the Match after a flawless display!", timestamp: "5:00 PM", type: 'general' },
+        { id: 'comm-qf3-card-obafemi', matchId: 'QF3', minute: "48'", text: "🟨 YELLOW CARD! Obafemi of AGP receives a yellow card for a late challenge.", timestamp: "4:48 PM", type: 'general' },
+        { id: 'comm-qf3-goal-jesse', matchId: 'QF3', minute: "41'", text: "⚽ GOAL!!! Nwachukwu Jesse pulls one back for Statistics by calmly converting the penalty! Game on! STA 1 - 2 AGP.", timestamp: "4:41 PM", type: 'goal' },
+        { id: 'comm-qf3-ht', matchId: 'QF3', minute: "30'", text: "⏸️ HALF-TIME! STA 0 - 2 AGP. A dominant first half from Applied Geo-Physics sees them holding a comfortable two-goal cushion thanks to Onileowo Oluwafemi and Olasunkanmi Michael.", timestamp: "4:00 PM", type: 'general' },
+        { id: 'comm-qf3-goal-michael', matchId: 'QF3', minute: "19'", text: "⚽ GOAL!!! Olasunkanmi Michael steps up and converts from the penalty spot to double AGP's lead! STA 0 - 2 AGP.", timestamp: "3:49 PM", type: 'goal' },
+        { id: 'comm-qf3-goal-oluwafemi', matchId: 'QF3', minute: "9'", text: "⚽ GOAL!!! Onileowo Oluwafemi breaks the deadlock for AGP with a superb finish past the STA goalkeeper! STA 0 - 1 AGP.", timestamp: "3:39 PM", type: 'goal' },
+        { id: 'comm-qf3-kickoff', matchId: 'QF3', minute: "1'", text: "🏁 KICKOFF! The highly anticipated Quarter-final 3 between Statistics (STA) and Applied Geo-Physics (AGP) gets underway under the watchful eye of referee Frank!", timestamp: "3:30 PM", type: 'general' }
       ];
       loadedCommentary['QF4'] = [
         { id: 'comm-qf4-ft', matchId: 'QF4', minute: "60'", text: "🏁 FULL-TIME! ANA 0 - 0 MST (MST wins 4-2 on penalties). Marine Science and Technology (MST) advances to the FUTA Champions League Semi-finals after winning a highly intense penalty shootout 4–2 following a goalless draw in regulation time! Ogundeji Feyitunmise Hezekiah is named Man of the Match!", timestamp: "5:00 PM", type: 'general' },
@@ -5541,6 +5676,22 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       };
       localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
     }
+    if (!loadedReports['QF1']) {
+      loadedReports['QF1'] = {
+        matchId: 'QF1',
+        summary: "Information and Communication Engineering (ICE) booked their place in the FUTA Champions League Semi-finals after defeating Animal Production and Health (APH) 1–0.",
+        playerOfMatch: "Kolade Farooq (ICE)",
+        tacticalAnalysis: "Information and Communication Engineering (ICE) booked their place in the FUTA Champions League Semi-finals after securing a tight 1-0 victory over Animal Production and Health (APH). The only goal of the match came in the 19th minute, when an unfortunate own goal by APH defender Onana separated the two teams. ICE displayed remarkable defensive resilience and discipline to shut down APH's attackers and preserve their narrow lead. APH put up a valiant effort, but were ultimately unable to break through the compact and organized ICE structure. The victory books ICE's ticket to the last-four where they will face Statistics (STA) in Semi-final 1.",
+        keyMoments: [
+          "1' - KICKOFF! The crucial Quarter-final 1 match between ICE and APH gets underway under the supervision of referee Frank.",
+          "19' - GOAL! Onana of APH inadvertently turns the ball into his own net under pressure! ICE 1 - 0 APH.",
+          "30' - HALF-TIME! ICE 1 - 0 APH. A fast-paced and highly tactical first half ends with ICE in the lead.",
+          "60' - FULL-TIME! ICE 1 - 0 APH. Information and Communication Engineering holds on for a 1-0 win and secures a place in the Semi-finals!"
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
     if (!loadedReports['QF2']) {
       loadedReports['QF2'] = {
         matchId: 'QF2',
@@ -5554,6 +5705,25 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           "30' - HALF-TIME! CYS 1 - 1 MCB. A fast-paced and highly tactical half ends level.",
           "60' - FULL-TIME! CYS 1 - 1 MCB. The match goes straight to a penalty shootout!",
           "60' - PENALTY SHOOTOUT! CYS wins 4-2 on penalties! CYS was clinical, converting all four of their five spot-kicks, while MCB missed two of theirs to seal CYS's passage into the last four!"
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+    if (!loadedReports['QF3']) {
+      loadedReports['QF3'] = {
+        matchId: 'QF3',
+        summary: "Applied Geo-Physics (AGP) produced a commanding first-half display to defeat Statistics (STA) 2–1 and secure a historic place in the FUTA Champions League Semi-finals.",
+        playerOfMatch: "Akinyode Oluwaseun (AGP)",
+        tacticalAnalysis: "Applied Geo-Physics (AGP) booked their ticket to the last-four after an outstanding 2-1 victory over Statistics (STA). Onileowo Oluwafemi opened the scoring in the 9th minute with a clinical finish before Olasunkanmi Michael calmly converted from the penalty spot ten minutes later to double AGP's advantage. STA fought back in the second half when Nwachukwu Jesse converted a penalty in the 41st minute, but AGP's compact defensive structure, marshalled by Man of the Match Akinyode Oluwaseun in midfield, held firm to preserve the victory. The win completes the Semi-final lineup, where AGP will face Information and Communication Engineering (ICE) in Semi-final 1.",
+        keyMoments: [
+          "1' - KICKOFF! The highly-anticipated Quarter-final 3 between Statistics and Applied Geo-Physics is underway at the Mini Pitch under referee Frank.",
+          "9' - GOAL! Onileowo Oluwafemi breaks the deadlock with a clinical finish! STA 0 - 1 AGP.",
+          "19' - GOAL! Olasunkanmi Michael doubles AGP's lead from the penalty spot! STA 0 - 2 AGP.",
+          "30' - HALF-TIME! STA 0 - 2 AGP. Applied Geo-Physics in complete control at the break.",
+          "41' - GOAL! Nwachukwu Jesse pulls one back for STA with a calmly taken penalty! STA 1 - 2 AGP.",
+          "48' - Yellow Card! Obafemi of AGP is yellow-carded for a late tackle.",
+          "60' - FULL-TIME! STA 1 - 2 AGP. Applied Geo-Physics holds on for a historic 2-1 victory to advance to the Semi-finals!"
         ],
         isPublished: true
       };
@@ -5598,8 +5768,16 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       loadedTimers['PO5'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
+    if (!loadedTimers['QF1']) {
+      loadedTimers['QF1'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
     if (!loadedTimers['QF2']) {
       loadedTimers['QF2'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['QF3']) {
+      loadedTimers['QF3'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     if (!loadedTimers['QF4']) {

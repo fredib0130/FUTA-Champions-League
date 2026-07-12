@@ -1548,6 +1548,74 @@ function seedAppearancesDB() {
     fs.writeFileSync(APPEARANCES_FILE, JSON.stringify(dbAppearances, null, 2), "utf-8");
   }
 
+  // Ensure QF1 appearances are seeded
+  if (dbPlayers.length > 0 && !dbAppearances.some(app => app.match_id === "QF1")) {
+    console.log("[Appearances DB] Seeding QF1 (ICE vs APH) match appearances...");
+    let appearanceId = Math.max(0, ...dbAppearances.map(a => a.id)) + 1;
+    
+    const ensurePlayerInDb = (playerName: string, team: string, position: string = "MID") => {
+      let found = dbPlayers.find(p => p.name.toLowerCase() === playerName.toLowerCase() || String(p.id) === playerName);
+      if (!found) {
+        const nextId = Math.max(0, ...dbPlayers.map(p => p.id)) + 1;
+        const newPlayer = {
+          id: nextId,
+          name: playerName,
+          team: team.toUpperCase(),
+          position: position as any,
+          reg_number: `FCL/${team.toUpperCase()}/26/${1200 + nextId}`,
+          appearances: 0
+        };
+        dbPlayers.push(newPlayer);
+        found = newPlayer;
+      }
+      return found;
+    };
+
+    const addRecord = (playerName: string, team: string, isStarting: boolean, position: string = "MID") => {
+      const foundInDb = ensurePlayerInDb(playerName, team, position);
+      const cleanName = foundInDb ? foundInDb.name : playerName;
+
+      dbAppearances.push({
+        id: appearanceId++,
+        match_id: "QF1",
+        player_name: cleanName,
+        team: team.toUpperCase(),
+        is_starting: isStarting,
+        minutes_played: 90
+      });
+
+      if (foundInDb) {
+        foundInDb.appearances += 1;
+      }
+    };
+
+    const icePlayers = [
+      { name: "Adeyemi Prosper", pos: "GK" },
+      { name: "Big Sam", pos: "DEF" },
+      { name: "Kolade Farooq", pos: "MID" },
+      { name: "Muller", pos: "MID" },
+      { name: "Bamidele Usman", pos: "FWD" },
+      { name: "Olayiwola Samson", pos: "MID" }
+    ];
+
+    const aphPlayers = [
+      { name: "Adegoke", pos: "GK" },
+      { name: "Onana", pos: "DEF" },
+      { name: "Fola", pos: "MID" },
+      { name: "Chosen", pos: "MID" },
+      { name: "Emmy", pos: "MID" },
+      { name: "Emmanuel", pos: "MID" },
+      { name: "Toni", pos: "MID" },
+      { name: "Kunlex", pos: "FWD" }
+    ];
+
+    icePlayers.forEach(p => addRecord(p.name, "ICE", true, p.pos));
+    aphPlayers.forEach(p => addRecord(p.name, "APH", true, p.pos));
+
+    fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
+    fs.writeFileSync(APPEARANCES_FILE, JSON.stringify(dbAppearances, null, 2), "utf-8");
+  }
+
   // Ensure QF4 appearances are seeded
   if (dbPlayers.length > 0 && !dbAppearances.some(app => app.match_id === "QF4")) {
     console.log("[Appearances DB] Seeding QF4 (ANA vs MST) match appearances...");
