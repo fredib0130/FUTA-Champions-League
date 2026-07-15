@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Match, Team } from '../types';
-import { COEFFICIENTS } from '../data/mockData';
 import { cn } from '../lib/utils';
 import { Trophy, ChevronDown, ChevronUp, Radio } from 'lucide-react';
 import { useMatchState } from '../context/MatchStateContext';
@@ -13,7 +12,7 @@ interface MatchCardProps {
 }
 
 export function MatchCard({ match: initialMatch }: MatchCardProps) {
-  const { teams, detailedStats, activeMinAndStatus, matches } = useMatchState();
+  const { teams, detailedStats, activeMinAndStatus, matches, coefficients } = useMatchState();
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Fetch from live state list
@@ -119,8 +118,8 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
 
   const homeTeam = getDisplayTeam(match.homeTeam);
   const awayTeam = getDisplayTeam(match.awayTeam);
-  const homeCoeff = homeTeam ? COEFFICIENTS.find(c => c.teamId === homeTeam.id) : undefined;
-  const awayCoeff = awayTeam ? COEFFICIENTS.find(c => c.teamId === awayTeam.id) : undefined;
+  const homeCoeff = homeTeam ? coefficients.find(c => c.teamId === homeTeam.id) : undefined;
+  const awayCoeff = awayTeam ? coefficients.find(c => c.teamId === awayTeam.id) : undefined;
 
   const stats = detailedStats[match.id];
   const liveTimer = activeMinAndStatus[match.id];

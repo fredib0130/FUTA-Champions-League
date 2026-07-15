@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useMatchState } from '../context/MatchStateContext';
 import { parseMinuteToNumeric, formatMinuteDisplay } from '../types';
-import { PLAYERS, COEFFICIENTS } from '../data/mockData';
+import { PLAYERS } from '../data/mockData';
 import { TeamLogo } from '../components/TeamLogo';
 import { 
   ArrowLeft, Radio, Trophy, Calendar, Sparkles, Award, Shield, FileText, Send, Clock, List, Users, X, ShieldCheck
@@ -68,7 +68,7 @@ interface Toast {
 export default function PublicMatchCenter() {
   const { matchId } = useParams<{ matchId: string }>();
   const { 
-    matches, teams, detailedStats, goalScorers, cards, subs, commentaries, reports, activeMinAndStatus, lineups, players
+    matches, teams, detailedStats, goalScorers, cards, subs, commentaries, reports, activeMinAndStatus, lineups, players, coefficients
   } = useMatchState();
 
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -408,14 +408,14 @@ export default function PublicMatchCenter() {
   }, []);
 
   const getCoefficientRank = React.useCallback((teamIdCode: string) => {
-    const ranking = COEFFICIENTS.find(c => c.teamId.toLowerCase() === teamIdCode.toLowerCase());
+    const ranking = coefficients.find(c => c.teamId.toLowerCase() === teamIdCode.toLowerCase());
     if (!ranking) return '—';
     const rank = ranking.rank;
     if (rank === 1) return '🥇 1st';
     if (rank === 2) return '🥈 2nd';
     if (rank === 3) return '🥉 3rd';
     return `${rank}th`;
-  }, []);
+  }, [coefficients]);
 
   const getTeamFaculty = React.useCallback((teamId: string) => {
     const faculties: Record<string, string> = {

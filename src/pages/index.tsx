@@ -5,7 +5,7 @@ import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone
 import { Countdown } from '../components/Countdown';
 import { MatchCard } from '../components/MatchCard';
 import { PageHeader } from '../components/PageHeader';
-import { NEWS, SPONSORS, PLAYERS, COEFFICIENTS, TEAMS } from '../data/mockData';
+import { NEWS, SPONSORS, PLAYERS, TEAMS } from '../data/mockData';
 import { Match, Sponsor } from '../types';
 import { cn } from '../lib/utils';
 import { useMatchState } from '../context/MatchStateContext';
@@ -338,7 +338,7 @@ const SponsorCard: React.FC<SponsorCardProps> = ({ sponsor, onContactClick }) =>
 }
 
 export function Home() {
-  const { matches, sponsors, players, isLiveTableActive } = useMatchState();
+  const { matches, sponsors, players, isLiveTableActive, coefficients } = useMatchState();
   const [contactSponsor, setContactSponsor] = React.useState<Sponsor | null>(null);
   
   const completedMatches = React.useMemo(() => {
@@ -366,7 +366,7 @@ export function Home() {
       .slice(0, 3);
   }, [players]);
   const topTeamsTable = <LeagueTable limit={10} />;
-  const topCoefficients = COEFFICIENTS.slice(0, 3);
+  const topCoefficients = React.useMemo(() => coefficients.slice(0, 3), [coefficients]);
 
   return (
     <div className="space-y-32">
@@ -1603,10 +1603,10 @@ export const knockoutStructure = {
     { id: "QF4", stage: "Quarter-finals", dateRange: "11th July 2026", fixture: "Winner of PO2 vs Winner of PO6" }
   ],
   semiFinals: [
-    { id: "SF1_1", stage: "Semi-finals", dateRange: "TBA", fixture: "Winner of QF1 vs Winner of QF3 (Leg 1)" },
-    { id: "SF1_2", stage: "Semi-finals", dateRange: "TBA", fixture: "Winner of QF3 vs Winner of QF1 (Leg 2)" },
-    { id: "SF2_1", stage: "Semi-finals", dateRange: "TBA", fixture: "Winner of QF2 vs Winner of QF4 (Leg 1)" },
-    { id: "SF2_2", stage: "Semi-finals", dateRange: "TBA", fixture: "Winner of QF4 vs Winner of QF2 (Leg 2)" }
+    { id: "SF1_1", stage: "Semi-finals", dateRange: "17th July 2026", fixture: "Winner of QF1 vs Winner of QF3 (Leg 1)" },
+    { id: "SF1_2", stage: "Semi-finals", dateRange: "20th July 2026", fixture: "Winner of QF3 vs Winner of QF1 (Leg 2)" },
+    { id: "SF2_1", stage: "Semi-finals", dateRange: "17th July 2026", fixture: "Winner of QF2 vs Winner of QF4 (Leg 1)" },
+    { id: "SF2_2", stage: "Semi-finals", dateRange: "20th July 2026", fixture: "Winner of QF4 vs Winner of QF2 (Leg 2)" }
   ],
   final: [
     { id: "FINAL", stage: "Final", dateRange: "TBA", fixture: "Winner of SF1 vs Winner of SF2" }
@@ -1946,6 +1946,19 @@ export function Playoffs() {
             )}
           </div>
 
+          {/* Semi-final Rules Notice */}
+          {activeStage === 'semiFinals' && (
+            <div className="glass border border-[#00e5ff]/20 bg-[#00e5ff]/5 rounded-2xl p-4 mb-8 flex items-start gap-3">
+              <span className="text-xl">🏆</span>
+              <div>
+                <p className="text-xs font-black text-white uppercase tracking-wider mb-1">Semi-final Competition Rule</p>
+                <p className="text-xs text-white/80 leading-relaxed font-sans italic">
+                  "The winners on aggregate score over the two legs will qualify for the 2026 FUTA Champions League Final."
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Semi-final Ties aggregate summaries if in semi-finals stage */}
           {activeStage === 'semiFinals' && (
             <div className="grid md:grid-cols-2 gap-8 mb-8">
@@ -2042,6 +2055,31 @@ export function Playoffs() {
                       const isFinished = ['FINISHED', 'FULL-TIME', 'FULL TIME', 'COMPLETED'].includes(match.status.toUpperCase()) || match.walkover;
                       const isLive = ['LIVE', 'FIRST_HALF', 'SECOND_HALF', 'HALF_TIME'].includes(match.status.toUpperCase());
                       
+                      // Calculate live second leg aggregate text
+                      const isSecondLeg = match.id.endsWith('_2');
+                      let secondLegAggregateText = '';
+                      if (isSecondLeg) {
+                        const leg1Id = match.id.replace('_2', '_1');
+                        const leg1 = matches.find((m: any) => m.id === leg1Id);
+                        if (leg1) {
+                          const homeScore1 = leg1.homeScore ?? 0;
+                          const awayScore1 = leg1.awayScore ?? 0;
+                          const homeScore2 = match.homeScore ?? 0;
+                          const awayScore2 = match.awayScore ?? 0;
+                          
+                          // In second leg:
+                          // leg1: homeTeam = A, awayTeam = B
+                          // leg2: homeTeam = B, awayTeam = A
+                          const totalB = awayScore1 + homeScore2;
+                          const totalA = homeScore1 + awayScore2;
+                          
+                          const homeName = teams.find((t: any) => t.id.toLowerCase() === match.homeTeam.toLowerCase())?.id?.toUpperCase() || match.homeTeam.toUpperCase();
+                          const awayName = teams.find((t: any) => t.id.toLowerCase() === match.awayTeam.toLowerCase())?.id?.toUpperCase() || match.awayTeam.toUpperCase();
+                          
+                          secondLegAggregateText = `${homeName} ${totalB}–${totalA} ${awayName} on aggregate`;
+                        }
+                      }
+                      
                       return (
                         <tr key={match.id} className="hover:bg-white/[0.01] transition-colors">
                           {/* Match ID */}
@@ -2109,16 +2147,35 @@ export function Playoffs() {
                                     ({match.homePenalties} - {match.awayPenalties} pens)
                                   </span>
                                 )}
+                                {secondLegAggregateText && (
+                                  <span className="text-[9px] text-white/50 italic mt-0.5">
+                                    {secondLegAggregateText}
+                                  </span>
+                                )}
                               </div>
                             ) : isLive ? (
-                              <span className="font-black text-[#00e5ff] bg-[#00e5ff]/10 border border-[#00e5ff]/20 px-2.5 py-1 rounded-lg text-xs animate-pulse flex items-center gap-1.5 justify-end">
-                                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                                {match.homeScore} - {match.awayScore} LIVE
-                              </span>
+                              <div className="flex flex-col items-end gap-1">
+                                <span className="font-black text-[#00e5ff] bg-[#00e5ff]/10 border border-[#00e5ff]/20 px-2.5 py-1 rounded-lg text-xs animate-pulse flex items-center gap-1.5 justify-end">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                                  {match.homeScore} - {match.awayScore} LIVE
+                                </span>
+                                {secondLegAggregateText && (
+                                  <span className="text-[9px] text-[#00e5ff] font-bold animate-pulse mt-0.5">
+                                    {secondLegAggregateText}
+                                  </span>
+                                )}
+                              </div>
                             ) : (
-                              <span className="text-white/40 font-bold uppercase tracking-wider text-[10px] bg-white/5 border border-white/5 px-2 py-1 rounded-md">
-                                Scheduled
-                              </span>
+                              <div className="flex flex-col items-end gap-1">
+                                <span className="text-white/40 font-bold uppercase tracking-wider text-[10px] bg-white/5 border border-white/5 px-2 py-1 rounded-md">
+                                  Scheduled
+                                </span>
+                                {secondLegAggregateText && (
+                                  <span className="text-[9px] text-white/30 italic mt-0.5">
+                                    {secondLegAggregateText}
+                                  </span>
+                                )}
+                              </div>
                             )}
                           </td>
                         </tr>
@@ -4530,13 +4587,13 @@ const TECHNICAL_CREWS: Record<string, { headCoach: { name: string; phone?: strin
 
 export function TeamProfile() {
   const { id } = useParams();
-  const { players, teams } = useMatchState();
+  const { players, teams, coefficients } = useMatchState();
   const [selectedAccreditationPlayer, setSelectedAccreditationPlayer] = React.useState<any | null>(null);
   const team = teams.find(t => t.id === id) || TEAMS.find(t => t.id === id);
   const teamPlayers = players.filter(p => p.teamId === id);
   const activePlayers = teamPlayers.filter(p => !p.isFormer && !p.isInactive);
   const formerPlayers = teamPlayers.filter(p => p.isFormer || p.isInactive);
-  const teamCoefficient = COEFFICIENTS.find(c => c.teamId === id);
+  const teamCoefficient = coefficients.find(c => c.teamId === id);
 
   if (!team) return <div>Team not found</div>;
 
@@ -5080,6 +5137,7 @@ function PotAHighlight() {
 }
 
 export function Rankings() {
+  const { coefficients } = useMatchState();
   return (
     <div>
       <PageHeader 
@@ -5109,7 +5167,7 @@ export function Rankings() {
             </div>
           </aside>
           <div className="lg:col-span-3">
-            <CoefficientTable data={COEFFICIENTS} />
+            <CoefficientTable data={coefficients} />
           </div>
         </div>
 

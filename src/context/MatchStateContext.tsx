@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Match, Team, GoalScorer, MatchStats, Article, NewsItem, MatchPhoto, Sponsor, Player } from '../types';
-import { MATCHES, TEAMS, MOCK_MATCH_STATS, PLAYERS } from '../data/mockData';
+import { Match, Team, GoalScorer, MatchStats, Article, NewsItem, MatchPhoto, Sponsor, Player, CoefficientRanking } from '../types';
+import { MATCHES, TEAMS, MOCK_MATCH_STATS, PLAYERS, COEFFICIENTS } from '../data/mockData';
 import { fclApi } from '../lib/api';
 
 export interface CardEvent {
@@ -115,6 +115,7 @@ interface MatchStateContextType {
   matchPhotos: MatchPhoto[];
   isLiveTableActive: boolean;
   officialTeams: Team[];
+  coefficients: CoefficientRanking[];
   saveArticle: (article: Article) => void;
   deleteArticle: (id: string) => void;
   saveNewsItem: (newsItem: NewsItem) => void;
@@ -6631,8 +6632,230 @@ FUTA Champions League 2026 ⚽🏆`;
     });
   }, [matches, computedTeams]);
 
+  const computedCoefficients = React.useMemo(() => {
+    const activeTeams2026 = [
+      'mst', 'bdg', 'ifs', 'mcb', 'csp', 'cys', 'ice', 'mbbs', 'phs', 'agp', 
+      'ana', 'aph', 'idd', 'ent', 'phy', 'simt', 'sta', 'bch', 'age', 'fwt'
+    ];
+
+    const sortedLeagueTeams = [...computedTeams].sort((a, b) => {
+      const isDisqA = a.isDisqualified ? 1 : 0;
+      const isDisqB = b.isDisqualified ? 1 : 0;
+      if (isDisqA !== isDisqB) return isDisqA - isDisqB;
+
+      if ((b.points || 0) !== (a.points || 0)) return (b.points || 0) - (a.points || 0);
+      const gdA = a.goalDifference !== undefined ? a.goalDifference : (a.goalsFor - a.goalsAgainst);
+      const gdB = b.goalDifference !== undefined ? b.goalDifference : (b.goalsFor - b.goalsAgainst);
+      if (gdB !== gdA) return gdB - gdA;
+
+      if ((b.goalsFor || 0) !== (a.goalsFor || 0)) return (b.goalsFor || 0) - (a.goalsFor || 0);
+      if ((a.goalsAgainst || 0) !== (b.goalsAgainst || 0)) return (a.goalsAgainst || 0) - (b.goalsAgainst || 0);
+      if ((a.played || 0) !== (b.played || 0)) return (a.played || 0) - (b.played || 0);
+      if ((b.won || 0) !== (a.won || 0)) return (b.won || 0) - (a.won || 0);
+      return a.id.toUpperCase().localeCompare(b.id.toUpperCase());
+    });
+
+    const finishedMatches = resolvedMatches.filter(m => {
+      const s = m.status.trim().toUpperCase();
+      return s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED';
+    });
+
+    const getWinnerOfKnockout = (matchId: string): string => {
+      const m = finishedMatches.find(x => x.id === matchId);
+      if (!m) return '';
+      if (m.homeScore > m.awayScore) return m.homeTeam.toLowerCase();
+      if (m.awayScore > m.homeScore) return m.awayTeam.toLowerCase();
+      if (m.homePenalties !== undefined && m.awayPenalties !== undefined) {
+        return m.homePenalties > m.awayPenalties ? m.homeTeam.toLowerCase() : m.awayTeam.toLowerCase();
+      }
+      return '';
+    };
+
+    const coeffMap: Record<string, number> = {};
+
+    // Base qualification points:
+    // Qualifying for FCL League Phase: +2
+    // Winner of qualifying final: +2 (total +4)
+    // Runner-up: +1 (total +3)
+    const qualificationPoints: Record<string, number> = {
+      mst: 4, // SEMS champion
+      bdg: 4, // SET champion
+      ifs: 4, // SOC champion
+      mcb: 4, // SLS champion
+      csp: 3, // SAAT runner-up
+      cys: 3, // SOC runner-up
+      ice: 4, // SEET champion
+      mbbs: 3, // SCS representative
+      phs: 4, // SBMS champion
+      agp: 3, // SEMS runner-up
+      ana: 3, // SBMS runner-up
+      aph: 3, // SAAT runner-up
+      idd: 3, // SET runner-up
+      ent: 3, // SLIT runner-up
+      phy: 4, // SPS champion
+      simt: 3, // runner-up / qualifier
+      sta: 3, // runner-up / qualifier
+      bch: 3, // SLS runner-up
+      age: 3, // SEET runner-up
+      fwt: 3, // FA Cup runner-up
+    };
+
+    activeTeams2026.forEach(tid => {
+      coeffMap[tid] = qualificationPoints[tid] || 2;
+    });
+
+    // 1. League Phase Performance
+    finishedMatches.forEach(m => {
+      const isLeague = !m.id.startsWith('PO') && !m.id.startsWith('QF') && !m.id.startsWith('SF') && m.id !== 'FINAL';
+      if (!isLeague) return;
+
+      const home = m.homeTeam.toLowerCase();
+      const away = m.awayTeam.toLowerCase();
+
+      if (m.homeScore > m.awayScore) {
+        if (coeffMap[home] !== undefined) coeffMap[home] += 3;
+      } else if (m.homeScore < m.awayScore) {
+        if (coeffMap[away] !== undefined) coeffMap[away] += 3;
+      } else {
+        if (coeffMap[home] !== undefined) coeffMap[home] += 1;
+        if (coeffMap[away] !== undefined) coeffMap[away] += 1;
+      }
+    });
+
+    // 2. League Phase Position points (End of League Phase)
+    // Finish 1st–2nd: +3
+    // Finish 3rd–14th: +1
+    sortedLeagueTeams.forEach((team, idx) => {
+      const tid = team.id.toLowerCase();
+      if (coeffMap[tid] === undefined) return;
+      const rank = idx + 1;
+      if (rank >= 1 && rank <= 2) {
+        coeffMap[tid] += 3;
+      } else if (rank >= 3 && rank <= 14) {
+        coeffMap[tid] += 1;
+      }
+    });
+
+    // 3. Playoff Progression Points (+1)
+    finishedMatches.forEach(m => {
+      if (!m.id.startsWith('PO')) return;
+      const winner = getWinnerOfKnockout(m.id);
+      if (winner && coeffMap[winner] !== undefined) {
+        coeffMap[winner] += 1;
+      }
+    });
+
+    // 4. Quarter-final Progression Points (+1)
+    finishedMatches.forEach(m => {
+      if (!m.id.startsWith('QF')) return;
+      const winner = getWinnerOfKnockout(m.id);
+      if (winner && coeffMap[winner] !== undefined) {
+        coeffMap[winner] += 1;
+      }
+    });
+
+    // 5. Semi-finals: scored per leg
+    finishedMatches.forEach(m => {
+      if (!m.id.startsWith('SF')) return;
+      const home = m.homeTeam.toLowerCase();
+      const away = m.awayTeam.toLowerCase();
+
+      if (m.homeScore > m.awayScore) {
+        if (coeffMap[home] !== undefined) coeffMap[home] += 3;
+      } else if (m.homeScore < m.awayScore) {
+        if (coeffMap[away] !== undefined) coeffMap[away] += 3;
+      } else {
+        if (coeffMap[home] !== undefined) coeffMap[home] += 1;
+        if (coeffMap[away] !== undefined) coeffMap[away] += 1;
+      }
+    });
+
+    // 6. Final points
+    const finalMatch = finishedMatches.find(m => m.id === 'FINAL');
+    if (finalMatch) {
+      const home = finalMatch.homeTeam.toLowerCase();
+      const away = finalMatch.awayTeam.toLowerCase();
+      let winner = '';
+      let runnerUp = '';
+
+      if (finalMatch.homeScore > finalMatch.awayScore) {
+        winner = home;
+        runnerUp = away;
+      } else if (finalMatch.awayScore > finalMatch.homeScore) {
+        winner = away;
+        runnerUp = home;
+      } else if (finalMatch.homePenalties !== undefined && finalMatch.awayPenalties !== undefined) {
+        if (finalMatch.homePenalties > finalMatch.awayPenalties) {
+          winner = home;
+          runnerUp = away;
+        } else {
+          winner = away;
+          runnerUp = home;
+        }
+      }
+
+      if (winner && coeffMap[winner] !== undefined) coeffMap[winner] += 3;
+      if (runnerUp && coeffMap[runnerUp] !== undefined) coeffMap[runnerUp] += 2;
+    }
+
+    const initialRanks = COEFFICIENTS.reduce((acc, c, idx) => {
+      acc[c.teamId.toLowerCase()] = idx + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const list: CoefficientRanking[] = COEFFICIENTS.map(c => {
+      const tid = c.teamId.toLowerCase();
+      const isActive = activeTeams2026.includes(tid);
+      const points2026 = isActive ? (coeffMap[tid] ?? 0) : 0;
+      const totalCoefficient = c.points2025 + points2026;
+
+      return {
+        rank: 0,
+        teamId: c.teamId,
+        teamName: c.teamName,
+        points2026,
+        points2025: c.points2025,
+        totalCoefficient,
+        isActive,
+        movement: '⚪►'
+      };
+    });
+
+    // Sort by total coefficient (descending). If tied, sort by 2026 points (descending), then 2025 points (descending), then alphabetically by team abbreviation (teamId).
+    list.sort((a, b) => {
+      if (b.totalCoefficient !== a.totalCoefficient) {
+        return b.totalCoefficient - a.totalCoefficient;
+      }
+      if (b.points2026 !== a.points2026) {
+        return b.points2026 - a.points2026;
+      }
+      if (b.points2025 !== a.points2025) {
+        return b.points2025 - a.points2025;
+      }
+      return a.teamId.toUpperCase().localeCompare(b.teamId.toUpperCase());
+    });
+
+    return list.map((item, idx) => {
+      const currentRank = idx + 1;
+      const initialRank = initialRanks[item.teamId.toLowerCase()] || 31;
+      
+      let movement = '⚪►';
+      if (currentRank < initialRank) {
+        movement = '🟢▲';
+      } else if (currentRank > initialRank) {
+        movement = '🔴▼';
+      }
+
+      return {
+        ...item,
+        rank: currentRank,
+        movement
+      };
+    });
+  }, [resolvedMatches, computedTeams]);
+
   useEffect(() => {
-    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v35');
+    const hasReset = localStorage.getItem('fcl_reset_2026_ft_v36');
     if (!hasReset) {
       localStorage.removeItem('fcl_admin_matches');
       localStorage.removeItem('fcl_admin_teams');
@@ -6646,7 +6869,7 @@ FUTA Champions League 2026 ⚽🏆`;
       localStorage.removeItem('fcl_admin_reports');
       localStorage.removeItem('fcl_admin_timers');
       localStorage.removeItem('fcl_admin_news');
-      localStorage.setItem('fcl_reset_2026_ft_v35', 'true');
+      localStorage.setItem('fcl_reset_2026_ft_v36', 'true');
     }
 
     loadState();
@@ -7948,6 +8171,7 @@ FUTA Champions League 2026 ⚽🏆`;
         activeMinAndStatus,
         isLiveTableActive,
         officialTeams,
+        coefficients: computedCoefficients,
         login,
         logout,
         startMatch,
