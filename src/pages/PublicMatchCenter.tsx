@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useMatchState } from '../context/MatchStateContext';
 import { parseMinuteToNumeric, formatMinuteDisplay } from '../types';
-import { PLAYERS } from '../data/mockData';
+import { PLAYERS, COEFFICIENTS } from '../data/mockData';
 import { TeamLogo } from '../components/TeamLogo';
 import { 
   ArrowLeft, Radio, Trophy, Calendar, Sparkles, Award, Shield, FileText, Send, Clock, List, Users, X, ShieldCheck
@@ -247,7 +247,7 @@ export default function PublicMatchCenter() {
       const oppScore = isHome ? m.awayScore : m.homeScore;
 
       let outcome: 'W' | 'D' | 'L' = 'D';
-      let outcomeCircle = '🟨';
+      let outcomeCircle = '⚪';
       let detail = '';
 
       if (teamScore > oppScore) {
@@ -262,16 +262,16 @@ export default function PublicMatchCenter() {
           const oppPens = isHome ? m.awayPenalties : m.homePenalties;
           if (teamPens > oppPens) {
             outcome = 'W';
-            outcomeCircle = '🟩';
+            outcomeCircle = '🟡🟢';
             detail = ` (Won ${teamPens}–${oppPens} Pens)`;
           } else {
             outcome = 'L';
-            outcomeCircle = '🟧';
+            outcomeCircle = '🟠🔴';
             detail = ` (Lost ${oppPens}–${teamPens} Pens)`;
           }
         } else {
           outcome = 'D';
-          outcomeCircle = '🟨';
+          outcomeCircle = '⚪';
         }
       }
 
@@ -339,6 +339,157 @@ export default function PublicMatchCenter() {
     const idx = sortedStandings.findIndex(t => t.id.toLowerCase() === teamIdCode.toLowerCase());
     return idx !== -1 ? idx + 1 : '—';
   }, [sortedStandings]);
+
+  const getFormatRankSuffix = React.useCallback((rank: number | string) => {
+    if (typeof rank === 'string') return rank;
+    if (rank === 1) return '1st';
+    if (rank === 2) return '2nd';
+    if (rank === 3) return '3rd';
+    
+    const j = rank % 10;
+    const k = rank % 100;
+    if (j === 1 && k !== 11) {
+      return `${rank}st`;
+    }
+    if (j === 2 && k !== 12) {
+      return `${rank}nd`;
+    }
+    if (j === 3 && k !== 13) {
+      return `${rank}rd`;
+    }
+    return `${rank}th`;
+  }, []);
+
+  const getCoefficientRank = React.useCallback((teamIdCode: string) => {
+    const ranking = COEFFICIENTS.find(c => c.teamId.toLowerCase() === teamIdCode.toLowerCase());
+    if (!ranking) return '—';
+    const rank = ranking.rank;
+    if (rank === 1) return '🥇 1st';
+    if (rank === 2) return '🥈 2nd';
+    if (rank === 3) return '🥉 3rd';
+    return `${rank}th`;
+  }, []);
+
+  const getTeamFaculty = React.useCallback((teamId: string) => {
+    const faculties: Record<string, string> = {
+      age: "School of Engineering & Engineering Technology (SEET)",
+      agp: "School of Earth & Mineral Sciences (SEMS)",
+      ana: "School of Basic Medical Sciences (SBMS)",
+      aph: "School of Agriculture & Agricultural Technology (SAAT)",
+      bch: "School of Life Sciences (SLS)",
+      bdg: "School of Environmental Technology (SET)",
+      csp: "School of Agriculture & Agricultural Technology (SAAT)",
+      cys: "School of Computing (SOC)",
+      ent: "School of Logistics & Innovation Technology (SLIT)",
+      fwt: "School of Agriculture & Agricultural Technology (SAAT)",
+      ice: "School of Engineering & Engineering Technology (SEET)",
+      idd: "School of Environmental Technology (SET)",
+      ifs: "School of Computing (SOC)",
+      mbbs: "School of Clinical Sciences (SCS)",
+      mcb: "School of Life Sciences (SLS)",
+      mst: "School of Earth & Mineral Sciences (SEMS)",
+      phs: "School of Basic Medical Sciences (SBMS)",
+      phy: "School of Physical Sciences (SPS)",
+      simt: "School of Logistics & Innovation Technology (SLIT)",
+      sta: "School of Physical Sciences (SPS)"
+    };
+    return faculties[teamId.toLowerCase()] || "School of Sciences (SOS)";
+  }, []);
+
+  const getTeamStadium = React.useCallback((teamId: string) => {
+    const stadiums: Record<string, string> = {
+      age: "SEET Arena",
+      agp: "AGP Field",
+      ana: "Anatomy Ground",
+      aph: "SAAT Park",
+      bch: "BCH Court",
+      bdg: "SET Stadium",
+      csp: "SAAT Turf",
+      cys: "SOC Fortress",
+      ent: "SLIT Court",
+      fwt: "SAAT Ground",
+      ice: "SEET Pitch",
+      idd: "SET Studio Ground",
+      ifs: "SOC Ground",
+      mbbs: "MBBS Arena",
+      mcb: "SLS Turf",
+      mst: "Mariners Fortress",
+      phs: "Physiology Field",
+      phy: "Physicsian Stadium",
+      simt: "SLIT Field",
+      sta: "STA Ground"
+    };
+    return stadiums[teamId.toLowerCase()] || "FUTA Mini Pitch";
+  }, []);
+
+  const getTeamCoach = React.useCallback((teamId: string) => {
+    const coaches: Record<string, string> = {
+      fwt: "Omoloye Olaide",
+      mst: "Esezobor Isaac Eromosele",
+      cys: "Awosan Simileoluwa Olawale",
+      simt: "Asinwa Peter Adeleke",
+      sta: "Timilehin Joseph Abegunde",
+      ifs: "Hountodji Shadrach",
+      mcb: "Adeyinka Adetoye Israel",
+      phy: "Daniel Adura",
+      age: "Adejumo Adedapo Ayomide",
+      agp: "Faola Emmanuel Ifeoluwa",
+      ana: "N/A",
+      aph: "N/A",
+      bch: "N/A",
+      bdg: "Akinyele Mustaqueem",
+      csp: "N/A",
+      ent: "N/A",
+      ice: "Oghenekeno Israel Okoh",
+      idd: "Oludayo Marvellous",
+      mbbs: "Oluyamo Ayomikun",
+      phs: "N/A"
+    };
+    return coaches[teamId.toLowerCase()] || "N/A";
+  }, []);
+
+  const getTeamCaptain = React.useCallback((teamId: string) => {
+    const caps: Record<string, string> = {
+      cys: "Fashola Oluwatobi Joshua",
+      mcb: "Oni Oluwadamilola",
+      mst: "Adeyemi Adedayo Ibrahim",
+      simt: "Adebayo Samuel Ayobami",
+      sta: "Agbo Peter",
+      agp: "Akinyode Oluwaseun",
+      ent: "Promise",
+      mbbs: "N/A",
+      aph: "N/A",
+      csp: "N/A",
+      ice: "Bamidele Usman",
+      ifs: "Bakare Idris",
+      idd: "Ikudayisi Oyesola",
+      phy: "N/A",
+      age: "Agesin James",
+      fwt: "N/A",
+      bch: "N/A",
+      bdg: "N/A",
+      ana: "N/A",
+      phs: "N/A"
+    };
+    return caps[teamId.toLowerCase()] || "N/A";
+  }, []);
+
+  const getTeamCleanSheets = React.useCallback((teamId: string) => {
+    const teamMatches = matches.filter(m => 
+      m.status === 'Finished' &&
+      ((m.homeTeam.toLowerCase() === teamId.toLowerCase() && m.awayScore === 0) ||
+       (m.awayTeam.toLowerCase() === teamId.toLowerCase() && m.homeScore === 0))
+    );
+    return teamMatches.length;
+  }, [matches]);
+
+  const getOutstandingFines = React.useCallback((teamId: string) => {
+    const fines: Record<string, { amount: string; status: 'Pending' | 'Paid'; reason: string }> = {
+      simt: { amount: "₦10,000", status: "Pending", reason: "Disciplinary misconduct fine (Matchday 1)" },
+      mst: { amount: "₦10,000", status: "Paid", reason: "Disciplinary misconduct fine (Matchday 2)" },
+    };
+    return fines[teamId.toLowerCase()] || null;
+  }, []);
 
   const liveImpactData = React.useMemo(() => {
     const homeId = match.homeTeam.toLowerCase();
@@ -775,9 +926,10 @@ export default function PublicMatchCenter() {
             <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-right flex-1 justify-end">
               <div>
                 <h2 className="text-2xl font-display font-black leading-tight uppercase">{homeTeam.name}</h2>
-                <p className="text-[10px] font-bold text-white/45 uppercase tracking-widest mt-1">
-                  FCL Standings Rank: #{getStandingIndex(match.homeTeam)}
-                </p>
+                <div className="text-[10px] font-bold text-white/45 uppercase tracking-widest mt-1 space-y-0.5">
+                  <div>FCL Co-efficient Ranking: <span className="text-primary font-black">{getCoefficientRank(match.homeTeam)}</span></div>
+                  <div className="text-[9px] text-white/30">League Position: {getFormatRankSuffix(getStandingIndex(match.homeTeam))}</div>
+                </div>
                 
                 {/* Scorers on Home */}
                 {homeScorers.length > 0 && (
@@ -879,9 +1031,10 @@ export default function PublicMatchCenter() {
               <TeamLogo teamId={match.awayTeam} logoUrl={awayTeam.logoUrl} size="lg" className="w-20 h-20 object-contain flex-shrink-0" />
               <div>
                 <h2 className="text-2xl font-display font-black leading-tight uppercase">{awayTeam.name}</h2>
-                <p className="text-[10px] font-bold text-white/45 uppercase tracking-widest mt-1">
-                  FCL Standings Rank: #{getStandingIndex(match.awayTeam)}
-                </p>
+                <div className="text-[10px] font-bold text-white/45 uppercase tracking-widest mt-1 space-y-0.5">
+                  <div>FCL Co-efficient Ranking: <span className="text-yellow-400 font-black">{getCoefficientRank(match.awayTeam)}</span></div>
+                  <div className="text-[9px] text-white/30">League Position: {getFormatRankSuffix(getStandingIndex(match.awayTeam))}</div>
+                </div>
                 
                 {/* Scorers on Away */}
                 {awayScorers.length > 0 && (
@@ -928,7 +1081,7 @@ export default function PublicMatchCenter() {
           </div>
           <div className="space-y-1">
             <span className="text-[10px] font-black uppercase text-[#00E5FF] tracking-widest font-mono">
-              FUTA Champions League • Tournament Qualification Scenario
+              [14/16] LIVE TOURNAMENT IMPACT & QUALIFICATION SCENARIO
             </span>
             <p className="text-xs text-white/85 leading-relaxed font-medium">
               {getQualificationScenario()}
@@ -952,6 +1105,232 @@ export default function PublicMatchCenter() {
           </div>
         )}
 
+        {/* 📋 TEAM BIOS [02/16] & [03/16] */}
+        <div className="grid md:grid-cols-2 gap-8 mb-8">
+          
+          {/* [02/16] Home Team Profile Card */}
+          <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60 text-left space-y-4">
+            <div className="flex justify-between items-center pb-3 border-b border-white/5">
+              <span className="text-xs font-black uppercase text-primary tracking-widest font-mono">
+                [02/16] HOME TEAM PROFILE: {homeTeam.name}
+              </span>
+              <TeamLogo teamId={match.homeTeam} logoUrl={homeTeam.logoUrl} size="sm" className="w-6 h-6 object-contain" />
+            </div>
+            
+            <div className="space-y-3 font-sans text-xs">
+              <div className="flex justify-between items-center">
+                <span className="text-white/45 font-mono text-[9px] uppercase">Team ID</span>
+                <span className="font-bold text-white font-mono">{homeTeam.id.toUpperCase()}</span>
+              </div>
+              <div className="flex justify-between items-start gap-4">
+                <span className="text-white/45 font-mono text-[9px] uppercase">Faculty/Dept</span>
+                <span className="font-bold text-white text-right leading-tight">{getTeamFaculty(homeTeam.id)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-white/45 font-mono text-[9px] uppercase">Head Coach</span>
+                <span className="font-bold text-white">{getTeamCoach(homeTeam.id)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-white/45 font-mono text-[9px] uppercase">Team Captain</span>
+                <span className="font-bold text-white">{getTeamCaptain(homeTeam.id)}</span>
+              </div>
+              <div className="flex justify-between items-start gap-4">
+                <span className="text-white/45 font-mono text-[9px] uppercase">Home Ground</span>
+                <span className="font-bold text-white text-right leading-tight">{getTeamStadium(homeTeam.id)}</span>
+              </div>
+              
+              <div className="pt-2.5 border-t border-white/5 grid grid-cols-2 gap-2 text-center text-[10px]">
+                <div className="bg-white/[0.02] border border-white/5 p-2 rounded-xl">
+                  <span className="text-white/40 font-mono text-[8px] uppercase block">Co-efficient Ranking</span>
+                  <span className="font-bold text-primary block mt-0.5">{getCoefficientRank(homeTeam.id)}</span>
+                </div>
+                <div className="bg-white/[0.02] border border-white/5 p-2 rounded-xl">
+                  <span className="text-white/40 font-mono text-[8px] uppercase block">League Position</span>
+                  <span className="font-bold text-white block mt-0.5">{getFormatRankSuffix(getStandingIndex(homeTeam.id))}</span>
+                </div>
+              </div>
+
+              <div className="pt-2.5 border-t border-white/5">
+                <span className="text-[9px] font-black uppercase text-primary tracking-widest block font-mono mb-2">FCL League Record</span>
+                <div className="grid grid-cols-5 gap-1 text-center bg-slate-950/40 p-2 rounded-xl border border-white/5 font-mono text-[10px]">
+                  <div>
+                    <div className="text-[7px] text-white/35 font-bold uppercase" title="Matches Played">PL</div>
+                    <div className="text-white font-black mt-0.5">{homeTeam.played}</div>
+                  </div>
+                  <div>
+                    <div className="text-[7px] text-white/35 font-bold uppercase" title="Won-Drawn-Lost">WDL</div>
+                    <div className="text-white font-black mt-0.5">{homeTeam.won || 0}-{homeTeam.drawn || 0}-{homeTeam.lost || 0}</div>
+                  </div>
+                  <div>
+                    <div className="text-[7px] text-white/35 font-bold uppercase" title="Goals For / Goals Against">GF/GA</div>
+                    <div className="text-white font-black mt-0.5">{(homeTeam.goalsFor || 0)}/{(homeTeam.goalsAgainst || 0)}</div>
+                  </div>
+                  <div>
+                    <div className="text-[7px] text-white/35 font-bold uppercase" title="Goal Difference">GD</div>
+                    <div className="text-white font-black mt-0.5">{homeTeam.goalDifference !== undefined ? (homeTeam.goalDifference >= 0 ? `+${homeTeam.goalDifference}` : homeTeam.goalDifference) : '0'}</div>
+                  </div>
+                  <div>
+                    <div className="text-[7px] text-white/35 font-bold uppercase" title="Clean Sheets">CS</div>
+                    <div className="text-emerald-400 font-black mt-0.5">{getTeamCleanSheets(homeTeam.id)}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Home Team Form inside profile */}
+              <div className="pt-2.5 border-t border-white/5 flex flex-col gap-1.5">
+                <div className="flex justify-between items-center">
+                  <span className="text-[9px] font-black uppercase text-primary tracking-widest font-mono">Team Form (Last 5)</span>
+                  <div className="flex items-center gap-1 font-mono">
+                    {homeForm.formCircles.length === 0 ? (
+                      <span className="text-[9px] text-white/30 italic">No matches</span>
+                    ) : (
+                      homeForm.formCircles.map((circle, idx) => (
+                        <span 
+                          key={idx} 
+                          className="w-5 h-5 flex items-center justify-center text-xs"
+                          title={
+                            circle === '🟢' ? 'Win in regulation/full-time' :
+                            circle === '⚪' ? 'Draw' :
+                            circle === '🟡🟢' ? 'Won after a penalty shootout' :
+                            circle === '🟠🔴' ? 'Lost after a penalty shootout' :
+                            'Loss'
+                          }
+                        >
+                          {circle === '🟡🟢' ? '🟡' : circle === '🟠🔴' ? '🟠' : circle}
+                        </span>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                {/* Form Legend inside profile */}
+                <div className="bg-slate-950/20 border border-white/5 p-2 rounded-xl text-[8px] font-mono text-white/50 leading-normal">
+                  <div className="font-bold text-white/75 uppercase text-[7px] tracking-wider mb-1">Form Legend:</div>
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
+                    <div className="flex items-center gap-1"><span>🟢</span> <span>Win (Reg)</span></div>
+                    <div className="flex items-center gap-1"><span>🟡</span> <span>Win (Pen)</span></div>
+                    <div className="flex items-center gap-1"><span>⚪</span> <span>Draw</span></div>
+                    <div className="flex items-center gap-1"><span>🟠</span> <span>Loss (Pen)</span></div>
+                    <div className="flex items-center gap-1 col-span-2"><span>🔴</span> <span>Loss (Reg)</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* [03/16] Away Team Profile Card */}
+          <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60 text-left space-y-4">
+            <div className="flex justify-between items-center pb-3 border-b border-white/5">
+              <span className="text-xs font-black uppercase text-yellow-400 tracking-widest font-mono">
+                [03/16] AWAY TEAM PROFILE: {awayTeam.name}
+              </span>
+              <TeamLogo teamId={match.awayTeam} logoUrl={awayTeam.logoUrl} size="sm" className="w-6 h-6 object-contain" />
+            </div>
+            
+            <div className="space-y-3 font-sans text-xs">
+              <div className="flex justify-between items-center">
+                <span className="text-white/45 font-mono text-[9px] uppercase">Team ID</span>
+                <span className="font-bold text-white font-mono">{awayTeam.id.toUpperCase()}</span>
+              </div>
+              <div className="flex justify-between items-start gap-4">
+                <span className="text-white/45 font-mono text-[9px] uppercase">Faculty/Dept</span>
+                <span className="font-bold text-white text-right leading-tight">{getTeamFaculty(awayTeam.id)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-white/45 font-mono text-[9px] uppercase">Head Coach</span>
+                <span className="font-bold text-white">{getTeamCoach(awayTeam.id)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-white/45 font-mono text-[9px] uppercase">Team Captain</span>
+                <span className="font-bold text-white">{getTeamCaptain(awayTeam.id)}</span>
+              </div>
+              <div className="flex justify-between items-start gap-4">
+                <span className="text-white/45 font-mono text-[9px] uppercase">Home Ground</span>
+                <span className="font-bold text-white text-right leading-tight">{getTeamStadium(awayTeam.id)}</span>
+              </div>
+              
+              <div className="pt-2.5 border-t border-white/5 grid grid-cols-2 gap-2 text-center text-[10px]">
+                <div className="bg-white/[0.02] border border-white/5 p-2 rounded-xl">
+                  <span className="text-white/40 font-mono text-[8px] uppercase block">Co-efficient Ranking</span>
+                  <span className="font-bold text-yellow-400 block mt-0.5">{getCoefficientRank(awayTeam.id)}</span>
+                </div>
+                <div className="bg-white/[0.02] border border-white/5 p-2 rounded-xl">
+                  <span className="text-white/40 font-mono text-[8px] uppercase block">League Position</span>
+                  <span className="font-bold text-white block mt-0.5">{getFormatRankSuffix(getStandingIndex(awayTeam.id))}</span>
+                </div>
+              </div>
+
+              <div className="pt-2.5 border-t border-white/5">
+                <span className="text-[9px] font-black uppercase text-yellow-400 tracking-widest block font-mono mb-2">FCL League Record</span>
+                <div className="grid grid-cols-5 gap-1 text-center bg-slate-950/40 p-2 rounded-xl border border-white/5 font-mono text-[10px]">
+                  <div>
+                    <div className="text-[7px] text-white/35 font-bold uppercase" title="Matches Played">PL</div>
+                    <div className="text-white font-black mt-0.5">{awayTeam.played}</div>
+                  </div>
+                  <div>
+                    <div className="text-[7px] text-white/35 font-bold uppercase" title="Won-Drawn-Lost">WDL</div>
+                    <div className="text-white font-black mt-0.5">{awayTeam.won || 0}-{awayTeam.drawn || 0}-{awayTeam.lost || 0}</div>
+                  </div>
+                  <div>
+                    <div className="text-[7px] text-white/35 font-bold uppercase" title="Goals For / Goals Against">GF/GA</div>
+                    <div className="text-white font-black mt-0.5">{(awayTeam.goalsFor || 0)}/{(awayTeam.goalsAgainst || 0)}</div>
+                  </div>
+                  <div>
+                    <div className="text-[7px] text-white/35 font-bold uppercase" title="Goal Difference">GD</div>
+                    <div className="text-white font-black mt-0.5">{awayTeam.goalDifference !== undefined ? (awayTeam.goalDifference >= 0 ? `+${awayTeam.goalDifference}` : awayTeam.goalDifference) : '0'}</div>
+                  </div>
+                  <div>
+                    <div className="text-[7px] text-white/35 font-bold uppercase" title="Clean Sheets">CS</div>
+                    <div className="text-emerald-400 font-black mt-0.5">{getTeamCleanSheets(awayTeam.id)}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Away Team Form inside profile */}
+              <div className="pt-2.5 border-t border-white/5 flex flex-col gap-1.5">
+                <div className="flex justify-between items-center">
+                  <span className="text-[9px] font-black uppercase text-yellow-400 tracking-widest font-mono">Team Form (Last 5)</span>
+                  <div className="flex items-center gap-1 font-mono">
+                    {awayForm.formCircles.length === 0 ? (
+                      <span className="text-[9px] text-white/30 italic">No matches</span>
+                    ) : (
+                      awayForm.formCircles.map((circle, idx) => (
+                        <span 
+                          key={idx} 
+                          className="w-5 h-5 flex items-center justify-center text-xs"
+                          title={
+                            circle === '🟢' ? 'Win in regulation/full-time' :
+                            circle === '⚪' ? 'Draw' :
+                            circle === '🟡🟢' ? 'Won after a penalty shootout' :
+                            circle === '🟠🔴' ? 'Lost after a penalty shootout' :
+                            'Loss'
+                          }
+                        >
+                          {circle === '🟡🟢' ? '🟡' : circle === '🟠🔴' ? '🟠' : circle}
+                        </span>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                {/* Form Legend inside profile */}
+                <div className="bg-slate-950/20 border border-white/5 p-2 rounded-xl text-[8px] font-mono text-white/50 leading-normal">
+                  <div className="font-bold text-white/75 uppercase text-[7px] tracking-wider mb-1">Form Legend:</div>
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
+                    <div className="flex items-center gap-1"><span>🟢</span> <span>Win (Reg)</span></div>
+                    <div className="flex items-center gap-1"><span>🟡</span> <span>Win (Pen)</span></div>
+                    <div className="flex items-center gap-1"><span>⚪</span> <span>Draw</span></div>
+                    <div className="flex items-center gap-1"><span>🟠</span> <span>Loss (Pen)</span></div>
+                    <div className="flex items-center gap-1 col-span-2"><span>🔴</span> <span>Loss (Reg)</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
         {/* 📊 TEAM FORM & 🤝 HEAD-TO-HEAD PRE-MATCH ANALYSIS SECTION */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           
@@ -960,7 +1339,7 @@ export default function PublicMatchCenter() {
             <div>
               <h3 className="text-sm font-display font-black uppercase tracking-wider text-white mb-6 flex items-center gap-2 pb-4 border-b border-white/5">
                 <Sparkles size={15} className="text-primary" />
-                <span>📊 TEAM FORM (LAST FIVE COMPETITIVE MATCHES)</span>
+                <span>[05/16] TEAM FORM (LAST FIVE COMPETITIVE MATCHES)</span>
               </h3>
 
               <div className="space-y-6">
@@ -979,28 +1358,16 @@ export default function PublicMatchCenter() {
                         homeForm.formCircles.map((circle, idx) => (
                           <span 
                             key={idx} 
-                            className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px] ${
-                              circle === '🟢' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                              circle === '🟨' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
-                              circle === '🟩' ? 'bg-[#a3e635]/20 text-[#a3e635] border border-[#a3e635]/30' :
-                              circle === '🟧' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' :
-                              'bg-red-500/20 text-red-400 border border-red-500/30'
-                            }`}
+                            className="w-6 h-6 flex items-center justify-center text-xs"
                             title={
                               circle === '🟢' ? 'Win in regulation/full-time' :
-                              circle === '🟨' ? 'Draw (League Phase only)' :
-                              circle === '🟩' ? 'Won after a penalty shootout' :
-                              circle === '🟧' ? 'Lost after a penalty shootout' :
+                              circle === '⚪' ? 'Draw (League Phase only)' :
+                              circle === '🟡🟢' ? 'Won after a penalty shootout' :
+                              circle === '🟠🔴' ? 'Lost after a penalty shootout' :
                               'Loss in regulation/full-time'
                             }
                           >
-                            {
-                              circle === '🟢' ? 'W' :
-                              circle === '🟨' ? 'D' :
-                              circle === '🟩' ? 'W' :
-                              circle === '🟧' ? 'L' :
-                              'L'
-                            }
+                            {circle}
                           </span>
                         ))
                       )}
@@ -1025,13 +1392,7 @@ export default function PublicMatchCenter() {
                               <span className="inline-flex items-center gap-1.5">
                                 <span>{row.resultText}</span>
                                 {row.circle && (
-                                  <span className={`w-2 h-2 rounded-full ${
-                                    row.circle === '🟢' ? 'bg-emerald-400' :
-                                    row.circle === '🟨' ? 'bg-yellow-400' :
-                                    row.circle === '🟩' ? 'bg-[#a3e635]' :
-                                    row.circle === '🟧' ? 'bg-orange-400' :
-                                    'bg-red-400'
-                                  }`} />
+                                  <span className="text-xs">{row.circle}</span>
                                 )}
                               </span>
                             </td>
@@ -1057,28 +1418,16 @@ export default function PublicMatchCenter() {
                         awayForm.formCircles.map((circle, idx) => (
                           <span 
                             key={idx} 
-                            className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px] ${
-                              circle === '🟢' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                              circle === '🟨' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
-                              circle === '🟩' ? 'bg-[#a3e635]/20 text-[#a3e635] border border-[#a3e635]/30' :
-                              circle === '🟧' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' :
-                              'bg-red-500/20 text-red-400 border border-red-500/30'
-                            }`}
+                            className="w-6 h-6 flex items-center justify-center text-xs"
                             title={
                               circle === '🟢' ? 'Win in regulation/full-time' :
-                              circle === '🟨' ? 'Draw (League Phase only)' :
-                              circle === '🟩' ? 'Won after a penalty shootout' :
-                              circle === '🟧' ? 'Lost after a penalty shootout' :
+                              circle === '⚪' ? 'Draw (League Phase only)' :
+                              circle === '🟡🟢' ? 'Won after a penalty shootout' :
+                              circle === '🟠🔴' ? 'Lost after a penalty shootout' :
                               'Loss in regulation/full-time'
                             }
                           >
-                            {
-                              circle === '🟢' ? 'W' :
-                              circle === '🟨' ? 'D' :
-                              circle === '🟩' ? 'W' :
-                              circle === '🟧' ? 'L' :
-                              'L'
-                            }
+                            {circle}
                           </span>
                         ))
                       )}
@@ -1103,13 +1452,7 @@ export default function PublicMatchCenter() {
                               <span className="inline-flex items-center gap-1.5">
                                 <span>{row.resultText}</span>
                                 {row.circle && (
-                                  <span className={`w-2 h-2 rounded-full ${
-                                    row.circle === '🟢' ? 'bg-emerald-400' :
-                                    row.circle === '🟨' ? 'bg-yellow-400' :
-                                    row.circle === '🟩' ? 'bg-[#a3e635]' :
-                                    row.circle === '🟧' ? 'bg-orange-400' :
-                                    'bg-red-400'
-                                  }`} />
+                                  <span className="text-xs">{row.circle}</span>
                                 )}
                               </span>
                             </td>
@@ -1124,19 +1467,19 @@ export default function PublicMatchCenter() {
 
             <div className="mt-4 pt-4 border-t border-white/5 flex flex-wrap gap-x-4 gap-y-2 text-[9px] font-mono text-white/40">
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" /> 🟢 Win (Regulation)
+                🟢 Win in regulation time
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 inline-block" /> 🟨 Draw (League Phase)
+                🟡🟢 Win on penalties
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#a3e635] inline-block" /> 🟩 Won pens
+                ⚪ Draw
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-400 inline-block" /> 🟧 Lost pens
+                🟠🔴 Loss on penalties
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 inline-block" /> 🔴 Loss (Regulation)
+                🔴 Loss in regulation time
               </span>
             </div>
           </div>
@@ -1146,12 +1489,12 @@ export default function PublicMatchCenter() {
             <div>
               <h3 className="text-sm font-display font-black uppercase tracking-wider text-white mb-6 flex items-center gap-2 pb-4 border-b border-white/5">
                 <Users size={15} className="text-primary" />
-                <span>🤝 HEAD-TO-HEAD HISTORIC MEETINGS</span>
+                <span>[06/16] HEAD-TO-HEAD HISTORIC RECORD</span>
               </h3>
 
               <div className="space-y-4">
                 <div className="text-xs font-black uppercase tracking-wider text-white/60 mb-2 flex justify-between items-center">
-                  <span>PREVIOUS FCL MEETINGS</span>
+                  <span>[07/16] PREVIOUS MEETINGS ENCOUNTERS</span>
                   <span className="text-[10px] font-mono bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded">
                     {headToHeadData.played} Played
                   </span>
@@ -1269,7 +1612,7 @@ export default function PublicMatchCenter() {
             <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60">
             <h3 className="text-sm font-display font-black uppercase tracking-wider text-white mb-6 flex items-center gap-2 pb-4 border-b border-b-white/5">
               <Award size={15} className="text-primary" />
-              <span>MATCH DAY SCIENTIFIC METRICS</span>
+              <span>[13/16] LIVE STATISTICS & SCIENTIFIC METRICS</span>
             </h3>
 
             {isUpcoming ? (
@@ -1407,7 +1750,7 @@ export default function PublicMatchCenter() {
             <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60 space-y-5 text-left">
               <h3 className="text-sm font-display font-black uppercase tracking-wider text-white flex items-center gap-2 pb-4 border-b border-white/5">
                 <Clock size={16} className="text-primary" />
-                <span>OFFICIAL CLOCK CONFIGURATION</span>
+                <span>[01/16] FIXTURE INFO & OFFICIAL MATCH DAY CLOCK</span>
               </h3>
 
               <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4 space-y-3.5">
@@ -1466,7 +1809,7 @@ export default function PublicMatchCenter() {
             <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60">
               <h3 className="text-sm font-display font-black uppercase tracking-wider text-white mb-6 flex items-center gap-2 pb-4 border-b border-b-white/5">
                 <List size={15} className="text-primary" />
-                <span>OFFICIAL TIMELINE RECORD</span>
+                <span>[12/16] OFFICIAL TIMELINE RECORD</span>
               </h3>
 
               {timelineEvents.length === 0 ? (
@@ -1495,7 +1838,7 @@ export default function PublicMatchCenter() {
               <h3 className="text-sm font-display font-black uppercase tracking-wider text-white flex items-center justify-between pb-4 border-b border-b-white/5">
                 <div className="flex items-center gap-2">
                   <Users size={15} className="text-primary" />
-                  <span>COMBAT SQUAD SATELLITE</span>
+                  <span>[08/16] CONFIRMED STARTING XI</span>
                 </div>
                 {lineups[match.id] && (
                   <span className="text-[9px] font-black tracking-widest font-mono bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full uppercase">
@@ -1598,7 +1941,12 @@ export default function PublicMatchCenter() {
                   </div>
 
                   {/* Bench Roster */}
-                  <div className="pt-4 border-t border-white/5 grid grid-cols-2 gap-4 text-[9px] font-sans">
+                  <div className="pt-4 border-t border-white/5 col-span-2">
+                    <span className="text-[10px] font-black uppercase text-[#00E5FF] tracking-widest font-mono block mb-1">
+                      [09/16] CONFIRMED BENCH & SUBSTITUTES
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 text-[9px] font-sans col-span-2">
                     <div className="space-y-1.5">
                       <span className="font-bold tracking-wider text-white/40 block pb-1 uppercase font-display">SUBS / BENCH</span>
                       <div className="flex flex-wrap gap-1 leading-normal">
@@ -1668,7 +2016,7 @@ export default function PublicMatchCenter() {
               <div className="pt-5 border-t border-white/5 mt-5 space-y-6">
                 <div>
                   <span className="text-[10px] font-black uppercase text-red-400 tracking-widest block font-mono mb-3">
-                    🏥 TEAM DISCIPLINARY & MEDICAL REPORT
+                    🏥 [10/16] SUSPENSIONS, INJURIES & MEDICAL REPORT
                   </span>
                   
                   <div className="space-y-4">
@@ -1870,12 +2218,12 @@ export default function PublicMatchCenter() {
 
                 <h3 className="text-xs font-display font-black uppercase tracking-wider text-yellow-500 flex items-center gap-2 mb-2">
                   <FileText size={15} />
-                  <span>POST-MATCH SUMMARY ANALYSIS</span>
+                  <span>[16/16] POST-MATCH SUMMARY ANALYSIS</span>
                 </h3>
 
                 <div className="space-y-3.5 text-xs leading-relaxed text-white/80 font-medium">
                   <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-wider text-yellow-500 mb-1">MVP Player of Match</h4>
+                    <h4 className="text-[10px] font-black uppercase tracking-wider text-yellow-500 mb-1">[15/16] MAN OF THE MATCH MVP</h4>
                     <span className="bg-yellow-500/25 border border-yellow-500/30 text-yellow-400 px-3 py-1 rounded font-bold text-xs inline-block">
                       🏆 {publishedReport.playerOfMatch}
                     </span>

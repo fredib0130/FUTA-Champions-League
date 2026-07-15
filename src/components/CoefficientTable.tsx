@@ -219,9 +219,6 @@ export const CoefficientTable: React.FC<CoefficientTableProps> = ({ data, limit,
             <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest leading-relaxed">
               *FCL Team Coefficient Ranking is updated live throughout the competition in accordance with the official FUTA Champions League Coefficient Regulations.
             </p>
-            <p className="text-[9px] font-black uppercase text-primary tracking-widest">
-              Last Updated: 4th July 2026, 17:00
-            </p>
           </div>
         </div>
         <div className="flex flex-col gap-2.5 max-w-md w-full md:w-auto">

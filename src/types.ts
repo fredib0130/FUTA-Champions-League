@@ -29,6 +29,10 @@ export interface Team {
   fineAmount?: number;
   finePaid?: boolean;
   disciplinaryStatus?: string;
+  coach?: string;
+  captain?: string;
+  stadium?: string;
+  faculty?: string;
   
   // FCL 2026 Standing Rules
   yellowCards?: number;
