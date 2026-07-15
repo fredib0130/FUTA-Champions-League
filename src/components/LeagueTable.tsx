@@ -272,28 +272,34 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
                 {showFull && (
                   <>
                     <td className="px-4 py-4">
-                      <div className="flex items-center justify-center space-x-1">
+                      <div className="flex items-center justify-center space-x-1.5">
                         {team.form.map((res, i) => {
-                          let bgClass = 'bg-red-500';
-                          if (res === 'W') bgClass = 'bg-green-500';
-                          else if (res === 'D') bgClass = 'bg-yellow-500';
-                          else if (res === 'WP') bgClass = 'bg-[#a3e635] text-black';
-                          else if (res === 'LP') bgClass = 'bg-orange-500';
-                          else if (res === 'L') bgClass = 'bg-red-500';
+                          let textColor = 'text-red-500';
+                          let label = 'Loss (Regular Time)';
+                          if (res === 'W') {
+                            textColor = 'text-green-500';
+                            label = 'Win (Regular Time)';
+                          } else if (res === 'D') {
+                            textColor = 'text-white';
+                            label = 'Draw';
+                          } else if (res === 'WP') {
+                            textColor = 'text-[#a3e635]';
+                            label = 'Win (Penalty Shootout)';
+                          } else if (res === 'LP') {
+                            textColor = 'text-orange-500';
+                            label = 'Loss (Penalty Shootout)';
+                          } else if (res === 'L') {
+                            textColor = 'text-red-500';
+                            label = 'Loss (Regular Time)';
+                          }
 
                           return (
                             <span
                               key={i}
-                              className={`w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold text-white ${bgClass}`}
-                              title={
-                                res === 'W' ? 'Win' :
-                                res === 'D' ? 'Draw' :
-                                res === 'WP' ? 'Won after penalties' :
-                                res === 'LP' ? 'Lost after penalties' :
-                                'Loss'
-                              }
+                              className={`text-sm font-bold leading-none ${textColor}`}
+                              title={label}
                             >
-                              {res === 'WP' ? 'W' : res === 'LP' ? 'L' : res}
+                              ●
                             </span>
                           );
                         })}
@@ -312,18 +318,39 @@ export function LeagueTable({ limit, showFull = false }: LeagueTableProps) {
         </tbody>
       </table>
       {showFull && (
-        <div className="p-4 bg-white/5 border-t border-white/10 flex flex-wrap gap-6">
-          <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 rounded-full bg-green-500" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">Quarter-Finals (1-2)</span>
+        <div className="p-4 bg-white/5 border-t border-white/10 flex flex-col gap-4">
+          <div className="flex flex-wrap gap-6">
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">Quarter-Finals (1-2)</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 rounded-full bg-yellow-500" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">Playoff Zone (3-14)</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">Eliminated (15-20)</span>
+            </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 rounded-full bg-yellow-500" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">Playoff Zone (3-14)</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 rounded-full bg-red-500" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">Eliminated (15-20)</span>
+
+          <div className="pt-3 border-t border-white/5 flex flex-wrap gap-x-6 gap-y-2 text-[9px] font-mono text-white/40">
+            <div className="font-bold text-white/60 uppercase text-[8px] tracking-wider w-full mb-1">Form Legend:</div>
+            <span className="flex items-center gap-1">
+              <span className="text-green-500 font-bold">●</span> Green – Win (Regular Time)
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="text-white font-bold">●</span> White – Draw
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="text-red-500 font-bold">●</span> Red – Loss (Regular Time)
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="text-[#a3e635] font-bold">●</span> Chartreuse – Win (Penalty Shootout)
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="text-orange-500 font-bold">●</span> Orange – Loss (Penalty Shootout)
+            </span>
           </div>
         </div>
       )}

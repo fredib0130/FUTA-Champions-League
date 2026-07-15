@@ -6172,7 +6172,7 @@ FUTA Champions League 2026 ⚽🏆`;
       goalsAgainst: 0,
       goalDifference: 0,
       points: 0,
-      form: [] as ('W' | 'D' | 'L')[],
+      form: [] as ('W' | 'D' | 'L' | 'WP' | 'LP')[],
       yellowCards: 0,
       yellow_cards: 0,
       redCards: 0,
@@ -6269,16 +6269,28 @@ FUTA Champions League 2026 ⚽🏆`;
             homeTeamObj.form.push('L');
           }
         } else {
+          const hasPens = match.homePenalties !== undefined && match.awayPenalties !== undefined;
+          const homeWonPens = hasPens && (match.homePenalties ?? 0) > (match.awayPenalties ?? 0);
+          const awayWonPens = hasPens && (match.awayPenalties ?? 0) > (match.homePenalties ?? 0);
+
           if (updateHome) {
             homeTeamObj.drawn += 1;
             homeTeamObj.points += 1;
-            homeTeamObj.form.push('D');
+            if (hasPens) {
+              homeTeamObj.form.push(homeWonPens ? 'WP' : 'LP');
+            } else {
+              homeTeamObj.form.push('D');
+            }
           }
 
           if (updateAway) {
             awayTeamObj.drawn += 1;
             awayTeamObj.points += 1;
-            awayTeamObj.form.push('D');
+            if (hasPens) {
+              awayTeamObj.form.push(awayWonPens ? 'WP' : 'LP');
+            } else {
+              awayTeamObj.form.push('D');
+            }
           }
         }
 

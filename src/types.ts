@@ -21,7 +21,7 @@ export interface Team {
   goalsAgainst: number;
   goalDifference: number;
   points: number;
-  form: ('W' | 'D' | 'L')[];
+  form: ('W' | 'D' | 'L' | 'WP' | 'LP')[];
   description: string;
   squad: Player[];
   isDisqualified?: boolean;

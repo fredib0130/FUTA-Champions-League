@@ -9,6 +9,53 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const getFormCircleProps = (circle: string) => {
+  switch (circle) {
+    case 'W':
+      return {
+        color: 'text-green-500',
+        bg: 'bg-green-500',
+        title: 'Win (Regular Time)',
+        char: '●'
+      };
+    case 'D':
+      return {
+        color: 'text-white',
+        bg: 'bg-white',
+        title: 'Draw',
+        char: '●'
+      };
+    case 'L':
+      return {
+        color: 'text-red-500',
+        bg: 'bg-red-500',
+        title: 'Loss (Regular Time)',
+        char: '●'
+      };
+    case 'WP':
+      return {
+        color: 'text-[#a3e635]', // Chartreuse
+        bg: 'bg-[#a3e635]',
+        title: 'Win (Penalty Shootout)',
+        char: '●'
+      };
+    case 'LP':
+      return {
+        color: 'text-orange-500',
+        bg: 'bg-orange-500',
+        title: 'Loss (Penalty Shootout)',
+        char: '●'
+      };
+    default:
+      return {
+        color: 'text-white/20',
+        bg: 'bg-white/20',
+        title: '—',
+        char: '●'
+      };
+  }
+};
+
 interface Toast {
   id: string;
   type: 'goal' | 'status-change';
@@ -247,31 +294,31 @@ export default function PublicMatchCenter() {
       const oppScore = isHome ? m.awayScore : m.homeScore;
 
       let outcome: 'W' | 'D' | 'L' = 'D';
-      let outcomeCircle = '⚪';
+      let outcomeCircle: 'W' | 'D' | 'L' | 'WP' | 'LP' = 'D';
       let detail = '';
 
       if (teamScore > oppScore) {
         outcome = 'W';
-        outcomeCircle = '🟢';
+        outcomeCircle = 'W';
       } else if (teamScore < oppScore) {
         outcome = 'L';
-        outcomeCircle = '🔴';
+        outcomeCircle = 'L';
       } else {
         if (m.homePenalties !== undefined && m.awayPenalties !== undefined) {
           const teamPens = isHome ? m.homePenalties : m.awayPenalties;
           const oppPens = isHome ? m.awayPenalties : m.homePenalties;
           if (teamPens > oppPens) {
             outcome = 'W';
-            outcomeCircle = '🟡🟢';
+            outcomeCircle = 'WP';
             detail = ` (Won ${teamPens}–${oppPens} Pens)`;
           } else {
             outcome = 'L';
-            outcomeCircle = '🟠🔴';
+            outcomeCircle = 'LP';
             detail = ` (Lost ${oppPens}–${teamPens} Pens)`;
           }
         } else {
           outcome = 'D';
-          outcomeCircle = '⚪';
+          outcomeCircle = 'D';
         }
       }
 
@@ -308,7 +355,7 @@ export default function PublicMatchCenter() {
       });
     }
 
-    const activeCircles = rows.map(r => r.circle);
+    const activeCircles = rows.map(r => r.circle).reverse();
 
     return { rows: displayRows, formCircles: activeCircles };
   }, [sortedFinishedMatches, getTeamName]);
@@ -1180,25 +1227,22 @@ export default function PublicMatchCenter() {
               <div className="pt-2.5 border-t border-white/5 flex flex-col gap-1.5">
                 <div className="flex justify-between items-center">
                   <span className="text-[9px] font-black uppercase text-primary tracking-widest font-mono">Team Form (Last 5)</span>
-                  <div className="flex items-center gap-1 font-mono">
+                  <div className="flex items-center gap-1.5 font-mono">
                     {homeForm.formCircles.length === 0 ? (
-                      <span className="text-[9px] text-white/30 italic">No matches</span>
+                       <span className="text-[9px] text-white/30 italic">No matches</span>
                     ) : (
-                      homeForm.formCircles.map((circle, idx) => (
-                        <span 
-                          key={idx} 
-                          className="w-5 h-5 flex items-center justify-center text-xs"
-                          title={
-                            circle === '🟢' ? 'Win in regulation/full-time' :
-                            circle === '⚪' ? 'Draw' :
-                            circle === '🟡🟢' ? 'Won after a penalty shootout' :
-                            circle === '🟠🔴' ? 'Lost after a penalty shootout' :
-                            'Loss'
-                          }
-                        >
-                          {circle === '🟡🟢' ? '🟡' : circle === '🟠🔴' ? '🟠' : circle}
-                        </span>
-                      ))
+                      homeForm.formCircles.map((circle, idx) => {
+                        const circleProps = getFormCircleProps(circle);
+                        return (
+                          <span 
+                            key={idx} 
+                            className={`w-4 h-4 flex items-center justify-center text-sm font-bold leading-none ${circleProps.color}`}
+                            title={circleProps.title}
+                          >
+                            ●
+                          </span>
+                        );
+                      })
                     )}
                   </div>
                 </div>
@@ -1206,12 +1250,12 @@ export default function PublicMatchCenter() {
                 {/* Form Legend inside profile */}
                 <div className="bg-slate-950/20 border border-white/5 p-2 rounded-xl text-[8px] font-mono text-white/50 leading-normal">
                   <div className="font-bold text-white/75 uppercase text-[7px] tracking-wider mb-1">Form Legend:</div>
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
-                    <div className="flex items-center gap-1"><span>🟢</span> <span>Win (Reg)</span></div>
-                    <div className="flex items-center gap-1"><span>🟡</span> <span>Win (Pen)</span></div>
-                    <div className="flex items-center gap-1"><span>⚪</span> <span>Draw</span></div>
-                    <div className="flex items-center gap-1"><span>🟠</span> <span>Loss (Pen)</span></div>
-                    <div className="flex items-center gap-1 col-span-2"><span>🔴</span> <span>Loss (Reg)</span></div>
+                  <div className="flex flex-col gap-0.5">
+                    <div className="flex items-center gap-1"><span className="text-green-500 font-bold">●</span> <span>Green – Win (Regular Time)</span></div>
+                    <div className="flex items-center gap-1"><span className="text-white font-bold">●</span> <span>White – Draw</span></div>
+                    <div className="flex items-center gap-1"><span className="text-red-500 font-bold">●</span> <span>Red – Loss (Regular Time)</span></div>
+                    <div className="flex items-center gap-1"><span className="text-[#a3e635] font-bold">●</span> <span>Chartreuse – Win (Penalty Shootout)</span></div>
+                    <div className="flex items-center gap-1"><span className="text-orange-500 font-bold">●</span> <span>Orange – Loss (Penalty Shootout)</span></div>
                   </div>
                 </div>
               </div>
@@ -1290,25 +1334,22 @@ export default function PublicMatchCenter() {
               <div className="pt-2.5 border-t border-white/5 flex flex-col gap-1.5">
                 <div className="flex justify-between items-center">
                   <span className="text-[9px] font-black uppercase text-yellow-400 tracking-widest font-mono">Team Form (Last 5)</span>
-                  <div className="flex items-center gap-1 font-mono">
+                  <div className="flex items-center gap-1.5 font-mono">
                     {awayForm.formCircles.length === 0 ? (
                       <span className="text-[9px] text-white/30 italic">No matches</span>
                     ) : (
-                      awayForm.formCircles.map((circle, idx) => (
-                        <span 
-                          key={idx} 
-                          className="w-5 h-5 flex items-center justify-center text-xs"
-                          title={
-                            circle === '🟢' ? 'Win in regulation/full-time' :
-                            circle === '⚪' ? 'Draw' :
-                            circle === '🟡🟢' ? 'Won after a penalty shootout' :
-                            circle === '🟠🔴' ? 'Lost after a penalty shootout' :
-                            'Loss'
-                          }
-                        >
-                          {circle === '🟡🟢' ? '🟡' : circle === '🟠🔴' ? '🟠' : circle}
-                        </span>
-                      ))
+                      awayForm.formCircles.map((circle, idx) => {
+                        const circleProps = getFormCircleProps(circle);
+                        return (
+                          <span 
+                            key={idx} 
+                            className={`w-4 h-4 flex items-center justify-center text-sm font-bold leading-none ${circleProps.color}`}
+                            title={circleProps.title}
+                          >
+                            ●
+                          </span>
+                        );
+                      })
                     )}
                   </div>
                 </div>
@@ -1316,12 +1357,12 @@ export default function PublicMatchCenter() {
                 {/* Form Legend inside profile */}
                 <div className="bg-slate-950/20 border border-white/5 p-2 rounded-xl text-[8px] font-mono text-white/50 leading-normal">
                   <div className="font-bold text-white/75 uppercase text-[7px] tracking-wider mb-1">Form Legend:</div>
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
-                    <div className="flex items-center gap-1"><span>🟢</span> <span>Win (Reg)</span></div>
-                    <div className="flex items-center gap-1"><span>🟡</span> <span>Win (Pen)</span></div>
-                    <div className="flex items-center gap-1"><span>⚪</span> <span>Draw</span></div>
-                    <div className="flex items-center gap-1"><span>🟠</span> <span>Loss (Pen)</span></div>
-                    <div className="flex items-center gap-1 col-span-2"><span>🔴</span> <span>Loss (Reg)</span></div>
+                  <div className="flex flex-col gap-0.5">
+                    <div className="flex items-center gap-1"><span className="text-green-500 font-bold">●</span> <span>Green – Win (Regular Time)</span></div>
+                    <div className="flex items-center gap-1"><span className="text-white font-bold">●</span> <span>White – Draw</span></div>
+                    <div className="flex items-center gap-1"><span className="text-red-500 font-bold">●</span> <span>Red – Loss (Regular Time)</span></div>
+                    <div className="flex items-center gap-1"><span className="text-[#a3e635] font-bold">●</span> <span>Chartreuse – Win (Penalty Shootout)</span></div>
+                    <div className="flex items-center gap-1"><span className="text-orange-500 font-bold">●</span> <span>Orange – Loss (Penalty Shootout)</span></div>
                   </div>
                 </div>
               </div>
@@ -1355,21 +1396,18 @@ export default function PublicMatchCenter() {
                       {homeForm.formCircles.length === 0 ? (
                         <span className="text-[10px] text-white/30 italic">No matches played</span>
                       ) : (
-                        homeForm.formCircles.map((circle, idx) => (
-                          <span 
-                            key={idx} 
-                            className="w-6 h-6 flex items-center justify-center text-xs"
-                            title={
-                              circle === '🟢' ? 'Win in regulation/full-time' :
-                              circle === '⚪' ? 'Draw (League Phase only)' :
-                              circle === '🟡🟢' ? 'Won after a penalty shootout' :
-                              circle === '🟠🔴' ? 'Lost after a penalty shootout' :
-                              'Loss in regulation/full-time'
-                            }
-                          >
-                            {circle}
-                          </span>
-                        ))
+                        homeForm.formCircles.map((circle, idx) => {
+                          const circleProps = getFormCircleProps(circle);
+                          return (
+                            <span 
+                              key={idx} 
+                              className={`w-5 h-5 flex items-center justify-center text-sm font-bold leading-none ${circleProps.color}`}
+                              title={circleProps.title}
+                            >
+                              ●
+                            </span>
+                          );
+                        })
                       )}
                     </div>
                   </div>
@@ -1391,9 +1429,14 @@ export default function PublicMatchCenter() {
                             <td className="py-2 px-3 text-right font-mono font-bold text-white/95">
                               <span className="inline-flex items-center gap-1.5">
                                 <span>{row.resultText}</span>
-                                {row.circle && (
-                                  <span className="text-xs">{row.circle}</span>
-                                )}
+                                {row.circle && (() => {
+                                  const circleProps = getFormCircleProps(row.circle);
+                                  return (
+                                    <span className={`text-xs ${circleProps.color}`} title={circleProps.title}>
+                                      ●
+                                    </span>
+                                  );
+                                })()}
                               </span>
                             </td>
                           </tr>
@@ -1415,21 +1458,18 @@ export default function PublicMatchCenter() {
                       {awayForm.formCircles.length === 0 ? (
                         <span className="text-[10px] text-white/30 italic">No matches played</span>
                       ) : (
-                        awayForm.formCircles.map((circle, idx) => (
-                          <span 
-                            key={idx} 
-                            className="w-6 h-6 flex items-center justify-center text-xs"
-                            title={
-                              circle === '🟢' ? 'Win in regulation/full-time' :
-                              circle === '⚪' ? 'Draw (League Phase only)' :
-                              circle === '🟡🟢' ? 'Won after a penalty shootout' :
-                              circle === '🟠🔴' ? 'Lost after a penalty shootout' :
-                              'Loss in regulation/full-time'
-                            }
-                          >
-                            {circle}
-                          </span>
-                        ))
+                        awayForm.formCircles.map((circle, idx) => {
+                          const circleProps = getFormCircleProps(circle);
+                          return (
+                            <span 
+                              key={idx} 
+                              className={`w-5 h-5 flex items-center justify-center text-sm font-bold leading-none ${circleProps.color}`}
+                              title={circleProps.title}
+                            >
+                              ●
+                            </span>
+                          );
+                        })
                       )}
                     </div>
                   </div>
@@ -1451,9 +1491,14 @@ export default function PublicMatchCenter() {
                             <td className="py-2 px-3 text-right font-mono font-bold text-white/95">
                               <span className="inline-flex items-center gap-1.5">
                                 <span>{row.resultText}</span>
-                                {row.circle && (
-                                  <span className="text-xs">{row.circle}</span>
-                                )}
+                                {row.circle && (() => {
+                                  const circleProps = getFormCircleProps(row.circle);
+                                  return (
+                                    <span className={`text-xs ${circleProps.color}`} title={circleProps.title}>
+                                      ●
+                                    </span>
+                                  );
+                                })()}
                               </span>
                             </td>
                           </tr>
@@ -1467,19 +1512,19 @@ export default function PublicMatchCenter() {
 
             <div className="mt-4 pt-4 border-t border-white/5 flex flex-wrap gap-x-4 gap-y-2 text-[9px] font-mono text-white/40">
               <span className="flex items-center gap-1">
-                🟢 Win in regulation time
+                <span className="text-green-500 font-bold">●</span> Green – Win (Regular Time)
               </span>
               <span className="flex items-center gap-1">
-                🟡🟢 Win on penalties
+                <span className="text-white font-bold">●</span> White – Draw
               </span>
               <span className="flex items-center gap-1">
-                ⚪ Draw
+                <span className="text-red-500 font-bold">●</span> Red – Loss (Regular Time)
               </span>
               <span className="flex items-center gap-1">
-                🟠🔴 Loss on penalties
+                <span className="text-[#a3e635] font-bold">●</span> Chartreuse – Win (Penalty Shootout)
               </span>
               <span className="flex items-center gap-1">
-                🔴 Loss in regulation time
+                <span className="text-orange-500 font-bold">●</span> Orange – Loss (Penalty Shootout)
               </span>
             </div>
           </div>
