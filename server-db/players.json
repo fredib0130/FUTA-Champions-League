@@ -1,0 +1,2738 @@
+[
+  {
+    "id": 1,
+    "name": "Olasunkanmi Michael",
+    "team": "AGP",
+    "position": "FWD",
+    "reg_number": "FCL/AGP/26/1438",
+    "appearances": 0
+  },
+  {
+    "id": 2,
+    "name": "Roland",
+    "team": "AGP",
+    "position": "FWD",
+    "reg_number": "FCL/AGP/26/1439",
+    "appearances": 0
+  },
+  {
+    "id": 3,
+    "name": "Promise",
+    "team": "ENT",
+    "position": "DEF",
+    "reg_number": "FCL/ENT/26/1302",
+    "appearances": 0
+  },
+  {
+    "id": 4,
+    "name": "Fairy",
+    "team": "ENT",
+    "position": "MID",
+    "reg_number": "FCL/ENT/26/1303",
+    "appearances": 0
+  },
+  {
+    "id": 5,
+    "name": "Pelumi",
+    "team": "ENT",
+    "position": "MID",
+    "reg_number": "FCL/ENT/26/1304",
+    "appearances": 0
+  },
+  {
+    "id": 6,
+    "name": "Dr. P",
+    "team": "MBBS",
+    "position": "FWD",
+    "reg_number": "FCL/MBBS/26/1259",
+    "appearances": 0
+  },
+  {
+    "id": 7,
+    "name": "Adesola Emmanuel",
+    "team": "MBBS",
+    "position": "MID",
+    "reg_number": "FCL/MBBS/26/1260",
+    "appearances": 0
+  },
+  {
+    "id": 8,
+    "name": "Kunlex",
+    "team": "APH",
+    "position": "FWD",
+    "reg_number": "FCL/APH/26/1284",
+    "appearances": 1
+  },
+  {
+    "id": 9,
+    "name": "Emmanuel",
+    "team": "APH",
+    "position": "MID",
+    "reg_number": "FCL/APH/26/1285",
+    "appearances": 1
+  },
+  {
+    "id": 10,
+    "name": "Fola",
+    "team": "APH",
+    "position": "MID",
+    "reg_number": "FCL/APH/26/1286",
+    "appearances": 1
+  },
+  {
+    "id": 11,
+    "name": "Toni",
+    "team": "APH",
+    "position": "MID",
+    "reg_number": "FCL/APH/26/1287",
+    "appearances": 1
+  },
+  {
+    "id": 12,
+    "name": "Emmy",
+    "team": "APH",
+    "position": "MID",
+    "reg_number": "FCL/APH/26/1288",
+    "appearances": 1
+  },
+  {
+    "id": 13,
+    "name": "Adegoke",
+    "team": "APH",
+    "position": "GK",
+    "reg_number": "FCL/APH/26/1289",
+    "appearances": 1
+  },
+  {
+    "id": 14,
+    "name": "Chosen",
+    "team": "APH",
+    "position": "MID",
+    "reg_number": "FCL/APH/26/1290",
+    "appearances": 1
+  },
+  {
+    "id": 15,
+    "name": "Onana",
+    "team": "APH",
+    "position": "DEF",
+    "reg_number": "FCL/APH/26/1291",
+    "appearances": 1
+  },
+  {
+    "id": 16,
+    "name": "Ademide",
+    "team": "CSP",
+    "position": "FWD",
+    "reg_number": "FCL/CSP/26/1338",
+    "appearances": 0
+  },
+  {
+    "id": 17,
+    "name": "Adedara",
+    "team": "CSP",
+    "position": "FWD",
+    "reg_number": "FCL/CSP/26/1339",
+    "appearances": 0
+  },
+  {
+    "id": 18,
+    "name": "Akindeko Emmanuel",
+    "team": "CSP",
+    "position": "FWD",
+    "reg_number": "FCL/CSP/26/1340",
+    "appearances": 0
+  },
+  {
+    "id": 19,
+    "name": "Pelumi",
+    "team": "CSP",
+    "position": "MID",
+    "reg_number": "FCL/CSP/26/1341",
+    "appearances": 0
+  },
+  {
+    "id": 20,
+    "name": "Michael",
+    "team": "CSP",
+    "position": "MID",
+    "reg_number": "FCL/CSP/26/1342",
+    "appearances": 0
+  },
+  {
+    "id": 21,
+    "name": "SOJ",
+    "team": "CSP",
+    "position": "MID",
+    "reg_number": "FCL/CSP/26/1343",
+    "appearances": 0
+  },
+  {
+    "id": 22,
+    "name": "Goodness",
+    "team": "CSP",
+    "position": "MID",
+    "reg_number": "FCL/CSP/26/1344",
+    "appearances": 0
+  },
+  {
+    "id": 23,
+    "name": "Amos",
+    "team": "CSP",
+    "position": "DEF",
+    "reg_number": "FCL/CSP/26/1345",
+    "appearances": 0
+  },
+  {
+    "id": 24,
+    "name": "Bamidele Usman",
+    "team": "ICE",
+    "position": "FWD",
+    "reg_number": "FCL/ICE/26/1231",
+    "appearances": 2
+  },
+  {
+    "id": 25,
+    "name": "Adeyemi Prosper",
+    "team": "ICE",
+    "position": "GK",
+    "reg_number": "FCL/ICE/26/1232",
+    "appearances": 1
+  },
+  {
+    "id": 26,
+    "name": "Olayiwola Samson",
+    "team": "ICE",
+    "position": "MID",
+    "reg_number": "FCL/ICE/26/1233",
+    "appearances": 2
+  },
+  {
+    "id": 27,
+    "name": "Kolade Farooq",
+    "team": "ICE",
+    "position": "MID",
+    "reg_number": "FCL/ICE/26/1234",
+    "appearances": 1
+  },
+  {
+    "id": 28,
+    "name": "Muller",
+    "team": "ICE",
+    "position": "MID",
+    "reg_number": "FCL/ICE/26/1235",
+    "appearances": 1
+  },
+  {
+    "id": 29,
+    "name": "Big Sam",
+    "team": "ICE",
+    "position": "DEF",
+    "reg_number": "FCL/ICE/26/1236",
+    "appearances": 1
+  },
+  {
+    "id": 30,
+    "name": "Idris",
+    "team": "IFS",
+    "position": "MID",
+    "reg_number": "FCL/IFS/26/1168",
+    "appearances": 0
+  },
+  {
+    "id": 31,
+    "name": "Kehinde",
+    "team": "IFS",
+    "position": "MID",
+    "reg_number": "FCL/IFS/26/1169",
+    "appearances": 0
+  },
+  {
+    "id": 32,
+    "name": "Segun",
+    "team": "IFS",
+    "position": "DEF",
+    "reg_number": "FCL/IFS/26/1170",
+    "appearances": 0
+  },
+  {
+    "id": 33,
+    "name": "Victor",
+    "team": "IFS",
+    "position": "DEF",
+    "reg_number": "FCL/IFS/26/1171",
+    "appearances": 0
+  },
+  {
+    "id": 34,
+    "name": "Soji",
+    "team": "IDD",
+    "position": "FWD",
+    "reg_number": "FCL/IDD/26/1425",
+    "appearances": 1
+  },
+  {
+    "id": 35,
+    "name": "Ikudayisi Oyesola",
+    "team": "IDD",
+    "position": "FWD",
+    "reg_number": "FCL/IDD/26/1426",
+    "appearances": 0
+  },
+  {
+    "id": 36,
+    "name": "Tolu",
+    "team": "IDD",
+    "position": "DEF",
+    "reg_number": "FCL/IDD/26/1427",
+    "appearances": 1
+  },
+  {
+    "id": 37,
+    "name": "Neymar",
+    "team": "IDD",
+    "position": "FWD",
+    "reg_number": "FCL/IDD/26/1428",
+    "appearances": 1
+  },
+  {
+    "id": 38,
+    "name": "Enzo",
+    "team": "IDD",
+    "position": "MID",
+    "reg_number": "FCL/IDD/26/1429",
+    "appearances": 1
+  },
+  {
+    "id": 39,
+    "name": "Emmy",
+    "team": "IDD",
+    "position": "MID",
+    "reg_number": "FCL/IDD/26/1430",
+    "appearances": 0
+  },
+  {
+    "id": 40,
+    "name": "Ogundeji Feyitunmise Hezekiah",
+    "team": "MST",
+    "position": "GK",
+    "reg_number": "FCL/MST/26/1001",
+    "appearances": 2
+  },
+  {
+    "id": 41,
+    "name": "Adeyemi Adedayo Ibrahim",
+    "team": "MST",
+    "position": "DEF",
+    "reg_number": "FCL/MST/26/1002",
+    "appearances": 1
+  },
+  {
+    "id": 42,
+    "name": "Akinnayajo Irewale",
+    "team": "MST",
+    "position": "DEF",
+    "reg_number": "FCL/MST/26/1003",
+    "appearances": 2
+  },
+  {
+    "id": 43,
+    "name": "Ojoisimi Bright Agbomizi",
+    "team": "MST",
+    "position": "DEF",
+    "reg_number": "FCL/MST/26/1004",
+    "appearances": 0
+  },
+  {
+    "id": 44,
+    "name": "Bernard Augustine Obioma",
+    "team": "MST",
+    "position": "DEF",
+    "reg_number": "FCL/MST/26/1005",
+    "appearances": 2
+  },
+  {
+    "id": 45,
+    "name": "Philip Believe Oluwashina",
+    "team": "MST",
+    "position": "DEF",
+    "reg_number": "FCL/MST/26/1006",
+    "appearances": 2
+  },
+  {
+    "id": 46,
+    "name": "Adeniyi Ademola Daniel",
+    "team": "MST",
+    "position": "DEF",
+    "reg_number": "FCL/MST/26/1007",
+    "appearances": 2
+  },
+  {
+    "id": 47,
+    "name": "Ademisoye Segun",
+    "team": "MST",
+    "position": "DEF",
+    "reg_number": "FCL/MST/26/1008",
+    "appearances": 0
+  },
+  {
+    "id": 48,
+    "name": "Adediran Olanrewaju Abeeb",
+    "team": "MST",
+    "position": "MID",
+    "reg_number": "FCL/MST/26/1009",
+    "appearances": 2
+  },
+  {
+    "id": 49,
+    "name": "Iyare Praise",
+    "team": "MST",
+    "position": "MID",
+    "reg_number": "FCL/MST/26/1010",
+    "appearances": 2
+  },
+  {
+    "id": 50,
+    "name": "Akinyo Boluwatife Precious",
+    "team": "MST",
+    "position": "MID",
+    "reg_number": "FCL/MST/26/1011",
+    "appearances": 0
+  },
+  {
+    "id": 51,
+    "name": "Adekunle Ayomide Mubarak",
+    "team": "MST",
+    "position": "MID",
+    "reg_number": "FCL/MST/26/1012",
+    "appearances": 1
+  },
+  {
+    "id": 52,
+    "name": "Olagunju Moses Temitope",
+    "team": "MST",
+    "position": "MID",
+    "reg_number": "FCL/MST/26/1013",
+    "appearances": 0
+  },
+  {
+    "id": 53,
+    "name": "Ayeni Ayobami",
+    "team": "MST",
+    "position": "MID",
+    "reg_number": "FCL/MST/26/1014",
+    "appearances": 0
+  },
+  {
+    "id": 54,
+    "name": "Nkemjika Sydney",
+    "team": "MST",
+    "position": "FWD",
+    "reg_number": "FCL/MST/26/1015",
+    "appearances": 2
+  },
+  {
+    "id": 55,
+    "name": "Shomuyiwa Lateef Babatunde",
+    "team": "MST",
+    "position": "FWD",
+    "reg_number": "FCL/MST/26/1016",
+    "appearances": 1
+  },
+  {
+    "id": 56,
+    "name": "Boyede Joseph Ayomide",
+    "team": "MST",
+    "position": "FWD",
+    "reg_number": "FCL/MST/26/1017",
+    "appearances": 2
+  },
+  {
+    "id": 57,
+    "name": "Fabusuyi Daniel Oluwafisayo",
+    "team": "MST",
+    "position": "FWD",
+    "reg_number": "FCL/MST/26/1018",
+    "appearances": 2
+  },
+  {
+    "id": 58,
+    "name": "Akintunde Ayomide Oluwaseyifunmi",
+    "team": "MST",
+    "position": "FWD",
+    "reg_number": "FCL/MST/26/1019",
+    "appearances": 2
+  },
+  {
+    "id": 59,
+    "name": "Ekwe Fortune",
+    "team": "MST",
+    "position": "FWD",
+    "reg_number": "FCL/MST/26/1020",
+    "appearances": 1
+  },
+  {
+    "id": 60,
+    "name": "Ikwue David Oche",
+    "team": "MST",
+    "position": "GK",
+    "reg_number": "FCL/MST/26/1021",
+    "appearances": 2
+  },
+  {
+    "id": 61,
+    "name": "Afolabi Timothy Testimony",
+    "team": "FWT",
+    "position": "GK",
+    "reg_number": "FCL/FWT/26/1024",
+    "appearances": 1
+  },
+  {
+    "id": 62,
+    "name": "Jonathan Henry Chukwu",
+    "team": "FWT",
+    "position": "DEF",
+    "reg_number": "FCL/FWT/26/1025",
+    "appearances": 0
+  },
+  {
+    "id": 63,
+    "name": "Ayodeji Blessing Elisha",
+    "team": "FWT",
+    "position": "DEF",
+    "reg_number": "FCL/FWT/26/1026",
+    "appearances": 1
+  },
+  {
+    "id": 64,
+    "name": "Ayadi Bright Tayo",
+    "team": "FWT",
+    "position": "DEF",
+    "reg_number": "FCL/FWT/26/1027",
+    "appearances": 1
+  },
+  {
+    "id": 65,
+    "name": "Ganiyu Malik Ayomide",
+    "team": "FWT",
+    "position": "DEF",
+    "reg_number": "FCL/FWT/26/1028",
+    "appearances": 1
+  },
+  {
+    "id": 66,
+    "name": "Owolabi Taofeeq Ademola",
+    "team": "FWT",
+    "position": "DEF",
+    "reg_number": "FCL/FWT/26/1029",
+    "appearances": 1
+  },
+  {
+    "id": 67,
+    "name": "Tiamiyu Samuel Temitope",
+    "team": "FWT",
+    "position": "DEF",
+    "reg_number": "FCL/FWT/26/1030",
+    "appearances": 0
+  },
+  {
+    "id": 68,
+    "name": "Awosiyan Oluwaseun Victor",
+    "team": "FWT",
+    "position": "DEF",
+    "reg_number": "FCL/FWT/26/1031",
+    "appearances": 0
+  },
+  {
+    "id": 69,
+    "name": "Bello Baki Oluwaseyi",
+    "team": "FWT",
+    "position": "MID",
+    "reg_number": "FCL/FWT/26/1032",
+    "appearances": 1
+  },
+  {
+    "id": 70,
+    "name": "Famuwagun Tomiwa Young",
+    "team": "FWT",
+    "position": "MID",
+    "reg_number": "FCL/FWT/26/1033",
+    "appearances": 0
+  },
+  {
+    "id": 71,
+    "name": "Fadiji Bonnke Samuel",
+    "team": "FWT",
+    "position": "MID",
+    "reg_number": "FCL/FWT/26/1034",
+    "appearances": 1
+  },
+  {
+    "id": 72,
+    "name": "Ajayi Oluwatobi Oluwasegun",
+    "team": "FWT",
+    "position": "MID",
+    "reg_number": "FCL/FWT/26/1035",
+    "appearances": 1
+  },
+  {
+    "id": 73,
+    "name": "Iyapo Banji",
+    "team": "FWT",
+    "position": "MID",
+    "reg_number": "FCL/FWT/26/1036",
+    "appearances": 1
+  },
+  {
+    "id": 74,
+    "name": "Oghoromai Richard Ayomide",
+    "team": "FWT",
+    "position": "MID",
+    "reg_number": "FCL/FWT/26/1037",
+    "appearances": 0
+  },
+  {
+    "id": 75,
+    "name": "Adegoke Blessing Moses",
+    "team": "FWT",
+    "position": "MID",
+    "reg_number": "FCL/FWT/26/1038",
+    "appearances": 0
+  },
+  {
+    "id": 76,
+    "name": "Ayodeji Bright Kehinde",
+    "team": "FWT",
+    "position": "FWD",
+    "reg_number": "FCL/FWT/26/1039",
+    "appearances": 1
+  },
+  {
+    "id": 77,
+    "name": "Ogunkanmi Oluwanimisire Oladayo",
+    "team": "FWT",
+    "position": "FWD",
+    "reg_number": "FCL/FWT/26/1040",
+    "appearances": 1
+  },
+  {
+    "id": 78,
+    "name": "Agunloye Segun Isaac",
+    "team": "FWT",
+    "position": "FWD",
+    "reg_number": "FCL/FWT/26/1041",
+    "appearances": 0
+  },
+  {
+    "id": 79,
+    "name": "Sanusi Olaitan John",
+    "team": "FWT",
+    "position": "FWD",
+    "reg_number": "FCL/FWT/26/1042",
+    "appearances": 0
+  },
+  {
+    "id": 80,
+    "name": "Olalekan Hammed Olajuwon",
+    "team": "FWT",
+    "position": "FWD",
+    "reg_number": "FCL/FWT/26/1043",
+    "appearances": 0
+  },
+  {
+    "id": 81,
+    "name": "Akinmola Oluwafisayo Oluwafemi",
+    "team": "FWT",
+    "position": "FWD",
+    "reg_number": "FCL/FWT/26/1044",
+    "appearances": 0
+  },
+  {
+    "id": 82,
+    "name": "Olayemi Elijah Ayokunle",
+    "team": "FWT",
+    "position": "FWD",
+    "reg_number": "FCL/FWT/26/1045",
+    "appearances": 0
+  },
+  {
+    "id": 83,
+    "name": "Akindele Damilola Temitope",
+    "team": "FWT",
+    "position": "FWD",
+    "reg_number": "FCL/FWT/26/1046",
+    "appearances": 0
+  },
+  {
+    "id": 84,
+    "name": "Olabode Victor Oluwatosin",
+    "team": "CYS",
+    "position": "GK",
+    "reg_number": "FCL/CYS/26/1070",
+    "appearances": 1
+  },
+  {
+    "id": 85,
+    "name": "Adewumi Excel Joshua",
+    "team": "CYS",
+    "position": "DEF",
+    "reg_number": "FCL/CYS/26/1071",
+    "appearances": 1
+  },
+  {
+    "id": 86,
+    "name": "Kadri Taofeek Akorede",
+    "team": "CYS",
+    "position": "DEF",
+    "reg_number": "FCL/CYS/26/1072",
+    "appearances": 1
+  },
+  {
+    "id": 87,
+    "name": "Raji Jubril Olarewaju",
+    "team": "CYS",
+    "position": "DEF",
+    "reg_number": "FCL/CYS/26/1073",
+    "appearances": 1
+  },
+  {
+    "id": 88,
+    "name": "Fashola Oluwatobi Joshua",
+    "team": "CYS",
+    "position": "DEF",
+    "reg_number": "FCL/CYS/26/1074",
+    "appearances": 1
+  },
+  {
+    "id": 89,
+    "name": "Nwoke Isaac Honour",
+    "team": "CYS",
+    "position": "MID",
+    "reg_number": "FCL/CYS/26/1075",
+    "appearances": 1
+  },
+  {
+    "id": 90,
+    "name": "Ayeni Babatunde Paul",
+    "team": "CYS",
+    "position": "MID",
+    "reg_number": "FCL/CYS/26/1076",
+    "appearances": 1
+  },
+  {
+    "id": 91,
+    "name": "Onah Caleb Igoche",
+    "team": "CYS",
+    "position": "MID",
+    "reg_number": "FCL/CYS/26/1077",
+    "appearances": 1
+  },
+  {
+    "id": 92,
+    "name": "Ajao Alameen Olaide",
+    "team": "CYS",
+    "position": "MID",
+    "reg_number": "FCL/CYS/26/1078",
+    "appearances": 0
+  },
+  {
+    "id": 93,
+    "name": "Jegede Daniel Kolawole",
+    "team": "CYS",
+    "position": "FWD",
+    "reg_number": "FCL/CYS/26/1079",
+    "appearances": 1
+  },
+  {
+    "id": 94,
+    "name": "Akinyede Allen Oluwaferanmi",
+    "team": "CYS",
+    "position": "FWD",
+    "reg_number": "FCL/CYS/26/1080",
+    "appearances": 1
+  },
+  {
+    "id": 95,
+    "name": "Adedotun Faiz Ayobami",
+    "team": "CYS",
+    "position": "GK",
+    "reg_number": "FCL/CYS/26/1081",
+    "appearances": 0
+  },
+  {
+    "id": 96,
+    "name": "Ifedayoijitimeyin Valerian Igbagboyemi",
+    "team": "CYS",
+    "position": "DEF",
+    "reg_number": "FCL/CYS/26/1082",
+    "appearances": 0
+  },
+  {
+    "id": 97,
+    "name": "Olanrewaju Mujeeb Abolaji",
+    "team": "CYS",
+    "position": "DEF",
+    "reg_number": "FCL/CYS/26/1083",
+    "appearances": 0
+  },
+  {
+    "id": 98,
+    "name": "Akinrinola Samuel Temitope",
+    "team": "CYS",
+    "position": "MID",
+    "reg_number": "FCL/CYS/26/1084",
+    "appearances": 0
+  },
+  {
+    "id": 99,
+    "name": "Akinshipe Oluwafemi Solomon",
+    "team": "CYS",
+    "position": "MID",
+    "reg_number": "FCL/CYS/26/1085",
+    "appearances": 0
+  },
+  {
+    "id": 100,
+    "name": "Oluwadiya Timilehin Abraham",
+    "team": "CYS",
+    "position": "MID",
+    "reg_number": "FCL/CYS/26/1086",
+    "appearances": 0
+  },
+  {
+    "id": 101,
+    "name": "Olamijulo Israel Damilare",
+    "team": "CYS",
+    "position": "MID",
+    "reg_number": "FCL/CYS/26/1087",
+    "appearances": 0
+  },
+  {
+    "id": 102,
+    "name": "Adeoye Ezekiel Oluwaseyi",
+    "team": "CYS",
+    "position": "MID",
+    "reg_number": "FCL/CYS/26/1088",
+    "appearances": 0
+  },
+  {
+    "id": 103,
+    "name": "Owolabi Olaifeoluwa Solomon",
+    "team": "CYS",
+    "position": "MID",
+    "reg_number": "FCL/CYS/26/1089",
+    "appearances": 0
+  },
+  {
+    "id": 104,
+    "name": "Bello Daniel Damilare",
+    "team": "CYS",
+    "position": "FWD",
+    "reg_number": "FCL/CYS/26/1090",
+    "appearances": 1
+  },
+  {
+    "id": 105,
+    "name": "Olorunfemi Taiwo James",
+    "team": "CYS",
+    "position": "FWD",
+    "reg_number": "FCL/CYS/26/1091",
+    "appearances": 1
+  },
+  {
+    "id": 106,
+    "name": "Adetule Marvellous Mayowa",
+    "team": "CYS",
+    "position": "FWD",
+    "reg_number": "FCL/CYS/26/1092",
+    "appearances": 0
+  },
+  {
+    "id": 107,
+    "name": "John Igbalamide",
+    "team": "CYS",
+    "position": "GK",
+    "reg_number": "FCL/CYS/26/1093",
+    "appearances": 0
+  },
+  {
+    "id": 108,
+    "name": "Nwabunwanne Chibichi Daniel",
+    "team": "SIMT",
+    "position": "GK",
+    "reg_number": "FCL/SIMT/26/1047",
+    "appearances": 0
+  },
+  {
+    "id": 109,
+    "name": "Divine Gabriel Ibrahim",
+    "team": "SIMT",
+    "position": "GK",
+    "reg_number": "FCL/SIMT/26/1048",
+    "appearances": 0
+  },
+  {
+    "id": 110,
+    "name": "Adebayo Samuel Ayobami",
+    "team": "SIMT",
+    "position": "DEF",
+    "reg_number": "FCL/SIMT/26/1049",
+    "appearances": 0
+  },
+  {
+    "id": 111,
+    "name": "Adeniyi Opeyemi Israel",
+    "team": "SIMT",
+    "position": "DEF",
+    "reg_number": "FCL/SIMT/26/1050",
+    "appearances": 0
+  },
+  {
+    "id": 112,
+    "name": "Momoh Joshua David",
+    "team": "SIMT",
+    "position": "DEF",
+    "reg_number": "FCL/SIMT/26/1051",
+    "appearances": 0
+  },
+  {
+    "id": 113,
+    "name": "Aderiye Joshua Adekunle",
+    "team": "SIMT",
+    "position": "DEF",
+    "reg_number": "FCL/SIMT/26/1052",
+    "appearances": 0
+  },
+  {
+    "id": 114,
+    "name": "Adewale Uthman Boluwatife",
+    "team": "SIMT",
+    "position": "DEF",
+    "reg_number": "FCL/SIMT/26/1053",
+    "appearances": 0
+  },
+  {
+    "id": 115,
+    "name": "Omolayo Precious Ayomide",
+    "team": "SIMT",
+    "position": "DEF",
+    "reg_number": "FCL/SIMT/26/1054",
+    "appearances": 0
+  },
+  {
+    "id": 116,
+    "name": "Yusuf Soliu Okikiola",
+    "team": "SIMT",
+    "position": "DEF",
+    "reg_number": "FCL/SIMT/26/1055",
+    "appearances": 0
+  },
+  {
+    "id": 117,
+    "name": "Ajiwoye Oluwalonimi Israel",
+    "team": "SIMT",
+    "position": "DEF",
+    "reg_number": "FCL/SIMT/26/1056",
+    "appearances": 0
+  },
+  {
+    "id": 118,
+    "name": "Afolabi Abdulmuheez",
+    "team": "SIMT",
+    "position": "DEF",
+    "reg_number": "FCL/SIMT/26/1057",
+    "appearances": 0
+  },
+  {
+    "id": 119,
+    "name": "Olabamiji Eric Ayokunle",
+    "team": "SIMT",
+    "position": "DEF",
+    "reg_number": "FCL/SIMT/26/1058",
+    "appearances": 0
+  },
+  {
+    "id": 120,
+    "name": "Kolawole Emmanuel Timilehin",
+    "team": "SIMT",
+    "position": "MID",
+    "reg_number": "FCL/SIMT/26/1059",
+    "appearances": 0
+  },
+  {
+    "id": 121,
+    "name": "Oweazim Chukwudumebi",
+    "team": "SIMT",
+    "position": "MID",
+    "reg_number": "FCL/SIMT/26/1060",
+    "appearances": 0
+  },
+  {
+    "id": 122,
+    "name": "Okoye Philip C.",
+    "team": "SIMT",
+    "position": "MID",
+    "reg_number": "FCL/SIMT/26/1061",
+    "appearances": 0
+  },
+  {
+    "id": 123,
+    "name": "Adeniyi Temitope Oluwadamilare",
+    "team": "SIMT",
+    "position": "MID",
+    "reg_number": "FCL/SIMT/26/1062",
+    "appearances": 0
+  },
+  {
+    "id": 124,
+    "name": "Adewopo Feranmi",
+    "team": "SIMT",
+    "position": "MID",
+    "reg_number": "FCL/SIMT/26/1063",
+    "appearances": 0
+  },
+  {
+    "id": 125,
+    "name": "Omowale Ridwan Gbolahun",
+    "team": "SIMT",
+    "position": "MID",
+    "reg_number": "FCL/SIMT/26/1064",
+    "appearances": 0
+  },
+  {
+    "id": 126,
+    "name": "Oladapo Isaac Ayomide",
+    "team": "SIMT",
+    "position": "FWD",
+    "reg_number": "FCL/SIMT/26/1065",
+    "appearances": 0
+  },
+  {
+    "id": 127,
+    "name": "Emmanuel Oluwapamilerin Joshua",
+    "team": "SIMT",
+    "position": "FWD",
+    "reg_number": "FCL/SIMT/26/1066",
+    "appearances": 0
+  },
+  {
+    "id": 128,
+    "name": "Ogboye Samuel Oluwaponmile",
+    "team": "SIMT",
+    "position": "FWD",
+    "reg_number": "FCL/SIMT/26/1067",
+    "appearances": 0
+  },
+  {
+    "id": 129,
+    "name": "Ipinlaye Samuel Fisayo",
+    "team": "SIMT",
+    "position": "FWD",
+    "reg_number": "FCL/SIMT/26/1068",
+    "appearances": 0
+  },
+  {
+    "id": 130,
+    "name": "Amure Matthew",
+    "team": "SIMT",
+    "position": "FWD",
+    "reg_number": "FCL/SIMT/26/1069",
+    "appearances": 0
+  },
+  {
+    "id": 131,
+    "name": "Rotimi Joseph Folahan",
+    "team": "STA",
+    "position": "GK",
+    "reg_number": "FCL/STA/26/1116",
+    "appearances": 0
+  },
+  {
+    "id": 132,
+    "name": "Okusi Edward",
+    "team": "STA",
+    "position": "MID",
+    "reg_number": "FCL/STA/26/1117",
+    "appearances": 0
+  },
+  {
+    "id": 133,
+    "name": "Emmanuel Olaoluwa Akintayo",
+    "team": "STA",
+    "position": "DEF",
+    "reg_number": "FCL/STA/26/1118",
+    "appearances": 0
+  },
+  {
+    "id": 134,
+    "name": "Adewumi MicClinton Adegoke",
+    "team": "STA",
+    "position": "DEF",
+    "reg_number": "FCL/STA/26/1119",
+    "appearances": 0
+  },
+  {
+    "id": 135,
+    "name": "Afilaka Praise Temidayo",
+    "team": "STA",
+    "position": "DEF",
+    "reg_number": "FCL/STA/26/1120",
+    "appearances": 0
+  },
+  {
+    "id": 136,
+    "name": "Omowole Adebusuyi Abraham",
+    "team": "STA",
+    "position": "DEF",
+    "reg_number": "FCL/STA/26/1121",
+    "appearances": 0
+  },
+  {
+    "id": 137,
+    "name": "Aminu Moses Vincent",
+    "team": "STA",
+    "position": "DEF",
+    "reg_number": "FCL/STA/26/1122",
+    "appearances": 0
+  },
+  {
+    "id": 138,
+    "name": "Victor Gospel Leo",
+    "team": "STA",
+    "position": "DEF",
+    "reg_number": "FCL/STA/26/1123",
+    "appearances": 0
+  },
+  {
+    "id": 139,
+    "name": "Jackson Joseph",
+    "team": "STA",
+    "position": "DEF",
+    "reg_number": "FCL/STA/26/1124",
+    "appearances": 0
+  },
+  {
+    "id": 140,
+    "name": "Adedeji Taofeek Oyeleke",
+    "team": "STA",
+    "position": "DEF",
+    "reg_number": "FCL/STA/26/1125",
+    "appearances": 0
+  },
+  {
+    "id": 141,
+    "name": "Eki Kelvin Aghoghomena",
+    "team": "STA",
+    "position": "DEF",
+    "reg_number": "FCL/STA/26/1126",
+    "appearances": 0
+  },
+  {
+    "id": 142,
+    "name": "Afolabi David Adebayo",
+    "team": "STA",
+    "position": "MID",
+    "reg_number": "FCL/STA/26/1127",
+    "appearances": 0
+  },
+  {
+    "id": 143,
+    "name": "Agbo Peter",
+    "team": "STA",
+    "position": "MID",
+    "reg_number": "FCL/STA/26/1128",
+    "appearances": 0
+  },
+  {
+    "id": 144,
+    "name": "Johnson Emmanuel Olaoluwa",
+    "team": "STA",
+    "position": "MID",
+    "reg_number": "FCL/STA/26/1129",
+    "appearances": 0
+  },
+  {
+    "id": 145,
+    "name": "Akinjogunla Mayowa",
+    "team": "STA",
+    "position": "MID",
+    "reg_number": "FCL/STA/26/1130",
+    "appearances": 0
+  },
+  {
+    "id": 146,
+    "name": "Akinsowon Gbenga Ejiro",
+    "team": "STA",
+    "position": "MID",
+    "reg_number": "FCL/STA/26/1131",
+    "appearances": 0
+  },
+  {
+    "id": 147,
+    "name": "Ayetan Samuel Precious",
+    "team": "STA",
+    "position": "MID",
+    "reg_number": "FCL/STA/26/1132",
+    "appearances": 0
+  },
+  {
+    "id": 148,
+    "name": "Salam Rokeeb Oladimeji",
+    "team": "STA",
+    "position": "MID",
+    "reg_number": "FCL/STA/26/1133",
+    "appearances": 0
+  },
+  {
+    "id": 149,
+    "name": "Daisi Tioluwanimi",
+    "team": "STA",
+    "position": "FWD",
+    "reg_number": "FCL/STA/26/1134",
+    "appearances": 0
+  },
+  {
+    "id": 150,
+    "name": "Akintunde Samuel",
+    "team": "STA",
+    "position": "FWD",
+    "reg_number": "FCL/STA/26/1135",
+    "appearances": 0
+  },
+  {
+    "id": 151,
+    "name": "Precious",
+    "team": "STA",
+    "position": "FWD",
+    "reg_number": "FCL/STA/26/1136",
+    "appearances": 0
+  },
+  {
+    "id": 152,
+    "name": "Bello Riliwan Remilekun",
+    "team": "STA",
+    "position": "FWD",
+    "reg_number": "FCL/STA/26/1137",
+    "appearances": 0
+  },
+  {
+    "id": 153,
+    "name": "Nwachukwu Jesse",
+    "team": "STA",
+    "position": "FWD",
+    "reg_number": "FCL/STA/26/1138",
+    "appearances": 0
+  },
+  {
+    "id": 154,
+    "name": "Emmanuel",
+    "team": "STA",
+    "position": "GK",
+    "reg_number": "FCL/STA/26/1139",
+    "appearances": 0
+  },
+  {
+    "id": 155,
+    "name": "Faith",
+    "team": "STA",
+    "position": "MID",
+    "reg_number": "FCL/STA/26/1140",
+    "appearances": 0
+  },
+  {
+    "id": 156,
+    "name": "Bashiru Taofeek Olanrewaju",
+    "team": "STA",
+    "position": "FWD",
+    "reg_number": "FCL/STA/26/1141",
+    "appearances": 0
+  },
+  {
+    "id": 157,
+    "name": "Harun Abdulkareem",
+    "team": "IFS",
+    "position": "GK",
+    "reg_number": "FCL/IFS/26/1139",
+    "appearances": 0
+  },
+  {
+    "id": 158,
+    "name": "Owogbemi Oluwadunsin Emmanuel",
+    "team": "IFS",
+    "position": "GK",
+    "reg_number": "FCL/IFS/26/1140",
+    "appearances": 0
+  },
+  {
+    "id": 159,
+    "name": "Gowon Mathias Monday",
+    "team": "IFS",
+    "position": "DEF",
+    "reg_number": "FCL/IFS/26/1141",
+    "appearances": 0
+  },
+  {
+    "id": 160,
+    "name": "Ude-Abara George Chidindu",
+    "team": "IFS",
+    "position": "DEF",
+    "reg_number": "FCL/IFS/26/1142",
+    "appearances": 0
+  },
+  {
+    "id": 161,
+    "name": "Sokun Omotayo Clinton",
+    "team": "IFS",
+    "position": "DEF",
+    "reg_number": "FCL/IFS/26/1143",
+    "appearances": 0
+  },
+  {
+    "id": 162,
+    "name": "Falana Stephen Odunayo",
+    "team": "IFS",
+    "position": "DEF",
+    "reg_number": "FCL/IFS/26/1144",
+    "appearances": 0
+  },
+  {
+    "id": 163,
+    "name": "Olatunji Dunni Oluwagbenga",
+    "team": "IFS",
+    "position": "DEF",
+    "reg_number": "FCL/IFS/26/1145",
+    "appearances": 0
+  },
+  {
+    "id": 164,
+    "name": "Owamokele Joshua",
+    "team": "IFS",
+    "position": "DEF",
+    "reg_number": "FCL/IFS/26/1146",
+    "appearances": 0
+  },
+  {
+    "id": 165,
+    "name": "Oshunniran Gbolahan",
+    "team": "IFS",
+    "position": "DEF",
+    "reg_number": "FCL/IFS/26/1147",
+    "appearances": 0
+  },
+  {
+    "id": 166,
+    "name": "Adeosun Peace",
+    "team": "IFS",
+    "position": "DEF",
+    "reg_number": "FCL/IFS/26/1148",
+    "appearances": 0
+  },
+  {
+    "id": 167,
+    "name": "Adeyanju Dominion Harry",
+    "team": "IFS",
+    "position": "MID",
+    "reg_number": "FCL/IFS/26/1149",
+    "appearances": 0
+  },
+  {
+    "id": 168,
+    "name": "Olorunfunmilayo Gbolaga Emmanuel",
+    "team": "IFS",
+    "position": "MID",
+    "reg_number": "FCL/IFS/26/1150",
+    "appearances": 0
+  },
+  {
+    "id": 169,
+    "name": "Olawuyi Praise Olatunji",
+    "team": "IFS",
+    "position": "MID",
+    "reg_number": "FCL/IFS/26/1151",
+    "appearances": 0
+  },
+  {
+    "id": 170,
+    "name": "Olanrewaju Ifeoluwa",
+    "team": "IFS",
+    "position": "MID",
+    "reg_number": "FCL/IFS/26/1152",
+    "appearances": 0
+  },
+  {
+    "id": 171,
+    "name": "Uhiene Paul Anuoluwapo",
+    "team": "IFS",
+    "position": "MID",
+    "reg_number": "FCL/IFS/26/1153",
+    "appearances": 0
+  },
+  {
+    "id": 172,
+    "name": "Bakare Idris",
+    "team": "IFS",
+    "position": "FWD",
+    "reg_number": "FCL/IFS/26/1154",
+    "appearances": 0
+  },
+  {
+    "id": 173,
+    "name": "Ojodako Joseph Olayinka",
+    "team": "IFS",
+    "position": "FWD",
+    "reg_number": "FCL/IFS/26/1155",
+    "appearances": 0
+  },
+  {
+    "id": 174,
+    "name": "Fasiku Victor Adebola",
+    "team": "IFS",
+    "position": "FWD",
+    "reg_number": "FCL/IFS/26/1156",
+    "appearances": 0
+  },
+  {
+    "id": 175,
+    "name": "Busari Ifeoluwa Habeeb",
+    "team": "IFS",
+    "position": "FWD",
+    "reg_number": "FCL/IFS/26/1157",
+    "appearances": 0
+  },
+  {
+    "id": 176,
+    "name": "Omotomo Olumide Daniel",
+    "team": "IFS",
+    "position": "FWD",
+    "reg_number": "FCL/IFS/26/1158",
+    "appearances": 0
+  },
+  {
+    "id": 177,
+    "name": "Adewale Adeola Samue",
+    "team": "IFS",
+    "position": "FWD",
+    "reg_number": "FCL/IFS/26/1159",
+    "appearances": 0
+  },
+  {
+    "id": 178,
+    "name": "Akinyemi Feranmi Olusegun",
+    "team": "IFS",
+    "position": "FWD",
+    "reg_number": "FCL/IFS/26/1160",
+    "appearances": 0
+  },
+  {
+    "id": 179,
+    "name": "Olorunfemi Kehinde John",
+    "team": "IFS",
+    "position": "FWD",
+    "reg_number": "FCL/IFS/26/1161",
+    "appearances": 0
+  },
+  {
+    "id": 180,
+    "name": "Adesuyi Oluwasegun",
+    "team": "MCB",
+    "position": "GK",
+    "reg_number": "FCL/MCB/26/1162",
+    "appearances": 1
+  },
+  {
+    "id": 181,
+    "name": "Ayeni Opeyemi",
+    "team": "MCB",
+    "position": "DEF",
+    "reg_number": "FCL/MCB/26/1163",
+    "appearances": 1
+  },
+  {
+    "id": 182,
+    "name": "Alagbe Jeremiah Kehinde",
+    "team": "MCB",
+    "position": "DEF",
+    "reg_number": "FCL/MCB/26/1164",
+    "appearances": 0
+  },
+  {
+    "id": 183,
+    "name": "Osowo Taiwo",
+    "team": "MCB",
+    "position": "DEF",
+    "reg_number": "FCL/MCB/26/1165",
+    "appearances": 1
+  },
+  {
+    "id": 184,
+    "name": "Favour",
+    "team": "MCB",
+    "position": "MID",
+    "reg_number": "FCL/MCB/26/1166",
+    "appearances": 0
+  },
+  {
+    "id": 185,
+    "name": "Oni Oluwadamilola",
+    "team": "MCB",
+    "position": "MID",
+    "reg_number": "FCL/MCB/26/1167",
+    "appearances": 1
+  },
+  {
+    "id": 186,
+    "name": "Lawal Favour Ben",
+    "team": "MCB",
+    "position": "MID",
+    "reg_number": "FCL/MCB/26/1168",
+    "appearances": 1
+  },
+  {
+    "id": 187,
+    "name": "Olowu Dennis",
+    "team": "MCB",
+    "position": "MID",
+    "reg_number": "FCL/MCB/26/1169",
+    "appearances": 1
+  },
+  {
+    "id": 188,
+    "name": "Olaniran Oluwatimilehin",
+    "team": "MCB",
+    "position": "FWD",
+    "reg_number": "FCL/MCB/26/1170",
+    "appearances": 1
+  },
+  {
+    "id": 189,
+    "name": "Ameh Lucky",
+    "team": "MCB",
+    "position": "FWD",
+    "reg_number": "FCL/MCB/26/1171",
+    "appearances": 1
+  },
+  {
+    "id": 190,
+    "name": "Alowonle Clement",
+    "team": "MCB",
+    "position": "FWD",
+    "reg_number": "FCL/MCB/26/1172",
+    "appearances": 1
+  },
+  {
+    "id": 191,
+    "name": "Adameji Isaac",
+    "team": "MCB",
+    "position": "DEF",
+    "reg_number": "FCL/MCB/26/1173",
+    "appearances": 1
+  },
+  {
+    "id": 192,
+    "name": "Wasiu Ismaeel",
+    "team": "MCB",
+    "position": "FWD",
+    "reg_number": "FCL/MCB/26/1174",
+    "appearances": 0
+  },
+  {
+    "id": 193,
+    "name": "Adeleye Blessing",
+    "team": "MCB",
+    "position": "DEF",
+    "reg_number": "FCL/MCB/26/1175",
+    "appearances": 1
+  },
+  {
+    "id": 194,
+    "name": "Tallest",
+    "team": "MCB",
+    "position": "DEF",
+    "reg_number": "FCL/MCB/26/1176",
+    "appearances": 0
+  },
+  {
+    "id": 195,
+    "name": "Arogunrerin Abdulsalam",
+    "team": "MCB",
+    "position": "MID",
+    "reg_number": "FCL/MCB/26/1177",
+    "appearances": 0
+  },
+  {
+    "id": 196,
+    "name": "Olaoye Festus",
+    "team": "MCB",
+    "position": "MID",
+    "reg_number": "FCL/MCB/26/1178",
+    "appearances": 0
+  },
+  {
+    "id": 197,
+    "name": "Dyno",
+    "team": "MCB",
+    "position": "MID",
+    "reg_number": "FCL/MCB/26/1179",
+    "appearances": 0
+  },
+  {
+    "id": 198,
+    "name": "Olanipekun Alfred",
+    "team": "MCB",
+    "position": "MID",
+    "reg_number": "FCL/MCB/26/1180",
+    "appearances": 0
+  },
+  {
+    "id": 199,
+    "name": "Fayipe Christopher",
+    "team": "MCB",
+    "position": "FWD",
+    "reg_number": "FCL/MCB/26/1181",
+    "appearances": 0
+  },
+  {
+    "id": 200,
+    "name": "Adenoye Paul",
+    "team": "MCB",
+    "position": "FWD",
+    "reg_number": "FCL/MCB/26/1182",
+    "appearances": 1
+  },
+  {
+    "id": 201,
+    "name": "Oyelakin Fawaz",
+    "team": "MCB",
+    "position": "FWD",
+    "reg_number": "FCL/MCB/26/1183",
+    "appearances": 0
+  },
+  {
+    "id": 202,
+    "name": "Abdullattef Solah",
+    "team": "MCB",
+    "position": "FWD",
+    "reg_number": "FCL/MCB/26/1184",
+    "appearances": 0
+  },
+  {
+    "id": 203,
+    "name": "Afolabi Yusuf",
+    "team": "MBBS",
+    "position": "GK",
+    "reg_number": "FCL/MBBS/26/1254",
+    "appearances": 0
+  },
+  {
+    "id": 204,
+    "name": "Ojo Daniel",
+    "team": "MBBS",
+    "position": "DEF",
+    "reg_number": "FCL/MBBS/26/1255",
+    "appearances": 0
+  },
+  {
+    "id": 205,
+    "name": "Chinedu Nelson",
+    "team": "MBBS",
+    "position": "DEF",
+    "reg_number": "FCL/MBBS/26/1256",
+    "appearances": 0
+  },
+  {
+    "id": 206,
+    "name": "Eze Joshua",
+    "team": "MBBS",
+    "position": "DEF",
+    "reg_number": "FCL/MBBS/26/1257",
+    "appearances": 0
+  },
+  {
+    "id": 207,
+    "name": "Olumide Olamide",
+    "team": "MBBS",
+    "position": "DEF",
+    "reg_number": "FCL/MBBS/26/1258",
+    "appearances": 0
+  },
+  {
+    "id": 208,
+    "name": "SK",
+    "team": "MBBS",
+    "position": "MID",
+    "reg_number": "FCL/MBBS/26/1259",
+    "appearances": 0
+  },
+  {
+    "id": 209,
+    "name": "Balogun Victor",
+    "team": "MBBS",
+    "position": "MID",
+    "reg_number": "FCL/MBBS/26/1260",
+    "appearances": 0
+  },
+  {
+    "id": 210,
+    "name": "Adeniyi Samuel",
+    "team": "MBBS",
+    "position": "MID",
+    "reg_number": "FCL/MBBS/26/1261",
+    "appearances": 0
+  },
+  {
+    "id": 211,
+    "name": "Bamidele Fikayo",
+    "team": "MBBS",
+    "position": "FWD",
+    "reg_number": "FCL/MBBS/26/1262",
+    "appearances": 0
+  },
+  {
+    "id": 212,
+    "name": "Olawale Ibrahim",
+    "team": "MBBS",
+    "position": "FWD",
+    "reg_number": "FCL/MBBS/26/1263",
+    "appearances": 0
+  },
+  {
+    "id": 213,
+    "name": "Okonkwo Charles",
+    "team": "MBBS",
+    "position": "FWD",
+    "reg_number": "FCL/MBBS/26/1264",
+    "appearances": 0
+  },
+  {
+    "id": 214,
+    "name": "Eniola Ayomide Emmanuel",
+    "team": "PHY",
+    "position": "GK",
+    "reg_number": "FCL/PHY/26/1093",
+    "appearances": 0
+  },
+  {
+    "id": 215,
+    "name": "Ajayi Timothy",
+    "team": "PHY",
+    "position": "DEF",
+    "reg_number": "FCL/PHY/26/1094",
+    "appearances": 0
+  },
+  {
+    "id": 216,
+    "name": "Praise Balogun",
+    "team": "PHY",
+    "position": "DEF",
+    "reg_number": "FCL/PHY/26/1095",
+    "appearances": 0
+  },
+  {
+    "id": 217,
+    "name": "Okumagba Franklin",
+    "team": "PHY",
+    "position": "DEF",
+    "reg_number": "FCL/PHY/26/1096",
+    "appearances": 0
+  },
+  {
+    "id": 218,
+    "name": "Olamide Agboola",
+    "team": "PHY",
+    "position": "DEF",
+    "reg_number": "FCL/PHY/26/1097",
+    "appearances": 0
+  },
+  {
+    "id": 219,
+    "name": "Ajigboteleda Emmanuel",
+    "team": "PHY",
+    "position": "MID",
+    "reg_number": "FCL/PHY/26/1098",
+    "appearances": 0
+  },
+  {
+    "id": 220,
+    "name": "Temitope Ajayi",
+    "team": "PHY",
+    "position": "MID",
+    "reg_number": "FCL/PHY/26/1099",
+    "appearances": 0
+  },
+  {
+    "id": 221,
+    "name": "Uduak Abasi",
+    "team": "PHY",
+    "position": "MID",
+    "reg_number": "FCL/PHY/26/1100",
+    "appearances": 0
+  },
+  {
+    "id": 222,
+    "name": "Are Moses",
+    "team": "PHY",
+    "position": "FWD",
+    "reg_number": "FCL/PHY/26/1101",
+    "appearances": 0
+  },
+  {
+    "id": 223,
+    "name": "Iyenagbe Christian",
+    "team": "PHY",
+    "position": "FWD",
+    "reg_number": "FCL/PHY/26/1102",
+    "appearances": 0
+  },
+  {
+    "id": 224,
+    "name": "Akinseye Oluwasanmilore",
+    "team": "PHY",
+    "position": "FWD",
+    "reg_number": "FCL/PHY/26/1103",
+    "appearances": 0
+  },
+  {
+    "id": 225,
+    "name": "Lawal Oluwabukunmi",
+    "team": "PHY",
+    "position": "DEF",
+    "reg_number": "FCL/PHY/26/1104",
+    "appearances": 0
+  },
+  {
+    "id": 226,
+    "name": "Oladipupo Afeez",
+    "team": "PHY",
+    "position": "FWD",
+    "reg_number": "FCL/PHY/26/1105",
+    "appearances": 0
+  },
+  {
+    "id": 227,
+    "name": "Andrew Emmanuel",
+    "team": "PHY",
+    "position": "FWD",
+    "reg_number": "FCL/PHY/26/1106",
+    "appearances": 0
+  },
+  {
+    "id": 228,
+    "name": "Adeleye Benjamin",
+    "team": "PHY",
+    "position": "GK",
+    "reg_number": "FCL/PHY/26/1107",
+    "appearances": 0
+  },
+  {
+    "id": 229,
+    "name": "Olagundoye Joseph",
+    "team": "PHY",
+    "position": "DEF",
+    "reg_number": "FCL/PHY/26/1108",
+    "appearances": 0
+  },
+  {
+    "id": 230,
+    "name": "Gomes Oluwabukunmi",
+    "team": "PHY",
+    "position": "DEF",
+    "reg_number": "FCL/PHY/26/1109",
+    "appearances": 0
+  },
+  {
+    "id": 231,
+    "name": "Oyeleye Oladipupo",
+    "team": "PHY",
+    "position": "MID",
+    "reg_number": "FCL/PHY/26/1110",
+    "appearances": 0
+  },
+  {
+    "id": 232,
+    "name": "Abiola Samuel",
+    "team": "PHY",
+    "position": "MID",
+    "reg_number": "FCL/PHY/26/1111",
+    "appearances": 0
+  },
+  {
+    "id": 233,
+    "name": "Abiola Abdmalik",
+    "team": "PHY",
+    "position": "MID",
+    "reg_number": "FCL/PHY/26/1112",
+    "appearances": 0
+  },
+  {
+    "id": 234,
+    "name": "Adesomo Blessing",
+    "team": "PHY",
+    "position": "FWD",
+    "reg_number": "FCL/PHY/26/1113",
+    "appearances": 0
+  },
+  {
+    "id": 235,
+    "name": "Ubine David",
+    "team": "PHY",
+    "position": "FWD",
+    "reg_number": "FCL/PHY/26/1114",
+    "appearances": 0
+  },
+  {
+    "id": 236,
+    "name": "Adejimi Goodluck",
+    "team": "PHY",
+    "position": "FWD",
+    "reg_number": "FCL/PHY/26/1115",
+    "appearances": 0
+  },
+  {
+    "id": 237,
+    "name": "Ojo David",
+    "team": "BDG",
+    "position": "GK",
+    "reg_number": "FCL/BDG/26/1185",
+    "appearances": 0
+  },
+  {
+    "id": 238,
+    "name": "Arowolo Gideon",
+    "team": "BDG",
+    "position": "DEF",
+    "reg_number": "FCL/BDG/26/1186",
+    "appearances": 0
+  },
+  {
+    "id": 239,
+    "name": "Adeleke Samson",
+    "team": "BDG",
+    "position": "DEF",
+    "reg_number": "FCL/BDG/26/1187",
+    "appearances": 0
+  },
+  {
+    "id": 240,
+    "name": "Salami Victor",
+    "team": "BDG",
+    "position": "DEF",
+    "reg_number": "FCL/BDG/26/1188",
+    "appearances": 0
+  },
+  {
+    "id": 241,
+    "name": "Babalola Toheeb",
+    "team": "BDG",
+    "position": "DEF",
+    "reg_number": "FCL/BDG/26/1189",
+    "appearances": 0
+  },
+  {
+    "id": 242,
+    "name": "Akinbiyi Akinwalere Ayomikun",
+    "team": "BDG",
+    "position": "MID",
+    "reg_number": "FCL/BDG/26/1190",
+    "appearances": 0
+  },
+  {
+    "id": 243,
+    "name": "Akinfolahan Temidayo Ebunoluwa",
+    "team": "BDG",
+    "position": "MID",
+    "reg_number": "FCL/BDG/26/1191",
+    "appearances": 0
+  },
+  {
+    "id": 244,
+    "name": "Praise",
+    "team": "BDG",
+    "position": "MID",
+    "reg_number": "FCL/BDG/26/1192",
+    "appearances": 0
+  },
+  {
+    "id": 245,
+    "name": "Christopher Samuel",
+    "team": "BDG",
+    "position": "FWD",
+    "reg_number": "FCL/BDG/26/1193",
+    "appearances": 0
+  },
+  {
+    "id": 246,
+    "name": "Awoyemi Jesutofunmi",
+    "team": "BDG",
+    "position": "FWD",
+    "reg_number": "FCL/BDG/26/1194",
+    "appearances": 0
+  },
+  {
+    "id": 247,
+    "name": "Desmond",
+    "team": "BDG",
+    "position": "FWD",
+    "reg_number": "FCL/BDG/26/1195",
+    "appearances": 0
+  },
+  {
+    "id": 248,
+    "name": "Adebayo Kolawole",
+    "team": "BDG",
+    "position": "DEF",
+    "reg_number": "FCL/BDG/26/1196",
+    "appearances": 0
+  },
+  {
+    "id": 249,
+    "name": "Olawuyi Moses",
+    "team": "BDG",
+    "position": "MID",
+    "reg_number": "FCL/BDG/26/1197",
+    "appearances": 0
+  },
+  {
+    "id": 250,
+    "name": "Babatunde",
+    "team": "AGE",
+    "position": "GK",
+    "reg_number": "FCL/AGE/26/1231",
+    "appearances": 0
+  },
+  {
+    "id": 251,
+    "name": "Afolabi",
+    "team": "AGE",
+    "position": "DEF",
+    "reg_number": "FCL/AGE/26/1232",
+    "appearances": 0
+  },
+  {
+    "id": 252,
+    "name": "Olawale",
+    "team": "AGE",
+    "position": "DEF",
+    "reg_number": "FCL/AGE/26/1233",
+    "appearances": 0
+  },
+  {
+    "id": 253,
+    "name": "Temitope",
+    "team": "AGE",
+    "position": "DEF",
+    "reg_number": "FCL/AGE/26/1234",
+    "appearances": 0
+  },
+  {
+    "id": 254,
+    "name": "Femi",
+    "team": "AGE",
+    "position": "DEF",
+    "reg_number": "FCL/AGE/26/1235",
+    "appearances": 0
+  },
+  {
+    "id": 255,
+    "name": "Adeyemi",
+    "team": "AGE",
+    "position": "MID",
+    "reg_number": "FCL/AGE/26/1236",
+    "appearances": 0
+  },
+  {
+    "id": 256,
+    "name": "Jones Falana",
+    "team": "AGE",
+    "position": "MID",
+    "reg_number": "FCL/AGE/26/1237",
+    "appearances": 0
+  },
+  {
+    "id": 257,
+    "name": "Anthony",
+    "team": "AGE",
+    "position": "MID",
+    "reg_number": "FCL/AGE/26/1238",
+    "appearances": 0
+  },
+  {
+    "id": 258,
+    "name": "Tunde",
+    "team": "AGE",
+    "position": "FWD",
+    "reg_number": "FCL/AGE/26/1239",
+    "appearances": 0
+  },
+  {
+    "id": 259,
+    "name": "Sylvanus",
+    "team": "AGE",
+    "position": "FWD",
+    "reg_number": "FCL/AGE/26/1240",
+    "appearances": 0
+  },
+  {
+    "id": 260,
+    "name": "Samuel",
+    "team": "AGE",
+    "position": "FWD",
+    "reg_number": "FCL/AGE/26/1241",
+    "appearances": 0
+  },
+  {
+    "id": 261,
+    "name": "Agesin",
+    "team": "AGE",
+    "position": "DEF",
+    "reg_number": "FCL/AGE/26/1242",
+    "appearances": 0
+  },
+  {
+    "id": 262,
+    "name": "Muhammed",
+    "team": "AGE",
+    "position": "FWD",
+    "reg_number": "FCL/AGE/26/1243",
+    "appearances": 0
+  },
+  {
+    "id": 263,
+    "name": "Aina John",
+    "team": "ANA",
+    "position": "GK",
+    "reg_number": "FCL/ANA/26/1369",
+    "appearances": 1
+  },
+  {
+    "id": 264,
+    "name": "Adewole Ola",
+    "team": "ANA",
+    "position": "DEF",
+    "reg_number": "FCL/ANA/26/1370",
+    "appearances": 1
+  },
+  {
+    "id": 265,
+    "name": "Alade Joshua",
+    "team": "ANA",
+    "position": "DEF",
+    "reg_number": "FCL/ANA/26/1371",
+    "appearances": 1
+  },
+  {
+    "id": 266,
+    "name": "Ayeni Femi",
+    "team": "ANA",
+    "position": "DEF",
+    "reg_number": "FCL/ANA/26/1372",
+    "appearances": 1
+  },
+  {
+    "id": 267,
+    "name": "Akinola Tunde",
+    "team": "ANA",
+    "position": "DEF",
+    "reg_number": "FCL/ANA/26/1373",
+    "appearances": 1
+  },
+  {
+    "id": 268,
+    "name": "Arowolo Segun",
+    "team": "ANA",
+    "position": "MID",
+    "reg_number": "FCL/ANA/26/1374",
+    "appearances": 1
+  },
+  {
+    "id": 269,
+    "name": "Dele Adejumo",
+    "team": "ANA",
+    "position": "MID",
+    "reg_number": "FCL/ANA/26/1375",
+    "appearances": 1
+  },
+  {
+    "id": 270,
+    "name": "Ayodele Isaac",
+    "team": "ANA",
+    "position": "MID",
+    "reg_number": "FCL/ANA/26/1376",
+    "appearances": 1
+  },
+  {
+    "id": 271,
+    "name": "Adebanjo Blessing",
+    "team": "ANA",
+    "position": "FWD",
+    "reg_number": "FCL/ANA/26/1377",
+    "appearances": 1
+  },
+  {
+    "id": 272,
+    "name": "Arogundade David",
+    "team": "ANA",
+    "position": "FWD",
+    "reg_number": "FCL/ANA/26/1378",
+    "appearances": 1
+  },
+  {
+    "id": 273,
+    "name": "Adebayo Samuel",
+    "team": "ANA",
+    "position": "FWD",
+    "reg_number": "FCL/ANA/26/1379",
+    "appearances": 0
+  },
+  {
+    "id": 274,
+    "name": "Success Bayode",
+    "team": "ANA",
+    "position": "FWD",
+    "reg_number": "FCL/ANA/26/1380",
+    "appearances": 1
+  },
+  {
+    "id": 275,
+    "name": "Isreal",
+    "team": "ANA",
+    "position": "FWD",
+    "reg_number": "FCL/ANA/26/1381",
+    "appearances": 0
+  },
+  {
+    "id": 276,
+    "name": "Ademola Paul",
+    "team": "ANA",
+    "position": "MID",
+    "reg_number": "FCL/ANA/26/1382",
+    "appearances": 0
+  },
+  {
+    "id": 277,
+    "name": "Olatunde Segun",
+    "team": "AGP",
+    "position": "GK",
+    "reg_number": "FCL/AGP/26/1440",
+    "appearances": 5
+  },
+  {
+    "id": 278,
+    "name": "Adeyeye Femi",
+    "team": "AGP",
+    "position": "DEF",
+    "reg_number": "FCL/AGP/26/1441",
+    "appearances": 0
+  },
+  {
+    "id": 279,
+    "name": "Arowolo Tunde",
+    "team": "AGP",
+    "position": "DEF",
+    "reg_number": "FCL/AGP/26/1442",
+    "appearances": 0
+  },
+  {
+    "id": 280,
+    "name": "Alabi Joshua",
+    "team": "AGP",
+    "position": "DEF",
+    "reg_number": "FCL/AGP/26/1443",
+    "appearances": 0
+  },
+  {
+    "id": 281,
+    "name": "Ayeni Blessing",
+    "team": "AGP",
+    "position": "DEF",
+    "reg_number": "FCL/AGP/26/1444",
+    "appearances": 0
+  },
+  {
+    "id": 282,
+    "name": "Adebayo Ola",
+    "team": "AGP",
+    "position": "MID",
+    "reg_number": "FCL/AGP/26/1445",
+    "appearances": 0
+  },
+  {
+    "id": 283,
+    "name": "Adejumo David",
+    "team": "AGP",
+    "position": "MID",
+    "reg_number": "FCL/AGP/26/1446",
+    "appearances": 0
+  },
+  {
+    "id": 284,
+    "name": "Ayodele Samuel",
+    "team": "AGP",
+    "position": "MID",
+    "reg_number": "FCL/AGP/26/1447",
+    "appearances": 0
+  },
+  {
+    "id": 285,
+    "name": "Akinola Segun",
+    "team": "AGP",
+    "position": "FWD",
+    "reg_number": "FCL/AGP/26/1448",
+    "appearances": 0
+  },
+  {
+    "id": 286,
+    "name": "Adewole Isaac",
+    "team": "AGP",
+    "position": "FWD",
+    "reg_number": "FCL/AGP/26/1449",
+    "appearances": 0
+  },
+  {
+    "id": 287,
+    "name": "Onileowo Oluwafemi",
+    "team": "AGP",
+    "position": "FWD",
+    "reg_number": "FCL/AGP/26/1450",
+    "appearances": 0
+  },
+  {
+    "id": 288,
+    "name": "Akinyode Oluwaseun",
+    "team": "AGP",
+    "position": "MID",
+    "reg_number": "FCL/AGP/26/1451",
+    "appearances": 0
+  },
+  {
+    "id": 289,
+    "name": "Obafemi",
+    "team": "AGP",
+    "position": "DEF",
+    "reg_number": "FCL/AGP/26/1452",
+    "appearances": 0
+  },
+  {
+    "id": 290,
+    "name": "Tunde Williams 3",
+    "team": "APH",
+    "position": "DEF",
+    "reg_number": "FCL/APH/26/1279",
+    "appearances": 0
+  },
+  {
+    "id": 291,
+    "name": "Victor Moses 5",
+    "team": "BCH",
+    "position": "FWD",
+    "reg_number": "FCL/BCH/26/1350",
+    "appearances": 0
+  },
+  {
+    "id": 292,
+    "name": "Olamide Baddo 7",
+    "team": "CSP",
+    "position": "DEF",
+    "reg_number": "FCL/CSP/26/1329",
+    "appearances": 0
+  },
+  {
+    "id": 293,
+    "name": "Burna Boy 9",
+    "team": "ENT",
+    "position": "FWD",
+    "reg_number": "FCL/ENT/26/1308",
+    "appearances": 0
+  },
+  {
+    "id": 294,
+    "name": "Davido 11",
+    "team": "IDD",
+    "position": "DEF",
+    "reg_number": "FCL/IDD/26/1402",
+    "appearances": 0
+  },
+  {
+    "id": 295,
+    "name": "Rema 12",
+    "team": "ICE",
+    "position": "GK",
+    "reg_number": "FCL/ICE/26/1219",
+    "appearances": 0
+  },
+  {
+    "id": 296,
+    "name": "Tunde Williams 18",
+    "team": "PHS",
+    "position": "MID",
+    "reg_number": "FCL/PHS/26/1432",
+    "appearances": 1
+  },
+  {
+    "id": 297,
+    "name": "Femi Kuti 23",
+    "team": "APH",
+    "position": "DEF",
+    "reg_number": "FCL/APH/26/1299",
+    "appearances": 0
+  },
+  {
+    "id": 298,
+    "name": "Wiz Kid 25",
+    "team": "BCH",
+    "position": "FWD",
+    "reg_number": "FCL/BCH/26/1370",
+    "appearances": 0
+  },
+  {
+    "id": 299,
+    "name": "Rema 27",
+    "team": "CSP",
+    "position": "DEF",
+    "reg_number": "FCL/CSP/26/1349",
+    "appearances": 0
+  },
+  {
+    "id": 300,
+    "name": "Tiwa Savage 29",
+    "team": "ENT",
+    "position": "FWD",
+    "reg_number": "FCL/ENT/26/1328",
+    "appearances": 0
+  },
+  {
+    "id": 301,
+    "name": "John Doe 31",
+    "team": "IDD",
+    "position": "DEF",
+    "reg_number": "FCL/IDD/26/1422",
+    "appearances": 0
+  },
+  {
+    "id": 302,
+    "name": "Samuel Ade 32",
+    "team": "ICE",
+    "position": "GK",
+    "reg_number": "FCL/ICE/26/1239",
+    "appearances": 0
+  },
+  {
+    "id": 303,
+    "name": "Femi Kuti 38",
+    "team": "PHS",
+    "position": "MID",
+    "reg_number": "FCL/PHS/26/1452",
+    "appearances": 0
+  },
+  {
+    "id": 304,
+    "name": "Asake 43",
+    "team": "APH",
+    "position": "DEF",
+    "reg_number": "FCL/APH/26/1319",
+    "appearances": 0
+  },
+  {
+    "id": 305,
+    "name": "Yemi Alade 45",
+    "team": "BCH",
+    "position": "FWD",
+    "reg_number": "FCL/BCH/26/1390",
+    "appearances": 0
+  },
+  {
+    "id": 306,
+    "name": "Samuel Ade 47",
+    "team": "CSP",
+    "position": "DEF",
+    "reg_number": "FCL/CSP/26/1369",
+    "appearances": 0
+  },
+  {
+    "id": 307,
+    "name": "Chidi Okafor 49",
+    "team": "ENT",
+    "position": "FWD",
+    "reg_number": "FCL/ENT/26/1348",
+    "appearances": 0
+  },
+  {
+    "id": 308,
+    "name": "David Alaba 51",
+    "team": "IDD",
+    "position": "DEF",
+    "reg_number": "FCL/IDD/26/1442",
+    "appearances": 0
+  },
+  {
+    "id": 309,
+    "name": "Olamide Baddo 52",
+    "team": "ICE",
+    "position": "GK",
+    "reg_number": "FCL/ICE/26/1259",
+    "appearances": 0
+  },
+  {
+    "id": 310,
+    "name": "Asake 58",
+    "team": "PHS",
+    "position": "MID",
+    "reg_number": "FCL/PHS/26/1472",
+    "appearances": 0
+  },
+  {
+    "id": 311,
+    "name": "Tunde Williams 63",
+    "team": "APH",
+    "position": "DEF",
+    "reg_number": "FCL/APH/26/1339",
+    "appearances": 0
+  },
+  {
+    "id": 312,
+    "name": "Victor Moses 65",
+    "team": "BCH",
+    "position": "FWD",
+    "reg_number": "FCL/BCH/26/1410",
+    "appearances": 0
+  },
+  {
+    "id": 313,
+    "name": "Olamide Baddo 67",
+    "team": "CSP",
+    "position": "DEF",
+    "reg_number": "FCL/CSP/26/1389",
+    "appearances": 0
+  },
+  {
+    "id": 314,
+    "name": "Burna Boy 69",
+    "team": "ENT",
+    "position": "FWD",
+    "reg_number": "FCL/ENT/26/1368",
+    "appearances": 0
+  },
+  {
+    "id": 315,
+    "name": "Davido 71",
+    "team": "IDD",
+    "position": "DEF",
+    "reg_number": "FCL/IDD/26/1462",
+    "appearances": 0
+  },
+  {
+    "id": 316,
+    "name": "Rema 72",
+    "team": "ICE",
+    "position": "GK",
+    "reg_number": "FCL/ICE/26/1279",
+    "appearances": 0
+  },
+  {
+    "id": 317,
+    "name": "Tunde Williams 78",
+    "team": "PHS",
+    "position": "MID",
+    "reg_number": "FCL/PHS/26/1492",
+    "appearances": 0
+  },
+  {
+    "id": 318,
+    "name": "Femi Kuti 83",
+    "team": "APH",
+    "position": "DEF",
+    "reg_number": "FCL/APH/26/1359",
+    "appearances": 0
+  },
+  {
+    "id": 319,
+    "name": "Wiz Kid 85",
+    "team": "BCH",
+    "position": "FWD",
+    "reg_number": "FCL/BCH/26/1430",
+    "appearances": 0
+  },
+  {
+    "id": 320,
+    "name": "Rema 87",
+    "team": "CSP",
+    "position": "DEF",
+    "reg_number": "FCL/CSP/26/1409",
+    "appearances": 0
+  },
+  {
+    "id": 321,
+    "name": "Tiwa Savage 89",
+    "team": "ENT",
+    "position": "FWD",
+    "reg_number": "FCL/ENT/26/1388",
+    "appearances": 0
+  },
+  {
+    "id": 322,
+    "name": "John Doe 91",
+    "team": "IDD",
+    "position": "DEF",
+    "reg_number": "FCL/IDD/26/1482",
+    "appearances": 0
+  },
+  {
+    "id": 323,
+    "name": "Samuel Ade 92",
+    "team": "ICE",
+    "position": "GK",
+    "reg_number": "FCL/ICE/26/1299",
+    "appearances": 0
+  },
+  {
+    "id": 324,
+    "name": "Femi Kuti 98",
+    "team": "PHS",
+    "position": "MID",
+    "reg_number": "FCL/PHS/26/1512",
+    "appearances": 0
+  },
+  {
+    "id": 325,
+    "name": "Asake 103",
+    "team": "APH",
+    "position": "DEF",
+    "reg_number": "FCL/APH/26/1379",
+    "appearances": 0
+  },
+  {
+    "id": 326,
+    "name": "Yemi Alade 105",
+    "team": "BCH",
+    "position": "FWD",
+    "reg_number": "FCL/BCH/26/1450",
+    "appearances": 0
+  },
+  {
+    "id": 327,
+    "name": "Samuel Ade 107",
+    "team": "CSP",
+    "position": "DEF",
+    "reg_number": "FCL/CSP/26/1429",
+    "appearances": 0
+  },
+  {
+    "id": 328,
+    "name": "Chidi Okafor 109",
+    "team": "ENT",
+    "position": "FWD",
+    "reg_number": "FCL/ENT/26/1408",
+    "appearances": 0
+  },
+  {
+    "id": 329,
+    "name": "David Alaba 111",
+    "team": "IDD",
+    "position": "DEF",
+    "reg_number": "FCL/IDD/26/1502",
+    "appearances": 0
+  },
+  {
+    "id": 330,
+    "name": "Olamide Baddo 112",
+    "team": "ICE",
+    "position": "GK",
+    "reg_number": "FCL/ICE/26/1319",
+    "appearances": 0
+  },
+  {
+    "id": 331,
+    "name": "Asake 118",
+    "team": "PHS",
+    "position": "MID",
+    "reg_number": "FCL/PHS/26/1532",
+    "appearances": 0
+  },
+  {
+    "id": 332,
+    "name": "Tunde Williams 123",
+    "team": "APH",
+    "position": "DEF",
+    "reg_number": "FCL/APH/26/1399",
+    "appearances": 0
+  },
+  {
+    "id": 333,
+    "name": "Victor Moses 125",
+    "team": "BCH",
+    "position": "FWD",
+    "reg_number": "FCL/BCH/26/1470",
+    "appearances": 0
+  },
+  {
+    "id": 334,
+    "name": "Olamide Baddo 127",
+    "team": "CSP",
+    "position": "DEF",
+    "reg_number": "FCL/CSP/26/1449",
+    "appearances": 0
+  },
+  {
+    "id": 335,
+    "name": "Burna Boy 129",
+    "team": "ENT",
+    "position": "FWD",
+    "reg_number": "FCL/ENT/26/1428",
+    "appearances": 0
+  },
+  {
+    "id": 336,
+    "name": "Davido 131",
+    "team": "IDD",
+    "position": "DEF",
+    "reg_number": "FCL/IDD/26/1522",
+    "appearances": 0
+  },
+  {
+    "id": 337,
+    "name": "Rema 132",
+    "team": "ICE",
+    "position": "GK",
+    "reg_number": "FCL/ICE/26/1339",
+    "appearances": 0
+  },
+  {
+    "id": 338,
+    "name": "Tunde Williams 138",
+    "team": "PHS",
+    "position": "MID",
+    "reg_number": "FCL/PHS/26/1552",
+    "appearances": 0
+  },
+  {
+    "id": 339,
+    "name": "Femi Kuti 143",
+    "team": "APH",
+    "position": "DEF",
+    "reg_number": "FCL/APH/26/1419",
+    "appearances": 0
+  },
+  {
+    "id": 340,
+    "name": "Wiz Kid 145",
+    "team": "BCH",
+    "position": "FWD",
+    "reg_number": "FCL/BCH/26/1490",
+    "appearances": 0
+  },
+  {
+    "id": 341,
+    "name": "Rema 147",
+    "team": "CSP",
+    "position": "DEF",
+    "reg_number": "FCL/CSP/26/1469",
+    "appearances": 0
+  },
+  {
+    "id": 342,
+    "name": "Tiwa Savage 149",
+    "team": "ENT",
+    "position": "FWD",
+    "reg_number": "FCL/ENT/26/1448",
+    "appearances": 0
+  }
+]

@@ -337,7 +337,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       if (involvedPlayerIds.size > 0) {
         involvedPlayerIds.forEach(pid => {
           const pObj = basePlayers.find(p => p.id === pid);
-          if (pObj) {
+          if (pObj && pObj.position !== 'GK') { // Skip GKs to calculate them accurately in step 4
             pObj.played += 1;
             pObj.matchesPlayed = pObj.played;
           }
@@ -359,7 +359,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         
         activeIds.forEach(pid => {
           const pObj = basePlayers.find(p => p.id === pid);
-          if (pObj) {
+          if (pObj && pObj.position !== 'GK') { // Skip GKs
             pObj.played += 1;
             pObj.matchesPlayed = pObj.played;
           }
@@ -367,57 +367,158 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       }
     });
 
-    // 4. Calculate Goalkeeper Clean Sheets and Goals Conceded
-    finishedMatches.forEach(m => {
+    // 4. Calculate Goalkeeper Appearances, Clean Sheets, and Goals Conceded
+    // Helper to resolve team abbreviation for any match ID to avoid seed/placeholder mismatches
+    const getResolvedTeams = (m: Match) => {
+      let homeTeam = m.homeTeam;
+      let awayTeam = m.awayTeam;
+
+      if (m.id === 'PO1') {
+        homeTeam = 'IDD';
+        awayTeam = 'STA';
+      } else if (m.id === 'PO2') {
+        homeTeam = 'ANA';
+        awayTeam = 'SIMT';
+      } else if (m.id === 'PO3') {
+        homeTeam = 'BDG';
+        awayTeam = 'AGP';
+      } else if (m.id === 'PO4') {
+        homeTeam = 'MBBS';
+        awayTeam = 'MCB';
+      } else if (m.id === 'PO5') {
+        homeTeam = 'APH';
+        awayTeam = 'PHY';
+      } else if (m.id === 'PO6') {
+        homeTeam = 'CSP';
+        awayTeam = 'MST';
+      } else if (m.id === 'QF1') {
+        homeTeam = 'ICE';
+        awayTeam = 'APH';
+      } else if (m.id === 'QF2') {
+        homeTeam = 'MCB';
+        awayTeam = 'ANA';
+      } else if (m.id === 'QF3') {
+        homeTeam = 'STA';
+        awayTeam = 'AGP';
+      } else if (m.id === 'QF4') {
+        homeTeam = 'ANA';
+        awayTeam = 'MST';
+      }
+      return { homeTeam, awayTeam };
+    };
+
+    // Helper to parse minute string to integer
+    const parseMinute = (minStr: string | number): number => {
+      if (typeof minStr === 'number') return minStr;
+      const clean = String(minStr).replace(/[^0-9+]/g, '');
+      if (clean.includes('+')) {
+        const parts = clean.split('+');
+        return (parseInt(parts[0], 10) || 0) + (parseInt(parts[1], 10) || 0);
+      }
+      return parseInt(clean, 10) || 0;
+    };
+
+    liveOrFinishedMatches.forEach(m => {
+      const isFinished = finishedMatches.some(fm => fm.id === m.id);
       const homeConceded = m.awayScore;
       const awayConceded = m.homeScore;
       
+      const { homeTeam, awayTeam } = getResolvedTeams(m);
       const matchLineup = lineups[m.id];
-      let homeGk: Player | undefined;
-      if (matchLineup && matchLineup.home && matchLineup.home.players && matchLineup.home.players['GK']) {
-        const gkId = matchLineup.home.players['GK'];
-        homeGk = basePlayers.find(p => p.id === gkId);
-      }
-      if (!homeGk) {
-        // Fallback: first GK of home team
-        homeGk = basePlayers.find(p => p.teamId.toLowerCase() === m.homeTeam.toLowerCase() && p.position === 'GK');
-      }
-      if (homeGk) {
-        homeGk.goalsConceded = (homeGk.goalsConceded || 0) + homeConceded;
-        homeGk.goals_conceded = homeGk.goalsConceded;
-        if (homeConceded === 0) {
-          homeGk.cleanSheets += 1;
-          homeGk.clean_sheets = homeGk.cleanSheets;
+      const matchSubs = subs.filter(s => s.matchId === m.id);
+
+      const processGkForSide = (
+        teamAbbr: string,
+        concededTotal: number,
+        isHome: boolean
+      ) => {
+        // 1. Identify starting GK
+        let startingGk: Player | undefined;
+        if (matchLineup) {
+          const sideLineup = isHome ? matchLineup.home : matchLineup.away;
+          if (sideLineup && sideLineup.players && sideLineup.players['GK']) {
+            const gkId = sideLineup.players['GK'];
+            startingGk = basePlayers.find(p => p.id === gkId);
+          }
         }
-        // Ensure they are also tracked as played
-        if (homeGk.played === 0) {
-          homeGk.played = 1;
-          homeGk.matchesPlayed = 1;
+        if (!startingGk) {
+          // Fallback: first GK of team in basePlayers
+          startingGk = basePlayers.find(p => p.teamId.toLowerCase() === teamAbbr.toLowerCase() && p.position === 'GK');
         }
-      }
-      
-      let awayGk: Player | undefined;
-      if (matchLineup && matchLineup.away && matchLineup.away.players && matchLineup.away.players['GK']) {
-        const gkId = matchLineup.away.players['GK'];
-        awayGk = basePlayers.find(p => p.id === gkId);
-      }
-      if (!awayGk) {
-        // Fallback: first GK of away team
-        awayGk = basePlayers.find(p => p.teamId.toLowerCase() === m.awayTeam.toLowerCase() && p.position === 'GK');
-      }
-      if (awayGk) {
-        awayGk.goalsConceded = (awayGk.goalsConceded || 0) + awayConceded;
-        awayGk.goals_conceded = awayGk.goalsConceded;
-        if (awayConceded === 0) {
-          awayGk.cleanSheets += 1;
-          awayGk.clean_sheets = awayGk.cleanSheets;
+
+        if (!startingGk) return;
+
+        // 2. Check if starting GK was substituted
+        const gkSub = matchSubs.find(s => 
+          s.teamAbbr.toLowerCase() === teamAbbr.toLowerCase() &&
+          (s.playerOut.toLowerCase() === startingGk?.name.toLowerCase() || 
+           s.playerOut === startingGk?.id || 
+           s.id.includes('gk') ||
+           basePlayers.find(p => p.id === s.playerIn || p.name.toLowerCase() === s.playerIn.toLowerCase())?.position === 'GK')
+        );
+
+        // Find goals scored against this team in this match
+        const opponentTeam = isHome ? awayTeam : homeTeam;
+        const goalsAgainstThisTeam = goalScorers.filter(g => 
+          g.matchId === m.id && 
+          g.type !== 'Own Goal' && 
+          g.team.toLowerCase() === opponentTeam.toLowerCase()
+        );
+
+        if (gkSub) {
+          const subMinute = gkSub.minute;
+          const subGkPlayer = basePlayers.find(p => p.id === gkSub.playerIn || p.name.toLowerCase() === gkSub.playerIn.toLowerCase());
+
+          // A. Starting GK
+          startingGk.played = (startingGk.played || 0) + 1;
+          startingGk.matchesPlayed = startingGk.played;
+
+          if (isFinished) {
+            const startingGkConceded = goalsAgainstThisTeam.filter(g => parseMinute(g.minute) <= subMinute).length;
+            startingGk.goalsConceded = (startingGk.goalsConceded || 0) + startingGkConceded;
+            startingGk.goals_conceded = startingGk.goalsConceded;
+            
+            if (startingGkConceded === 0) {
+              startingGk.cleanSheets = (startingGk.cleanSheets || 0) + 1;
+              startingGk.clean_sheets = startingGk.cleanSheets;
+            }
+          }
+
+          // B. Subbed GK
+          if (subGkPlayer) {
+            subGkPlayer.played = (subGkPlayer.played || 0) + 1;
+            subGkPlayer.matchesPlayed = subGkPlayer.played;
+
+            if (isFinished) {
+              const subGkConceded = goalsAgainstThisTeam.filter(g => parseMinute(g.minute) > subMinute).length;
+              subGkPlayer.goalsConceded = (subGkPlayer.goalsConceded || 0) + subGkConceded;
+              subGkPlayer.goals_conceded = subGkPlayer.goalsConceded;
+
+              if (subGkConceded === 0) {
+                subGkPlayer.cleanSheets = (subGkPlayer.cleanSheets || 0) + 1;
+                subGkPlayer.clean_sheets = subGkPlayer.cleanSheets;
+              }
+            }
+          }
+        } else {
+          // No GK substitution: starting GK played the whole game
+          startingGk.played = (startingGk.played || 0) + 1;
+          startingGk.matchesPlayed = startingGk.played;
+
+          if (isFinished) {
+            startingGk.goalsConceded = (startingGk.goalsConceded || 0) + concededTotal;
+            startingGk.goals_conceded = startingGk.goalsConceded;
+
+            if (concededTotal === 0) {
+              startingGk.cleanSheets = (startingGk.cleanSheets || 0) + 1;
+              startingGk.clean_sheets = startingGk.cleanSheets;
+            }
+          }
         }
-        // Ensure they are also tracked as played
-        if (awayGk.played === 0) {
-          awayGk.played = 1;
-          awayGk.matchesPlayed = 1;
-        }
-      }
+      };
+
+      processGkForSide(homeTeam, homeConceded, true);
+      processGkForSide(awayTeam, awayConceded, false);
     });
 
     const mjd = basePlayers.find(p => p.id === 'player-simt-5' || p.name.toLowerCase() === 'momoh joshua david');
@@ -2059,7 +2160,9 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'sub-md2-9-fwt-1', matchId: 'md2-9', teamAbbr: 'FWT', playerOut: 'Adegoke Blessing Moses', playerIn: 'Olalekan Hammed Olajuwon', minute: 40 },
 
       // PO6 Subs
-      { id: 'sub-po6-mst-gk', matchId: 'PO6', teamAbbr: 'MST', playerOut: 'Ogundeji Feyitunmise Hezekiah', playerIn: 'Ikwue David Oche', minute: 55 }
+      { id: 'sub-po6-mst-gk', matchId: 'PO6', teamAbbr: 'MST', playerOut: 'Ogundeji Feyitunmise Hezekiah', playerIn: 'Ikwue David Oche', minute: 55 },
+      // QF4 Subs
+      { id: 'sub-qf4-mst-gk', matchId: 'QF4', teamAbbr: 'MST', playerOut: 'Ogundeji Feyitunmise Hezekiah', playerIn: 'Ikwue David Oche', minute: 52 }
     ];
 
     let subsUpdated = false;
