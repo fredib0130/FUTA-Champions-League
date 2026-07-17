@@ -3,6 +3,40 @@ import { Match, Team, GoalScorer, MatchStats, Article, NewsItem, MatchPhoto, Spo
 import { MATCHES, TEAMS, MOCK_MATCH_STATS, PLAYERS, COEFFICIENTS } from '../data/mockData';
 import { fclApi } from '../lib/api';
 
+export const GOALKEEPER_BASELINES: Record<string, { played: number; cleanSheets: number; goalsConceded: number }> = {
+  "adeyemi prosper": { played: 3, cleanSheets: 3, goalsConceded: 0 },
+  "ogundeji feyitunmise hezekiah": { played: 5, cleanSheets: 3, goalsConceded: 2 },
+  "adegoke": { played: 5, cleanSheets: 3, goalsConceded: 2 },
+  "aina john": { played: 4, cleanSheets: 3, goalsConceded: 1 },
+  "ikwue david oche": { played: 2, cleanSheets: 2, goalsConceded: 0 },
+  "akinyode joseph oluwaseun": { played: 5, cleanSheets: 2, goalsConceded: 4 },
+  "atere victor": { played: 5, cleanSheets: 2, goalsConceded: 4 },
+  "adesuyi oluwasegun": { played: 5, cleanSheets: 2, goalsConceded: 5 },
+  "olabode victor oluwatosin": { played: 3, cleanSheets: 2, goalsConceded: 1 },
+  "rotimi joseph folahan": { played: 5, cleanSheets: 1, goalsConceded: 6 },
+  "ojo david": { played: 3, cleanSheets: 1, goalsConceded: 3 },
+  "divine gabriel ibrahim": { played: 1, cleanSheets: 0, goalsConceded: 1 },
+  "john igbalamide": { played: 1, cleanSheets: 0, goalsConceded: 2 },
+  "afolabi yusuf": { played: 4, cleanSheets: 0, goalsConceded: 8 },
+  "afolabi timothy testimony": { played: 2, cleanSheets: 0, goalsConceded: 3 },
+  "babatunde": { played: 3, cleanSheets: 0, goalsConceded: 6 },
+  "eniola ayomide emmanuel": { played: 3, cleanSheets: 0, goalsConceded: 5 },
+  "harun abdulkareem": { played: 3, cleanSheets: 0, goalsConceded: 4 },
+  "nwabunwanne chibichi daniel": { played: 3, cleanSheets: 0, goalsConceded: 5 },
+  "adedotun faiz ayobami": { played: 0, cleanSheets: 0, goalsConceded: 0 },
+  "adeleye benjamin": { played: 0, cleanSheets: 0, goalsConceded: 0 },
+  "emmanuel": { played: 0, cleanSheets: 0, goalsConceded: 0 },
+  "owogbemi oluwadunsin emmanuel": { played: 0, cleanSheets: 0, goalsConceded: 0 }
+};
+
+export const PRE_COMPLETED_MATCH_IDS = new Set([
+  'md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10',
+  'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-9', 'md2-10',
+  'md3-1', 'md3-2', 'md3-3', 'md3-4', 'md3-5', 'md3-6', 'md3-7', 'md3-8', 'md3-9', 'md3-10',
+  'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'PO6',
+  'QF1', 'QF2', 'QF3', 'QF4'
+]);
+
 export interface CardEvent {
   id: string;
   matchId: string;
@@ -214,22 +248,28 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
   // 1b. Dynamic Player and Team Recalculation Engine
   const players = React.useMemo(() => {
     // Start with the base list of PLAYERS
-    const basePlayers: Player[] = PLAYERS.map(p => ({
-      ...p,
-      goals: 0,
-      played: 0,
-      matchesPlayed: 0,
-      yellowCards: 0,
-      yellow_cards: 0,
-      redCards: 0,
-      red_cards: 0,
-      cleanSheets: 0,
-      clean_sheets: 0,
-      goalsConceded: 0,
-      goals_conceded: 0,
-      penaltyShootoutGoals: 0,
-      penaltyShootoutMisses: 0,
-    }));
+    const basePlayers: Player[] = PLAYERS.map(p => {
+      const isGK = p.position === 'GK';
+      const nameKey = p.name.toLowerCase();
+      const baseline = isGK ? GOALKEEPER_BASELINES[nameKey] : null;
+
+      return {
+        ...p,
+        goals: 0,
+        played: baseline ? baseline.played : 0,
+        matchesPlayed: baseline ? baseline.played : 0,
+        yellowCards: 0,
+        yellow_cards: 0,
+        redCards: 0,
+        red_cards: 0,
+        cleanSheets: baseline ? baseline.cleanSheets : 0,
+        clean_sheets: baseline ? baseline.cleanSheets : 0,
+        goalsConceded: baseline ? baseline.goalsConceded : 0,
+        goals_conceded: baseline ? baseline.goalsConceded : 0,
+        penaltyShootoutGoals: 0,
+        penaltyShootoutMisses: 0,
+      };
+    });
 
     // Calculate Penalty Shootout Goals & Misses
     matches.forEach(m => {
@@ -546,8 +586,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         }
       };
 
-      processGkForSide(homeTeam, homeConceded, true);
-      processGkForSide(awayTeam, awayConceded, false);
+      if (!PRE_COMPLETED_MATCH_IDS.has(m.id)) {
+        processGkForSide(homeTeam, homeConceded, true);
+        processGkForSide(awayTeam, awayConceded, false);
+      }
     });
 
     const mjd = basePlayers.find(p => p.id === 'player-simt-5' || p.name.toLowerCase() === 'momoh joshua david');
