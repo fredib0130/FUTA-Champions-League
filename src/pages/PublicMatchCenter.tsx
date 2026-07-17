@@ -1375,12 +1375,12 @@ export default function PublicMatchCenter() {
         {/* 📊 TEAM FORM & 🤝 HEAD-TO-HEAD PRE-MATCH ANALYSIS SECTION */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           
-          {/* 📊 TEAM FORM (LAST FIVE MATCHES) CARD */}
+          {/* 📊 TEAM FORM (LAST FIVE FCL MATCHES) CARD */}
           <div className="glass border border-white/10 rounded-[32px] p-6 bg-navy/60 text-left flex flex-col justify-between">
             <div>
               <h3 className="text-sm font-display font-black uppercase tracking-wider text-white mb-6 flex items-center gap-2 pb-4 border-b border-white/5">
                 <Sparkles size={15} className="text-primary" />
-                <span>[05/16] TEAM FORM (LAST FIVE COMPETITIVE MATCHES)</span>
+                <span>[05/16] TEAM FORM (LAST FIVE FCL MATCHES)</span>
               </h3>
 
               <div className="space-y-6">

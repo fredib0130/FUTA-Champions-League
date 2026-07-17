@@ -1699,7 +1699,7 @@ function seedAppearancesDB() {
 
     const aphPlayers = [
       { name: "Adegoke", pos: "GK" },
-      { name: "Onana", pos: "DEF" },
+      { name: "Tunde Williams", pos: "DEF" },
       { name: "Fola", pos: "MID" },
       { name: "Chosen", pos: "MID" },
       { name: "Emmy", pos: "MID" },

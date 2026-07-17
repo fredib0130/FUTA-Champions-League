@@ -1969,7 +1969,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
     if (!loadedGoals.some(g => g.matchId === 'QF1')) {
       loadedGoals.push(
-        { id: 'goal-qf1-onana-19-og', matchId: 'QF1', playerName: 'Onana', team: 'APH', minute: "19'", type: 'Own Goal' }
+        { id: 'goal-qf1-adegoke-19-og', matchId: 'QF1', playerName: 'Adegoke', team: 'APH', minute: "19'", type: 'Own Goal' }
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
@@ -3438,7 +3438,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         captainId: 'player-aph-kunlex',
         players: {
           'GK': 'player-aph-gk',
-          'RB': 'player-aph-onana',
+          'RB': 'player-aph-tunde',
           'CB1': 'player-aph-fola',
           'CB2': 'player-aph-chosen',
           'LB': 'player-aph-emmy',
@@ -5747,8 +5747,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       loadedCommentary['QF1'] = [
         { id: 'comm-qf1-ft', matchId: 'QF1', minute: "60'", text: "🏁 FULL-TIME! ICE 1 - 0 APH. Information and Communication Engineering (ICE) booked their place in the FUTA Champions League Semi-finals after a disciplined 1-0 victory over Animal Production and Health (APH)! Kolade Farooq is named Man of the Match!", timestamp: "3:00 PM", type: 'general' },
         { id: 'comm-qf1-defense', matchId: 'QF1', minute: "52'", text: "ICE is defending deep and compact. APH is throwing everything forward but cannot find a breakthrough against ICE's solid defensive wall.", timestamp: "2:52 PM", type: 'general' },
-        { id: 'comm-qf1-ht', matchId: 'QF1', minute: "30'", text: "⏸️ HALF-TIME! ICE 1 - 0 APH. A fast-paced half comes to a close with ICE leading courtesy of Onana's 19th-minute own goal.", timestamp: "2:30 PM", type: 'general' },
-        { id: 'comm-qf1-goal-og', matchId: 'QF1', minute: "19'", text: "⚽ OWN GOAL!!! Onana of APH turns the ball into his own net while attempting to clear! Tragic moment for APH, but ICE has the breakthrough! ICE 1 - 0 APH.", timestamp: "2:19 PM", type: 'goal' },
+        { id: 'comm-qf1-ht', matchId: 'QF1', minute: "30'", text: "⏸️ HALF-TIME! ICE 1 - 0 APH. A fast-paced half comes to a close with ICE leading courtesy of Adegoke's 19th-minute own goal.", timestamp: "2:30 PM", type: 'general' },
+        { id: 'comm-qf1-goal-og', matchId: 'QF1', minute: "19'", text: "⚽ OWN GOAL!!! Adegoke of APH turns the ball into his own net while attempting to clear! Tragic moment for APH, but ICE has the breakthrough! ICE 1 - 0 APH.", timestamp: "2:19 PM", type: 'goal' },
         { id: 'comm-qf1-kickoff', matchId: 'QF1', minute: "1'", text: "🏁 KICKOFF! The highly-anticipated Quarter-final 1 between Information and Communication Engineering (ICE) and Animal Production and Health (APH) is underway at the Mini Pitch! Frank is the referee.", timestamp: "2:00 PM", type: 'general' }
       ];
       loadedCommentary['QF2'] = [
@@ -5978,10 +5978,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         matchId: 'QF1',
         summary: "Information and Communication Engineering (ICE) booked their place in the FUTA Champions League Semi-finals after defeating Animal Production and Health (APH) 1–0.",
         playerOfMatch: "Kolade Farooq (ICE)",
-        tacticalAnalysis: "Information and Communication Engineering (ICE) booked their place in the FUTA Champions League Semi-finals after securing a tight 1-0 victory over Animal Production and Health (APH). The only goal of the match came in the 19th minute, when an unfortunate own goal by APH defender Onana separated the two teams. ICE displayed remarkable defensive resilience and discipline to shut down APH's attackers and preserve their narrow lead. APH put up a valiant effort, but were ultimately unable to break through the compact and organized ICE structure. The victory books ICE's ticket to the last-four where they will face Statistics (STA) in Semi-final 1.",
+        tacticalAnalysis: "Information and Communication Engineering (ICE) booked their place in the FUTA Champions League Semi-finals after securing a tight 1-0 victory over Animal Production and Health (APH). The only goal of the match came in the 19th minute, when an unfortunate own goal by APH goalkeeper Adegoke separated the two teams. ICE displayed remarkable defensive resilience and discipline to shut down APH's attackers and preserve their narrow lead. APH put up a valiant effort, but were ultimately unable to break through the compact and organized ICE structure. The victory books ICE's ticket to the last-four where they will face Statistics (STA) in Semi-final 1.",
         keyMoments: [
           "1' - KICKOFF! The crucial Quarter-final 1 match between ICE and APH gets underway under the supervision of referee Frank.",
-          "19' - GOAL! Onana of APH inadvertently turns the ball into his own net under pressure! ICE 1 - 0 APH.",
+          "19' - GOAL! Adegoke of APH inadvertently turns the ball into his own net under pressure! ICE 1 - 0 APH.",
           "30' - HALF-TIME! ICE 1 - 0 APH. A fast-paced and highly tactical first half ends with ICE in the lead.",
           "60' - FULL-TIME! ICE 1 - 0 APH. Information and Communication Engineering holds on for a 1-0 win and secures a place in the Semi-finals!"
         ],
