@@ -102,6 +102,11 @@ export const PLAYERS: Player[] = [
   { id: 'player-ice-aduragbemi', name: "Faleye Aduragbemi", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-aduragbemi', regNumber: "FCL/ICE/26/1218", level: "400L", jerseyNo: 8 },
   { id: 'player-ice-olayinka', name: "Quadri Olayinka", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-olayinka', regNumber: "FCL/ICE/26/1219", level: "300L", jerseyNo: 10 },
   { id: 'player-ice-ayomide', name: "Boyede Joseph Ayomide", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-ayomide', regNumber: "FCL/ICE/26/1220", level: "200L", jerseyNo: 9 },
+  { id: 'player-ice-folowosele', name: "Folowosele Peace", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-folowosele' },
+  { id: 'player-ice-akinloye', name: "Akinloye Toluwalase", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-akinloye' },
+  { id: 'player-ice-damola', name: "Adeyemi Damola", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-damola' },
+  { id: 'player-ice-kudabo', name: "Kudabo Timilehin", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-kudabo' },
+  { id: 'player-ice-adejinmi', name: "Adejinmi Daniel", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-adejinmi' },
   { id: 'player-ifs-idris', name: "Idris", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ifs', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ifs-idris' },
   { id: 'player-ifs-kehinde', name: "Kehinde", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ifs', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ifs-kehinde' },
   { id: 'player-ifs-segun', name: "Segun", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ifs', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ifs-segun' },
@@ -598,7 +603,9 @@ export const PLAYERS: Player[] = [
     { id: "player-agp-19", name: "Taiwo Jacob", position: "DEF" as const, level: "200L", jerseyNo: 23 },
     { id: "player-agp-20", name: "Oyelakin Abdulquadri", position: "MID" as const, level: "400L", jerseyNo: 24 },
     { id: "player-agp-21", name: "Olujobade Daniel", position: "MID" as const, level: "300L", jerseyNo: 25 },
-    { id: "player-agp-22", name: "Apake Avososhido Frank", position: "MID" as const, level: "300L", jerseyNo: 26 }
+    { id: "player-agp-22", name: "Apake Avososhido Frank", position: "MID" as const, level: "300L", jerseyNo: 26 },
+    { id: "player-agp-samuel", name: "Ayomide Samuel", position: "MID" as const, level: "200L", jerseyNo: 14 },
+    { id: "player-agp-akinbosoye", name: "Akinbosoye Akinola", position: "MID" as const, level: "300L", jerseyNo: 27 }
   ].map((p, idx) => ({
     id: p.id,
     name: p.name,
@@ -741,7 +748,7 @@ export const MATCHES: Match[] = [
   ], lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 5, stage: 'Quarter-finals', referee: 'Kizzy', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Ogundeji Feyitunmise Hezekiah' },
 
   // --- SEMI-FINALS (Two-legged Home & Away Aggregate) ---
-  { id: 'SF1_1', homeTeam: 'ICE', awayTeam: 'AGP', date: 'Friday, 17th July, 2026', time: '2:00 PM', venue: 'SEET Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals' },
+  { id: 'SF1_1', homeTeam: 'ICE', awayTeam: 'AGP', date: 'Friday, 17th July, 2026', time: '2:00 PM', venue: 'SEET Pitch', status: 'Finished', homeScore: 1, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals', referee: 'Victor (ESM)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Olasunkanmi Michael' },
   { id: 'SF1_2', homeTeam: 'AGP', awayTeam: 'ICE', date: 'Monday, 20th July, 2026', time: '5:00 PM', venue: 'AGP Field', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
   { id: 'SF2_1', homeTeam: 'CYS', awayTeam: 'MST', date: 'Friday, 17th July, 2026', time: '3:30 PM', venue: 'SOC Fortress', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals' },
   { id: 'SF2_2', homeTeam: 'MST', awayTeam: 'CYS', date: 'Monday, 20th July, 2026', time: '3:30 PM', venue: 'Mariners Fortress', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
@@ -751,6 +758,26 @@ export const MATCHES: Match[] = [
 ];
 
 export const NEWS: NewsPost[] = [
+  {
+    id: 'semi-final-1-first-leg-draw',
+    title: '🏆 ICE and AGP Share the Spoils in Tense Semi-final First Leg',
+    excerpt: 'ICE and AGP played out an entertaining 1–1 draw in the first leg of the FUTA Champions League Semi-finals at the SEET Pitch.',
+    content: `Published: 17th July, 2026
+Time: 4:00 PM
+
+ICE and AGP played out an entertaining **1–1 draw** in the first leg of the FUTA Champions League Semi-finals at the SEET Pitch.
+
+Second-half substitute **Bamidele Usman** broke the deadlock in the 33rd minute, but AGP responded just two minutes later through **Olasunkanmi Michael**, whose composed finish earned his side a valuable equaliser.
+
+The match also marked the end of **Adeyemi Prosper's remarkable run of 215 consecutive minutes without conceding a goal**, as AGP became the first team to breach the ICE goalkeeper's defence since his clean-sheet streak began.
+
+Named **Man of the Match**, **Olasunkanmi Michael** continued his outstanding season by extending his lead in the **Golden Boot race** with another crucial goal.
+
+With the aggregate score tied at **1–1**, both teams head into the second leg knowing that a place in the 2026 FUTA Champions League Final is still up for grabs.`,
+    image: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop&q=60',
+    date: '2026-07-17',
+    category: 'Match Report'
+  },
   {
     id: 'official-quarter-final-draw-2026',
     title: '🏆 OFFICIAL FCL 2026 QUARTER-FINAL DRAW & KNOCKOUT BRACKET RELEASED!',
@@ -1063,6 +1090,29 @@ export const MOCK_MATCH_STATS: MatchStats[] = MATCHES.map((match) => {
       awayFouls: 0,
       homeFreeKicks: 0,
       awayFreeKicks: 0
+    };
+  }
+  if (match.id === 'SF1_1') {
+    return {
+      matchId: match.id,
+      cornersHome: 4,
+      cornersAway: 4,
+      yellowCardsHome: 0,
+      yellowCardsAway: 1,
+      redCardsHome: 0,
+      redCardsAway: 0,
+      homeCorners: 4,
+      awayCorners: 4,
+      homeYellowCards: 0,
+      awayYellowCards: 1,
+      homeRedCards: 0,
+      awayRedCards: 0,
+      homeOffsides: 2,
+      awayOffsides: 2,
+      homeFouls: 8,
+      awayFouls: 6,
+      homeFreeKicks: 6,
+      awayFreeKicks: 8
     };
   }
   const charSum = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);

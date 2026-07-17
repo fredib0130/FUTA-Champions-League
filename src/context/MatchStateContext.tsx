@@ -1991,6 +1991,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
 
+    if (!loadedGoals.some(g => g.matchId === 'SF1_1')) {
+      loadedGoals.push(
+        { id: 'goal-sf1_1-usman-33', matchId: 'SF1_1', playerName: 'Bamidele Usman', team: 'ICE', minute: "33'", type: 'Goal' },
+        { id: 'goal-sf1_1-michael-35', matchId: 'SF1_1', playerName: 'Olasunkanmi Michael', team: 'AGP', minute: "35'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -2128,7 +2136,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'card-md3-9-adesola-y', matchId: 'md3-9', playerName: 'Adesola Emmanuel', teamAbbr: 'MBBS', minute: "55'", type: 'Yellow' },
 
       // QF3 Cards (STA vs AGP)
-      { id: 'card-qf3-obafemi-48', matchId: 'QF3', playerName: 'Obafemi', teamAbbr: 'AGP', minute: "48'", type: 'Yellow' }
+      { id: 'card-qf3-obafemi-48', matchId: 'QF3', playerName: 'Obafemi', teamAbbr: 'AGP', minute: "48'", type: 'Yellow' },
+
+      // SF1_1 Cards (ICE vs AGP)
+      { id: 'card-sf1_1-frank-52', matchId: 'SF1_1', playerName: 'Apake Avososhido Frank', teamAbbr: 'AGP', minute: "52'", type: 'Yellow' }
     ];
     officialMd1_5Cards.forEach(c => {
       const existingIdx = loadedCards.findIndex(existing => existing.id === c.id);
@@ -2233,7 +2244,15 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       // PO6 Subs
       { id: 'sub-po6-mst-gk', matchId: 'PO6', teamAbbr: 'MST', playerOut: 'Ogundeji Feyitunmise Hezekiah', playerIn: 'Ikwue David Oche', minute: 55 },
       // QF4 Subs
-      { id: 'sub-qf4-mst-gk', matchId: 'QF4', teamAbbr: 'MST', playerOut: 'Ogundeji Feyitunmise Hezekiah', playerIn: 'Ikwue David Oche', minute: 52 }
+      { id: 'sub-qf4-mst-gk', matchId: 'QF4', teamAbbr: 'MST', playerOut: 'Ogundeji Feyitunmise Hezekiah', playerIn: 'Ikwue David Oche', minute: 52 },
+
+      // SF1_1 Subs
+      { id: 'sub-sf1_1-ice-1', matchId: 'SF1_1', teamAbbr: 'ICE', playerOut: 'Olayiwola Samson', playerIn: 'Akinloye Toluwalase', minute: 31 },
+      { id: 'sub-sf1_1-ice-2', matchId: 'SF1_1', teamAbbr: 'ICE', playerOut: 'Folowosele Peace', playerIn: 'Bamidele Usman', minute: 31 },
+      { id: 'sub-sf1_1-agp-1', matchId: 'SF1_1', teamAbbr: 'AGP', playerOut: 'Rowland', playerIn: 'Ayomide Samuel', minute: 41 },
+      { id: 'sub-sf1_1-ice-3', matchId: 'SF1_1', teamAbbr: 'ICE', playerOut: 'Adeyemi Damola', playerIn: 'Kudabo Timilehin', minute: 42 },
+      { id: 'sub-sf1_1-agp-2', matchId: 'SF1_1', teamAbbr: 'AGP', playerOut: 'Olujobade Daniel', playerIn: 'Akinbosoye Akinola', minute: 55 },
+      { id: 'sub-sf1_1-ice-4', matchId: 'SF1_1', teamAbbr: 'ICE', playerOut: 'Akinloye Toluwalase', playerIn: 'Adejinmi Daniel', minute: 55 }
     ];
 
     let subsUpdated = false;
@@ -3627,7 +3646,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         matchId: 'SF1_1',
         teamAbbr: 'ICE',
         formation: '4-2-3-1',
-        captainId: 'player-ice-usman',
+        captainId: 'player-ice-samson',
         players: {
           'GK': 'player-ice-prosper',
           'RB': 'player-ice-godwin',
@@ -3638,12 +3657,17 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'RCM': 'player-ice-aduragbemi',
           'RMF': 'player-ice-samson',
           'AMF': 'player-ice-olayinka',
-          'LWF': 'player-ice-usman',
-          'CF': 'player-ice-ayomide'
+          'LWF': 'player-ice-folowosele',
+          'CF': 'player-ice-damola'
         },
         bench: [
+          'player-ice-usman',
+          'player-ice-akinloye',
+          'player-ice-kudabo',
+          'player-ice-adejinmi',
           'player-ice-muller',
-          'player-ice-bigsam'
+          'player-ice-bigsam',
+          'player-ice-ayomide'
         ],
         status: 'Approved'
       },
@@ -3666,6 +3690,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'ST2': 'player-agp-rowland'
         },
         bench: [
+          'player-agp-samuel',
+          'player-agp-akinbosoye',
           'player-agp-4',
           'player-agp-5',
           'player-agp-6',
@@ -5776,6 +5802,27 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'comm-qf4-chance-mst', matchId: 'QF4', minute: "12'", text: "Chance! Nkemjika Sydney of MST fires from the edge of the area but it goes inches wide of the post.", timestamp: "3:42 PM", type: 'general' },
         { id: 'comm-qf4-kickoff', matchId: 'QF4', minute: "1'", text: "🏁 KICKOFF! The crucial Quarter-final 4 match between Anatomy (ANA) and Marine Science and Technology (MST) is underway at the Mini Pitch! Kizzy is the referee.", timestamp: "3:30 PM", type: 'general' }
       ];
+      loadedCommentary['SF1_1'] = [
+        { id: 'comm-sf1_1-ft', matchId: 'SF1_1', minute: "60'", text: "🏁 FULL TIME! ICE 1–1 AGP. A captivating first leg of Semi-final 1 ends in a 1-1 draw. Goals from Bamidele Usman and Olasunkanmi Michael keep the tie on a knife-edge ahead of the second leg! Olasunkanmi Michael is named Man of the Match.", timestamp: "3:30 PM", type: 'general' },
+        { id: 'comm-sf1_1-chance-agp2', matchId: 'SF1_1', minute: "57'", text: "Chance! AGP wins a freekick in a dangerous area. Michael steps up but his curling effort is well gathered by Prosper.", timestamp: "3:27 PM", type: 'general' },
+        { id: 'comm-sf1_1-sub-agp-akin', matchId: 'SF1_1', minute: "55'", text: "🔄 AGP Substitution: Olujobade Daniel ⬇ / Akinbosoye Akinola ⬆", timestamp: "3:25 PM", type: 'general' },
+        { id: 'comm-sf1_1-sub-ice-adej', matchId: 'SF1_1', minute: "55'", text: "🔄 ICE Substitution: Akinloye Toluwalase ⬇ / Adejinmi Daniel ⬆", timestamp: "3:25 PM", type: 'general' },
+        { id: 'comm-sf1_1-card-frank', matchId: 'SF1_1', minute: "52'", text: "🟨 YELLOW CARD! Apake Avososhido Frank (AGP) is booked for a reckless challenge.", timestamp: "3:22 PM", type: 'general' },
+        { id: 'comm-sf1_1-corner-ice4', matchId: 'SF1_1', minute: "51'", text: "Corner for ICE. The delivery is floated in but cleared out of the box by the AGP defence.", timestamp: "3:21 PM", type: 'general' },
+        { id: 'comm-sf1_1-corner-ice3', matchId: 'SF1_1', minute: "49'", text: "Corner for ICE! Samson whips it in, but the keeper punches it away.", timestamp: "3:19 PM", type: 'general' },
+        { id: 'comm-sf1_1-sub-ice-kud', matchId: 'SF1_1', minute: "42'", text: "🔄 ICE Substitution: Adeyemi Damola ⬇ / Kudabo Timilehin ⬆", timestamp: "3:12 PM", type: 'general' },
+        { id: 'comm-sf1_1-sub-agp-sam', matchId: 'SF1_1', minute: "41'", text: "🔄 AGP Substitution: Rowland ⬇ / Ayomide Samuel ⬆", timestamp: "3:11 PM", type: 'general' },
+        { id: 'comm-sf1_1-offside-ice2', matchId: 'SF1_1', minute: "40'", text: "Offside against ICE. Usman is caught just a fraction early.", timestamp: "3:10 PM", type: 'general' },
+        { id: 'comm-sf1_1-goal-michael', matchId: 'SF1_1', minute: "35'", text: "⚽ GOAL!!! AGP responds instantly! Olasunkanmi Michael finds some space in the box and buries a clinical finish to draw AGP level! ICE 1–1 AGP.", timestamp: "3:05 PM", type: 'goal' },
+        { id: 'comm-sf1_1-goal-usman', matchId: 'SF1_1', minute: "33'", text: "⚽ GOAL!!! Bamidele Usman breaks the deadlock for ICE! A beautiful, sweeping team move is finished off sublimely by Usman to send the SEET Pitch into raptures! ICE 1–0 AGP.", timestamp: "3:03 PM", type: 'goal' },
+        { id: 'comm-sf1_1-sub-ice-usman', matchId: 'SF1_1', minute: "31'", text: "🔄 ICE Substitution: Folowosele Peace ⬇ / Bamidele Usman ⬆", timestamp: "3:01 PM", type: 'general' },
+        { id: 'comm-sf1_1-sub-ice-akin', matchId: 'SF1_1', minute: "31'", text: "🔄 ICE Substitution: Olayiwola Samson ⬇ / Akinloye Toluwalase ⬆", timestamp: "3:01 PM", type: 'general' },
+        { id: 'comm-sf1_1-ht', matchId: 'SF1_1', minute: "30'", text: "⏸️ HALF-TIME! ICE 0–0 AGP. A tense, high-quality, and tactical first half ends without goals, but there is plenty of drama to come.", timestamp: "3:00 PM", type: 'general' },
+        { id: 'comm-sf1_1-offside-ice1', matchId: 'SF1_1', minute: "23'", text: "Offside against ICE - freekick to AGP.", timestamp: "2:23 PM", type: 'general' },
+        { id: 'comm-sf1_1-offside-agp-disallowed', matchId: 'SF1_1', minute: "22'", text: "❌ DISALLOWED GOAL! AGP scores from close range but the linesman has his flag up for offside! Freekick to ICE.", timestamp: "2:22 PM", type: 'general' },
+        { id: 'comm-sf1_1-offside-agp1', matchId: 'SF1_1', minute: "13'", text: "Offside against AGP - freekick to ICE.", timestamp: "2:13 PM", type: 'general' },
+        { id: 'comm-sf1_1-kickoff', matchId: 'SF1_1', minute: "1'", text: "🏁 KICKOFF! The FUTA Champions League 2026 Semi-final 1 (First Leg) clash between ICE and AGP is underway at the SEET Pitch! Victor (ESM) is today's referee.", timestamp: "2:00 PM", type: 'general' }
+      ];
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
@@ -6039,6 +6086,27 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           "54' - CHANCE! Success Bayode of ANA cuts inside and fires a curling effort, but Ogundeji Feyitunmise Hezekiah makes a stunning flying save to keep MST level!",
           "60' - FULL-TIME! ANA 0 - 0 MST. The match goes straight to a penalty shootout!",
           "60' - PENALTY SHOOTOUT! MST wins 4-2 on penalties! MST was clinical, converting all four of their spot-kicks, while ANA missed two of theirs to seal MST's passage into the last four!"
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+    if (!loadedReports['SF1_1']) {
+      loadedReports['SF1_1'] = {
+        matchId: 'SF1_1',
+        summary: "ICE and AGP share the spoils in a thrilling 1–1 draw in the first leg of the FUTA Champions League Semi-finals.",
+        playerOfMatch: "Olasunkanmi Michael (AGP)",
+        tacticalAnalysis: "A highly anticipated first-leg clash between ICE and AGP ended in a captivating 1–1 draw. After a goalless first half characterized by solid defending and offside calls on both sides, the game exploded into life in the second half. ICE took the lead in the 33rd minute when second-half substitute Bamidele Usman broke the deadlock after a sweeping team move. However, AGP responded almost immediately, with star forward Olasunkanmi Michael leveling the score just two minutes later with a clinical, composed finish. The goal also shattered Adeyemi Prosper's incredible streak of 215 consecutive minutes without conceding a goal. The draw keeps the tie wide open heading into the second leg, with both teams having everything to play for.",
+        keyMoments: [
+          "1' - KICKOFF! The Semi-final 1 first leg between ICE and AGP is underway at the SEET Pitch.",
+          "13' - Offside against AGP - freekick to ICE.",
+          "22' - DISALLOWED GOAL! AGP scores but it is ruled out for offside.",
+          "26' - Back-to-back corners for ICE but AGP defends well.",
+          "30' - HALF-TIME! ICE 0–0 AGP.",
+          "33' - GOAL!!! Second-half substitute Bamidele Usman breaks the deadlock for ICE with a brilliant finish! ICE 1–0 AGP.",
+          "35' - GOAL!!! AGP responds instantly! Olasunkanmi Michael scores with a composed finish to draw AGP level! ICE 1–1 AGP.",
+          "52' - YELLOW CARD! Apake Avososhido Frank (AGP) is booked for a reckless challenge.",
+          "60' - FULL-TIME! ICE 1–1 AGP. All to play for in the second leg!"
         ],
         isPublished: true
       };
