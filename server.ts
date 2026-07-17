@@ -1368,6 +1368,105 @@ function seedAppearancesDB() {
     fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
   }
 
+  // Dynamic player sync to merge any newly added players from mockData.ts to the database
+  let dbPlayersUpdated = false;
+  PLAYERS.forEach((p, idx) => {
+    const exists = dbPlayers.some(dp => dp.name.trim().toLowerCase() === p.name.trim().toLowerCase() && dp.team.toUpperCase() === p.teamId.toUpperCase());
+    if (!exists) {
+      const teamAbbr = p.teamId.toUpperCase();
+      const normalizedName = p.name.trim();
+      const reg_number = p.regNumber || getPlayerRegNumber(p.teamId, idx);
+      const maxId = dbPlayers.reduce((max, dp) => Math.max(max, dp.id), 0);
+      
+      dbPlayers.push({
+        id: maxId + 1,
+        name: normalizedName,
+        team: teamAbbr,
+        position: p.position || "MID",
+        reg_number,
+        appearances: 0
+      });
+      dbPlayersUpdated = true;
+    }
+  });
+
+  // Keep Obafemi name synced
+  dbPlayers.forEach(dp => {
+    if (dp.name === "Obafemi" && dp.team === "AGP") {
+      dp.name = "Adetunji Obafemi";
+      dbPlayersUpdated = true;
+    }
+  });
+
+  // Ensure semifinal starting XI appearances are incremented once
+  const SF_FLAG_FILE = path.join(DB_DIR, "sf_apps_added.flag");
+  if (!fs.existsSync(SF_FLAG_FILE)) {
+    console.log("[Appearances DB] Incrementing appearances for semifinal starting XIs...");
+    const sfStarters = [
+      // ICE
+      { name: "Adeyemi Prosper", team: "ICE" },
+      { name: "Abubakar Godwin", team: "ICE" },
+      { name: "Kolade Farooq", team: "ICE" },
+      { name: "Kareem Yusuf", team: "ICE" },
+      { name: "Oripelaye Alameen", team: "ICE" },
+      { name: "Abiodun Boluwatife", team: "ICE" },
+      { name: "Faleye Aduragbemi", team: "ICE" },
+      { name: "Olayiwola Samson", team: "ICE" },
+      { name: "Quadri Olayinka", team: "ICE" },
+      { name: "Bamidele Usman", team: "ICE" },
+      { name: "Boyede Joseph Ayomide", team: "ICE" },
+      // AGP
+      { name: "Akinyode Joseph Oluwaseun", team: "AGP" },
+      { name: "Atere Victor", team: "AGP" },
+      { name: "Adetunji Obafemi", team: "AGP" },
+      { name: "Alake Oluwatimilehin", team: "AGP" },
+      { name: "Taiwo Jacob", team: "AGP" },
+      { name: "Oyelakin Abdulquadri", team: "AGP" },
+      { name: "Olujobade Daniel", team: "AGP" },
+      { name: "Apake Avososhido Frank", team: "AGP" },
+      { name: "Olasunkanmi Michael", team: "AGP" },
+      { name: "Onileowo Oluwafemi", team: "AGP" },
+      { name: "Rowland", team: "AGP" },
+      // CYS
+      { name: "Olabode Victor Oluwatosin", team: "CYS" },
+      { name: "Fashola Oluwatobi Joshua", team: "CYS" },
+      { name: "Raji Jubril Olarewaju", team: "CYS" },
+      { name: "Jegede Daniel Kolawole", team: "CYS" },
+      { name: "Adewumi Excel Joshua", team: "CYS" },
+      { name: "Onah Caleb Igoche", team: "CYS" },
+      { name: "Nwoke Isaac Honour", team: "CYS" },
+      { name: "Akinshipe Oluwafemi Solomon", team: "CYS" },
+      { name: "Ajao Alameen Olaide", team: "CYS" },
+      { name: "Olorunfemi Taiwo James", team: "CYS" },
+      { name: "Bello Daniel Damilare", team: "CYS" },
+      // MST
+      { name: "Ogundeji Feyitunmise Hezekiah", team: "MST" },
+      { name: "Adeniyi Ademola Daniel", team: "MST" },
+      { name: "Adeyemi Adedayo Ibrahim", team: "MST" },
+      { name: "Olagunju Moses Temitope", team: "MST" },
+      { name: "Akinnayajo Irewale", team: "MST" },
+      { name: "Bernard Augustine Obioma", team: "MST" },
+      { name: "Adediran Olanrewaju Abeeb", team: "MST" },
+      { name: "Iyare Praise", team: "MST" },
+      { name: "Boyede Joseph Ayomide", team: "MST" },
+      { name: "Akintunde Ayomide Oluwaseyifunmi", team: "MST" },
+      { name: "Fabusuyi Daniel Oluwafisayo", team: "MST" }
+    ];
+
+    sfStarters.forEach(starter => {
+      const p = dbPlayers.find(dp => dp.name.trim().toLowerCase() === starter.name.trim().toLowerCase() && dp.team.toUpperCase() === starter.team.toUpperCase());
+      if (p) {
+        p.appearances = (p.appearances || 0) + 1;
+      }
+    });
+    dbPlayersUpdated = true;
+    fs.writeFileSync(SF_FLAG_FILE, "done", "utf-8");
+  }
+
+  if (dbPlayersUpdated) {
+    fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
+  }
+
   // Seeding initial appearance events from Matchday 1 md1-1 completed results
   if (dbAppearances.length === 0) {
     console.log("[Appearances DB] Seeding initial appearances from Matchday 1 (MST vs ICE)...");
@@ -1677,6 +1776,138 @@ function seedAppearancesDB() {
 
 // Invoke seeded check right away
 seedAppearancesDB();
+
+// Consolidate player records
+function consolidatePlayerRecords() {
+  console.log("[Appearances DB] Running player record consolidations...");
+  let dbPlayers: any[] = [];
+  let dbAppearances: any[] = [];
+
+  if (fs.existsSync(PLAYERS_FILE)) {
+    try { dbPlayers = JSON.parse(fs.readFileSync(PLAYERS_FILE, "utf-8")); } catch (e) {}
+  }
+  if (fs.existsSync(APPEARANCES_FILE)) {
+    try { dbAppearances = JSON.parse(fs.readFileSync(APPEARANCES_FILE, "utf-8")); } catch (e) {}
+  }
+
+  if (dbPlayers.length === 0) return;
+
+  // --- Consolidation 1: Roland (AGP) -> Rowland (AGP) ---
+  let rowland = dbPlayers.find(p => p.name.trim().toLowerCase() === "rowland" && p.team.toUpperCase() === "AGP");
+  const roland = dbPlayers.find(p => p.name.trim().toLowerCase() === "roland" && p.team.toUpperCase() === "AGP");
+
+  if (roland) {
+    if (!rowland) {
+      roland.name = "Rowland";
+      rowland = roland;
+    } else {
+      rowland.appearances = (rowland.appearances || 0) + (roland.appearances || 0);
+      dbPlayers = dbPlayers.filter(p => p.id !== roland.id);
+    }
+
+    dbAppearances.forEach(app => {
+      if (app.player_name.trim().toLowerCase() === "roland" && app.team.toUpperCase() === "AGP") {
+        app.player_name = "Rowland";
+      }
+    });
+  }
+
+  // --- Consolidation 2: Akinyode Oluwaseun & Olatunde Segun -> Akinyode Joseph Oluwaseun ---
+  let joseph = dbPlayers.find(p => p.name.trim().toLowerCase() === "akinyode joseph oluwaseun" && p.team.toUpperCase() === "AGP");
+  const oluwaseun = dbPlayers.find(p => p.name.trim().toLowerCase() === "akinyode oluwaseun" && p.team.toUpperCase() === "AGP");
+  const segun = dbPlayers.find(p => p.name.trim().toLowerCase() === "olatunde segun" && p.team.toUpperCase() === "AGP");
+
+  if (!joseph) {
+    if (oluwaseun) {
+      oluwaseun.name = "Akinyode Joseph Oluwaseun";
+      joseph = oluwaseun;
+    } else if (segun) {
+      segun.name = "Akinyode Joseph Oluwaseun";
+      joseph = segun;
+    } else {
+      const maxId = dbPlayers.reduce((max, p) => Math.max(max, p.id), 0);
+      joseph = {
+        id: maxId + 1,
+        name: "Akinyode Joseph Oluwaseun",
+        team: "AGP",
+        position: "GK",
+        reg_number: "FCL/AGP/26/1453",
+        appearances: 0
+      };
+      dbPlayers.push(joseph);
+    }
+  }
+
+  let addedApps = 0;
+  if (oluwaseun && oluwaseun.id !== joseph.id) {
+    addedApps += (oluwaseun.appearances || 0);
+    dbPlayers = dbPlayers.filter(p => p.id !== oluwaseun.id);
+  }
+  if (segun && segun.id !== joseph.id) {
+    addedApps += (segun.appearances || 0);
+    dbPlayers = dbPlayers.filter(p => p.id !== segun.id);
+  }
+
+  joseph.appearances = (joseph.appearances || 0) + addedApps;
+
+  dbAppearances.forEach(app => {
+    const norm = app.player_name.trim().toLowerCase();
+    if ((norm === "akinyode oluwaseun" || norm === "olatunde segun") && app.team.toUpperCase() === "AGP") {
+      app.player_name = "Akinyode Joseph Oluwaseun";
+    }
+  });
+
+  // Filter out any unwanted duplicate references
+  const seenNames = new Set<string>();
+  dbPlayers = dbPlayers.filter(p => {
+    if (p.team.toUpperCase() === "AGP") {
+      const norm = p.name.trim().toLowerCase();
+      if (norm === "akinyode oluwaseun" || norm === "olatunde segun" || norm === "roland") {
+        return false;
+      }
+      if (seenNames.has(norm)) {
+        return false;
+      }
+      seenNames.add(norm);
+    }
+    return true;
+  });
+
+  // Make sure Akinyode Joseph Oluwaseun has his 5 official appearances in dbAppearances
+  const targetGkName = "Akinyode Joseph Oluwaseun";
+  const targetGkMatches = [
+    { match_id: "md1-2", is_starting: true, minutes_played: 60 },
+    { match_id: "md2-5", is_starting: true, minutes_played: 60 },
+    { match_id: "md3-1", is_starting: true, minutes_played: 60 },
+    { match_id: "PO3", is_starting: true, minutes_played: 60 },
+    { match_id: "QF3", is_starting: true, minutes_played: 60 }
+  ];
+
+  targetGkMatches.forEach(tm => {
+    const exists = dbAppearances.some(app => app.player_name.toLowerCase() === targetGkName.toLowerCase() && app.match_id === tm.match_id);
+    if (!exists) {
+      const maxAppId = dbAppearances.reduce((max, app) => Math.max(max, app.id), 0);
+      dbAppearances.push({
+        id: maxAppId + 1,
+        match_id: tm.match_id,
+        player_name: targetGkName,
+        team: "AGP",
+        is_starting: tm.is_starting,
+        minutes_played: tm.minutes_played
+      });
+    }
+  });
+
+  // Recompute appearances from actual match records
+  dbPlayers.forEach(p => {
+    p.appearances = dbAppearances.filter(a => a.player_name.toLowerCase() === p.name.toLowerCase() && a.team.toLowerCase() === p.team.toLowerCase()).length;
+  });
+
+  fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
+  fs.writeFileSync(APPEARANCES_FILE, JSON.stringify(dbAppearances, null, 2), "utf-8");
+  console.log("[Appearances DB] Player record consolidations completed successfully.");
+}
+consolidatePlayerRecords();
 
 // API to load players appearances lists
 app.get("/api/players/appearances", (req, res) => {

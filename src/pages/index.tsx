@@ -5034,6 +5034,21 @@ export function TeamProfile() {
                   </div>
                 </div>
 
+                {/* Dynamic Match Played History Log */}
+                {selectedAccreditationPlayer.matchHistory && selectedAccreditationPlayer.matchHistory.length > 0 && (
+                  <div className="bg-black/60 border border-white/5 p-3 rounded-xl space-y-1.5 text-left relative overflow-hidden">
+                    <span className="text-[7.5px] font-mono text-white/35 tracking-widest uppercase block text-center">MATCH PLAYED LOG</span>
+                    <div className="space-y-1 max-h-24 overflow-y-auto pr-1">
+                      {selectedAccreditationPlayer.matchHistory.map((h: string, idx: number) => (
+                        <div key={idx} className="text-[9px] font-mono text-[#00e5ff] flex items-center gap-1.5 border-b border-white/5 pb-1 last:border-0 last:pb-0">
+                          <span className="text-[#00e5ff] shrink-0">⚽</span>
+                          <span className="truncate text-white/80">{h}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Simulated Barcode */}
                 <div className="flex justify-center items-center h-8 bg-white/5 p-1 rounded-sm opacity-50 hover:opacity-100 transition-opacity gap-[1px]">
                   {[2,1,4,1,3,1,2,5,1,2,1,3,2,1,4,1,3,1,2,5,1,2].map((w, idx) => (

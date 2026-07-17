@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Shield, Award, User, RefreshCw, BarChart2, Hash, Calendar, Trophy, Zap, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
+import { useMatchState } from '../context/MatchStateContext';
 
 interface ServerPlayer {
   id: number;
@@ -21,7 +22,21 @@ export function Appearances() {
   const [selectedPosition, setSelectedPosition] = useState<string>('ALL');
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
   const [countdown, setCountdown] = useState<number>(5);
-  const [selectedAccreditationPlayer, setSelectedAccreditationPlayer] = useState<any | null>(null);
+  const { players: contextPlayers } = useMatchState();
+  const [selectedAccreditationPlayerRaw, setSelectedAccreditationPlayerRaw] = useState<any | null>(null);
+
+  const selectedAccreditationPlayer = useMemo(() => {
+    if (!selectedAccreditationPlayerRaw) return null;
+    const cp = contextPlayers.find(p => p.name.toLowerCase() === selectedAccreditationPlayerRaw.name.toLowerCase() && p.teamId.toLowerCase() === selectedAccreditationPlayerRaw.team.toLowerCase());
+    return {
+      ...selectedAccreditationPlayerRaw,
+      matchHistory: cp?.matchHistory || []
+    };
+  }, [selectedAccreditationPlayerRaw, contextPlayers]);
+
+  const setSelectedAccreditationPlayer = (val: any) => {
+    setSelectedAccreditationPlayerRaw(val);
+  };
 
   // Load instances from `/api/players/appearances`
   const loadAppearances = async (showLoadingIndicator = false) => {
@@ -491,6 +506,21 @@ export function Appearances() {
                       {selectedAccreditationPlayer.regNumber}
                     </div>
                   </div>
+
+                  {/* Dynamic Match Played History Log */}
+                  {selectedAccreditationPlayer.matchHistory && selectedAccreditationPlayer.matchHistory.length > 0 && (
+                    <div className="bg-black/60 border border-white/5 p-3 rounded-xl space-y-1.5 text-left relative overflow-hidden">
+                      <span className="text-[7.5px] font-mono text-white/35 tracking-widest uppercase block text-center">MATCH PLAYED LOG</span>
+                      <div className="space-y-1 max-h-24 overflow-y-auto pr-1">
+                        {selectedAccreditationPlayer.matchHistory.map((h: string, idx: number) => (
+                          <div key={idx} className="text-[9px] font-mono text-[#00e5ff] flex items-center gap-1.5 border-b border-white/5 pb-1 last:border-0 last:pb-0">
+                            <span className="text-[#00e5ff] shrink-0">⚽</span>
+                            <span className="truncate text-white/80">{h}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Simulated Barcode */}
                   <div className="flex justify-center items-center h-8 bg-white/5 p-1 rounded-sm opacity-50 hover:opacity-100 transition-opacity gap-[1px]">

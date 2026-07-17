@@ -67,7 +67,7 @@ export const TEAMS: Team[] = [
 export const PLAYERS: Player[] = [
   // Live Star Players
   { id: 'player-agp-michael', name: "Olasunkanmi Michael", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'agp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=agp-michael' },
-  { id: 'player-agp-roland', name: "Roland", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'agp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=agp-roland' },
+  { id: 'player-agp-rowland', name: "Rowland", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'agp', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=agp-rowland' },
   { id: 'player-ent-promise', name: "Promise", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ent', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ent-promise' },
   { id: 'player-ent-fairy', name: "Fairy", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ent', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ent-fairy' },
   { id: 'player-ent-pelumi', name: "Pelumi", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ent', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ent-pelumi' },
@@ -95,6 +95,13 @@ export const PLAYERS: Player[] = [
   { id: 'player-ice-farooq', name: "Kolade Farooq", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-farooq' },
   { id: 'player-ice-muller', name: "Muller", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-muller' },
   { id: 'player-ice-bigsam', name: "Big Sam", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-bigsam' },
+  { id: 'player-ice-godwin', name: "Abubakar Godwin", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-godwin', regNumber: "FCL/ICE/26/1214", level: "300L", jerseyNo: 2 },
+  { id: 'player-ice-yusuf', name: "Kareem Yusuf", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-yusuf', regNumber: "FCL/ICE/26/1215", level: "300L", jerseyNo: 4 },
+  { id: 'player-ice-alameen', name: "Oripelaye Alameen", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-alameen', regNumber: "FCL/ICE/26/1216", level: "300L", jerseyNo: 3 },
+  { id: 'player-ice-boluwatife', name: "Abiodun Boluwatife", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-boluwatife', regNumber: "FCL/ICE/26/1217", level: "400L", jerseyNo: 6 },
+  { id: 'player-ice-aduragbemi', name: "Faleye Aduragbemi", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-aduragbemi', regNumber: "FCL/ICE/26/1218", level: "400L", jerseyNo: 8 },
+  { id: 'player-ice-olayinka', name: "Quadri Olayinka", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-olayinka', regNumber: "FCL/ICE/26/1219", level: "300L", jerseyNo: 10 },
+  { id: 'player-ice-ayomide', name: "Boyede Joseph Ayomide", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-ayomide', regNumber: "FCL/ICE/26/1220", level: "200L", jerseyNo: 9 },
   { id: 'player-ifs-idris', name: "Idris", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ifs', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ifs-idris' },
   { id: 'player-ifs-kehinde', name: "Kehinde", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ifs', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ifs-kehinde' },
   { id: 'player-ifs-segun', name: "Segun", position: "DEF" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ifs', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ifs-segun' },
@@ -574,21 +581,26 @@ export const PLAYERS: Player[] = [
 
   // AGP Official Squad (Applied Geo-Physics)
   ...[
-    { name: "Olatunde Segun", position: "GK" as const, level: "300L", jerseyNo: 1 },
-    { name: "Adeyeye Femi", position: "DEF" as const, level: "400L", jerseyNo: 2 },
-    { name: "Arowolo Tunde", position: "DEF" as const, level: "200L", jerseyNo: 3 },
-    { name: "Alabi Joshua", position: "DEF" as const, level: "500L", jerseyNo: 4 },
-    { name: "Ayeni Blessing", position: "DEF" as const, level: "300L", jerseyNo: 5 },
-    { name: "Adebayo Ola", position: "MID" as const, level: "200L", jerseyNo: 6 },
-    { name: "Adejumo David", position: "MID" as const, level: "400L", jerseyNo: 8 },
-    { name: "Ayodele Samuel", position: "MID" as const, level: "300L", jerseyNo: 10 },
-    { name: "Akinola Segun", position: "FWD" as const, level: "400L", jerseyNo: 11 },
-    { name: "Adewole Isaac", position: "FWD" as const, level: "500L", jerseyNo: 12 },
-    { name: "Onileowo Oluwafemi", position: "FWD" as const, level: "300L", jerseyNo: 9 },
-    { name: "Akinyode Oluwaseun", position: "MID" as const, level: "300L", jerseyNo: 14 },
-    { name: "Obafemi", position: "DEF" as const, level: "300L", jerseyNo: 15 }
+    { id: "player-agp-4", name: "Adeyeye Femi", position: "DEF" as const, level: "400L", jerseyNo: 2 },
+    { id: "player-agp-5", name: "Arowolo Tunde", position: "DEF" as const, level: "200L", jerseyNo: 3 },
+    { id: "player-agp-6", name: "Alabi Joshua", position: "DEF" as const, level: "500L", jerseyNo: 4 },
+    { id: "player-agp-7", name: "Ayeni Blessing", position: "DEF" as const, level: "300L", jerseyNo: 5 },
+    { id: "player-agp-8", name: "Adebayo Ola", position: "MID" as const, level: "200L", jerseyNo: 6 },
+    { id: "player-agp-9", name: "Adejumo David", position: "MID" as const, level: "400L", jerseyNo: 8 },
+    { id: "player-agp-10", name: "Ayodele Samuel", position: "MID" as const, level: "300L", jerseyNo: 10 },
+    { id: "player-agp-11", name: "Akinola Segun", position: "FWD" as const, level: "400L", jerseyNo: 11 },
+    { id: "player-agp-12", name: "Adewole Isaac", position: "FWD" as const, level: "500L", jerseyNo: 12 },
+    { id: "player-agp-13", name: "Onileowo Oluwafemi", position: "FWD" as const, level: "300L", jerseyNo: 9 },
+    { id: "player-agp-15", name: "Adetunji Obafemi", position: "DEF" as const, level: "300L", jerseyNo: 15 },
+    { id: "player-agp-16", name: "Akinyode Joseph Oluwaseun", position: "GK" as const, level: "300L", jerseyNo: 12 },
+    { id: "player-agp-17", name: "Atere Victor", position: "DEF" as const, level: "400L", jerseyNo: 17 },
+    { id: "player-agp-18", name: "Alake Oluwatimilehin", position: "DEF" as const, level: "300L", jerseyNo: 22 },
+    { id: "player-agp-19", name: "Taiwo Jacob", position: "DEF" as const, level: "200L", jerseyNo: 23 },
+    { id: "player-agp-20", name: "Oyelakin Abdulquadri", position: "MID" as const, level: "400L", jerseyNo: 24 },
+    { id: "player-agp-21", name: "Olujobade Daniel", position: "MID" as const, level: "300L", jerseyNo: 25 },
+    { id: "player-agp-22", name: "Apake Avososhido Frank", position: "MID" as const, level: "300L", jerseyNo: 26 }
   ].map((p, idx) => ({
-    id: `player-agp-${idx + 3}`,
+    id: p.id,
     name: p.name,
     position: p.position,
     level: p.level,
@@ -598,7 +610,7 @@ export const PLAYERS: Player[] = [
     played: 0,
     cleanSheets: 0,
     teamId: 'agp',
-    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=agp-player-${idx + 3}`
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=agp-player-${p.id}`
   })),
 
   // Auto-generate helper players for other teams to keep rosters occupied
@@ -715,7 +727,7 @@ export const MATCHES: Match[] = [
     { playerName: 'Penalty Scorer', isScored: true },
     { playerName: 'Penalty Scorer', isScored: false }
   ], lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 5, stage: 'Quarter-finals', referee: 'Kizzy', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Olorunfemi Taiwo James' },
-  { id: 'QF3', homeTeam: 'PO1_WINNER', awayTeam: 'PO3_WINNER', date: 'Sunday, 12th July, 2026', time: '3:30 PM', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 2, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 5, stage: 'Quarter-finals', referee: 'Frank', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Akinyode Oluwaseun' },
+  { id: 'QF3', homeTeam: 'PO1_WINNER', awayTeam: 'PO3_WINNER', date: 'Sunday, 12th July, 2026', time: '3:30 PM', venue: 'Mini Pitch', status: 'Finished', homeScore: 1, awayScore: 2, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 5, stage: 'Quarter-finals', referee: 'Frank', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Akinyode Joseph Oluwaseun' },
   { id: 'QF4', homeTeam: 'PO2_WINNER', awayTeam: 'PO6_WINNER', date: 'Saturday, 11th July, 2026', time: '3:30 PM', venue: 'Mini Pitch', status: 'Finished', homeScore: 0, awayScore: 0, homePenalties: 2, awayPenalties: 4, penaltyShootoutHome: [
     { playerName: 'Penalty Scorer', isScored: true },
     { playerName: 'Penalty Scorer', isScored: true },
@@ -729,10 +741,10 @@ export const MATCHES: Match[] = [
   ], lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 5, stage: 'Quarter-finals', referee: 'Kizzy', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Ogundeji Feyitunmise Hezekiah' },
 
   // --- SEMI-FINALS (Two-legged Home & Away Aggregate) ---
-  { id: 'SF1_1', homeTeam: 'QF1_WINNER', awayTeam: 'QF3_WINNER', date: 'Friday, 17th July, 2026', time: '2:00 PM', venue: 'SEET Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
-  { id: 'SF1_2', homeTeam: 'QF3_WINNER', awayTeam: 'QF1_WINNER', date: 'Monday, 20th July, 2026', time: '5:00 PM', venue: 'AGP Field', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
-  { id: 'SF2_1', homeTeam: 'QF2_WINNER', awayTeam: 'QF4_WINNER', date: 'Friday, 17th July, 2026', time: '3:30 PM', venue: 'SOC Fortress', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
-  { id: 'SF2_2', homeTeam: 'QF4_WINNER', awayTeam: 'QF2_WINNER', date: 'Monday, 20th July, 2026', time: '3:30 PM', venue: 'Mariners Fortress', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
+  { id: 'SF1_1', homeTeam: 'ICE', awayTeam: 'AGP', date: 'Friday, 17th July, 2026', time: '2:00 PM', venue: 'SEET Pitch', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals' },
+  { id: 'SF1_2', homeTeam: 'AGP', awayTeam: 'ICE', date: 'Monday, 20th July, 2026', time: '5:00 PM', venue: 'AGP Field', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
+  { id: 'SF2_1', homeTeam: 'CYS', awayTeam: 'MST', date: 'Friday, 17th July, 2026', time: '3:30 PM', venue: 'SOC Fortress', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals' },
+  { id: 'SF2_2', homeTeam: 'MST', awayTeam: 'CYS', date: 'Monday, 20th July, 2026', time: '3:30 PM', venue: 'Mariners Fortress', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
 
   // --- FINAL ---
   { id: 'FINAL', homeTeam: 'SF1_WINNER', awayTeam: 'SF2_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 7, stage: 'Final' },

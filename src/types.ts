@@ -78,6 +78,7 @@ export interface Player {
   isInactive?: boolean;
   penaltyShootoutGoals?: number;
   penaltyShootoutMisses?: number;
+  matchHistory?: string[];
 }
 
 export interface Match {

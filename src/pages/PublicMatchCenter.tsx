@@ -502,7 +502,7 @@ export default function PublicMatchCenter() {
       mst: "Adeyemi Adedayo Ibrahim",
       simt: "Adebayo Samuel Ayobami",
       sta: "Agbo Peter",
-      agp: "Akinyode Oluwaseun",
+      agp: "Atere Victor",
       ent: "Promise",
       mbbs: "N/A",
       aph: "N/A",

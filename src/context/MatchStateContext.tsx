@@ -272,7 +272,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     // Find all live, finished or interrupted matches for matches played (APPS) calculation
     const liveOrFinishedMatches = matches.filter(m => {
       const s = m.status.trim().toUpperCase();
-      return (s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED' || s === 'INTERRUPTED' || s === 'LIVE') && !m.walkover;
+      const isSFMatchesWithLineups = (m.id === 'SF1_1' || m.id === 'SF2_1');
+      return (s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED' || s === 'INTERRUPTED' || s === 'LIVE' || isSFMatchesWithLineups) && !m.walkover;
     });
 
     // 1. Calculate Goals
@@ -305,7 +306,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       }
     });
 
-    // 3. Calculate Matches Played
+    // 3. Calculate Matches Played and Build Match History Log
     liveOrFinishedMatches.forEach(m => {
       // Look at lineups
       const matchLineup = lineups[m.id];
@@ -333,13 +334,41 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         }
       });
       
-      // If we have lineup involved player IDs, mark them
+      // Resolve team names
+      const homeTeamStr = m.id === 'SF1_1' ? 'ICE' : m.id === 'SF1_2' ? 'AGP' : m.id === 'SF2_1' ? 'CYS' : m.id === 'SF2_2' ? 'MST' : m.homeTeam;
+      const awayTeamStr = m.id === 'SF1_1' ? 'AGP' : m.id === 'SF1_2' ? 'ICE' : m.id === 'SF2_1' ? 'MST' : m.id === 'SF2_2' ? 'CYS' : m.awayTeam;
+
+      // Match Description
+      let matchDesc = '';
+      if (m.id === 'SF1_1') {
+        matchDesc = 'FCL SF1 (1st Leg): ICE vs AGP';
+      } else if (m.id === 'SF2_1') {
+        matchDesc = 'FCL SF2 (1st Leg): CYS vs MST';
+      } else if (m.id === 'SF1_2') {
+        matchDesc = 'FCL SF1 (2nd Leg): AGP vs ICE';
+      } else if (m.id === 'SF2_2') {
+        matchDesc = 'FCL SF2 (2nd Leg): MST vs CYS';
+      } else if (m.stage && m.stage.toLowerCase() === 'quarter-finals') {
+        matchDesc = `FCL QF: ${homeTeamStr} vs ${awayTeamStr}`;
+      } else if (m.stage && m.stage.toLowerCase() === 'play-offs') {
+        matchDesc = `FCL Play-off: ${homeTeamStr} vs ${awayTeamStr}`;
+      } else {
+        matchDesc = `Matchday ${m.matchday || 1}: ${homeTeamStr} vs ${awayTeamStr}`;
+      }
+
+      // If we have lineup involved player IDs, mark them and log history
       if (involvedPlayerIds.size > 0) {
         involvedPlayerIds.forEach(pid => {
           const pObj = basePlayers.find(p => p.id === pid);
-          if (pObj && pObj.position !== 'GK') { // Skip GKs to calculate them accurately in step 4
-            pObj.played += 1;
-            pObj.matchesPlayed = pObj.played;
+          if (pObj) {
+            if (!pObj.matchHistory) pObj.matchHistory = [];
+            if (!pObj.matchHistory.includes(matchDesc)) {
+              pObj.matchHistory.push(matchDesc);
+            }
+            if (pObj.position !== 'GK') { // Skip GKs to calculate them accurately in step 4
+              pObj.played += 1;
+              pObj.matchesPlayed = pObj.played;
+            }
           }
         });
       } else {
@@ -1468,11 +1497,11 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
 
-    if (!loadedGoals.some(g => g.matchId === 'md1-2' && g.playerName === 'Roland')) {
+    if (!loadedGoals.some(g => g.matchId === 'md1-2' && g.playerName === 'Rowland')) {
       loadedGoals.push({
-        id: 'goal-md1-2-roland-46',
+        id: 'goal-md1-2-rowland-46',
         matchId: 'md1-2',
-        playerName: 'Roland',
+        playerName: 'Rowland',
         team: 'AGP',
         minute: "46'",
         type: 'Goal'
@@ -3148,7 +3177,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         formation: '4-3-3',
         captainId: 'player-agp-michael',
         players: {
-          'GK': 'player-agp-3',
+          'GK': 'player-agp-16',
           'LB': 'player-agp-4',
           'CB1': 'player-agp-5',
           'CB2': 'player-agp-6',
@@ -3156,7 +3185,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'DM': 'player-agp-8',
           'CM1': 'player-agp-9',
           'CM2': 'player-agp-10',
-          'LW': 'player-agp-roland',
+          'LW': 'player-agp-rowland',
           'ST': 'player-agp-michael',
           'RW': 'player-agp-11'
         },
@@ -3472,14 +3501,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         matchId: 'QF3',
         teamAbbr: 'AGP',
         formation: '4-3-3',
-        captainId: 'player-agp-14', // Akinyode Oluwaseun
+        captainId: 'player-agp-16', // Akinyode Joseph Oluwaseun
         players: {
-          'GK': 'player-agp-3',
+          'GK': 'player-agp-16',
           'RB': 'player-agp-4',
           'CB1': 'player-agp-5',
           'CB2': 'player-agp-15', // Obafemi
           'LB': 'player-agp-7',
-          'DM': 'player-agp-14', // Akinyode Oluwaseun
+          'DM': 'player-agp-16', // Akinyode Joseph Oluwaseun
           'CM1': 'player-agp-8',
           'CM2': 'player-agp-9',
           'LW': 'player-agp-10',
@@ -3545,6 +3574,128 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'player-mst-16', // Shomuyiwa Lateef Babatunde
           'player-mst-20', // Ekwe Fortune
           'player-mst-21'  // Ikwue David Oche
+        ],
+        status: 'Approved'
+      }
+    };
+
+    // Semi-final 1: ICE vs AGP (First Leg)
+    loadedLineups['SF1_1'] = {
+      home: {
+        matchId: 'SF1_1',
+        teamAbbr: 'ICE',
+        formation: '4-2-3-1',
+        captainId: 'player-ice-usman',
+        players: {
+          'GK': 'player-ice-prosper',
+          'RB': 'player-ice-godwin',
+          'RCB': 'player-ice-farooq',
+          'LCB': 'player-ice-yusuf',
+          'LB': 'player-ice-alameen',
+          'LCM': 'player-ice-boluwatife',
+          'RCM': 'player-ice-aduragbemi',
+          'RMF': 'player-ice-samson',
+          'AMF': 'player-ice-olayinka',
+          'LWF': 'player-ice-usman',
+          'CF': 'player-ice-ayomide'
+        },
+        bench: [
+          'player-ice-muller',
+          'player-ice-bigsam'
+        ],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'SF1_1',
+        teamAbbr: 'AGP',
+        formation: '4-4-2',
+        captainId: 'player-agp-17',
+        players: {
+          'GK': 'player-agp-16',
+          'RB': 'player-agp-17',
+          'RCB': 'player-agp-15',
+          'LCB': 'player-agp-18',
+          'LB': 'player-agp-19',
+          'DM': 'player-agp-20',
+          'LCM': 'player-agp-21',
+          'RCM': 'player-agp-22',
+          'AMF': 'player-agp-michael',
+          'ST1': 'player-agp-13',
+          'ST2': 'player-agp-rowland'
+        },
+        bench: [
+          'player-agp-4',
+          'player-agp-5',
+          'player-agp-6',
+          'player-agp-8',
+          'player-agp-10',
+          'player-agp-11',
+          'player-agp-12'
+        ],
+        status: 'Approved'
+      }
+    };
+
+    // Semi-final 2: CYS vs MST (First Leg)
+    loadedLineups['SF2_1'] = {
+      home: {
+        matchId: 'SF2_1',
+        teamAbbr: 'CYS',
+        formation: '4-3-3',
+        captainId: 'player-cys-5',
+        players: {
+          'GK': 'player-cys-1',
+          'RWB': 'player-cys-5',
+          'CB1': 'player-cys-4',
+          'CB2': 'player-cys-10',
+          'LWB': 'player-cys-2',
+          'DM1': 'player-cys-8',
+          'DM2': 'player-cys-6',
+          'AM': 'player-cys-16',
+          'RW': 'player-cys-9',
+          'ST': 'player-cys-22',
+          'LW': 'player-cys-21'
+        },
+        bench: [
+          'player-cys-3',
+          'player-cys-7',
+          'player-cys-11',
+          'player-cys-12',
+          'player-cys-13',
+          'player-cys-14',
+          'player-cys-15'
+        ],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'SF2_1',
+        teamAbbr: 'MST',
+        formation: '4-3-3',
+        captainId: 'player-mst-2',
+        players: {
+          'GK': 'player-mst-1',
+          'RB': 'player-mst-7',
+          'RCB': 'player-mst-2',
+          'LCB': 'player-mst-13',
+          'LB': 'player-mst-3',
+          'DM': 'player-mst-5',
+          'CM1': 'player-mst-9',
+          'CM2': 'player-mst-10',
+          'RW': 'player-mst-17',
+          'ST': 'player-mst-19',
+          'LW': 'player-mst-18'
+        },
+        bench: [
+          'player-mst-4',
+          'player-mst-6',
+          'player-mst-8',
+          'player-mst-11',
+          'player-mst-12',
+          'player-mst-14',
+          'player-mst-15',
+          'player-mst-16',
+          'player-mst-20',
+          'player-mst-21'
         ],
         status: 'Approved'
       }
@@ -3961,7 +4112,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
-    if (!loadedCommentary['md1-2'] || !loadedCommentary['md1-2'].some(c => c.id === 'comm-goal-md1-2-roland')) {
+    if (!loadedCommentary['md1-2'] || !loadedCommentary['md1-2'].some(c => c.id === 'comm-goal-md1-2-rowland')) {
       loadedCommentary['md1-2'] = [
         {
           id: 'comm-md1-2-current',
@@ -3972,10 +4123,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           type: 'general'
         },
         {
-          id: 'comm-goal-md1-2-roland',
+          id: 'comm-goal-md1-2-rowland',
           matchId: 'md1-2',
           minute: "46'",
-          text: "⚽ GOAL! Roland scores for AGP shortly after the restart, doubling their advantage! AGP 2–0 BCH.",
+          text: "⚽ GOAL! Rowland scores for AGP shortly after the restart, doubling their advantage! AGP 2–0 BCH.",
           timestamp: "10:16 AM",
           type: 'goal'
         },
@@ -5567,7 +5718,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'comm-qf2-kickoff', matchId: 'QF2', minute: "1'", text: "🏁 KICKOFF! The high-stakes Quarter-final 2 between Cyber Security (CYS) and Microbiology (MCB) is underway at the Mini Pitch! Kizzy is the referee.", timestamp: "2:00 PM", type: 'general' }
       ];
       loadedCommentary['QF3'] = [
-        { id: 'comm-qf3-ft', matchId: 'QF3', minute: "60'", text: "🏁 FULL-TIME! STA 1 - 2 AGP. Applied Geo-Physics (AGP) books their place in the FUTA Champions League Semi-finals with a hard-fought 2-1 victory over Statistics (STA)! Akinyode Oluwaseun is named Man of the Match after a flawless display!", timestamp: "5:00 PM", type: 'general' },
+        { id: 'comm-qf3-ft', matchId: 'QF3', minute: "60'", text: "🏁 FULL-TIME! STA 1 - 2 AGP. Applied Geo-Physics (AGP) books their place in the FUTA Champions League Semi-finals with a hard-fought 2-1 victory over Statistics (STA)! Akinyode Joseph Oluwaseun is named Man of the Match after a flawless display!", timestamp: "5:00 PM", type: 'general' },
         { id: 'comm-qf3-card-obafemi', matchId: 'QF3', minute: "48'", text: "🟨 YELLOW CARD! Obafemi of AGP receives a yellow card for a late challenge.", timestamp: "4:48 PM", type: 'general' },
         { id: 'comm-qf3-goal-jesse', matchId: 'QF3', minute: "41'", text: "⚽ GOAL!!! Nwachukwu Jesse pulls one back for Statistics by calmly converting the penalty! Game on! STA 1 - 2 AGP.", timestamp: "4:41 PM", type: 'goal' },
         { id: 'comm-qf3-ht', matchId: 'QF3', minute: "30'", text: "⏸️ HALF-TIME! STA 0 - 2 AGP. A dominant first half from Applied Geo-Physics sees them holding a comfortable two-goal cushion thanks to Onileowo Oluwafemi and Olasunkanmi Michael.", timestamp: "4:00 PM", type: 'general' },
@@ -5818,8 +5969,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       loadedReports['QF3'] = {
         matchId: 'QF3',
         summary: "Applied Geo-Physics (AGP) produced a commanding first-half display to defeat Statistics (STA) 2–1 and secure a historic place in the FUTA Champions League Semi-finals.",
-        playerOfMatch: "Akinyode Oluwaseun (AGP)",
-        tacticalAnalysis: "Applied Geo-Physics (AGP) booked their ticket to the last-four after an outstanding 2-1 victory over Statistics (STA). Onileowo Oluwafemi opened the scoring in the 9th minute with a clinical finish before Olasunkanmi Michael calmly converted from the penalty spot ten minutes later to double AGP's advantage. STA fought back in the second half when Nwachukwu Jesse converted a penalty in the 41st minute, but AGP's compact defensive structure, marshalled by Man of the Match Akinyode Oluwaseun in midfield, held firm to preserve the victory. The win completes the Semi-final lineup, where AGP will face Information and Communication Engineering (ICE) in Semi-final 1.",
+        playerOfMatch: "Akinyode Joseph Oluwaseun (AGP)",
+        tacticalAnalysis: "Applied Geo-Physics (AGP) booked their ticket to the last-four after an outstanding 2-1 victory over Statistics (STA). Onileowo Oluwafemi opened the scoring in the 9th minute with a clinical finish before Olasunkanmi Michael calmly converted from the penalty spot ten minutes later to double AGP's advantage. STA fought back in the second half when Nwachukwu Jesse converted a penalty in the 41st minute, but AGP's compact defensive structure, marshalled by Man of the Match Akinyode Joseph Oluwaseun in midfield, held firm to preserve the victory. The win completes the Semi-final lineup, where AGP will face Information and Communication Engineering (ICE) in Semi-final 1.",
         keyMoments: [
           "1' - KICKOFF! The highly-anticipated Quarter-final 3 between Statistics and Applied Geo-Physics is underway at the Mini Pitch under referee Frank.",
           "9' - GOAL! Onileowo Oluwafemi breaks the deadlock with a clinical finish! STA 0 - 1 AGP.",
