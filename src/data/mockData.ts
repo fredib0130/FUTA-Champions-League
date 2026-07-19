@@ -171,7 +171,8 @@ export const PLAYERS: Player[] = [
     { name: "Fabusuyi Daniel Oluwafisayo", position: "FWD" as const, level: "500L", regNumber: "FCL/MST/26/1018" },
     { name: "Akintunde Ayomide Oluwaseyifunmi", position: "FWD" as const, level: "100L", jerseyNo: 30, regNumber: "FCL/MST/26/1019" },
     { name: "Ekwe Fortune", position: "FWD" as const, level: "500L", regNumber: "FCL/MST/26/1020" },
-    { name: "Ikwue David Oche", position: "GK" as const, level: "100L", jerseyNo: 12, regNumber: "FCL/MST/26/1021" }
+    { name: "Ikwue David Oche", position: "GK" as const, level: "100L", jerseyNo: 12, regNumber: "FCL/MST/26/1021" },
+    { name: "David Ogayemi", position: "DEF" as const, level: "300L", jerseyNo: 23, regNumber: "FCL/MST/26/1022" }
   ].map((p, idx) => ({
     id: `player-mst-${idx + 1}`,
     name: p.name,
@@ -225,42 +226,47 @@ export const PLAYERS: Player[] = [
   })),
   // CYS Official Squad (Extensive 23-player registry, ordered to match historical lineup mappings)
   ...[
-    { name: "Olabode Victor Oluwatosin", position: "GK" as const, level: "500L", jerseyNo: 1, matricNumber: "CYS/20/4932" },
-    { name: "Adewumi Excel Joshua", position: "DEF" as const, level: "500L", jerseyNo: 3, matricNumber: "CYS/22/9017" },
-    { name: "Kadri Taofeek Akorede", position: "DEF" as const, level: "300L", jerseyNo: 4, matricNumber: "CYS/23/4061" },
-    { name: "Raji Jubril Olarewaju", position: "DEF" as const, level: "100L", jerseyNo: 5, matricNumber: "CYS/25/7084" },
-    { name: "Fashola Oluwatobi Joshua", position: "DEF" as const, level: "500L", jerseyNo: 2, matricNumber: "CYS/20/4918" },
-    { name: "Nwoke Isaac Honour", position: "MID" as const, level: "300L", jerseyNo: 6, matricNumber: "CYS/23/4068" },
-    { name: "Ayeni Babatunde Paul", position: "MID" as const, level: "500L", jerseyNo: 21, matricNumber: "CYS/20/4911" },
-    { name: "Onah Caleb Igoche", position: "MID" as const, level: "500L", jerseyNo: 8, matricNumber: "CYS/22/9082" },
-    { name: "Ajao Alameen Olaide", position: "MID" as const, level: "200L", jerseyNo: 17, matricNumber: "CYS/24/9175" },
-    { name: "Jegede Daniel Kolawole", position: "FWD" as const, level: "500L", jerseyNo: 9, matricNumber: "CYS/20/4923" },
-    { name: "Akinyede Allen Oluwaferanmi", position: "FWD" as const, level: "500L", jerseyNo: 7, matricNumber: "CYS/20/4908" },
-    { name: "Adedotun Faiz Ayobami", position: "GK" as const, level: "100L", jerseyNo: 13, matricNumber: "CYS/25/6982" },
-    { name: "Ifedayoijitimeyin Valerian Igbagboyemi", position: "DEF" as const, level: "500L", jerseyNo: 15, matricNumber: "CYS/20/4920" },
-    { name: "Olanrewaju Mujeeb Abolaji", position: "DEF" as const, level: "100L", jerseyNo: 12, matricNumber: "CYS/25/7071" },
-    { name: "Akinrinola Samuel Temitope", position: "MID" as const, level: "500L", jerseyNo: 20, matricNumber: "CYS/20/4905" },
-    { name: "Akinshipe Oluwafemi Solomon", position: "MID" as const, level: "300L", jerseyNo: 23, matricNumber: "CYS/24/9180" },
-    { name: "Oluwadiya Timilehin Abraham", position: "MID" as const, level: "500L", jerseyNo: 18, matricNumber: "CYS/20/4935" },
-    { name: "Olamijulo Israel Damilare", position: "MID" as const, level: "500L", jerseyNo: 10, matricNumber: "CYS/22/9071" },
-    { name: "Adeoye Ezekiel Oluwaseyi", position: "MID" as const, level: "500L", jerseyNo: 14, matricNumber: "CYS/20/4897" },
-    { name: "Owolabi Olaifeoluwa Solomon", position: "MID" as const, level: "300L", jerseyNo: 16, matricNumber: "CYS/23/4090" },
-    { name: "Bello Daniel Damilare", position: "FWD" as const, level: "500L", jerseyNo: 11, matricNumber: "CYS/20/4914" },
-    { name: "Olorunfemi Taiwo James", position: "FWD" as const, level: "100L", jerseyNo: 22, matricNumber: "CYS/25/7075" },
-    { name: "Adetule Marvellous Mayowa", position: "FWD" as const, level: "500L", jerseyNo: 19, matricNumber: "CYS/20/4899" },
-    { name: "John Igbalamide", position: "GK" as const, level: "200L", jerseyNo: 16, matricNumber: "CYS/24/9111" }
+    { name: "Olabode Victor Oluwatosin", position: "GK" as const, level: "500L", jerseyNo: 1, regNumber: "FCL/CYS/26/1001" },
+    { name: "Adewumi Excel Joshua", position: "DEF" as const, level: "500L", jerseyNo: 3, regNumber: "FCL/CYS/26/1005" },
+    { name: "Kadri Taofeek Akorede", position: "DEF" as const, level: "300L", jerseyNo: 4, regNumber: "FCL/CYS/26/1004" },
+    { name: "Raji Jubril Olarewaju", position: "DEF" as const, level: "100L", jerseyNo: 5, regNumber: "FCL/CYS/26/1003" },
+    { name: "Fashola Oluwatobi Joshua", position: "DEF" as const, level: "500L", jerseyNo: 2, regNumber: "FCL/CYS/26/1007" },
+    { name: "Nwoke Isaac Honour", position: "MID" as const, level: "300L", jerseyNo: 6, regNumber: "FCL/CYS/26/1012" },
+    { name: "Ayeni Babatunde Paul", position: "MID" as const, level: "500L", jerseyNo: 21, regNumber: "FCL/CYS/26/1015" },
+    { name: "Onah Caleb Igoche", position: "MID" as const, level: "500L", jerseyNo: 8, regNumber: "FCL/CYS/26/1013" },
+    { name: "Ajao Alameen Olaide", position: "MID" as const, level: "200L", jerseyNo: 17, regNumber: "FCL/CYS/26/1011" },
+    { name: "Jegede Daniel Kolawole", position: "DEF" as const, level: "500L", jerseyNo: 20, regNumber: "FCL/CYS/26/1009" },
+    { name: "Akinyede Allen Oluwaferanmi", position: "FWD" as const, level: "500L", jerseyNo: 7, regNumber: "FCL/CYS/26/1020" },
+    { name: "Adedotun Faiz Ayobami", position: "GK" as const, level: "100L", jerseyNo: 13, regNumber: "FCL/CYS/26/1002" },
+    { name: "Ifedayoijitimeyin Valerian Igbagboyemi", position: "DEF" as const, level: "500L", jerseyNo: 15, regNumber: "FCL/CYS/26/1006" },
+    { name: "Olanrewaju Mujeeb Abolaji", position: "DEF" as const, level: "100L", jerseyNo: 12, regNumber: "FCL/CYS/26/1008" },
+    { name: "Akinrinola Samuel Temitope", position: "MID" as const, level: "500L", jerseyNo: 20, regNumber: "FCL/CYS/26/1084", isFormer: true, isInactive: true },
+    { name: "Akinshipe Oluwafemi Solomon", position: "MID" as const, level: "300L", jerseyNo: 23, regNumber: "FCL/CYS/26/1010" },
+    { name: "Oluwadiya Timilehin Abraham", position: "MID" as const, level: "500L", jerseyNo: 18, regNumber: "FCL/CYS/26/1086", isFormer: true, isInactive: true },
+    { name: "Olamijulo Isreal Damilare", position: "MID" as const, level: "500L", jerseyNo: 10, regNumber: "FCL/CYS/26/1016" },
+    { name: "Adeoye Ezekiel Oluwaseyi", position: "MID" as const, level: "500L", jerseyNo: 14, regNumber: "FCL/CYS/26/1017" },
+    { name: "Owolabi Olaifeoluwa Solomon", position: "MID" as const, level: "300L", jerseyNo: 16, regNumber: "FCL/CYS/26/1018" },
+    { name: "Bello Daniel Damilare", position: "FWD" as const, level: "500L", jerseyNo: 11, regNumber: "FCL/CYS/26/1021" },
+    { name: "Olorunfemi Taiwo James", position: "FWD" as const, level: "100L", jerseyNo: 22, regNumber: "FCL/CYS/26/1022" },
+    { name: "Adetule Marvellous Mayowa", position: "FWD" as const, level: "500L", jerseyNo: 19, regNumber: "FCL/CYS/26/1092", isFormer: true, isInactive: true },
+    { name: "John Igbalamide", position: "GK" as const, level: "200L", jerseyNo: 16, regNumber: "FCL/CYS/26/1093", isFormer: true, isInactive: true },
+    { name: "Arinze Meshach Agboro", position: "FWD" as const, level: "400L", jerseyNo: 9, regNumber: "FCL/CYS/26/1019" },
+    { name: "Kayode Fidelis Olubunmi", position: "MID" as const, level: "500L", jerseyNo: 18, regNumber: "FCL/CYS/26/1014" },
+    { name: "Mobolaji Habib", position: "FWD" as const, level: "500L", jerseyNo: 19, regNumber: "FCL/CYS/26/1023" }
   ].map((p, idx) => ({
     id: `player-cys-${idx + 1}`,
     name: p.name,
     position: p.position,
     level: p.level,
     jerseyNo: p.jerseyNo,
-    regNumber: (globalThis as any).getPlayerRegNumber('cys', idx),
+    regNumber: p.regNumber || (globalThis as any).getPlayerRegNumber('cys', idx),
     goals: 0,
     played: 0,
     cleanSheets: 0,
     teamId: 'cys',
-    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=cys-player-${idx + 1}`
+    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=cys-player-${idx + 1}`,
+    isFormer: p.isFormer,
+    isInactive: p.isInactive
   })),
 
   // SIMT Official Squad (Underdogs' extensive 23-player registry)
@@ -599,6 +605,7 @@ export const PLAYERS: Player[] = [
     { id: "player-agp-15", name: "Adetunji Obafemi", position: "DEF" as const, level: "300L", jerseyNo: 15 },
     { id: "player-agp-16", name: "Akinyode Joseph Oluwaseun", position: "GK" as const, level: "300L", jerseyNo: 12 },
     { id: "player-agp-17", name: "Atere Victor", position: "DEF" as const, level: "400L", jerseyNo: 17 },
+    { id: "player-agp-favour", name: "Patrick Favour", position: "DEF" as const, level: "300L", jerseyNo: 7 },
     { id: "player-agp-18", name: "Alake Oluwatimilehin", position: "DEF" as const, level: "300L", jerseyNo: 22 },
     { id: "player-agp-19", name: "Taiwo Jacob", position: "DEF" as const, level: "200L", jerseyNo: 23 },
     { id: "player-agp-20", name: "Oyelakin Abdulquadri", position: "MID" as const, level: "400L", jerseyNo: 24 },
@@ -750,7 +757,7 @@ export const MATCHES: Match[] = [
   // --- SEMI-FINALS (Two-legged Home & Away Aggregate) ---
   { id: 'SF1_1', homeTeam: 'ICE', awayTeam: 'AGP', date: 'Friday, 17th July, 2026', time: '2:00 PM', venue: 'SEET Pitch', status: 'Finished', homeScore: 1, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals', referee: 'Victor (ESM)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Olasunkanmi Michael' },
   { id: 'SF1_2', homeTeam: 'AGP', awayTeam: 'ICE', date: 'Monday, 20th July, 2026', time: '5:00 PM', venue: 'AGP Field', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
-  { id: 'SF2_1', homeTeam: 'CYS', awayTeam: 'MST', date: 'Friday, 17th July, 2026', time: '3:30 PM', venue: 'SOC Fortress', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals' },
+  { id: 'SF2_1', homeTeam: 'CYS', awayTeam: 'MST', date: 'Friday, 17th July, 2026', time: '3:30 PM', venue: 'SOC Fortress', status: 'Finished', homeScore: 1, awayScore: 2, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals', referee: 'Jones (AGE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Akinnayajo Irewale' },
   { id: 'SF2_2', homeTeam: 'MST', awayTeam: 'CYS', date: 'Monday, 20th July, 2026', time: '3:30 PM', venue: 'Mariners Fortress', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
 
   // --- FINAL ---
@@ -758,6 +765,24 @@ export const MATCHES: Match[] = [
 ];
 
 export const NEWS: NewsPost[] = [
+  {
+    id: 'semi-final-2-first-leg-mst-win',
+    title: '🏆 MST Take First-leg Advantage over CYS',
+    excerpt: 'Defending champions Marine Science and Technology (MST) moved a step closer to another FUTA Champions League final with a hard-fought 2–1 victory over Cyber Security (CYS).',
+    content: `Published: 17th July, 2026
+Time: 6:00 PM
+
+Defending champions **Marine Science and Technology (MST)** moved a step closer to another FUTA Champions League final with a hard-fought **2–1 victory** over **Cyber Security (CYS)** in the first leg of their semi-final at the SOC Fortress.
+
+MST took an early lead through an unfortunate own goal by **Adewumi Excel Joshua** before **Iyare Praise** calmly converted a second-half penalty to double the advantage. CYS responded through substitute **Arinze Meshach Agboro**, whose goal ensured the tie remains finely balanced heading into the return leg.
+
+**Akinnayajo Irewale** was named **Man of the Match** after an outstanding defensive display that helped MST withstand sustained CYS pressure.
+
+The result hands MST a **2–1 aggregate advantage** ahead of the decisive second leg at the **Mariners Fortress**, where CYS will seek a comeback while the defending champions aim to secure another appearance in the FCL Final.`,
+    image: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=800&auto=format&fit=crop&q=60',
+    date: '2026-07-17',
+    category: 'Match Report'
+  },
   {
     id: 'semi-final-1-first-leg-draw',
     title: '🏆 ICE and AGP Share the Spoils in Tense Semi-final First Leg',
@@ -932,7 +957,7 @@ export const SPONSORS: Sponsor[] = [
 ];
 
 export const COEFFICIENTS: CoefficientRanking[] = [
-  { rank: 1, teamId: 'mst', teamName: 'Marine Science and Technology', points2026: 12.00, points2025: 18.00, totalCoefficient: 30.00, isActive: true, movement: '🟢➡️' },
+  { rank: 1, teamId: 'mst', teamName: 'Marine Science and Technology', points2026: 14.00, points2025: 18.00, totalCoefficient: 32.00, isActive: true, movement: '🟢➡️' },
   { rank: 2, teamId: 'bdg', teamName: 'Building Technology', points2026: 11.00, points2025: 13.00, totalCoefficient: 24.00, isActive: true, movement: '🟢➡️' },
   { rank: 3, teamId: 'ifs', teamName: 'Information Systems', points2026: 7.00, points2025: 16.00, totalCoefficient: 23.00, isActive: true, movement: '🟢➡️' },
   { rank: 4, teamId: 'mcb', teamName: 'Micro Biology', points2026: 10.00, points2025: 11.00, totalCoefficient: 21.00, isActive: true, movement: '🟢➡️' },
@@ -940,7 +965,7 @@ export const COEFFICIENTS: CoefficientRanking[] = [
   { rank: 6, teamId: 'csp', teamName: 'Crop Soil and Pest Management', points2026: 10.00, points2025: 8.00, totalCoefficient: 18.00, isActive: true, movement: '🟢➡️' },
   { rank: 7, teamId: 'cys', teamName: 'Cyber Security', points2026: 14.00, points2025: 3.00, totalCoefficient: 17.00, isActive: true, movement: '🟢➡️' },
   { rank: 8, teamId: 'ipe', teamName: 'Industrial and Production Engineering', points2026: 0.00, points2025: 17.00, totalCoefficient: 17.00, isActive: false, movement: '🔴➡️' },
-  { rank: 9, teamId: 'ice', teamName: 'Information and Communication Engineering', points2026: 15.00, points2025: 0.00, totalCoefficient: 15.00, isActive: true, movement: '🟢➡️' },
+  { rank: 9, teamId: 'ice', teamName: 'Information and Communication Engineering', points2026: 16.00, points2025: 0.00, totalCoefficient: 16.00, isActive: true, movement: '🟢➡️' },
   { rank: 10, teamId: 'mbbs', teamName: 'Medicine and Surgery', points2026: 10.00, points2025: 4.00, totalCoefficient: 14.00, isActive: true, movement: '🟢➡️' },
   { rank: 11, teamId: 'phs', teamName: 'Physiology', points2026: 7.00, points2025: 7.00, totalCoefficient: 14.00, isActive: true, movement: '🟢➡️' },
   { rank: 12, teamId: 'fat', teamName: 'Fisheries and Aquaculture Technology', points2026: 0.00, points2025: 13.00, totalCoefficient: 13.00, isActive: false, movement: '🔴➡️' },
@@ -948,10 +973,10 @@ export const COEFFICIENTS: CoefficientRanking[] = [
   { rank: 14, teamId: 'aph', teamName: 'Animal Production and Health', points2026: 12.00, points2025: 0.00, totalCoefficient: 12.00, isActive: true, movement: '🟢➡️' },
   { rank: 15, teamId: 'idd', teamName: 'Industrial Design', points2026: 11.00, points2025: 0.00, totalCoefficient: 11.00, isActive: true, movement: '🟢➡️' },
   { rank: 16, teamId: 'ana', teamName: 'Anatomy', points2026: 11.00, points2025: 0.00, totalCoefficient: 11.00, isActive: true, movement: '🟢➡️' },
-  { rank: 17, teamId: 'ent', teamName: 'Entrepreneurship', points2026: 4.00, points2025: 7.00, totalCoefficient: 11.00, isActive: true, movement: '🟢➡️' },
-  { rank: 18, teamId: 'mme', teamName: 'Metallurgical and Materials Engineering', points2026: 0.00, points2025: 11.00, totalCoefficient: 11.00, isActive: false, movement: '🔴➡️' },
-  { rank: 19, teamId: 'phy', teamName: 'Physics', points2026: 10.00, points2025: 0.00, totalCoefficient: 10.00, isActive: true, movement: '🟢➡️' },
-  { rank: 20, teamId: 'agp', teamName: 'Applied Geo-Physics', points2026: 10.00, points2025: 0.00, totalCoefficient: 10.00, isActive: true, movement: '🟢➡️' },
+  { rank: 17, teamId: 'agp', teamName: 'Applied Geo-Physics', points2026: 11.00, points2025: 0.00, totalCoefficient: 11.00, isActive: true, movement: '🟢➡️' },
+  { rank: 18, teamId: 'ent', teamName: 'Entrepreneurship', points2026: 4.00, points2025: 7.00, totalCoefficient: 11.00, isActive: true, movement: '🟢➡️' },
+  { rank: 19, teamId: 'mme', teamName: 'Metallurgical and Materials Engineering', points2026: 0.00, points2025: 11.00, totalCoefficient: 11.00, isActive: false, movement: '🔴➡️' },
+  { rank: 20, teamId: 'phy', teamName: 'Physics', points2026: 10.00, points2025: 0.00, totalCoefficient: 10.00, isActive: true, movement: '🟢➡️' },
   { rank: 21, teamId: 'mts', teamName: 'Mathematics', points2026: 0.00, points2025: 9.00, totalCoefficient: 9.00, isActive: false, movement: '🔴➡️' },
   { rank: 22, teamId: 'simt', teamName: 'Securities and Investment Management Technology', points2026: 8.00, points2025: 0.00, totalCoefficient: 8.00, isActive: true, movement: '🟢➡️' },
   { rank: 23, teamId: 'sta', teamName: 'Statistics', points2026: 8.00, points2025: 0.00, totalCoefficient: 8.00, isActive: true, movement: '🟢➡️' },

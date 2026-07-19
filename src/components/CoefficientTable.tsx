@@ -12,9 +12,9 @@ interface CoefficientTableProps {
 }
 
 const getMovementDescription = (m: string) => {
-  if (m === '⬆️' || m === '🟢⬆️') return 'Improved position';
-  if (m === '⬇️' || m === '🟢⬇️' || m === '🔴⬇️') return 'Position dropped';
-  if (m === '➡️' || m === '🟢➡️' || m === '🔴➡️') return 'Position unchanged';
+  if (m === '⬆️' || m === '🟢⬆️' || m === '🟢▲') return 'Improved position';
+  if (m === '⬇️' || m === '🟢⬇️' || m === '🔴⬇️' || m === '🔴▼') return 'Position dropped';
+  if (m === '➡️' || m === '🟢➡️' || m === '🔴➡️' || m === '⚪►') return 'Position unchanged';
   return 'No movement data';
 };
 

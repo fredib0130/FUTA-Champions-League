@@ -472,6 +472,18 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       } else if (m.id === 'QF4') {
         homeTeam = 'ANA';
         awayTeam = 'MST';
+      } else if (m.id === 'SF1_1') {
+        homeTeam = 'ICE';
+        awayTeam = 'AGP';
+      } else if (m.id === 'SF1_2') {
+        homeTeam = 'AGP';
+        awayTeam = 'ICE';
+      } else if (m.id === 'SF2_1') {
+        homeTeam = 'CYS';
+        awayTeam = 'MST';
+      } else if (m.id === 'SF2_2') {
+        homeTeam = 'MST';
+        awayTeam = 'CYS';
       }
       return { homeTeam, awayTeam };
     };
@@ -1999,6 +2011,15 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
 
+    if (!loadedGoals.some(g => g.matchId === 'SF2_1')) {
+      loadedGoals.push(
+        { id: 'goal-sf2_1-joshua-5-og', matchId: 'SF2_1', playerName: 'Adewumi Excel Joshua', team: 'CYS', minute: "5'", type: 'Own Goal' },
+        { id: 'goal-sf2_1-praise-33', matchId: 'SF2_1', playerName: 'Iyare Praise', team: 'MST', minute: "33'", type: 'Penalty' },
+        { id: 'goal-sf2_1-agboro-41', matchId: 'SF2_1', playerName: 'Arinze Meshach Agboro', team: 'CYS', minute: "41'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -2139,7 +2160,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'card-qf3-obafemi-48', matchId: 'QF3', playerName: 'Obafemi', teamAbbr: 'AGP', minute: "48'", type: 'Yellow' },
 
       // SF1_1 Cards (ICE vs AGP)
-      { id: 'card-sf1_1-frank-52', matchId: 'SF1_1', playerName: 'Apake Avososhido Frank', teamAbbr: 'AGP', minute: "52'", type: 'Yellow' }
+      { id: 'card-sf1_1-frank-52', matchId: 'SF1_1', playerName: 'Apake Avososhido Frank', teamAbbr: 'AGP', minute: "52'", type: 'Yellow' },
+
+      // SF2_1 Cards (CYS vs MST)
+      { id: 'card-sf2_1-fashola-23', matchId: 'SF2_1', playerName: 'Fashola Oluwatobi Joshua', teamAbbr: 'CYS', minute: "23'", type: 'Yellow' },
+      { id: 'card-sf2_1-adeniyi-41', matchId: 'SF2_1', playerName: 'Adeniyi Ademola Daniel', teamAbbr: 'MST', minute: "41'", type: 'Yellow' },
+      { id: 'card-sf2_1-fabusuyi-63', matchId: 'SF2_1', playerName: 'Fabusuyi Daniel Oluwafisayo', teamAbbr: 'MST', minute: "60+3'", type: 'Yellow' },
+      { id: 'card-sf2_1-jegede-63', matchId: 'SF2_1', playerName: 'Jegede Daniel Kolawole', teamAbbr: 'CYS', minute: "60+3'", type: 'Yellow' },
+      { id: 'card-sf2_1-ogayemi-66', matchId: 'SF2_1', playerName: 'David Ogayemi', teamAbbr: 'MST', minute: "60+6'", type: 'Yellow' }
     ];
     officialMd1_5Cards.forEach(c => {
       const existingIdx = loadedCards.findIndex(existing => existing.id === c.id);
@@ -2250,9 +2278,16 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'sub-sf1_1-ice-1', matchId: 'SF1_1', teamAbbr: 'ICE', playerOut: 'Olayiwola Samson', playerIn: 'Akinloye Toluwalase', minute: 31 },
       { id: 'sub-sf1_1-ice-2', matchId: 'SF1_1', teamAbbr: 'ICE', playerOut: 'Folowosele Peace', playerIn: 'Bamidele Usman', minute: 31 },
       { id: 'sub-sf1_1-agp-1', matchId: 'SF1_1', teamAbbr: 'AGP', playerOut: 'Rowland', playerIn: 'Ayomide Samuel', minute: 41 },
-      { id: 'sub-sf1_1-ice-3', matchId: 'SF1_1', teamAbbr: 'ICE', playerOut: 'Adeyemi Damola', playerIn: 'Kudabo Timilehin', minute: 42 },
+      { id: 'sub-sf1_1-ice-3', matchId: 'SF1_1', teamAbbr: 'ICE', playerOut: 'Boyede Joseph Ayomide', playerIn: 'Kudabo Timilehin', minute: 42 },
       { id: 'sub-sf1_1-agp-2', matchId: 'SF1_1', teamAbbr: 'AGP', playerOut: 'Olujobade Daniel', playerIn: 'Akinbosoye Akinola', minute: 55 },
-      { id: 'sub-sf1_1-ice-4', matchId: 'SF1_1', teamAbbr: 'ICE', playerOut: 'Akinloye Toluwalase', playerIn: 'Adejinmi Daniel', minute: 55 }
+      { id: 'sub-sf1_1-ice-4', matchId: 'SF1_1', teamAbbr: 'ICE', playerOut: 'Akinloye Toluwalase', playerIn: 'Adejinmi Daniel', minute: 55 },
+
+      // SF2_1 Subs
+      { id: 'sub-sf2_1-cys-1', matchId: 'SF2_1', teamAbbr: 'CYS', playerOut: 'Fashola Oluwatobi Joshua', playerIn: 'Akinyede Allen Oluwaferanmi', minute: 37 },
+      { id: 'sub-sf2_1-cys-2', matchId: 'SF2_1', teamAbbr: 'CYS', playerOut: 'Owolabi Olaifeoluwa Solomon', playerIn: 'Arinze Meshach Agboro', minute: 37 },
+      { id: 'sub-sf2_1-mst-1', matchId: 'SF2_1', teamAbbr: 'MST', playerOut: 'Akintunde Ayomide Oluwaseyifunmi', playerIn: 'Shomuyiwa Lateef Babatunde', minute: 50 },
+      { id: 'sub-sf2_1-mst-2', matchId: 'SF2_1', teamAbbr: 'MST', playerOut: 'Adeniyi Ademola Daniel', playerIn: 'Ademisoye Segun', minute: 57 },
+      { id: 'sub-sf2_1-mst-3', matchId: 'SF2_1', teamAbbr: 'MST', playerOut: 'Boyede Joseph Ayomide', playerIn: 'David Ogayemi', minute: 60 }
     ];
 
     let subsUpdated = false;
@@ -3646,7 +3681,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         matchId: 'SF1_1',
         teamAbbr: 'ICE',
         formation: '4-2-3-1',
-        captainId: 'player-ice-samson',
+        captainId: 'player-ice-yusuf',
         players: {
           'GK': 'player-ice-prosper',
           'RB': 'player-ice-godwin',
@@ -3658,7 +3693,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'RMF': 'player-ice-samson',
           'AMF': 'player-ice-olayinka',
           'LWF': 'player-ice-folowosele',
-          'CF': 'player-ice-damola'
+          'CF': 'player-ice-ayomide'
         },
         bench: [
           'player-ice-usman',
@@ -3667,7 +3702,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'player-ice-adejinmi',
           'player-ice-muller',
           'player-ice-bigsam',
-          'player-ice-ayomide'
+          'player-ice-damola'
         ],
         status: 'Approved'
       },
@@ -3675,10 +3710,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         matchId: 'SF1_1',
         teamAbbr: 'AGP',
         formation: '4-4-2',
-        captainId: 'player-agp-17',
+        captainId: 'player-agp-18',
         players: {
           'GK': 'player-agp-16',
-          'RB': 'player-agp-17',
+          'RB': 'player-agp-favour',
           'RCB': 'player-agp-15',
           'LCB': 'player-agp-18',
           'LB': 'player-agp-19',
@@ -3719,7 +3754,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'LWB': 'player-cys-2',
           'DM1': 'player-cys-8',
           'DM2': 'player-cys-6',
-          'AM': 'player-cys-16',
+          'AM': 'player-cys-20',
           'RW': 'player-cys-9',
           'ST': 'player-cys-22',
           'LW': 'player-cys-21'
@@ -3731,7 +3766,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'player-cys-12',
           'player-cys-13',
           'player-cys-14',
-          'player-cys-15'
+          'player-cys-15',
+          'player-cys-25'
         ],
         status: 'Approved'
       },
@@ -3763,7 +3799,8 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'player-mst-15',
           'player-mst-16',
           'player-mst-20',
-          'player-mst-21'
+          'player-mst-21',
+          'player-mst-22'
         ],
         status: 'Approved'
       }
@@ -5826,6 +5863,30 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
+    if (!loadedCommentary['SF2_1']) {
+      loadedCommentary['SF2_1'] = [
+        { id: 'comm-sf2_1-ft', matchId: 'SF2_1', minute: "60+7'", text: "🏁 FULL TIME! CYS 1–2 MST. Defending champions MST seal a hard-fought 2-1 victory over CYS in the first leg of their Semi-final at the SOC Fortress, heading into the second leg with a one-goal advantage! Akinnayajo Irewale is named Man of the Match.", timestamp: "5:07 PM", type: 'general' },
+        { id: 'comm-sf2_1-ogayemi-yc', matchId: 'SF2_1', minute: "60+6'", text: "🟨 YELLOW CARD! David Ogayemi (MST) is booked immediately after coming on for a late, reckless challenge.", timestamp: "5:06 PM", type: 'general' },
+        { id: 'comm-sf2_1-sub-ogayemi', matchId: 'SF2_1', minute: "60+6'", text: "🔄 MST Substitution: Boyede Joseph Ayomide ⬇ / David Ogayemi ⬆", timestamp: "5:06 PM", type: 'general' },
+        { id: 'comm-sf2_1-jegede-yc', matchId: 'SF2_1', minute: "60+3'", text: "🟨 YELLOW CARD! Jegede Daniel Kolawole (CYS) is booked for his part in a heated altercation.", timestamp: "5:03 PM", type: 'general' },
+        { id: 'comm-sf2_1-fabusuyi-yc', matchId: 'SF2_1', minute: "60+3'", text: "🟨 YELLOW CARD! Fabusuyi Daniel Oluwafisayo (MST) is booked for unsporting behavior.", timestamp: "5:03 PM", type: 'general' },
+        { id: 'comm-sf2_1-added', matchId: 'SF2_1', minute: "60+1'", text: "⏱️ Four minutes of added time indicated by the fourth official.", timestamp: "5:01 PM", type: 'general' },
+        { id: 'comm-sf2_1-sub-ademisoye', matchId: 'SF2_1', minute: "57'", text: "🔄 MST Substitution: Adeniyi Ademola Daniel ⬇ / Ademisoye Segun ⬆", timestamp: "4:57 PM", type: 'general' },
+        { id: 'comm-sf2_1-sub-shomuyiwa', matchId: 'SF2_1', minute: "50'", text: "🔄 MST Substitution: Akintunde Ayomide Oluwaseyifunmi ⬇ / Shomuyiwa Lateef Babatunde ⬆", timestamp: "4:50 PM", type: 'general' },
+        { id: 'comm-sf2_1-goal-agboro', matchId: 'SF2_1', minute: "41'", text: "⚽ GOAL!!! CYS pulls one back! Substitute Arinze Meshach Agboro turns home a superb cross with a clinical finish to re-ignite CYS's hopes! CYS 1–2 MST.", timestamp: "4:41 PM", type: 'goal' },
+        { id: 'comm-sf2_1-adeniyi-yc', matchId: 'SF2_1', minute: "41'", text: "🟨 YELLOW CARD! Adeniyi Ademola Daniel (MST) is booked for a rash foul.", timestamp: "4:41 PM", type: 'general' },
+        { id: 'comm-sf2_1-sub-agboro', matchId: 'SF2_1', minute: "37'", text: "🔄 CYS Substitution: Owolabi Olaifeoluwa Solomon ⬇ / Arinze Meshach Agboro ⬆", timestamp: "4:37 PM", type: 'general' },
+        { id: 'comm-sf2_1-sub-akinyede', matchId: 'SF2_1', minute: "37'", text: "🔄 CYS Substitution: Fashola Oluwatobi Joshua ⬇ / Akinyede Allen Oluwaferanmi ⬆", timestamp: "4:37 PM", type: 'general' },
+        { id: 'comm-sf2_1-goal-praise', matchId: 'SF2_1', minute: "33'", text: "⚽ GOAL!!! Iyare Praise steps up and calmly converts the penalty, doubling MST's lead! CYS 0–2 MST.", timestamp: "4:33 PM", type: 'goal' },
+        { id: 'comm-sf2_1-penalty', matchId: 'SF2_1', minute: "32'", text: "🎯 PENALTY! Handball inside the area by CYS! The referee points straight to the spot!", timestamp: "4:32 PM", type: 'general' },
+        { id: 'comm-sf2_1-ht', matchId: 'SF2_1', minute: "30'", text: "⏸️ HALF-TIME! CYS 0–1 MST. MST leads at the break thanks to Adewumi Excel Joshua's early own goal, but CYS is still very much in this.", timestamp: "3:30 PM", type: 'general' },
+        { id: 'comm-sf2_1-fashola-yc', matchId: 'SF2_1', minute: "23'", text: "🟨 YELLOW CARD! Fashola Oluwatobi Joshua (CYS) is booked for a heavy challenge.", timestamp: "3:23 PM", type: 'general' },
+        { id: 'comm-sf2_1-goal-og', matchId: 'SF2_1', minute: "5'", text: "⚽ OWN GOAL!!! Unfortunate moment for CYS as defender Adewumi Excel Joshua turns the ball into his own net while trying to clear a dangerous cross! CYS 0–1 MST.", timestamp: "3:05 PM", type: 'goal' },
+        { id: 'comm-sf2_1-kickoff', matchId: 'SF2_1', minute: "1'", text: "🏁 KICKOFF! The FUTA Champions League 2026 Semi-final 2 (First Leg) clash between CYS and MST is underway at the SOC Fortress! Referee Jones (AGE) blows the whistle.", timestamp: "3:00 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
     setCommentaries(loadedCommentary);
 
     // 10. Reports
@@ -6112,6 +6173,32 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       };
       localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
     }
+    if (!loadedReports['SF2_1']) {
+      loadedReports['SF2_1'] = {
+        matchId: 'SF2_1',
+        summary: "Defending champions Marine Science and Technology (MST) secured a crucial 2–1 victory over Cyber Security (CYS) in the first leg of their Semi-final at the SOC Fortress.",
+        playerOfMatch: "Akinnayajo Irewale (MST)",
+        tacticalAnalysis: "Marine Science and Technology (MST) secured a vital 2–1 victory over Cyber Security (CYS) in a highly competitive Semi-final first-leg clash at the SOC Fortress. MST took an early lead in the 5th minute when CYS defender Adewumi Excel Joshua inadvertently turned the ball into his own net. CYS fought back bravely but was dealt another blow in the second half when a handball in the box gifted MST a penalty, which Iyare Praise calmly converted in the 33rd minute to double the lead. Refusing to go down without a fight, CYS pushed forward and found a lifeline in the 41st minute as substitute Arinze Meshach Agboro swept home a brilliant goal. MST's compact defense, marshalled expertly by Man of the Match Akinnayajo Irewale, withstood a late barrage to preserve the one-goal advantage heading into the return leg at the Mariners Fortress.",
+        keyMoments: [
+          "1' - KICKOFF! The Semi-final 2 first leg between CYS and MST is underway at the SOC Fortress.",
+          "5' - OWN GOAL! Adewumi Excel Joshua (CYS) inadvertently turns the ball into his own net! CYS 0–1 MST.",
+          "23' - YELLOW CARD! Fashola Oluwatobi Joshua (CYS) is booked.",
+          "30' - HALF-TIME! CYS 0–1 MST.",
+          "32' - PENALTY! Handball by CYS in the box! Penalty awarded to MST.",
+          "33' - GOAL!!! Iyare Praise converts the penalty to double MST's lead! CYS 0–2 MST.",
+          "37' - DOUBLE SUB (CYS)! Arinze Meshach Agboro and Akinyede Allen Oluwaferanmi come on.",
+          "41' - GOAL!!! Arinze Meshach Agboro pulls one back for CYS with a clinical finish! CYS 1–2 MST.",
+          "50' - SUB (MST)! Shomuyiwa Lateef Babatunde replaces Akintunde Ayomide Oluwaseyifunmi.",
+          "57' - SUB (MST)! Ademisoye Segun replaces Adeniyi Ademola Daniel.",
+          "60+3' - YELLOW CARDS! Fabusuyi Daniel Oluwafisayo (MST) and Jegede Daniel Kolawole (CYS) are booked after a heated clash.",
+          "60+6' - SUB (MST)! David Ogayemi replaces Boyede Joseph Ayomide.",
+          "60+6' - YELLOW CARD! David Ogayemi (MST) is yellow-carded immediately after coming on.",
+          "60+7' - FULL-TIME! CYS 1–2 MST. MST takes a one-goal advantage into the second leg!"
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
     setReports(loadedReports);
 
     // 11. Timer Cache
@@ -6147,6 +6234,14 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     }
     if (!loadedTimers['QF4']) {
       loadedTimers['QF4'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['SF1_1']) {
+      loadedTimers['SF1_1'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['SF2_1']) {
+      loadedTimers['SF2_1'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     if (!loadedTimers['md1-1'] || loadedTimers['md1-1'].liveMinute !== "FT") {
@@ -7125,9 +7220,9 @@ FUTA Champions League 2026 ⚽🏆`;
       const away = m.awayTeam.toLowerCase();
 
       if (m.homeScore > m.awayScore) {
-        if (coeffMap[home] !== undefined) coeffMap[home] += 3;
+        if (coeffMap[home] !== undefined) coeffMap[home] += 2;
       } else if (m.homeScore < m.awayScore) {
-        if (coeffMap[away] !== undefined) coeffMap[away] += 3;
+        if (coeffMap[away] !== undefined) coeffMap[away] += 2;
       } else {
         if (coeffMap[home] !== undefined) coeffMap[home] += 1;
         if (coeffMap[away] !== undefined) coeffMap[away] += 1;

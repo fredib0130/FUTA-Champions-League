@@ -1371,8 +1371,8 @@ function seedAppearancesDB() {
   // Dynamic player sync to merge any newly added players from mockData.ts to the database
   let dbPlayersUpdated = false;
   PLAYERS.forEach((p, idx) => {
-    const exists = dbPlayers.some(dp => dp.name.trim().toLowerCase() === p.name.trim().toLowerCase() && dp.team.toUpperCase() === p.teamId.toUpperCase());
-    if (!exists) {
+    const foundIdx = dbPlayers.findIndex(dp => dp.name.trim().toLowerCase() === p.name.trim().toLowerCase() && dp.team.toUpperCase() === p.teamId.toUpperCase());
+    if (foundIdx === -1) {
       const teamAbbr = p.teamId.toUpperCase();
       const normalizedName = p.name.trim();
       const reg_number = p.regNumber || getPlayerRegNumber(p.teamId, idx);
@@ -1387,6 +1387,21 @@ function seedAppearancesDB() {
         appearances: 0
       });
       dbPlayersUpdated = true;
+    } else {
+      // Keep existing player properties in sync (e.g. if position or regNumber changes)
+      const existing = dbPlayers[foundIdx];
+      let changed = false;
+      if (p.position && existing.position !== p.position) {
+        existing.position = p.position;
+        changed = true;
+      }
+      if (p.regNumber && existing.reg_number !== p.regNumber) {
+        existing.reg_number = p.regNumber;
+        changed = true;
+      }
+      if (changed) {
+        dbPlayersUpdated = true;
+      }
     }
   });
 
@@ -1413,11 +1428,11 @@ function seedAppearancesDB() {
       { name: "Faleye Aduragbemi", team: "ICE" },
       { name: "Olayiwola Samson", team: "ICE" },
       { name: "Quadri Olayinka", team: "ICE" },
-      { name: "Bamidele Usman", team: "ICE" },
+      { name: "Folowosele Peace", team: "ICE" },
       { name: "Boyede Joseph Ayomide", team: "ICE" },
       // AGP
       { name: "Akinyode Joseph Oluwaseun", team: "AGP" },
-      { name: "Atere Victor", team: "AGP" },
+      { name: "Patrick Favour", team: "AGP" },
       { name: "Adetunji Obafemi", team: "AGP" },
       { name: "Alake Oluwatimilehin", team: "AGP" },
       { name: "Taiwo Jacob", team: "AGP" },
@@ -1435,7 +1450,7 @@ function seedAppearancesDB() {
       { name: "Adewumi Excel Joshua", team: "CYS" },
       { name: "Onah Caleb Igoche", team: "CYS" },
       { name: "Nwoke Isaac Honour", team: "CYS" },
-      { name: "Akinshipe Oluwafemi Solomon", team: "CYS" },
+      { name: "Owolabi Olaifeoluwa Solomon", team: "CYS" },
       { name: "Ajao Alameen Olaide", team: "CYS" },
       { name: "Olorunfemi Taiwo James", team: "CYS" },
       { name: "Bello Daniel Damilare", team: "CYS" },
@@ -1768,6 +1783,145 @@ function seedAppearancesDB() {
 
     anaStarters.forEach(p => addRecord(p, "ANA", true));
     mstStarters.forEach(p => addRecord(p, "MST", true));
+
+    fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
+    fs.writeFileSync(APPEARANCES_FILE, JSON.stringify(dbAppearances, null, 2), "utf-8");
+  }
+
+  // Ensure SF1_1 appearances are seeded
+  if (dbPlayers.length > 0 && !dbAppearances.some(app => app.match_id === "SF1_1")) {
+    console.log("[Appearances DB] Seeding SF1_1 (ICE vs AGP) match appearances...");
+    let appearanceId = Math.max(0, ...dbAppearances.map(a => a.id)) + 1;
+    
+    const addRecord = (playerName: string, team: string, isStarting: boolean) => {
+      const foundInDb = dbPlayers.find(p => p.name.toLowerCase() === playerName.toLowerCase() || String(p.id) === playerName);
+      const cleanName = foundInDb ? foundInDb.name : playerName;
+
+      dbAppearances.push({
+        id: appearanceId++,
+        match_id: "SF1_1",
+        player_name: cleanName,
+        team: team.toUpperCase(),
+        is_starting: isStarting,
+        minutes_played: isStarting ? 90 : 30
+      });
+
+      if (foundInDb) {
+        foundInDb.appearances += 1;
+      }
+    };
+
+    const iceStarters = [
+      "Adeyemi Prosper",
+      "Abubakar Godwin",
+      "Kolade Farooq",
+      "Kareem Yusuf",
+      "Oripelaye Alameen",
+      "Abiodun Boluwatife",
+      "Faleye Aduragbemi",
+      "Olayiwola Samson",
+      "Quadri Olayinka",
+      "Folowosele Peace",
+      "Boyede Joseph Ayomide"
+    ];
+    const iceSubs = [
+      "Akinloye Toluwalase",
+      "Bamidele Usman",
+      "Kudabo Timilehin",
+      "Adejinmi Daniel"
+    ];
+
+    const agpStarters = [
+      "Akinyode Joseph Oluwaseun",
+      "Patrick Favour",
+      "Adetunji Obafemi",
+      "Alake Oluwatimilehin",
+      "Taiwo Jacob",
+      "Oyelakin Abdulquadri",
+      "Olujobade Daniel",
+      "Apake Avososhido Frank",
+      "Olasunkanmi Michael",
+      "Onileowo Oluwafemi",
+      "Rowland"
+    ];
+    const agpSubs = [
+      "Ayomide Samuel",
+      "Akinbosoye Akinola"
+    ];
+
+    iceStarters.forEach(p => addRecord(p, "ICE", true));
+    iceSubs.forEach(p => addRecord(p, "ICE", false));
+    agpStarters.forEach(p => addRecord(p, "AGP", true));
+    agpSubs.forEach(p => addRecord(p, "AGP", false));
+
+    fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
+    fs.writeFileSync(APPEARANCES_FILE, JSON.stringify(dbAppearances, null, 2), "utf-8");
+  }
+
+  // Ensure SF2_1 appearances are seeded
+  if (dbPlayers.length > 0 && !dbAppearances.some(app => app.match_id === "SF2_1")) {
+    console.log("[Appearances DB] Seeding SF2_1 (CYS vs MST) match appearances...");
+    let appearanceId = Math.max(0, ...dbAppearances.map(a => a.id)) + 1;
+    
+    const addRecord = (playerName: string, team: string, isStarting: boolean) => {
+      const foundInDb = dbPlayers.find(p => p.name.toLowerCase() === playerName.toLowerCase() || String(p.id) === playerName);
+      const cleanName = foundInDb ? foundInDb.name : playerName;
+
+      dbAppearances.push({
+        id: appearanceId++,
+        match_id: "SF2_1",
+        player_name: cleanName,
+        team: team.toUpperCase(),
+        is_starting: isStarting,
+        minutes_played: isStarting ? 90 : 30
+      });
+
+      if (foundInDb) {
+        foundInDb.appearances += 1;
+      }
+    };
+
+    const cysStarters = [
+      "Olabode Victor Oluwatosin",
+      "Fashola Oluwatobi Joshua",
+      "Raji Jubril Olarewaju",
+      "Jegede Daniel Kolawole",
+      "Adewumi Excel Joshua",
+      "Onah Caleb Igoche",
+      "Nwoke Isaac Honour",
+      "Owolabi Olaifeoluwa Solomon",
+      "Ajao Alameen Olaide",
+      "Olorunfemi Taiwo James",
+      "Bello Daniel Damilare"
+    ];
+    const cysSubs = [
+      "Akinyede Allen Oluwaferanmi",
+      "Arinze Meshach Agboro"
+    ];
+
+    const mstStarters = [
+      "Ogundeji Feyitunmise Hezekiah",
+      "Adeniyi Ademola Daniel",
+      "Adeyemi Adedayo Ibrahim",
+      "Olagunju Moses Temitope",
+      "Akinnayajo Irewale",
+      "Bernard Augustine Obioma",
+      "Adediran Olanrewaju Abeeb",
+      "Iyare Praise",
+      "Boyede Joseph Ayomide",
+      "Akintunde Ayomide Oluwaseyifunmi",
+      "Fabusuyi Daniel Oluwafisayo"
+    ];
+    const mstSubs = [
+      "Shomuyiwa Lateef Babatunde",
+      "Ademisoye Segun",
+      "David Ogayemi"
+    ];
+
+    cysStarters.forEach(p => addRecord(p, "CYS", true));
+    cysSubs.forEach(p => addRecord(p, "CYS", false));
+    mstStarters.forEach(p => addRecord(p, "MST", true));
+    mstSubs.forEach(p => addRecord(p, "MST", false));
 
     fs.writeFileSync(PLAYERS_FILE, JSON.stringify(dbPlayers, null, 2), "utf-8");
     fs.writeFileSync(APPEARANCES_FILE, JSON.stringify(dbAppearances, null, 2), "utf-8");
