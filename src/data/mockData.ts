@@ -101,7 +101,7 @@ export const PLAYERS: Player[] = [
   { id: 'player-ice-boluwatife', name: "Abiodun Boluwatife", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-boluwatife', regNumber: "FCL/ICE/26/1217", level: "400L", jerseyNo: 6 },
   { id: 'player-ice-aduragbemi', name: "Faleye Aduragbemi", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-aduragbemi', regNumber: "FCL/ICE/26/1218", level: "400L", jerseyNo: 8 },
   { id: 'player-ice-olayinka', name: "Quadri Olayinka", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-olayinka', regNumber: "FCL/ICE/26/1219", level: "300L", jerseyNo: 10 },
-  { id: 'player-ice-ayomide', name: "Boyede Joseph Ayomide", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-ayomide', regNumber: "FCL/ICE/26/1220", level: "200L", jerseyNo: 9 },
+  { id: 'player-ice-ayomide', name: "Ayeni Samuel", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-ayomide', regNumber: "FCL/ICE/26/1220", level: "200L", jerseyNo: 9 },
   { id: 'player-ice-folowosele', name: "Folowosele Peace", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-folowosele' },
   { id: 'player-ice-akinloye', name: "Akinloye Toluwalase", position: "MID" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-akinloye' },
   { id: 'player-ice-damola', name: "Adeyemi Damola", position: "FWD" as const, goals: 0, played: 0, cleanSheets: 0, teamId: 'ice', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ice-damola' },
@@ -756,15 +756,61 @@ export const MATCHES: Match[] = [
 
   // --- SEMI-FINALS (Two-legged Home & Away Aggregate) ---
   { id: 'SF1_1', homeTeam: 'ICE', awayTeam: 'AGP', date: 'Friday, 17th July, 2026', time: '2:00 PM', venue: 'SEET Pitch', status: 'Finished', homeScore: 1, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals', referee: 'Victor (ESM)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Olasunkanmi Michael' },
-  { id: 'SF1_2', homeTeam: 'AGP', awayTeam: 'ICE', date: 'Monday, 20th July, 2026', time: '5:00 PM', venue: 'AGP Field', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
+  { id: 'SF1_2', homeTeam: 'AGP', awayTeam: 'ICE', date: 'Monday, 20th July, 2026', time: '5:00 PM', venue: 'AGP Field', status: 'Finished', homeScore: 0, awayScore: 1, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals', referee: 'Tommy (URP)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Adeyemi Prosper' },
   { id: 'SF2_1', homeTeam: 'CYS', awayTeam: 'MST', date: 'Friday, 17th July, 2026', time: '3:30 PM', venue: 'SOC Fortress', status: 'Finished', homeScore: 1, awayScore: 2, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals', referee: 'Jones (AGE)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Akinnayajo Irewale' },
-  { id: 'SF2_2', homeTeam: 'MST', awayTeam: 'CYS', date: 'Monday, 20th July, 2026', time: '3:30 PM', venue: 'Mariners Fortress', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 6, stage: 'Semi-finals' },
-
+  { id: 'SF2_2', homeTeam: 'MST', awayTeam: 'CYS', date: 'Monday, 20th July, 2026', time: '3:30 PM', venue: 'Mariners Fortress', status: 'Finished', homeScore: 1, awayScore: 2, homePenalties: 4, awayPenalties: 2, penaltyShootoutHome: [
+    { playerName: 'Olagunju Moses Temitope', isScored: true },
+    { playerName: 'Adediran Olanrewaju Abeeb', isScored: true },
+    { playerName: 'Boyede Joseph Ayomide', isScored: true },
+    { playerName: 'Nkemjika Sydney', isScored: true }
+  ], penaltyShootoutAway: [
+    { playerName: 'Fashola Oluwatobi Joshua', isScored: false },
+    { playerName: 'Jegede Daniel Kolawole', isScored: false },
+    { playerName: 'Bello Daniel Damilare', isScored: true },
+    { playerName: 'Olorunfemi Taiwo James', isScored: true }
+  ], lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals', referee: 'Tommy (URP)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Arinze Meshach Agboro' },
+ 
   // --- FINAL ---
-  { id: 'FINAL', homeTeam: 'SF1_WINNER', awayTeam: 'SF2_WINNER', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 7, stage: 'Final' },
+  { id: 'FINAL', homeTeam: 'ICE', awayTeam: 'MST', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 7, stage: 'Final' },
 ];
 
 export const NEWS: NewsPost[] = [
+  {
+    id: 'semi-final-2-second-leg-mst-win',
+    title: '🏆 Defending Champions MST Survive CYS Scare to Reach Another Final',
+    excerpt: 'Marine Science and Technology (MST) booked their place in the 2026 FUTA Champions League Final after surviving a dramatic semi-final against Cyber Security (CYS).',
+    content: `Published: 20th July, 2026
+Time: 7:00 PM
+
+**Marine Science and Technology (MST)** booked their place in the **2026 FUTA Champions League Final** after surviving a dramatic semi-final against **Cyber Security (CYS)**.
+
+Trailing 2–0 on the night and 3–2 on aggregate after goals from **Arinze Meshach Agboro** and **Olorunfemi Taiwo James**, MST responded through **Akintunde Ayomide Oluwaseyifunmi** to level the tie at **3–3 on aggregate**.
+
+With no further goals, the contest was decided by penalties, where the defending champions held their nerve to win **4–2**, sealing a place in a second consecutive FCL Final.
+
+Despite ending on the losing side, **Arinze Meshach Agboro** was named **Man of the Match** for an outstanding performance that almost carried CYS to the final.`,
+    image: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=800&auto=format&fit=crop&q=60',
+    date: '2026-07-20',
+    category: 'Tournament News'
+  },
+  {
+    id: 'semi-final-1-second-leg-ice-win',
+    title: '🏆 ICE Secure Final Ticket with Hard-fought Win over AGP',
+    excerpt: 'Information and Communication Engineering (ICE) qualified for the 2026 FUTA Champions League Final after a tactical 1–0 second-leg victory (2–1 on aggregate) over AGP.',
+    content: `Published: 20th July, 2026
+Time: 6:30 PM
+
+**Information and Communication Engineering (ICE)** have locked their place in the **2026 FUTA Champions League Grand Final** after defeating **Applied Geo-Physics (AGP)** 1–0 at the AGP Field, progressing **2–1 on aggregate**.
+
+In a highly tactical and intense return leg, **Bamidele Usman** broke the deadlock early in the 9th minute, calmly slotting home a penalty after a handball inside the box. Holding a precious aggregate lead, ICE then showed incredible defensive resilience.
+
+AGP pushed numbers forward in the second half but found no way past an inspired **Adeyemi Prosper**. The ICE goalkeeper was named **Man of the Match** after producing several breathtaking saves to preserve the clean sheet.
+
+With this result, ICE books their ticket to the ultimate championship match, where they will face defending champions MST in what promises to be an epic final!`,
+    image: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop&q=60',
+    date: '2026-07-20',
+    category: 'Tournament News'
+  },
   {
     id: 'semi-final-2-first-leg-mst-win',
     title: '🏆 MST Take First-leg Advantage over CYS',

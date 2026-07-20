@@ -312,7 +312,7 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     // Find all live, finished or interrupted matches for matches played (APPS) calculation
     const liveOrFinishedMatches = matches.filter(m => {
       const s = m.status.trim().toUpperCase();
-      const isSFMatchesWithLineups = (m.id === 'SF1_1' || m.id === 'SF2_1');
+      const isSFMatchesWithLineups = (m.id === 'SF1_1' || m.id === 'SF1_2' || m.id === 'SF2_1' || m.id === 'SF2_2');
       return (s === 'FINISHED' || s === 'FULL-TIME' || s === 'FULL TIME' || s === 'COMPLETED' || s === 'INTERRUPTED' || s === 'LIVE' || isSFMatchesWithLineups) && !m.walkover;
     });
 
@@ -694,10 +694,10 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
             m.awayPenalties !== official.awayPenalties ||
             JSON.stringify(m.penaltyShootoutHome) !== JSON.stringify(official.penaltyShootoutHome) ||
             JSON.stringify(m.penaltyShootoutAway) !== JSON.stringify(official.penaltyShootoutAway) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'QF1', 'QF2', 'QF3', 'QF4'].includes(official.id) && m.homeScore !== official.homeScore) ||
-            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'QF1', 'QF2', 'QF3', 'QF4'].includes(official.id) && m.awayScore !== official.awayScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'QF1', 'QF2', 'QF3', 'QF4', 'SF1_1', 'SF1_2', 'SF2_1', 'SF2_2', 'FINAL'].includes(official.id) && m.homeScore !== official.homeScore) ||
+            (['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'QF1', 'QF2', 'QF3', 'QF4', 'SF1_1', 'SF1_2', 'SF2_1', 'SF2_2', 'FINAL'].includes(official.id) && m.awayScore !== official.awayScore) ||
             JSON.stringify(m.officialsPanel) !== JSON.stringify(official.officialsPanel) ||
-            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4' || official.id === 'PO5' || official.id === 'QF1' || official.id === 'QF2' || official.id === 'QF3' || official.id === 'QF4') && m.status !== official.status) // Sync status specifically for matchdays, PO, and QF matches
+            ((official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4' || official.id === 'PO5' || official.id === 'QF1' || official.id === 'QF2' || official.id === 'QF3' || official.id === 'QF4' || official.id === 'SF1_1' || official.id === 'SF1_2' || official.id === 'SF2_1' || official.id === 'SF2_2' || official.id === 'FINAL') && m.status !== official.status) // Sync status specifically for matchdays, PO, QF, SF, and Final matches
           ) {
             loadedMatches[index] = {
               ...m,
@@ -710,13 +710,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
               refereeAssigned: official.refereeAssigned,
               matchApproved: official.matchApproved,
               officialsPanel: official.officialsPanel,
-              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4' || official.id === 'PO5' || official.id === 'QF1' || official.id === 'QF2' || official.id === 'QF3' || official.id === 'QF4') ? official.status : m.status,
+              status: (official.matchday === 1 || official.matchday === 2 || official.id === 'md3-4' || official.id === 'md3-3' || official.id === 'md3-6' || official.id === 'md3-2' || official.id === 'md3-1' || official.id === 'md3-5' || official.id === 'md3-7' || official.id === 'md3-8' || official.id === 'md3-9' || official.id === 'md3-10' || official.id === 'PO6' || official.id === 'PO1' || official.id === 'PO2' || official.id === 'PO3' || official.id === 'PO4' || official.id === 'PO5' || official.id === 'QF1' || official.id === 'QF2' || official.id === 'QF3' || official.id === 'QF4' || official.id === 'SF1_1' || official.id === 'SF1_2' || official.id === 'SF2_1' || official.id === 'SF2_2' || official.id === 'FINAL') ? official.status : m.status,
               lineupSubmittedHome: official.lineupSubmittedHome,
               lineupSubmittedAway: official.lineupSubmittedAway,
               manOfTheMatch: official.manOfTheMatch,
               note: official.note,
-              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'QF1', 'QF2', 'QF3', 'QF4'].includes(official.id) ? official.homeScore : m.homeScore,
-              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'QF1', 'QF2', 'QF3', 'QF4'].includes(official.id) ? official.awayScore : m.awayScore,
+              homeScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'QF1', 'QF2', 'QF3', 'QF4', 'SF1_1', 'SF1_2', 'SF2_1', 'SF2_2', 'FINAL'].includes(official.id) ? official.homeScore : m.homeScore,
+              awayScore: ['md1-1', 'md1-2', 'md1-3', 'md1-4', 'md1-5', 'md1-6', 'md1-7', 'md1-8', 'md1-9', 'md1-10', 'md2-1', 'md2-2', 'md2-3', 'md2-4', 'md2-5', 'md2-6', 'md2-7', 'md2-8', 'md2-10', 'md3-4', 'md3-3', 'md3-6', 'md3-2', 'md3-1', 'md3-5', 'md3-7', 'md3-8', 'md3-9', 'md3-10', 'PO6', 'PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'QF1', 'QF2', 'QF3', 'QF4', 'SF1_1', 'SF1_2', 'SF2_1', 'SF2_2', 'FINAL'].includes(official.id) ? official.awayScore : m.awayScore,
               homePenalties: official.homePenalties,
               awayPenalties: official.awayPenalties,
               penaltyShootoutHome: official.penaltyShootoutHome,
@@ -2011,11 +2011,27 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
 
+    if (!loadedGoals.some(g => g.matchId === 'SF1_2')) {
+      loadedGoals.push(
+        { id: 'goal-sf1_2-usman-9-pen', matchId: 'SF1_2', playerName: 'Bamidele Usman', team: 'ICE', minute: "9'", type: 'Penalty' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
     if (!loadedGoals.some(g => g.matchId === 'SF2_1')) {
       loadedGoals.push(
         { id: 'goal-sf2_1-joshua-5-og', matchId: 'SF2_1', playerName: 'Adewumi Excel Joshua', team: 'CYS', minute: "5'", type: 'Own Goal' },
         { id: 'goal-sf2_1-praise-33', matchId: 'SF2_1', playerName: 'Iyare Praise', team: 'MST', minute: "33'", type: 'Penalty' },
         { id: 'goal-sf2_1-agboro-41', matchId: 'SF2_1', playerName: 'Arinze Meshach Agboro', team: 'CYS', minute: "41'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
+    if (!loadedGoals.some(g => g.matchId === 'SF2_2')) {
+      loadedGoals.push(
+        { id: 'goal-sf2_2-agboro-6', matchId: 'SF2_2', playerName: 'Arinze Meshach Agboro', team: 'CYS', minute: "6'", type: 'Goal' },
+        { id: 'goal-sf2_2-james-26', matchId: 'SF2_2', playerName: 'Olorunfemi Taiwo James', team: 'CYS', minute: "26'", type: 'Goal' },
+        { id: 'goal-sf2_2-oluwaseyifunmi-47', matchId: 'SF2_2', playerName: 'Akintunde Ayomide Oluwaseyifunmi', team: 'MST', minute: "47'", type: 'Goal' }
       );
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
@@ -2167,7 +2183,17 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'card-sf2_1-adeniyi-41', matchId: 'SF2_1', playerName: 'Adeniyi Ademola Daniel', teamAbbr: 'MST', minute: "41'", type: 'Yellow' },
       { id: 'card-sf2_1-fabusuyi-63', matchId: 'SF2_1', playerName: 'Fabusuyi Daniel Oluwafisayo', teamAbbr: 'MST', minute: "60+3'", type: 'Yellow' },
       { id: 'card-sf2_1-jegede-63', matchId: 'SF2_1', playerName: 'Jegede Daniel Kolawole', teamAbbr: 'CYS', minute: "60+3'", type: 'Yellow' },
-      { id: 'card-sf2_1-ogayemi-66', matchId: 'SF2_1', playerName: 'David Ogayemi', teamAbbr: 'MST', minute: "60+6'", type: 'Yellow' }
+      { id: 'card-sf2_1-ogayemi-66', matchId: 'SF2_1', playerName: 'David Ogayemi', teamAbbr: 'MST', minute: "60+6'", type: 'Yellow' },
+
+      // SF1_2 Cards (AGP vs ICE)
+      { id: 'card-sf1_2-alake-25', matchId: 'SF1_2', playerName: 'Alake Oluwatimilehin', teamAbbr: 'AGP', minute: "25'", type: 'Yellow' },
+      { id: 'card-sf1_2-onileowo-34', matchId: 'SF1_2', playerName: 'Onileowo Oluwafemi', teamAbbr: 'AGP', minute: "34'", type: 'Yellow' },
+      { id: 'card-sf1_2-kolade-37', matchId: 'SF1_2', playerName: 'Kolade Farooq', teamAbbr: 'ICE', minute: "37'", type: 'Yellow' },
+      { id: 'card-sf1_2-faleye-41', matchId: 'SF1_2', playerName: 'Faleye Aduragbemi', teamAbbr: 'ICE', minute: "41'", type: 'Yellow' },
+
+      // SF2_2 Cards (MST vs CYS)
+      { id: 'card-sf2_2-kadri-15', matchId: 'SF2_2', playerName: 'Kadri Taofeek Akorede', teamAbbr: 'CYS', minute: "15'", type: 'Yellow' },
+      { id: 'card-sf2_2-fashola-49', matchId: 'SF2_2', playerName: 'Fashola Oluwatobi Joshua', teamAbbr: 'CYS', minute: "49'", type: 'Yellow' }
     ];
     officialMd1_5Cards.forEach(c => {
       const existingIdx = loadedCards.findIndex(existing => existing.id === c.id);
@@ -2287,7 +2313,16 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       { id: 'sub-sf2_1-cys-2', matchId: 'SF2_1', teamAbbr: 'CYS', playerOut: 'Owolabi Olaifeoluwa Solomon', playerIn: 'Arinze Meshach Agboro', minute: 37 },
       { id: 'sub-sf2_1-mst-1', matchId: 'SF2_1', teamAbbr: 'MST', playerOut: 'Akintunde Ayomide Oluwaseyifunmi', playerIn: 'Shomuyiwa Lateef Babatunde', minute: 50 },
       { id: 'sub-sf2_1-mst-2', matchId: 'SF2_1', teamAbbr: 'MST', playerOut: 'Adeniyi Ademola Daniel', playerIn: 'Ademisoye Segun', minute: 57 },
-      { id: 'sub-sf2_1-mst-3', matchId: 'SF2_1', teamAbbr: 'MST', playerOut: 'Boyede Joseph Ayomide', playerIn: 'David Ogayemi', minute: 60 }
+      { id: 'sub-sf2_1-mst-3', matchId: 'SF2_1', teamAbbr: 'MST', playerOut: 'Boyede Joseph Ayomide', playerIn: 'David Ogayemi', minute: 60 },
+
+      // SF1_2 Subs
+      { id: 'sub-sf1_2-ice-1', matchId: 'SF1_2', teamAbbr: 'ICE', playerOut: 'Olayiwola Samson', playerIn: 'Adejinmi Daniel', minute: 45 },
+      { id: 'sub-sf1_2-agp-1', matchId: 'SF1_2', teamAbbr: 'AGP', playerOut: 'Alake Oluwatimilehin', playerIn: 'Patrick Favour', minute: 48 },
+
+      // SF2_2 Subs
+      { id: 'sub-sf2_2-cys-1', matchId: 'SF2_2', teamAbbr: 'CYS', playerOut: 'Kadri Taofeek Akorede', playerIn: 'Jegede Daniel Kolawole', minute: 40 },
+      { id: 'sub-sf2_2-cys-2', matchId: 'SF2_2', teamAbbr: 'CYS', playerOut: 'Nwoke Isaac Honour', playerIn: 'Olamijulo Isreal Damilare', minute: 54 },
+      { id: 'sub-sf2_2-mst-1', matchId: 'SF2_2', teamAbbr: 'MST', playerOut: 'Ogundeji Feyitunmise Hezekiah', playerIn: 'Philip Believe Oluwashina', minute: 64 }
     ];
 
     let subsUpdated = false;
@@ -3801,6 +3836,144 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           'player-mst-20',
           'player-mst-21',
           'player-mst-22'
+        ],
+        status: 'Approved'
+      }
+    };
+
+    // Semi-final 1 (Second Leg): AGP vs ICE
+    loadedLineups['SF1_2'] = {
+      home: {
+        matchId: 'SF1_2',
+        teamAbbr: 'AGP',
+        formation: '4-4-2',
+        captainId: 'player-agp-17',
+        players: {
+          'GK': 'player-agp-16',
+          'RB': 'player-agp-17',
+          'RCB': 'player-agp-15',
+          'LCB': 'player-agp-18',
+          'LB': 'player-agp-19',
+          'DM': 'player-agp-20',
+          'CM1': 'player-agp-21',
+          'CM2': 'player-agp-22',
+          'AMF': 'player-agp-michael',
+          'ST1': 'player-agp-13',
+          'ST2': 'player-agp-rowland'
+        },
+        bench: [
+          'player-agp-4',
+          'player-agp-5',
+          'player-agp-6',
+          'player-agp-7',
+          'player-agp-8',
+          'player-agp-9',
+          'player-agp-10',
+          'player-agp-11',
+          'player-agp-12',
+          'player-agp-favour',
+          'player-agp-samuel',
+          'player-agp-akinbosoye'
+        ],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'SF1_2',
+        teamAbbr: 'ICE',
+        formation: '4-2-2-1-1',
+        captainId: 'player-ice-usman',
+        players: {
+          'GK': 'player-ice-prosper',
+          'RB': 'player-ice-godwin',
+          'CB1': 'player-ice-alameen',
+          'CB2': 'player-ice-yusuf',
+          'LB': 'player-ice-samson',
+          'DM': 'player-ice-farooq',
+          'CM': 'player-ice-aduragbemi',
+          'RMF': 'player-ice-olayinka',
+          'LWF': 'player-ice-usman',
+          'SS': 'player-ice-kudabo',
+          'CF': 'player-ice-ayomide'
+        },
+        bench: [
+          'player-ice-boluwatife',
+          'player-ice-folowosele',
+          'player-ice-akinloye',
+          'player-ice-damola',
+          'player-ice-adejinmi',
+          'player-ice-muller',
+          'player-ice-bigsam'
+        ],
+        status: 'Approved'
+      }
+    };
+
+    // Semi-final 2 (Second Leg): MST vs CYS
+    loadedLineups['SF2_2'] = {
+      home: {
+        matchId: 'SF2_2',
+        teamAbbr: 'MST',
+        formation: '4-3-3',
+        captainId: 'player-mst-2',
+        players: {
+          'GK': 'player-mst-1',
+          'RB': 'player-mst-7',
+          'CB1': 'player-mst-2',
+          'CB2': 'player-mst-13',
+          'LB': 'player-mst-3',
+          'DM1': 'player-mst-5',
+          'DM2': 'player-mst-9',
+          'AM': 'player-mst-10',
+          'RW': 'player-mst-17',
+          'ST': 'player-mst-15',
+          'LW': 'player-mst-19'
+        },
+        bench: [
+          'player-mst-4',
+          'player-mst-6',
+          'player-mst-8',
+          'player-mst-11',
+          'player-mst-12',
+          'player-mst-14',
+          'player-mst-16',
+          'player-mst-18',
+          'player-mst-20',
+          'player-mst-21',
+          'player-mst-22'
+        ],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'SF2_2',
+        teamAbbr: 'CYS',
+        formation: '4-3-3',
+        captainId: 'player-cys-5',
+        players: {
+          'GK': 'player-cys-1',
+          'RWB': 'player-cys-5',
+          'CB1': 'player-cys-4',
+          'CB2': 'player-cys-3',
+          'LWB': 'player-cys-2',
+          'DM1': 'player-cys-8',
+          'DM2': 'player-cys-6',
+          'AM': 'player-cys-25',
+          'RW': 'player-cys-9',
+          'ST': 'player-cys-22',
+          'LW': 'player-cys-21'
+        },
+        bench: [
+          'player-cys-7',
+          'player-cys-10',
+          'player-cys-11',
+          'player-cys-12',
+          'player-cys-13',
+          'player-cys-14',
+          'player-cys-16',
+          'player-cys-18',
+          'player-cys-19',
+          'player-cys-20',
+          'player-cys-26',
+          'player-cys-27'
         ],
         status: 'Approved'
       }
@@ -5863,6 +6036,49 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
 
+    if (!loadedCommentary['SF1_2']) {
+      loadedCommentary['SF1_2'] = [
+        { id: 'comm-sf1_2-ft', matchId: 'SF1_2', minute: "60+3'", text: "🏁 FULL TIME! AGP 0–1 ICE (Agg: 1–2). ICE wins the second leg of Semi-final 1 to qualify for the Grand Final! Adeyemi Prosper is named Man of the Match after an outstanding performance!", timestamp: "6:03 PM", type: 'general' },
+        { id: 'comm-sf1_2-corner-agp-last', matchId: 'SF1_2', minute: "60+1'", text: "Corner to AGP! The goalkeeper comes up, but the delivery is cleared by Yusuf.", timestamp: "6:01 PM", type: 'general' },
+        { id: 'comm-sf1_2-added-time', matchId: 'SF1_2', minute: "60'", text: "⏱️ 3 minutes of added time indicated by the referee.", timestamp: "6:00 PM", type: 'general' },
+        { id: 'comm-sf1_2-foul-ice-win', matchId: 'SF1_2', minute: "58'", text: "Foul won by ICE. They are trying to keep possession and kill off the match.", timestamp: "5:58 PM", type: 'general' },
+        { id: 'comm-sf1_2-offside-agp', matchId: 'SF1_2', minute: "57'", text: "Offside against AGP. Patrick Favour is caught too early.", timestamp: "5:57 PM", type: 'general' },
+        { id: 'comm-sf1_2-corner-ice-last', matchId: 'SF1_2', minute: "56'", text: "Corner to ICE. Short corner taken, keeping the ball near the corner flag.", timestamp: "5:56 PM", type: 'general' },
+        { id: 'comm-sf1_2-corner-agp-54', matchId: 'SF1_2', minute: "54'", text: "Corner to AGP. Floated in high but Prosper rises and punches it clear.", timestamp: "5:54 PM", type: 'general' },
+        { id: 'comm-sf1_2-corner-agp-51', matchId: 'SF1_2', minute: "51'", text: "Corner to AGP. Shot blocked and deflected behind for another corner.", timestamp: "5:51 PM", type: 'general' },
+        { id: 'comm-sf1_2-sub-agp-favour', matchId: 'SF1_2', minute: "48'", text: "🔄 AGP Substitution: Alake Oluwatimilehin Out ⬇ / Patrick Favour In ⬆", timestamp: "5:48 PM", type: 'general' },
+        { id: 'comm-sf1_2-sub-ice-daniel', matchId: 'SF1_2', minute: "45'", text: "🔄 ICE Substitution: Olayiwola Samson Out ⬇ / Adejinmi Daniel In ⬆", timestamp: "5:45 PM", type: 'general' },
+        { id: 'comm-sf1_2-foul-ice-win2', matchId: 'SF1_2', minute: "43'", text: "Foul won by ICE deep in their own half.", timestamp: "5:43 PM", type: 'general' },
+        { id: 'comm-sf1_2-card-faleye', matchId: 'SF1_2', minute: "41'", text: "🟨 YELLOW CARD! Faleye Aduragbemi (ICE) is booked for a tactical foul.", timestamp: "5:41 PM", type: 'general' },
+        { id: 'comm-sf1_2-corner-ice-39', matchId: 'SF1_2', minute: "39'", text: "Corner to ICE. Cleared at the near post by Raji Jubril.", timestamp: "5:39 PM", type: 'general' },
+        { id: 'comm-sf1_2-card-kolade', matchId: 'SF1_2', minute: "37'", text: "🟨 YELLOW CARD! Kolade Farooq (ICE) receives a yellow card for a hard tackle.", timestamp: "5:37 PM", type: 'general' },
+        { id: 'comm-sf1_2-corner-agp-35', matchId: 'SF1_2', minute: "35'", text: "Corner to AGP! Whips in deep but goes out of play over the crossbar.", timestamp: "5:35 PM", type: 'general' },
+        { id: 'comm-sf1_2-foul-agp-win', matchId: 'SF1_2', minute: "34'", text: "Foul won by AGP as Michael is brought down by Yusuf.", timestamp: "5:34 PM", type: 'general' },
+        { id: 'comm-sf1_2-foul-ice-win3', matchId: 'SF1_2', minute: "32'", text: "Foul won by ICE. Usman is tripped on the left wing.", timestamp: "5:32 PM", type: 'general' },
+        { id: 'comm-sf1_2-sh-kickoff', matchId: 'SF1_2', minute: "31'", text: "🏁 SECOND HALF KICKOFF! AGP kicks off the second half, hunting for an equalizer.", timestamp: "5:31 PM", type: 'general' },
+        { id: 'comm-sf1_2-ht', matchId: 'SF1_2', minute: "32'", text: "⏸️ HALF TIME! AGP 0–1 ICE. Bamidele Usman's penalty separates the teams after an intense, fast-paced first half.", timestamp: "5:00 PM", type: 'general' },
+        { id: 'comm-sf1_2-card-onileowo', matchId: 'SF1_2', minute: "31'", text: "🟨 YELLOW CARD! Onileowo Oluwafemi (AGP) is booked for a late challenge.", timestamp: "4:31 PM", type: 'general' },
+        { id: 'comm-sf1_2-added-time-fh', matchId: 'SF1_2', minute: "30'", text: "⏱️ 2 minutes of added time indicated in the first half.", timestamp: "4:30 PM", type: 'general' },
+        { id: 'comm-sf1_2-offside-ice', matchId: 'SF1_2', minute: "28'", text: "Offside against ICE. Usman runs slightly too early.", timestamp: "4:28 PM", type: 'general' },
+        { id: 'comm-sf1_2-corner-ice-27', matchId: 'SF1_2', minute: "27'", text: "Corner to ICE. Swept in by Kudabo, but headed away by Kadri.", timestamp: "4:27 PM", type: 'general' },
+        { id: 'comm-sf1_2-card-alake', matchId: 'SF1_2', minute: "25'", text: "🟨 YELLOW CARD! Alake Oluwatimilehin (AGP) is booked for a sliding tackle on Usman.", timestamp: "4:25 PM", type: 'card' },
+        { id: 'comm-sf1_2-handball-ice', matchId: 'SF1_2', minute: "23'", text: "Handball by ICE. Freekick awarded to AGP near the halfway line.", timestamp: "4:23 PM", type: 'general' },
+        { id: 'comm-sf1_2-foul-ice-win4', matchId: 'SF1_2', minute: "16'", text: "Foul won by ICE. Farooq is brought down in midfield.", timestamp: "4:16 PM", type: 'general' },
+        { id: 'comm-sf1_2-foul-ice-win5', matchId: 'SF1_2', minute: "14'", text: "Foul won by ICE. Kudabo is pushed from behind.", timestamp: "4:14 PM", type: 'general' },
+        { id: 'comm-sf1_2-foul-ice-win6', matchId: 'SF1_2', minute: "13'", text: "Foul won by ICE. Alameen clears and wins the whistle.", timestamp: "4:13 PM", type: 'general' },
+        { id: 'comm-sf1_2-foul-agp-win2', matchId: 'SF1_2', minute: "10'", text: "Foul won by AGP as Rowland is fouled in the center circle.", timestamp: "4:10 PM", type: 'general' },
+        { id: 'comm-sf1_2-goal-usman', matchId: 'SF1_2', minute: "9'", text: "⚽ GOAL!!! Bamidele Usman drills the penalty into the bottom right corner, sending the goalkeeper the wrong way! AGP 0–1 ICE.", timestamp: "4:09 PM", type: 'goal' },
+        { id: 'comm-sf1_2-penalty-ice', matchId: 'SF1_2', minute: "8'", text: "⚠️ PENALTY TO ICE! Handball by AGP inside the box after a corner delivery!", timestamp: "4:08 PM", type: 'general' },
+        { id: 'comm-sf1_2-corner-ice-8', matchId: 'SF1_2', minute: "8'", text: "Corner to ICE. Floated into the box, leading to a massive scramble.", timestamp: "4:08 PM", type: 'general' },
+        { id: 'comm-sf1_2-foul-ice-win7', matchId: 'SF1_2', minute: "7'", text: "Foul won by ICE as Usman is tripped near the penalty box.", timestamp: "4:07 PM", type: 'general' },
+        { id: 'comm-sf1_2-foul-agp-win3', matchId: 'SF1_2', minute: "4'", text: "Foul won by AGP. Michael is fouled by Farooq.", timestamp: "4:04 PM", type: 'general' },
+        { id: 'comm-sf1_2-foul-ice-win8', matchId: 'SF1_2', minute: "3'", text: "Foul won by ICE deep in their own half.", timestamp: "4:03 PM", type: 'general' },
+        { id: 'comm-sf1_2-corner-agp-2', matchId: 'SF1_2', minute: "2'", text: "Corner to AGP! Inswinging ball met by Olujobade but blocked by Yusuf.", timestamp: "4:02 PM", type: 'general' },
+        { id: 'comm-sf1_2-kickoff', matchId: 'SF1_2', minute: "1'", text: "🏁 KICKOFF! The FUTA Champions League 2026 Semi-final 1 (Second Leg) between AGP and ICE is underway at the AGP Field! Tommy (URP) is today's referee.", timestamp: "4:00 PM", type: 'general' }
+      ];
+      localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
+    }
+
     if (!loadedCommentary['SF2_1']) {
       loadedCommentary['SF2_1'] = [
         { id: 'comm-sf2_1-ft', matchId: 'SF2_1', minute: "60+7'", text: "🏁 FULL TIME! CYS 1–2 MST. Defending champions MST seal a hard-fought 2-1 victory over CYS in the first leg of their Semi-final at the SOC Fortress, heading into the second leg with a one-goal advantage! Akinnayajo Irewale is named Man of the Match.", timestamp: "5:07 PM", type: 'general' },
@@ -5882,7 +6098,30 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
         { id: 'comm-sf2_1-ht', matchId: 'SF2_1', minute: "30'", text: "⏸️ HALF-TIME! CYS 0–1 MST. MST leads at the break thanks to Adewumi Excel Joshua's early own goal, but CYS is still very much in this.", timestamp: "3:30 PM", type: 'general' },
         { id: 'comm-sf2_1-fashola-yc', matchId: 'SF2_1', minute: "23'", text: "🟨 YELLOW CARD! Fashola Oluwatobi Joshua (CYS) is booked for a heavy challenge.", timestamp: "3:23 PM", type: 'general' },
         { id: 'comm-sf2_1-goal-og', matchId: 'SF2_1', minute: "5'", text: "⚽ OWN GOAL!!! Unfortunate moment for CYS as defender Adewumi Excel Joshua turns the ball into his own net while trying to clear a dangerous cross! CYS 0–1 MST.", timestamp: "3:05 PM", type: 'goal' },
-        { id: 'comm-sf2_1-kickoff', matchId: 'SF2_1', minute: "1'", text: "🏁 KICKOFF! The FUTA Champions League 2026 Semi-final 2 (First Leg) clash between CYS and MST is underway at the SOC Fortress! Referee Jones (AGE) blows the whistle.", timestamp: "3:00 PM", type: 'general' }
+        { id: 'comm-sf2_1-kickoff', matchId: 'SF2_1', minute: "1'", text: "🏁 KICKOFF! The FUTA Champions League 2026 Semi-final 2 (First Leg) clash between CYS and MST is underway at the SOC Fortress! Referee Jones (AGE) blows the whistle.", timestamp: "3:00 PM", type: 'general' },
+
+        // SF2_2 Commentaries
+        { id: 'comm-sf2_2-shootout-end', matchId: 'SF2_2', minute: "FT", text: "⚽ SHOOTOUT - GOAL!!! Nkemjika Sydney converts his penalty! MST wins the shootout 4-2! The defending champions advance to the Grand Final!", timestamp: "5:30 PM", type: 'general' },
+        { id: 'comm-sf2_2-shootout-cys4', matchId: 'SF2_2', minute: "FT", text: "⚽ SHOOTOUT - GOAL! Olorunfemi Taiwo James converts for CYS. MST 3-2 CYS.", timestamp: "5:29 PM", type: 'general' },
+        { id: 'comm-sf2_2-shootout-mst3', matchId: 'SF2_2', minute: "FT", text: "⚽ SHOOTOUT - GOAL! Boyede Joseph Ayomide converts for MST. MST 3-1 CYS.", timestamp: "5:28 PM", type: 'general' },
+        { id: 'comm-sf2_2-shootout-cys3', matchId: 'SF2_2', minute: "FT", text: "⚽ SHOOTOUT - GOAL! Bello Daniel Damilare converts for CYS. MST 2-1 CYS.", timestamp: "5:27 PM", type: 'general' },
+        { id: 'comm-sf2_2-shootout-mst2', matchId: 'SF2_2', minute: "FT", text: "⚽ SHOOTOUT - GOAL! Adediran Olanrewaju Abeeb converts for MST. MST 2-0 CYS.", timestamp: "5:26 PM", type: 'general' },
+        { id: 'comm-sf2_2-shootout-cys2', matchId: 'SF2_2', minute: "FT", text: "❌ SHOOTOUT - MISS! Jegede Daniel Kolawole misses his penalty for CYS! MST 1-0 CYS.", timestamp: "5:25 PM", type: 'general' },
+        { id: 'comm-sf2_2-shootout-mst1', matchId: 'SF2_2', minute: "FT", text: "⚽ SHOOTOUT - GOAL! Olagunju Moses Temitope converts for MST! MST 1-0 CYS.", timestamp: "5:24 PM", type: 'general' },
+        { id: 'comm-sf2_2-shootout-cys1', matchId: 'SF2_2', minute: "FT", text: "❌ SHOOTOUT - MISS! Fashola Oluwatobi Joshua misses CYS's first penalty!", timestamp: "5:23 PM", type: 'general' },
+        { id: 'comm-sf2_2-ft', matchId: 'SF2_2', minute: "60+5'", text: "🏁 FULL-TIME! MST 1–2 CYS (Agg: 3–3). An incredibly dramatic match goes straight to a penalty shootout to determine who advances to the Grand Final!", timestamp: "5:05 PM", type: 'general' },
+        { id: 'comm-sf2_2-sub-mst-injury', matchId: 'SF2_2', minute: "60+4'", text: "🔄 MST Substitution: Emergency goalkeeper change as Ogundeji Feyitunmise Hezekiah is subbed off after an injury, and Philip Believe Oluwashina enters.", timestamp: "5:04 PM", type: 'general' },
+        { id: 'comm-sf2_2-added', matchId: 'SF2_2', minute: "60'", text: "⏱️ 5 minutes of added time indicated by the fourth official.", timestamp: "5:00 PM", type: 'general' },
+        { id: 'comm-sf2_2-sub-cys-isreal', matchId: 'SF2_2', minute: "54'", text: "🔄 CYS Substitution: Nwoke Isaac Honour Out ⬇ / Olamijulo Isreal Damilare In ⬆", timestamp: "4:54 PM", type: 'general' },
+        { id: 'comm-sf2_2-card-joshua', matchId: 'SF2_2', minute: "49'", text: "🟨 YELLOW CARD! Fashola Oluwatobi Joshua (CYS) is booked for a hard tackle.", timestamp: "4:49 PM", type: 'card' },
+        { id: 'comm-sf2_2-goal-akintunde', matchId: 'SF2_2', minute: "47'", text: "⚽ GOAL!!! Akintunde Ayomide Oluwaseyifunmi scores a crucial goal for MST, tapping home after a deflected cross! MST 1–2 CYS (Agg: 3–3).", timestamp: "4:47 PM", type: 'goal' },
+        { id: 'comm-sf2_2-sh-kickoff', matchId: 'SF2_2', minute: "31'", text: "🏁 SECOND HALF KICKOFF! CYS gets the second half underway. As it stands, CYS are leading on aggregate!", timestamp: "4:31 PM", type: 'general' },
+        { id: 'comm-sf2_2-ht', matchId: 'SF2_2', minute: "30'", text: "⏸️ HALF-TIME! MST 0–2 CYS. CYS has turned this tie completely on its head with goals from Agboro and James!", timestamp: "4:30 PM", type: 'general' },
+        { id: 'comm-sf2_2-sub-cys-kola', matchId: 'SF2_2', minute: "40'", text: "🔄 CYS Substitution: Kadri Taofeek Akorede Out ⬇ / Jegede Daniel Kolawole In ⬆", timestamp: "4:40 PM", type: 'general' },
+        { id: 'comm-sf2_2-goal-james', matchId: 'SF2_2', minute: "26'", text: "⚽ GOAL!!! Olorunfemi Taiwo James scores to double CYS's lead on the night and put CYS in front on aggregate! MST 0–2 CYS (Agg: 2–3).", timestamp: "4:26 PM", type: 'goal' },
+        { id: 'comm-sf2_2-card-kadri', matchId: 'SF2_2', minute: "15'", text: "🟨 YELLOW CARD! Kadri Taofeek Akorede (CYS) is booked for a late challenge.", timestamp: "4:15 PM", type: 'card' },
+        { id: 'comm-sf2_2-goal-agboro', matchId: 'SF2_2', minute: "6'", text: "⚽ GOAL!!! CYS strikes early! Arinze Meshach Agboro converts a low cross with a neat finish at the near post! MST 0–1 CYS (Agg: 2–2).", timestamp: "4:06 PM", type: 'goal' },
+        { id: 'comm-sf2_2-kickoff', matchId: 'SF2_2', minute: "1'", text: "🏁 KICKOFF! The FUTA Champions League 2026 Semi-final 2 (Second Leg) between MST and CYS is underway at the Mariners Fortress! Referee Tommy (URP) takes charge.", timestamp: "4:00 PM", type: 'general' }
       ];
       localStorage.setItem('fcl_admin_commentaries', JSON.stringify(loadedCommentary));
     }
@@ -6173,6 +6412,31 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       };
       localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
     }
+
+    if (!loadedReports['SF1_2']) {
+      loadedReports['SF1_2'] = {
+        matchId: 'SF1_2',
+        summary: "ICE secured their ticket to the 2026 FUTA Champions League Final with a disciplined 1–0 second-leg victory (2–1 on aggregate) over AGP at the AGP Field.",
+        playerOfMatch: "Adeyemi Prosper (ICE)",
+        tacticalAnalysis: "In a tense and highly tactical second leg, Information and Communication Engineering (ICE) demonstrated immense defensive discipline to defeat Applied Geo-Physics (AGP) 1–0 and secure a 2–1 aggregate triumph. The only goal of the game came in the 9th minute when Bamidele Usman converted from the penalty spot following a handball in the box. Trailing on aggregate, AGP pushed numbers forward, but ICE's goalkeeper Adeyemi Prosper produced a series of world-class saves to keep a clean sheet and earn the Man of the Match accolade. The victory ensures ICE progresses to the 2026 Grand Final, where they will face either MST or CYS.",
+        keyMoments: [
+          "1' - KICKOFF! The crucial Semi-final 1 second leg between AGP and ICE gets underway at the AGP Field under referee Tommy (URP).",
+          "8' - PENALTY! Handball by AGP inside the box after a corner delivery! Penalty awarded to ICE.",
+          "9' - GOAL!!! Bamidele Usman calmly converts the penalty to put ICE in front! AGP 0–1 ICE (Agg: 1–2).",
+          "25' - YELLOW CARD! Alake Oluwatimilehin (AGP) is booked for a reckless tackle on Usman.",
+          "31' - YELLOW CARD! Onileowo Oluwafemi (AGP) is booked for a late challenge.",
+          "32' - HALF-TIME! AGP 0–1 ICE.",
+          "37' - YELLOW CARD! Kolade Farooq (ICE) is booked for a hard tackle.",
+          "41' - YELLOW CARD! Faleye Aduragbemi (ICE) is booked for a tactical foul.",
+          "45' - SUB (ICE)! Adejinmi Daniel replaces Olayiwola Samson.",
+          "48' - SUB (AGP)! Patrick Favour replaces Alake Oluwatimilehin.",
+          "60+3' - FULL-TIME! AGP 0–1 ICE (Agg: 1–2). ICE holds on for a magnificent 1-0 victory to qualify for the 2026 Grand Final! Goalkeeper Adeyemi Prosper is named Man of the Match."
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+
     if (!loadedReports['SF2_1']) {
       loadedReports['SF2_1'] = {
         matchId: 'SF2_1',
@@ -6194,6 +6458,38 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
           "60+6' - SUB (MST)! David Ogayemi replaces Boyede Joseph Ayomide.",
           "60+6' - YELLOW CARD! David Ogayemi (MST) is yellow-carded immediately after coming on.",
           "60+7' - FULL-TIME! CYS 1–2 MST. MST takes a one-goal advantage into the second leg!"
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
+
+    if (!loadedReports['SF2_2']) {
+      loadedReports['SF2_2'] = {
+        matchId: 'SF2_2',
+        summary: "Defending champions Marine Science and Technology (MST) survived a major scare to reach the FUTA Champions League Grand Final after defeating Cyber Security (CYS) 4-2 on penalties following a dramatic 3-3 aggregate draw.",
+        playerOfMatch: "Arinze Meshach Agboro (CYS)",
+        tacticalAnalysis: "In a spectacular and highly emotional Semi-final second leg, Cyber Security (CYS) put in a monumental performance to defeat Marine Science and Technology (MST) 2–1 on the night, leveling the tie at 3–3 on aggregate. However, the defending champions held their nerve in the ensuing penalty shootout to advance 4–2. CYS got off to a flying start when Arinze Meshach Agboro scored in the 6th minute, and when Olorunfemi Taiwo James doubled the lead in the 26th minute, the SOC Fortress visitors were in dreamland. MST responded with championship grit, pulling a crucial aggregate-leveling goal back via Akintunde Ayomide Oluwaseyifunmi in the 47th minute. The final minutes saw an emergency goalkeeper change for MST due to an injury to Ogundeji Feyitunmise Hezekiah. In the penalty shootout, MST goalkeeper stand-ins and outfield players converted all their spot-kicks perfectly, while CYS missed twice, sending MST into their second consecutive Grand Final where they will play ICE.",
+        keyMoments: [
+          "1' - KICKOFF! The crucial Semi-final 2 second leg between MST and CYS gets underway at the Mariners Fortress.",
+          "6' - GOAL!!! Arinze Meshach Agboro scores to put CYS ahead! MST 0–1 CYS (Agg: 2–2).",
+          "15' - YELLOW CARD! Kadri Taofeek Akorede (CYS) is booked for a reckless tackle.",
+          "26' - GOAL!!! Olorunfemi Taiwo James scores to double CYS's lead! MST 0–2 CYS (Agg: 2–3).",
+          "30' - HALF-TIME! MST 0–2 CYS.",
+          "40' - SUB (CYS)! Jegede Daniel Kolawole replaces Kadri Taofeek Akorede.",
+          "47' - GOAL!!! Akintunde Ayomide Oluwaseyifunmi scores a vital goal for MST to level the aggregate score! MST 1–2 CYS (Agg: 3–3).",
+          "49' - YELLOW CARD! Fashola Oluwatobi Joshua (CYS) is booked for a late challenge.",
+          "54' - SUB (CYS)! Olamijulo Isreal Damilare replaces Nwoke Isaac Honour.",
+          "60+4' - SUB (MST)! Ogundeji Feyitunmise Hezekiah is subbed off after an injury; Philip Believe Oluwashina enters.",
+          "60+5' - FULL-TIME! MST 1–2 CYS (Agg: 3–3). The tie is level on aggregate and goes to penalties!",
+          "SHOOTOUT - ❌ CYS: Fashola Oluwatobi Joshua's shot is missed!",
+          "SHOOTOUT - ✅ MST: Olagunju Moses Temitope converts cleanly!",
+          "SHOOTOUT - ❌ CYS: Jegede Daniel Kolawole's penalty misses!",
+          "SHOOTOUT - ✅ MST: Adediran Olanrewaju Abeeb converts!",
+          "SHOOTOUT - ✅ CYS: Bello Daniel Damilare scores!",
+          "SHOOTOUT - ✅ MST: Boyede Joseph Ayomide scores!",
+          "SHOOTOUT - ✅ CYS: Olorunfemi Taiwo James scores!",
+          "SHOOTOUT - ✅ MST: Nkemjika Sydney converts! MST win 4-2 on penalties to qualify for the Grand Final!"
         ],
         isPublished: true
       };
@@ -6240,8 +6536,16 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       loadedTimers['SF1_1'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
+    if (!loadedTimers['SF1_2']) {
+      loadedTimers['SF1_2'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
     if (!loadedTimers['SF2_1']) {
       loadedTimers['SF2_1'] = { liveMinute: "FT", isPaused: true };
+      localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
+    }
+    if (!loadedTimers['SF2_2']) {
+      loadedTimers['SF2_2'] = { liveMinute: "FT", isPaused: true };
       localStorage.setItem('fcl_admin_timers', JSON.stringify(loadedTimers));
     }
     if (!loadedTimers['md1-1'] || loadedTimers['md1-1'].liveMinute !== "FT") {
@@ -6565,6 +6869,68 @@ FUTA Champions League 2026 ⚽🏆`;
       existingDisciplinaryDecisionMstSimt.category = 'Disciplinary Updates';
       existingDisciplinaryDecisionMstSimt.body = disciplinaryDecisionMstSimtBody;
       existingDisciplinaryDecisionMstSimt.createdAt = '2026-06-28 22:30';
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    }
+
+    const sf1_2NewsBody = `Information and Communication Engineering (ICE) have locked their place in the 2026 FUTA Champions League Grand Final after defeating Applied Geo-Physics (AGP) 1–0 at the AGP Field, progressing 2–1 on aggregate.
+
+In a highly tactical and intense return leg, Bamidele Usman broke the deadlock early in the 9th minute, calmly slotting home a penalty after a handball inside the box. Holding a precious aggregate lead, ICE then showed incredible defensive resilience.
+
+AGP pushed numbers forward in the second half but found no way past an inspired Adeyemi Prosper. The ICE goalkeeper was named Man of the Match after producing several breathtaking saves to preserve the clean sheet.
+
+With this result, ICE books their ticket to the ultimate championship match, where they will face defending champions MST in what promises to be an epic final!`;
+
+    const sf2_2NewsBody = `Marine Science and Technology (MST) booked their place in the 2026 FUTA Champions League Final after surviving a dramatic semi-final against Cyber Security (CYS).
+
+Trailing 2–0 on the night and 3–2 on aggregate after goals from Arinze Meshach Agboro and Olorunfemi Taiwo James, MST responded through Akintunde Ayomide Oluwaseyifunmi to level the tie at 3–3 on aggregate.
+
+With no further goals, the contest was decided by penalties, where the defending champions held their nerve to win 4–2, sealing a place in a second consecutive FCL Final.
+
+Despite ending on the losing side, Arinze Meshach Agboro was named Man of the Match for an outstanding performance that almost carried CYS to the final.`;
+
+    // Force inject/update SF1_2 match report news article
+    const existingSf1_2News = loadedNews.find(n => n.id === 'news-sf1-2-match-report');
+    if (!existingSf1_2News) {
+      loadedNews.unshift({
+        id: 'news-sf1-2-match-report',
+        title: '🏆 ICE Secure Final Ticket with Hard-fought Win over AGP',
+        featuredImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
+        author: 'FCL Committee',
+        category: 'Tournament News',
+        body: sf1_2NewsBody,
+        tags: ['Semi-finals', 'AGP vs ICE', 'Match Report', 'Finalist'],
+        isPublished: true,
+        createdAt: '2026-07-20 18:30'
+      });
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    } else {
+      existingSf1_2News.title = '🏆 ICE Secure Final Ticket with Hard-fought Win over AGP';
+      existingSf1_2News.body = sf1_2NewsBody;
+      existingSf1_2News.createdAt = '2026-07-20 18:30';
+      existingSf1_2News.category = 'Tournament News';
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    }
+
+    // Force inject/update SF2_2 match report news article
+    const existingSf2_2News = loadedNews.find(n => n.id === 'news-sf2-2-match-report');
+    if (!existingSf2_2News) {
+      loadedNews.unshift({
+        id: 'news-sf2-2-match-report',
+        title: '🏆 Defending Champions MST Survive CYS Scare to Reach Another Final',
+        featuredImage: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=1000',
+        author: 'FCL Committee',
+        category: 'Tournament News',
+        body: sf2_2NewsBody,
+        tags: ['Semi-finals', 'MST vs CYS', 'Match Report', 'Finalist', 'Shootout'],
+        isPublished: true,
+        createdAt: '2026-07-20 19:00'
+      });
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    } else {
+      existingSf2_2News.title = '🏆 Defending Champions MST Survive CYS Scare to Reach Another Final';
+      existingSf2_2News.body = sf2_2NewsBody;
+      existingSf2_2News.createdAt = '2026-07-20 19:00';
+      existingSf2_2News.category = 'Tournament News';
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
 
