@@ -776,6 +776,33 @@ export const MATCHES: Match[] = [
 
 export const NEWS: NewsPost[] = [
   {
+    id: 'player-of-the-tournament-nominees-2026',
+    title: '🏆 FCL PLAYER OF THE TOURNAMENT NOMINEES ARE OUT!',
+    excerpt: 'The race for the 2026 FUTA Champions League Player of the Tournament is officially underway! Cast your vote for your favorite nominee now.',
+    content: `Published: 24th July, 2026
+Time: 11:30 AM
+
+🏆 FCL PLAYER OF THE TOURNAMENT NOMINEES ARE OUT!
+
+The race for the 2026 FUTA Champions League Player of the Tournament is officially underway!
+
+After weeks of breathtaking performances, unforgettable goals, outstanding saves, and match-winning displays, the nominees for the tournament's most prestigious individual award have now been unveiled.
+
+Now it's over to the fans.
+
+🗳️ **Vote for your Player of the Tournament here:**
+https://take.supersurvey.com/poll5825255x4A3C4f83-169
+
+Every vote counts as we celebrate the player who has made the biggest impact throughout the 2026 FUTA Champions League.
+
+Who deserves to be crowned the 2026 FCL Player of the Tournament? The decision is now in your hands.
+
+#FUTAChampionsLeague #FCL2026 #PlayerOfTheTournament #VoteNow #RoadToTheFinal #FootballLivesHere`,
+    image: '/logos/2026 POTT NOMINEES.jpg',
+    date: '2026-07-24',
+    category: 'Tournament News'
+  },
+  {
     id: 'semi-final-2-second-leg-mst-win',
     title: '🏆 Defending Champions MST Survive CYS Scare to Reach Another Final',
     excerpt: 'Marine Science and Technology (MST) booked their place in the 2026 FUTA Champions League Final after surviving a dramatic semi-final against Cyber Security (CYS).',

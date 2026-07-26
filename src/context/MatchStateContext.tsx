@@ -6934,6 +6934,46 @@ Despite ending on the losing side, Arinze Meshach Agboro was named Man of the Ma
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
 
+    const pottNewsBody = `🏆 FCL PLAYER OF THE TOURNAMENT NOMINEES ARE OUT!
+
+The race for the 2026 FUTA Champions League Player of the Tournament is officially underway!
+
+After weeks of breathtaking performances, unforgettable goals, outstanding saves, and match-winning displays, the nominees for the tournament's most prestigious individual award have now been unveiled.
+
+Now it's over to the fans.
+
+🗳️ Vote for your Player of the Tournament here:
+https://take.supersurvey.com/poll5825255x4A3C4f83-169
+
+Every vote counts as we celebrate the player who has made the biggest impact throughout the 2026 FUTA Champions League.
+
+Who deserves to be crowned the 2026 FCL Player of the Tournament? The decision is now in your hands.
+
+#FUTAChampionsLeague #FCL2026 #PlayerOfTheTournament #VoteNow #RoadToTheFinal #FootballLivesHere`;
+
+    const existingPottNews = loadedNews.find(n => n.id === 'news-player-of-the-tournament-nominees-2026');
+    if (!existingPottNews) {
+      loadedNews.unshift({
+        id: 'news-player-of-the-tournament-nominees-2026',
+        title: '🏆 FCL PLAYER OF THE TOURNAMENT NOMINEES ARE OUT!',
+        featuredImage: '/logos/2026 POTT NOMINEES.jpg',
+        author: 'FCL Committee',
+        category: 'Tournament News',
+        body: pottNewsBody,
+        tags: ['PlayerOfTheTournament', 'Nominees', 'VoteNow', 'FCL2026', 'RoadToTheFinal', 'FootballLivesHere'],
+        isPublished: true,
+        createdAt: '2026-07-24 11:30'
+      });
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    } else {
+      existingPottNews.title = '🏆 FCL PLAYER OF THE TOURNAMENT NOMINEES ARE OUT!';
+      existingPottNews.featuredImage = '/logos/2026 POTT NOMINEES.jpg';
+      existingPottNews.body = pottNewsBody;
+      existingPottNews.createdAt = '2026-07-24 11:30';
+      existingPottNews.category = 'Tournament News';
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    }
+
     setNewsItems(loadedNews);
 
     // 14. Match Photos Load & Seed

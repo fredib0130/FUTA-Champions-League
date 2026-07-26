@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useParams } from 'react-router-dom';
-import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone, Image as ImageIcon, Twitter, ExternalLink, ShieldCheck, Clock, Medal, BookOpen, ChevronRight, Search, Edit2, AlertCircle, Inbox, Trash2, Filter, Check, CheckCheck, AlertTriangle, Calendar } from 'lucide-react';
+import { Trophy, ArrowRight, Star, Youtube, Play, TrendingUp, Users, Mail, Phone, Image as ImageIcon, Twitter, ExternalLink, ShieldCheck, Clock, Medal, BookOpen, ChevronRight, Search, Edit2, AlertCircle, Inbox, Trash2, Filter, Check, CheckCheck, AlertTriangle, Calendar, Newspaper } from 'lucide-react';
 import { Countdown } from '../components/Countdown';
 import { MatchCard } from '../components/MatchCard';
 import { PageHeader } from '../components/PageHeader';
@@ -338,8 +338,44 @@ const SponsorCard: React.FC<SponsorCardProps> = ({ sponsor, onContactClick }) =>
 }
 
 export function Home() {
-  const { matches, sponsors, players, isLiveTableActive, coefficients } = useMatchState();
+  const { matches, sponsors, players, isLiveTableActive, coefficients, newsItems } = useMatchState();
   const [contactSponsor, setContactSponsor] = React.useState<Sponsor | null>(null);
+  const [homepageNewsModalId, setHomepageNewsModalId] = React.useState<string | null>(null);
+
+  const featuredNews = React.useMemo(() => {
+    const published = (newsItems || []).filter(n => n.isPublished);
+    if (published.length > 0) {
+      const item = published[0];
+      const voteUrl = item.body.match(/https?:\/\/[^\s]+/)?.[0];
+      const excerpt = item.body.split('\n\n').find(p => p.trim().length > 0 && !p.startsWith('Published:') && !p.startsWith('Time:')) || item.body.slice(0, 160);
+      return {
+        id: item.id,
+        title: item.title,
+        image: item.featuredImage || '/logos/2026 POTT NOMINEES.jpg',
+        author: item.author || 'FCL Committee',
+        createdAt: item.createdAt,
+        category: item.category,
+        excerpt: excerpt.replace(/\*\*/g, ''),
+        body: item.body,
+        voteUrl,
+        tags: item.tags || []
+      };
+    }
+    const fallback = NEWS[0];
+    const voteUrl = fallback?.content.match(/https?:\/\/[^\s]+/)?.[0];
+    return fallback ? {
+      id: fallback.id,
+      title: fallback.title,
+      image: fallback.image,
+      author: 'FCL Committee',
+      createdAt: fallback.date + ' 11:30 AM',
+      category: fallback.category,
+      excerpt: fallback.excerpt,
+      body: fallback.content,
+      voteUrl,
+      tags: ['FCL2026', 'News']
+    } : null;
+  }, [newsItems]);
   
   const completedMatches = React.useMemo(() => {
     return matches.filter(m => {
@@ -472,6 +508,84 @@ export function Home() {
 
         <div className="grid lg:grid-cols-3 gap-12 items-start">
           <div className="lg:col-span-2 space-y-12">
+            {/* Featured / Latest News Section */}
+            {featuredNews && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                      <Newspaper size={18} />
+                    </div>
+                    <h2 className="text-3xl font-display font-black italic uppercase tracking-tighter text-white">LATEST NEWS</h2>
+                    <div className="px-3 py-1 bg-primary/20 border border-primary/40 rounded-full text-[10px] font-black text-primary uppercase tracking-widest animate-pulse">FEATURED UPDATE</div>
+                  </div>
+                  <Link to="/news" className="text-primary font-bold text-sm hover:underline uppercase tracking-widest flex items-center gap-1">
+                    <span>VIEW ALL</span>
+                    <ChevronRight size={16} />
+                  </Link>
+                </div>
+
+                <div className="glass rounded-[32px] border border-primary/30 bg-gradient-to-br from-primary/10 via-dark/95 to-dark p-6 sm:p-8 relative overflow-hidden group shadow-2xl shadow-primary/10">
+                  <div className="absolute -top-24 -right-24 w-80 h-80 bg-primary/10 blur-[90px] rounded-full pointer-events-none group-hover:bg-primary/20 transition-all duration-700" />
+
+                  <div className="grid sm:grid-cols-12 gap-6 items-center relative z-10">
+                    {featuredNews.image && (
+                      <div className="sm:col-span-5 relative rounded-2xl overflow-hidden border border-white/10 aspect-video sm:aspect-[4/3]">
+                        <img 
+                          src={featuredNews.image} 
+                          alt={featuredNews.title} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-transparent" />
+                        <div className="absolute top-3 left-3 px-2.5 py-1 bg-black/70 backdrop-blur-md border border-white/10 rounded-lg text-[9px] font-black uppercase text-primary tracking-wider">
+                          {featuredNews.category}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className={cn("space-y-3", featuredNews.image ? "sm:col-span-7" : "sm:col-span-12")}>
+                      <div className="flex items-center space-x-2 text-[10px] font-mono text-white/50 uppercase tracking-widest">
+                        <span className="flex items-center gap-1 text-primary/90 font-bold">
+                          <Calendar size={12} />
+                          {featuredNews.createdAt}
+                        </span>
+                      </div>
+
+                      <h3 className="text-xl sm:text-2xl font-display font-black italic uppercase text-white leading-snug group-hover:text-primary transition-colors">
+                        {featuredNews.title}
+                      </h3>
+
+                      <p className="text-xs text-white/70 line-clamp-3 leading-relaxed font-medium">
+                        {featuredNews.excerpt}
+                      </p>
+
+                      <div className="pt-2 flex flex-wrap gap-3 items-center">
+                        {featuredNews.voteUrl && (
+                          <a
+                            href={featuredNews.voteUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-amber-500/20 active:scale-95"
+                          >
+                            <span>🗳️ VOTE NOW</span>
+                            <ExternalLink size={14} />
+                          </a>
+                        )}
+
+                        <button
+                          onClick={() => setHomepageNewsModalId(featuredNews.id)}
+                          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-primary hover:text-dark text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all border border-white/10 active:scale-95 cursor-pointer"
+                        >
+                          <span>READ MORE</span>
+                          <ArrowRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Next Fixtures (Only Upcoming/Scheduled/Postponed Matches in Fixtures status) */}
             <div className="space-y-6">
               <div className="flex items-center justify-between">
@@ -739,6 +853,83 @@ export function Home() {
           onClose={() => setContactSponsor(null)} 
         />
       )}
+
+      {/* Homepage News Detail Modal */}
+      <AnimatePresence>
+        {homepageNewsModalId && featuredNews && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative w-full max-w-2xl max-h-[90vh] glass border border-white/15 rounded-3xl overflow-hidden shadow-2xl flex flex-col bg-dark/95"
+            >
+              <div className="overflow-y-auto p-6 sm:p-8 space-y-6 custom-scrollbar">
+                {featuredNews.image && (
+                  <img src={featuredNews.image} className="w-full h-56 object-cover rounded-2xl border border-white/10" alt={featuredNews.title} />
+                )}
+                
+                <div>
+                  <span className="px-2.5 py-1 bg-[#00e5ff]/10 text-[#00e5ff] border border-[#00e5ff]/20 rounded-md text-[9px] font-black uppercase tracking-wider">
+                    {featuredNews.category}
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-display font-black italic uppercase text-white mt-3 leading-tight">
+                    {featuredNews.title}
+                  </h2>
+                  <div className="text-[10px] text-white/40 font-mono mt-1">
+                    PUBLISHED BY {featuredNews.author} ON {featuredNews.createdAt}
+                  </div>
+                </div>
+
+                <div className="text-sm leading-relaxed text-white/80 whitespace-pre-wrap font-medium">
+                  {(() => {
+                    const body = featuredNews.body || '';
+                    const urlRegex = /(https?:\/\/[^\s]+)/g;
+                    const parts = body.split(urlRegex);
+                    return parts.map((part, idx) => {
+                      if (part.match(urlRegex)) {
+                        return (
+                          <a
+                            key={idx}
+                            href={part}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 my-1.5 bg-[#00e5ff]/15 hover:bg-[#00e5ff]/25 text-[#00e5ff] font-bold rounded-lg border border-[#00e5ff]/30 transition-all underline break-all"
+                          >
+                            <span>{part}</span>
+                            <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                          </a>
+                        );
+                      }
+                      return part;
+                    });
+                  })()}
+                </div>
+
+                <div className="pt-4 space-y-3">
+                  {featuredNews.voteUrl && (
+                    <a
+                      href={featuredNews.voteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-amber-500/20"
+                    >
+                      <span>🗳️ VOTE HERE NOW</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  )}
+                  <button
+                    onClick={() => setHomepageNewsModalId(null)}
+                    className="w-full py-3 bg-white/5 hover:bg-[#00e5ff] hover:text-dark text-white font-bold text-xs uppercase rounded-xl transition-all border border-white/10 cursor-pointer"
+                  >
+                    CLOSE
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -3355,7 +3546,28 @@ export function Media() {
                     </div>
 
                     <div className="text-sm leading-relaxed text-white/70 whitespace-pre-wrap font-medium">
-                      {newsItems.find(n => n.id === readNewsId)?.body}
+                      {(() => {
+                        const body = newsItems.find(n => n.id === readNewsId)?.body || '';
+                        const urlRegex = /(https?:\/\/[^\s]+)/g;
+                        const parts = body.split(urlRegex);
+                        return parts.map((part, idx) => {
+                          if (part.match(urlRegex)) {
+                            return (
+                              <a
+                                key={idx}
+                                href={part}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 my-1.5 bg-[#00e5ff]/15 hover:bg-[#00e5ff]/25 text-[#00e5ff] font-bold rounded-lg border border-[#00e5ff]/30 transition-all underline break-all"
+                              >
+                                <span>{part}</span>
+                                <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                              </a>
+                            );
+                          }
+                          return part;
+                        });
+                      })()}
                     </div>
 
                     {newsItems.find(n => n.id === readNewsId)?.tags && (
@@ -3366,7 +3578,18 @@ export function Media() {
                       </div>
                     )}
 
-                    <div className="pt-4">
+                    <div className="pt-4 space-y-3">
+                      {newsItems.find(n => n.id === readNewsId)?.body.match(/https?:\/\/[^\s]+/) && (
+                        <a
+                          href={newsItems.find(n => n.id === readNewsId)?.body.match(/https?:\/\/[^\s]+/)?.[0]}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-amber-500/20"
+                        >
+                          <span>🗳️ VOTE HERE NOW</span>
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      )}
                       <button 
                         onClick={() => setReadNewsId(null)}
                         className="w-full py-3 bg-white/5 hover:bg-[#00e5ff] hover:text-dark text-white font-bold text-xs uppercase rounded-xl transition-all border border-white/10 cursor-pointer"
@@ -3680,10 +3903,42 @@ export function News() {
               </div>
 
               <div className="text-sm leading-relaxed text-white/70 whitespace-pre-wrap font-medium">
-                {newsItems.find(n => n.id === readNewsId)?.body}
+                {(() => {
+                  const body = newsItems.find(n => n.id === readNewsId)?.body || '';
+                  const urlRegex = /(https?:\/\/[^\s]+)/g;
+                  const parts = body.split(urlRegex);
+                  return parts.map((part, idx) => {
+                    if (part.match(urlRegex)) {
+                      return (
+                        <a
+                          key={idx}
+                          href={part}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 my-1.5 bg-[#00e5ff]/15 hover:bg-[#00e5ff]/25 text-[#00e5ff] font-bold rounded-lg border border-[#00e5ff]/30 transition-all underline break-all"
+                        >
+                          <span>{part}</span>
+                          <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                        </a>
+                      );
+                    }
+                    return part;
+                  });
+                })()}
               </div>
 
-              <div className="pt-4">
+              <div className="pt-4 space-y-3">
+                {newsItems.find(n => n.id === readNewsId)?.body.match(/https?:\/\/[^\s]+/) && (
+                  <a
+                    href={newsItems.find(n => n.id === readNewsId)?.body.match(/https?:\/\/[^\s]+/)?.[0]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-amber-500/20"
+                  >
+                    <span>🗳️ VOTE HERE NOW</span>
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                )}
                 <button 
                   onClick={() => setReadNewsId(null)}
                   className="w-full py-3 bg-white/5 hover:bg-[#00e5ff] hover:text-dark text-white font-bold text-xs uppercase rounded-xl transition-all border border-white/10 cursor-pointer"
