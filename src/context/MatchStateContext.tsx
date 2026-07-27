@@ -484,6 +484,9 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       } else if (m.id === 'SF2_2') {
         homeTeam = 'MST';
         awayTeam = 'CYS';
+      } else if (m.id === 'FINAL') {
+        homeTeam = 'ICE';
+        awayTeam = 'MST';
       }
       return { homeTeam, awayTeam };
     };
@@ -2036,6 +2039,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
     }
 
+    if (!loadedGoals.some(g => g.matchId === 'FINAL')) {
+      loadedGoals.push(
+        { id: 'goal-final-kudabo-6', matchId: 'FINAL', playerName: 'Kudabo Timilehin', team: 'ICE', minute: "6'", type: 'Goal' }
+      );
+      localStorage.setItem('fcl_admin_goals', JSON.stringify(loadedGoals));
+    }
+
     setGoalScorers(loadedGoals);
 
     // 5. Cards & Subs
@@ -2193,7 +2203,16 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
 
       // SF2_2 Cards (MST vs CYS)
       { id: 'card-sf2_2-kadri-15', matchId: 'SF2_2', playerName: 'Kadri Taofeek Akorede', teamAbbr: 'CYS', minute: "15'", type: 'Yellow' },
-      { id: 'card-sf2_2-fashola-49', matchId: 'SF2_2', playerName: 'Fashola Oluwatobi Joshua', teamAbbr: 'CYS', minute: "49'", type: 'Yellow' }
+      { id: 'card-sf2_2-fashola-49', matchId: 'SF2_2', playerName: 'Fashola Oluwatobi Joshua', teamAbbr: 'CYS', minute: "49'", type: 'Yellow' },
+
+      // FINAL Cards (ICE vs MST)
+      { id: 'card-final-faleye-9', matchId: 'FINAL', playerName: 'Faleye Aduragbemi', teamAbbr: 'ICE', minute: "9'", type: 'Yellow' },
+      { id: 'card-final-olayinka-9', matchId: 'FINAL', playerName: 'Quadri Olayinka', teamAbbr: 'ICE', minute: "9'", type: 'Yellow' },
+      { id: 'card-final-ogundeji-9', matchId: 'FINAL', playerName: 'Ogundeji Feyitunmise Hezekiah', teamAbbr: 'MST', minute: "9'", type: 'Yellow' },
+      { id: 'card-final-adeyemi-14', matchId: 'FINAL', playerName: 'Adeyemi Adedayo Ibrahim', teamAbbr: 'MST', minute: "14'", type: 'Yellow' },
+      { id: 'card-final-iyare-14', matchId: 'FINAL', playerName: 'Iyare Praise', teamAbbr: 'MST', minute: "14'", type: 'Red' },
+      { id: 'card-final-adeniyi-59', matchId: 'FINAL', playerName: 'Adeniyi Ademola Daniel', teamAbbr: 'MST', minute: "59'", type: 'Yellow' },
+      { id: 'card-final-bernard-64', matchId: 'FINAL', playerName: 'Bernard Augustine Obioma', teamAbbr: 'MST', minute: "60+4'", type: 'Yellow' }
     ];
     officialMd1_5Cards.forEach(c => {
       const existingIdx = loadedCards.findIndex(existing => existing.id === c.id);
@@ -2322,7 +2341,13 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       // SF2_2 Subs
       { id: 'sub-sf2_2-cys-1', matchId: 'SF2_2', teamAbbr: 'CYS', playerOut: 'Kadri Taofeek Akorede', playerIn: 'Jegede Daniel Kolawole', minute: 40 },
       { id: 'sub-sf2_2-cys-2', matchId: 'SF2_2', teamAbbr: 'CYS', playerOut: 'Nwoke Isaac Honour', playerIn: 'Olamijulo Isreal Damilare', minute: 54 },
-      { id: 'sub-sf2_2-mst-1', matchId: 'SF2_2', teamAbbr: 'MST', playerOut: 'Ogundeji Feyitunmise Hezekiah', playerIn: 'Philip Believe Oluwashina', minute: 64 }
+      { id: 'sub-sf2_2-mst-1', matchId: 'SF2_2', teamAbbr: 'MST', playerOut: 'Ogundeji Feyitunmise Hezekiah', playerIn: 'Philip Believe Oluwashina', minute: 64 },
+
+      // FINAL Subs
+      { id: 'sub-final-ice-1', matchId: 'FINAL', teamAbbr: 'ICE', playerOut: 'Big Sam', playerIn: 'Oripelaye Alameen', minute: 39 },
+      { id: 'sub-final-ice-2', matchId: 'FINAL', teamAbbr: 'ICE', playerOut: 'Quadri Olayinka', playerIn: 'Folowosele Peace', minute: 46 },
+      { id: 'sub-final-mst-1', matchId: 'FINAL', teamAbbr: 'MST', playerOut: 'Akintunde Ayomide Oluwaseyifunmi', playerIn: 'Fabusuyi Daniel Oluwafisayo', minute: 39 },
+      { id: 'sub-final-mst-2', matchId: 'FINAL', teamAbbr: 'MST', playerOut: 'Boyede Joseph Ayomide', playerIn: 'Shomuyiwa Lateef Babatunde', minute: 56 }
     ];
 
     let subsUpdated = false;
@@ -3979,6 +4004,72 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       }
     };
 
+    // FINAL: ICE vs MST
+    loadedLineups['FINAL'] = {
+      home: {
+        matchId: 'FINAL',
+        teamAbbr: 'ICE',
+        formation: '4-2-2-1-1',
+        captainId: 'player-ice-usman',
+        players: {
+          'GK': 'player-ice-prosper',
+          'RB': 'player-ice-godwin',
+          'CB1': 'player-ice-alameen',
+          'CB2': 'player-ice-yusuf',
+          'LB': 'player-ice-samson',
+          'DM': 'player-ice-farooq',
+          'CM': 'player-ice-aduragbemi',
+          'RMF': 'player-ice-olayinka',
+          'LWF': 'player-ice-usman',
+          'SS': 'player-ice-kudabo',
+          'CF': 'player-ice-ayomide'
+        },
+        bench: [
+          'player-ice-boluwatife',
+          'player-ice-folowosele',
+          'player-ice-akinloye',
+          'player-ice-damola',
+          'player-ice-adejinmi',
+          'player-ice-muller',
+          'player-ice-bigsam'
+        ],
+        status: 'Approved'
+      },
+      away: {
+        matchId: 'FINAL',
+        teamAbbr: 'MST',
+        formation: '4-2-3-1',
+        captainId: 'player-mst-2',
+        players: {
+          'GK': 'player-mst-1',
+          'RB': 'player-mst-7',
+          'CB1': 'player-mst-2',
+          'CB2': 'player-mst-13',
+          'LB': 'player-mst-3',
+          'DM1': 'player-mst-5',
+          'DM2': 'player-mst-9',
+          'RWF': 'player-mst-17',
+          'AM': 'player-mst-10',
+          'LWF': 'player-mst-19',
+          'ST': 'player-mst-15'
+        },
+        bench: [
+          'player-mst-4',
+          'player-mst-6',
+          'player-mst-8',
+          'player-mst-11',
+          'player-mst-12',
+          'player-mst-14',
+          'player-mst-16',
+          'player-mst-18',
+          'player-mst-20',
+          'player-mst-21',
+          'player-mst-22'
+        ],
+        status: 'Approved'
+      }
+    };
+
     localStorage.setItem('fcl_admin_lineups', JSON.stringify(loadedLineups));
     setLineups(loadedLineups);
 
@@ -4024,6 +4115,129 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
     }
 
     // Force/overprint md1-1 commentaries with the official first half and second half timeline
+    loadedCommentary['FINAL'] = [
+      {
+        id: 'comm-final-ft',
+        matchId: 'FINAL',
+        minute: "60+5'",
+        text: "🏆 FULL-TIME! ICE ARE THE CHAMPIONS OF THE 2026 FUTA CHAMPIONS LEAGUE! Referee Tommy (SET) blows the final whistle! ICE 1–0 MST! Kudabo Timilehin's 6th-minute goal proves to be the winner as ICE lift their first-ever FCL trophy!",
+        timestamp: "5:15 PM",
+        type: 'general'
+      },
+      {
+        id: 'comm-final-card-bernard',
+        matchId: 'FINAL',
+        minute: "60+4'",
+        text: "🟨 YELLOW CARD! Bernard Augustine Obioma (MST) receives a yellow card deep in injury time.",
+        timestamp: "5:14 PM",
+        type: 'card'
+      },
+      {
+        id: 'comm-final-card-adeniyi',
+        matchId: 'FINAL',
+        minute: "59'",
+        text: "🟨 YELLOW CARD! Adeniyi Ademola Daniel (MST) is cautioned by referee Tommy (SET).",
+        timestamp: "5:09 PM",
+        type: 'card'
+      },
+      {
+        id: 'comm-final-sub-mst-2',
+        matchId: 'FINAL',
+        minute: "56'",
+        text: "🔄 SUBSTITUTION (MST): Shomuyiwa Lateef Babatunde ⬆️ replaces Boyede Joseph Ayomide ⬇️.",
+        timestamp: "5:06 PM",
+        type: 'sub'
+      },
+      {
+        id: 'comm-final-disallowed-goal',
+        matchId: 'FINAL',
+        minute: "49'",
+        text: "❌ DISALLOWED GOAL! Oripelaye Alameen appears to score for ICE, but referee Tommy (SET) disallows the goal after ruling a foul on Adeyemi Adedayo Ibrahim (MST) in the buildup!",
+        timestamp: "4:59 PM",
+        type: 'general'
+      },
+      {
+        id: 'comm-final-sub-ice-2',
+        matchId: 'FINAL',
+        minute: "46'",
+        text: "🔄 SUBSTITUTION (ICE): Folowosele Peace ⬆️ replaces Quadri Olayinka ⬇️ at the start of the second half.",
+        timestamp: "4:56 PM",
+        type: 'sub'
+      },
+      {
+        id: 'comm-final-sub-ice-1',
+        matchId: 'FINAL',
+        minute: "39'",
+        text: "🔄 SUBSTITUTION (ICE): Oripelaye Alameen ⬆️ replaces Big Sam ⬇️.",
+        timestamp: "4:39 PM",
+        type: 'sub'
+      },
+      {
+        id: 'comm-final-sub-mst-1',
+        matchId: 'FINAL',
+        minute: "39'",
+        text: "🔄 SUBSTITUTION (MST): Fabusuyi Daniel Oluwafisayo ⬆️ replaces Akintunde Ayomide Oluwaseyifunmi ⬇️.",
+        timestamp: "4:39 PM",
+        type: 'sub'
+      },
+      {
+        id: 'comm-final-red-iyare',
+        matchId: 'FINAL',
+        minute: "14'",
+        text: "🟥 RED CARD! Iyare Praise (MST) receives a straight red card from referee Tommy (SET)! MST reduced to 10 men in the FCL Final!",
+        timestamp: "4:14 PM",
+        type: 'card'
+      },
+      {
+        id: 'comm-final-card-adeyemi',
+        matchId: 'FINAL',
+        minute: "14'",
+        text: "🟨 YELLOW CARD! Adeyemi Adedayo Ibrahim (MST) is shown a yellow card following the altercation.",
+        timestamp: "4:14 PM",
+        type: 'card'
+      },
+      {
+        id: 'comm-final-card-faleye',
+        matchId: 'FINAL',
+        minute: "9'",
+        text: "🟨 YELLOW CARD! Faleye Aduragbemi (ICE) receives a booking.",
+        timestamp: "4:09 PM",
+        type: 'card'
+      },
+      {
+        id: 'comm-final-card-olayinka',
+        matchId: 'FINAL',
+        minute: "9'",
+        text: "🟨 YELLOW CARD! Quadri Olayinka (ICE) is booked by the referee.",
+        timestamp: "4:09 PM",
+        type: 'card'
+      },
+      {
+        id: 'comm-final-card-ogundeji',
+        matchId: 'FINAL',
+        minute: "9'",
+        text: "🟨 YELLOW CARD! Ogundeji Feyitunmise Hezekiah (MST) receives a yellow card.",
+        timestamp: "4:09 PM",
+        type: 'card'
+      },
+      {
+        id: 'comm-final-goal-kudabo',
+        matchId: 'FINAL',
+        minute: "6'",
+        text: "⚽ GOAL! ICE 1–0 MST! Kudabo Timilehin strikes early for Information and Communication Engineering! A magnificent finish to put ICE ahead in the Grand Final!",
+        timestamp: "4:06 PM",
+        type: 'goal'
+      },
+      {
+        id: 'comm-final-kickoff',
+        matchId: 'FINAL',
+        minute: "0'",
+        text: "🏁 KICK-OFF! The 2026 FUTA Champions League Grand Final is UNDERWAY at the FUTA Main Pitch! Defending champions MST take on ICE in a blockbuster clash!",
+        timestamp: "4:00 PM",
+        type: 'general'
+      }
+    ];
+
     if (!loadedCommentary['md1-1'] || loadedCommentary['md1-1'].length <= 10 || !loadedCommentary['md1-1'].some(c => c.id === 'comm-ft-whistle')) {
       loadedCommentary['md1-1'] = [
         {
@@ -6157,6 +6371,24 @@ export function MatchStateProvider({ children }: { children: React.ReactNode }) 
       localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
     }
 
+    if (!loadedReports['FINAL']) {
+      loadedReports['FINAL'] = {
+        matchId: 'FINAL',
+        summary: "ICE defeat defending champions MST 1–0 in the Grand Final to claim their first-ever FUTA Champions League title!",
+        playerOfMatch: "Kudabo Timilehin (ICE)",
+        tacticalAnalysis: "ICE delivered a disciplined tactical masterclass, capitalizing early through Kudabo Timilehin's 6th-minute goal and defending stoutly against MST pressure after Iyare Praise was sent off in the 14th minute. Goalkeeper Adeyemi Prosper recorded his 5th clean sheet of the tournament.",
+        keyMoments: [
+          "6' - GOAL! Kudabo Timilehin strikes early for ICE to take a 1–0 lead.",
+          "9' - Yellow cards shown to Faleye Aduragbemi, Quadri Olayinka, and Ogundeji Feyitunmise Hezekiah as tempers flare.",
+          "14' - RED CARD! Iyare Praise is sent off for MST, reducing the defending champions to 10 men.",
+          "39' - Tactical substitutions: ICE bring on Oripelaye Alameen for Big Sam, MST introduce Fabusuyi Daniel Oluwafisayo.",
+          "49' - DISALLOWED GOAL! Oripelaye Alameen's strike for ICE is ruled out for a foul on Adeyemi Adedayo Ibrahim.",
+          "60+5' - FULL TIME! ICE hold firm to secure a 1–0 victory and lift the 2026 FUTA Champions League trophy!"
+        ],
+        isPublished: true
+      };
+      localStorage.setItem('fcl_admin_reports', JSON.stringify(loadedReports));
+    }
     if (!loadedReports['md3-2']) {
       loadedReports['md3-2'] = {
         matchId: 'md3-2',
@@ -6934,6 +7166,47 @@ Despite ending on the losing side, Arinze Meshach Agboro was named Man of the Ma
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
 
+    const finalNewsBody = `🏆 ICE ARE CHAMPIONS OF THE FUTA CHAMPIONS LEAGUE 2026!
+
+History has been made as Information and Communication Engineering (ICE) are crowned 2026 FUTA Champions League Champions, defeating defending champions Marine Science and Technology (MST) 1–0 in a fiercely contested final at the FUTA Main Pitch!
+
+A stunning early strike from Kudabo Timilehin in the 6th minute proved to be the decisive goal of the match. Kudabo's performance earned him the Man of the Match award.
+
+Key Match Highlights:
+• 6' ⚽ Kudabo Timilehin scores the opening and title-winning goal for ICE!
+• 14' 🔴 MST reduced to 10 men after Iyare Praise receives a straight red card.
+• 49' ICE appeared to double their lead through Oripelaye Alameen, but the goal was disallowed following a foul on Adeyemi Adedayo Ibrahim.
+
+Despite MST's relentless pressure to equalize in the second half, goalkeeper Adeyemi Prosper and the resolute ICE defense held firm, recording Prosper's 5th clean sheet of the tournament and securing ICE's first-ever FUTA Champions League trophy!
+
+🏆 Champions: ICE
+🥈 Runners-up: MST
+⭐ Man of the Match: Kudabo Timilehin (ICE)
+
+#FUTAChampionsLeague #FCL2026 #ICEChampions #FCLFinal #FUTAFootball #HistoryMade`;
+
+    const existingFinalNews = loadedNews.find(n => n.id === 'news-ice-crowned-futa-champions-league-2026-winners' || n.id === 'ice-crowned-futa-champions-league-2026-winners');
+    if (!existingFinalNews) {
+      loadedNews.unshift({
+        id: 'news-ice-crowned-futa-champions-league-2026-winners',
+        title: '🏆 ICE ARE CHAMPIONS OF THE FUTA CHAMPIONS LEAGUE 2026!',
+        featuredImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
+        author: 'FCL Committee',
+        category: 'Tournament News',
+        body: finalNewsBody,
+        tags: ['ICE', 'Champions', 'FCL2026', 'Final', 'KudaboTimilehin', 'FUTAChampionsLeague'],
+        isPublished: true,
+        createdAt: '2026-07-27 18:00'
+      });
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    } else {
+      existingFinalNews.title = '🏆 ICE ARE CHAMPIONS OF THE FUTA CHAMPIONS LEAGUE 2026!';
+      existingFinalNews.body = finalNewsBody;
+      existingFinalNews.createdAt = '2026-07-27 18:00';
+      existingFinalNews.category = 'Tournament News';
+      localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
+    }
+
     const pottNewsBody = `🏆 FCL PLAYER OF THE TOURNAMENT NOMINEES ARE OUT!
 
 The race for the 2026 FUTA Champions League Player of the Tournament is officially underway!
@@ -6973,6 +7246,67 @@ Who deserves to be crowned the 2026 FCL Player of the Tournament? The decision i
       existingPottNews.category = 'Tournament News';
       localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
     }
+
+    const awardsNewsBody = `Published: 24th July, 2026 • 6:30 PM
+
+Following the conclusion of an exciting 2026 FUTA Champions League season, the Organising Committee is pleased to unveil the winners of the tournament's individual awards.
+
+🥇 **Player of the Tournament**
+**Olorunfemi Taiwo James (CYS)**
+🏅 **30.40% of total fan votes**
+
+The CYS forward produced outstanding performances throughout the tournament, playing a pivotal role in his team's journey to the semi-finals. His consistency, goals, and overall influence earned him the highest number of votes from fans.
+
+---
+
+⚽ **Highest Goal Scorer**
+**Olasunkunmi Michael (AGP)**
+🥇 **6 Goals**
+
+AGP's talisman finished as the tournament's leading scorer, displaying remarkable composure in front of goal and ending the campaign as the winner of the Golden Boot.
+
+---
+
+🧤 **Goalkeeper of the Tournament**
+**Adeyemi Prosper (ICE)**
+🧤 **5 Clean Sheets**
+
+The ICE shot-stopper enjoyed an exceptional tournament, producing numerous match-winning saves and recording five clean sheets on his way to helping ICE lift the championship.
+
+---
+
+👔 **Manager of the Tournament**
+**Oghenekeno Israel Okoh (ICE)**
+
+The ICE manager guided his side to an impressive title-winning campaign with disciplined tactics, strong defensive organization, and consistent performances throughout the competition.
+
+---
+
+🏆 **2026 FCL Award Winners**
+
+• ⭐ **Player of the Tournament:** Olorunfemi Taiwo James (CYS) *(30.40% of fan votes)*
+• ⚽ **Highest Goal Scorer:** Olasunkunmi Michael (AGP) *(6 Goals)*
+• 🧤 **Goalkeeper of the Tournament:** Adeyemi Prosper (ICE) *(5 Clean Sheets)*
+• 👔 **Manager of the Tournament:** Oghenekeno Israel Okoh (ICE)
+
+Congratulations to all the winners for their outstanding contributions to an unforgettable 2026 FUTA Champions League season. 🎉`;
+
+    const existingAwardsNewsIdx = loadedNews.findIndex(n => n.id === 'fcl-2026-awards-winners-announced');
+    if (existingAwardsNewsIdx !== -1) {
+      loadedNews.splice(existingAwardsNewsIdx, 1);
+    }
+    loadedNews.unshift({
+      id: 'fcl-2026-awards-winners-announced',
+      title: '🏆 FCL 2026 AWARDS WINNERS ANNOUNCED',
+      featuredImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000',
+      author: 'FCL Committee',
+      category: 'Tournament Awards',
+      body: awardsNewsBody,
+      tags: ['Awards', 'PlayerOfTheTournament', 'GoldenBoot', 'GoldenGlove', 'ManagerOfTheYear', 'FCL2026'],
+      isPublished: true,
+      createdAt: '2026-07-27 19:30'
+    });
+    localStorage.setItem('fcl_admin_news', JSON.stringify(loadedNews));
 
     setNewsItems(loadedNews);
 

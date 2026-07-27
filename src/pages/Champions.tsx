@@ -86,13 +86,22 @@ export function Champions() {
                 <p className="text-xl text-white/60 mb-8 max-w-xl">
                   Defeated <span className="text-white font-bold">{latestChampion.runnerUpName}</span> ({latestChampion.score})
                 </p>
-                <Link 
-                  to={`/teams/${latestChampion.winnerId}`}
-                  className="inline-flex items-center space-x-3 px-8 py-4 sporty-gradient rounded-full font-black text-sm tracking-widest uppercase hover:scale-105 transition-transform"
-                >
-                  <span>View Team Profile</span>
-                  <ArrowRight size={18} />
-                </Link>
+                <div className="flex flex-wrap items-center gap-4">
+                  <Link 
+                    to={`/teams/${latestChampion.winnerId}`}
+                    className="inline-flex items-center space-x-3 px-8 py-4 sporty-gradient rounded-full font-black text-sm tracking-widest uppercase hover:scale-105 transition-transform"
+                  >
+                    <span>View Team Profile</span>
+                    <ArrowRight size={18} />
+                  </Link>
+                  <Link 
+                    to="/awards"
+                    className="inline-flex items-center space-x-3 px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-full font-black text-sm tracking-widest uppercase transition-all"
+                  >
+                    <Trophy size={18} className="text-yellow-400" />
+                    <span>2026 Award Winners</span>
+                  </Link>
+                </div>
               </div>
             </div>
           </motion.div>

@@ -2,6 +2,14 @@ import { Team, Player, Match, NewsPost, Sponsor, CoefficientRanking, ChampionRec
 
 export const CHAMPIONS: ChampionRecord[] = [
   { 
+    year: 2026, 
+    winnerId: 'ice', 
+    winnerName: 'ICE', 
+    runnerUpId: 'mst', 
+    runnerUpName: 'MST', 
+    score: '1–0' 
+  },
+  { 
     year: 2025, 
     winnerId: 'mst', 
     winnerName: 'MST', 
@@ -771,10 +779,81 @@ export const MATCHES: Match[] = [
   ], lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 6, stage: 'Semi-finals', referee: 'Tommy (URP)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Arinze Meshach Agboro' },
  
   // --- FINAL ---
-  { id: 'FINAL', homeTeam: 'ICE', awayTeam: 'MST', date: 'TBA', time: 'TBA', venue: 'TBA', status: 'Upcoming', homeScore: 0, awayScore: 0, lineupSubmittedHome: false, lineupSubmittedAway: false, matchday: 7, stage: 'Final' },
+  { id: 'FINAL', homeTeam: 'ICE', awayTeam: 'MST', date: 'Sunday, 26th July, 2026', time: '3:30 PM', venue: 'FUTA Main Pitch', status: 'Finished', homeScore: 1, awayScore: 0, lineupSubmittedHome: true, lineupSubmittedAway: true, matchday: 7, stage: 'Final', referee: 'Tommy (SET)', refereeAssigned: true, matchApproved: true, manOfTheMatch: 'Kudabo Timilehin' },
 ];
 
 export const NEWS: NewsPost[] = [
+  {
+    id: 'fcl-2026-awards-winners-announced',
+    title: '🏆 FCL 2026 AWARDS WINNERS ANNOUNCED',
+    excerpt: 'Following the conclusion of an exciting 2026 FUTA Champions League season, the Organising Committee is pleased to unveil the winners of the tournament\'s individual awards.',
+    content: `Published: 24th July, 2026 • 6:30 PM
+
+Following the conclusion of an exciting 2026 FUTA Champions League season, the Organising Committee is pleased to unveil the winners of the tournament's individual awards.
+
+🥇 Player of the Tournament
+Olorunfemi Taiwo James (CYS)
+🏅 30.40% of Overall votes
+
+The CYS forward produced outstanding performances throughout the tournament, playing a pivotal role in his team's journey to the semi-finals. His consistency, goals, and overall influence earned him the highest number of votes.
+
+
+⚽ Highest Goal Scorer
+Olasunkunmi Michael (AGP)
+🥇 6 Goals
+
+AGP's talisman finished as the tournament's leading scorer, displaying remarkable composure in front of goal and ending the campaign as the winner of the Golden Boot.
+
+
+🧤 Goalkeeper of the Tournament
+Adeyemi Prosper (ICE)
+🧤 5 Clean Sheets
+
+The ICE shot-stopper enjoyed an exceptional tournament, producing numerous match-winning saves and recording five clean sheets on his way to helping ICE lift the championship.
+
+
+👔 Manager of the Tournament
+Oghenekeno Israel Okoh (ICE)
+
+The ICE manager guided his side to an impressive title-winning unbeaten campaign with disciplined tactics, strong defensive organization, and consistent performances throughout the competition.
+
+
+🏆 2026 FCL Award Winners**
+
+• ⭐ Player of the Tournament: Olorunfemi Taiwo James (CYS) (30.40% of fan votes)
+• ⚽ Highest Goal Scorer: Olasunkunmi Michael (AGP) (6 Goals)
+• 🧤 Goalkeeper of the Tournament: Adeyemi Prosper (ICE) (5 Clean Sheets)
+• 👔 Manager of the Tournament: Oghenekeno Israel Okoh (ICE)
+
+Congratulations to all the winners for their outstanding contributions to an unforgettable 2026 FUTA Champions League season. 🎉`,
+    image: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop&q=60',
+    date: '2026-07-27',
+    category: 'Tournament Awards'
+  },
+  {
+    id: 'ice-crowned-futa-champions-league-2026-winners',
+    title: '🏆 ICE ARE CHAMPIONS OF THE FUTA CHAMPIONS LEAGUE 2026!',
+    excerpt: 'History has been made as ICE are crowned 2026 FUTA Champions League Champions, defeating defending champions MST 1–0 in a fiercely contested final.',
+    content: `Published: 27th July, 2026
+Time: Immediately after Full-time
+
+🏆 ICE ARE CHAMPIONS OF THE FUTA CHAMPIONS LEAGUE 2026!
+
+History has been made as **ICE** are crowned **2026 FUTA Champions League Champions**, defeating defending champions **MST** 1–0 in a fiercely contested final.
+
+A stunning strike from **Kudabo Timilehin** in the 6th minute proved to be the decisive moment, while goalkeeper **Adeyemi Prosper** and the ICE defence produced another disciplined performance to preserve the lead and secure the club's maiden FCL title.
+
+The final was marked by high intensity, with MST reduced to ten men in the 14th minute after **Iyare Praise** was shown a red card. Despite sustained pressure, ICE held firm to lift the trophy and end MST's reign as champions.
+
+🏆 **Champions:** ICE
+🥈 **Runners-up:** MST
+⭐ **Man of the Match:** Kudabo Timilehin (ICE)
+
+This article is now featured following the conclusion of the 2026 FUTA Champions League Grand Final.`,
+    image: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop&q=60',
+    date: '2026-07-27',
+    category: 'Tournament News'
+  },
   {
     id: 'player-of-the-tournament-nominees-2026',
     title: '🏆 FCL PLAYER OF THE TOURNAMENT NOMINEES ARE OUT!',
@@ -1211,6 +1290,29 @@ export const MOCK_MATCH_STATS: MatchStats[] = MATCHES.map((match) => {
       awayFouls: 6,
       homeFreeKicks: 6,
       awayFreeKicks: 8
+    };
+  }
+  if (match.id === 'FINAL') {
+    return {
+      matchId: match.id,
+      cornersHome: 5,
+      cornersAway: 4,
+      yellowCardsHome: 2,
+      yellowCardsAway: 4,
+      redCardsHome: 0,
+      redCardsAway: 1,
+      homeCorners: 5,
+      awayCorners: 4,
+      homeYellowCards: 2,
+      awayYellowCards: 4,
+      homeRedCards: 0,
+      awayRedCards: 1,
+      homeOffsides: 2,
+      awayOffsides: 1,
+      homeFouls: 10,
+      awayFouls: 14,
+      homeFreeKicks: 14,
+      awayFreeKicks: 10
     };
   }
   const charSum = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);

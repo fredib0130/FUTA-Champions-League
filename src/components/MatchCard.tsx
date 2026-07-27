@@ -261,8 +261,8 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
             ) : (
               <div className="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 text-white/30 font-mono text-xl font-black">?</div>
             )}
-            {homeTeam && homeTeam.id === 'mst' && (
-              <div className="absolute -top-2 -right-2 bg-yellow-500 rounded-full p-1 border border-dark animate-bounce">
+            {homeTeam && homeTeam.id === 'ice' && (
+              <div className="absolute -top-2 -right-2 bg-yellow-500 rounded-full p-1 border border-dark animate-bounce" title="Defending Champions (ICE)">
                 <Trophy size={10} className="text-dark" />
               </div>
             )}
@@ -365,8 +365,8 @@ export function MatchCard({ match: initialMatch }: MatchCardProps) {
             ) : (
               <div className="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 text-white/30 font-mono text-xl font-black">?</div>
             )}
-            {awayTeam && awayTeam.id === 'mst' && (
-              <div className="absolute -top-2 -right-2 bg-yellow-500 rounded-full p-1 border border-dark animate-bounce">
+            {awayTeam && awayTeam.id === 'ice' && (
+              <div className="absolute -top-2 -right-2 bg-yellow-500 rounded-full p-1 border border-dark animate-bounce" title="Defending Champions (ICE)">
                 <Trophy size={10} className="text-dark" />
               </div>
             )}

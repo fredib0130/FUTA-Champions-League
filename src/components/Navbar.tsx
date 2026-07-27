@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Calendar, Users, BarChart3, Image as ImageIcon, Newspaper, Info, Star, Trophy, Medal, ShieldCheck, Radio } from 'lucide-react';
+import { Menu, X, Calendar, Users, BarChart3, Image as ImageIcon, Newspaper, Info, Star, Trophy, Medal, ShieldCheck, Radio, Award } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import { APP_LOGO } from '../constants';
@@ -12,6 +12,7 @@ const navItems = [
   { name: 'Rankings', path: '/rankings', icon: Star },
   { name: 'Pots', path: '/pots', icon: Trophy },
   { name: 'Champions', path: '/champions', icon: Medal },
+  { name: 'Awards 🏆', path: '/awards', icon: Award },
   { name: 'Teams', path: '/teams', icon: Users },
   { name: 'Stats', path: '/stats', icon: BarChart3 },
   { name: 'Appearances', path: '/appearances', icon: Users },

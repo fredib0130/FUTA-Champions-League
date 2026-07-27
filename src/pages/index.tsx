@@ -16,6 +16,7 @@ import { CoefficientTable } from '../components/CoefficientTable';
 import { TeamLogo } from '../components/TeamLogo';
 
 export { Champions } from './Champions';
+export { Awards } from './Awards';
 
 interface SponsorContactModalProps {
   sponsor: Sponsor;
@@ -428,7 +429,7 @@ export function Home() {
                 </div>
                 <Link to="/champions" className="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass border border-yellow-500/30 bg-yellow-500/5 group/champ hover:bg-yellow-500/10 transition-colors">
                   <Trophy size={14} className="text-yellow-500" />
-                  <span className="text-[10px] font-bold tracking-[0.2em] text-yellow-500 uppercase">Defending Champions: MST</span>
+                  <span className="text-[10px] font-bold tracking-[0.2em] text-yellow-500 uppercase">Defending Champions: ICE</span>
                 </Link>
               </div>
               
@@ -439,7 +440,7 @@ export function Home() {
               </h1>
               
               <p className="text-lg text-white/50 mb-12 max-w-lg leading-relaxed font-medium">
-                The defending champions return. MST faces off against ICE in the ultimate season opener. Don't miss the kickoff.
+                ICE crowned 2026 FUTA Champions League winners. Reigning Champions return after defeating MST 1–0 in the Grand Final.
               </p>
 
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
@@ -493,14 +494,14 @@ export function Home() {
           >
             <div className="flex items-center space-x-6">
                <div className="w-20 h-20 rounded-2xl bg-yellow-500/10 flex items-center justify-center p-2.5">
-                 <TeamLogo teamId="mst" logoUrl={TEAMS.find(t => t.id === 'mst')?.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-display text-[20px] font-black" />
+                 <TeamLogo teamId="ice" logoUrl={TEAMS.find(t => t.id === 'ice')?.logoUrl} size="custom" className="w-[100%] h-[100%] object-contain bg-transparent border-0 shadow-none font-display text-[20px] font-black" />
                </div>
                <div>
-                 <h3 className="text-2xl font-display font-black italic uppercase text-white group-hover:text-yellow-500 transition-colors">MST</h3>
-                 <p className="text-sm text-white/40 font-medium">Kings of 2025. Returning to defend the throne.</p>
+                 <h3 className="text-2xl font-display font-black italic uppercase text-white group-hover:text-yellow-500 transition-colors">ICE</h3>
+                 <p className="text-sm text-white/40 font-medium">Kings of 2026. FUTA Champions League Title Holders.</p>
                </div>
             </div>
-            <Link to="/teams/mst" className="px-6 py-3 bg-yellow-500 text-dark font-black text-xs rounded-xl hover:scale-105 transition-transform uppercase tracking-widest">
+            <Link to="/teams/ice" className="px-6 py-3 bg-yellow-500 text-dark font-black text-xs rounded-xl hover:scale-105 transition-transform uppercase tracking-widest">
               Team Profile
             </Link>
           </motion.div>
@@ -1800,7 +1801,7 @@ export const knockoutStructure = {
     { id: "SF2_2", stage: "Semi-finals", dateRange: "20th July 2026", fixture: "Winner of QF4 vs Winner of QF2 (Leg 2)" }
   ],
   final: [
-    { id: "FINAL", stage: "Final", dateRange: "TBA", fixture: "Winner of SF1 vs Winner of SF2" }
+    { id: "FINAL", stage: "Final", dateRange: "Sunday, 26th July 2026", fixture: "ICE vs MST" }
   ]
 };
 
@@ -1852,7 +1853,7 @@ export function Playoffs() {
       case 'SF1_2': return 'Winner of QF3 vs Winner of QF1';
       case 'SF2_1': return 'Winner of QF2 vs Winner of QF4';
       case 'SF2_2': return 'Winner of QF4 vs Winner of QF2';
-      case 'FINAL': return 'Winner of SF1 vs Winner of SF2';
+      case 'FINAL': return 'ICE vs MST';
       default: return '';
     }
   };
@@ -2426,7 +2427,19 @@ export function Teams() {
                   <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-0 group-hover:scale-100 transition-transform" />
                   <TeamLogo teamId={team.id} logoUrl={team.logoUrl} size="xl" className="relative z-10" />
                 </div>
-                <div className="text-[10px] font-bold text-primary mb-1 tracking-widest uppercase italic">Group {team.group}</div>
+                <div className="flex flex-wrap items-center justify-center gap-2 mb-1">
+                  <div className="text-[10px] font-bold text-primary tracking-widest uppercase italic">Group {team.group}</div>
+                  {team.id === 'ice' && (
+                    <span className="px-2 py-0.5 rounded bg-yellow-500/20 border border-yellow-500/40 text-[8px] font-black text-yellow-400 uppercase tracking-widest flex items-center gap-1">
+                      <Trophy size={10} /> Defending Champions
+                    </span>
+                  )}
+                  {team.id === 'mst' && (
+                    <span className="px-2 py-0.5 rounded bg-slate-500/20 border border-slate-500/40 text-[8px] font-black text-slate-300 uppercase tracking-widest flex items-center gap-1">
+                      <Medal size={10} className="text-slate-400" /> 2026 Runners-Up
+                    </span>
+                  )}
+                </div>
                 <h3 className="text-xl font-display mb-4">{team.name}</h3>
                 
                 <div className="grid grid-cols-3 gap-4 w-full border-t border-white/5 pt-4">
@@ -4877,10 +4890,16 @@ export function TeamProfile() {
                 {teamCoefficient && teamCoefficient.rank <= 3 && (
                   <div className="px-2 py-0.5 bg-primary/20 rounded border border-primary/40 text-[8px] font-black text-primary uppercase tracking-[0.2em] italic">Top Seed</div>
                 )}
-                {team.id === 'mst' && (
+                {team.id === 'ice' && (
                   <div className="px-2 py-0.5 bg-yellow-500/20 rounded border border-yellow-500/40 text-[8px] font-black text-yellow-500 uppercase tracking-[0.2em] italic flex items-center">
                     <Trophy size={10} className="mr-1" />
                     Defending Champions
+                  </div>
+                )}
+                {team.id === 'mst' && (
+                  <div className="px-2 py-0.5 bg-slate-500/20 rounded border border-slate-500/40 text-[8px] font-black text-slate-300 uppercase tracking-[0.2em] italic flex items-center">
+                    <Medal size={10} className="mr-1 text-slate-400" />
+                    2026 Runners-Up
                   </div>
                 )}
                 {team.pot && (
@@ -5386,10 +5405,15 @@ function PotAHighlight() {
               </div>
               <TeamLogo teamId={team.id} logoUrl={team.logoUrl} size="lg" className="mx-auto mb-6 transform group-hover:scale-110 transition-all duration-500" />
               <h3 className="text-sm font-black uppercase tracking-widest text-white group-hover:text-primary mb-2 transition-colors">{team.id.toUpperCase()}</h3>
-              {team.id === 'mst' ? (
+              {team.id === 'ice' ? (
                 <p className="text-[8px] font-black text-yellow-500 uppercase tracking-[0.2em] mb-4 flex items-center justify-center">
                   <Trophy size={10} className="mr-1" />
                   Defending Champion
+                </p>
+              ) : team.id === 'mst' ? (
+                <p className="text-[8px] font-black text-slate-300 uppercase tracking-[0.2em] mb-4 flex items-center justify-center">
+                  <Medal size={10} className="mr-1 text-slate-400" />
+                  2026 Runner-Up
                 </p>
               ) : (
                 <p className="text-[8px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Title Contender</p>

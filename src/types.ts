@@ -233,7 +233,7 @@ export interface NewsItem {
   title: string;
   featuredImage: string;
   author: string;
-  category: 'Tournament News' | 'Fixture Announcement' | 'Disciplinary Updates' | 'Registration Updates' | 'Competition Updates' | 'Committee Announcement' | 'Sponsor News';
+  category: 'Tournament News' | 'Tournament Awards' | 'Fixture Announcement' | 'Disciplinary Updates' | 'Registration Updates' | 'Competition Updates' | 'Committee Announcement' | 'Sponsor News';
   body: string;
   tags: string[];
   isPublished: boolean;

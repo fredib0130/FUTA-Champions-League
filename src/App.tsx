@@ -17,6 +17,7 @@ import {
   Rankings,
   Pots,
   Champions,
+  Awards,
   Appearances
 } from './pages';
 
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="rankings" element={<Rankings />} />
             <Route path="pots" element={<Pots />} />
             <Route path="champions" element={<Champions />} />
+            <Route path="awards" element={<Awards />} />
             <Route path="playoffs" element={<Playoffs />} />
             <Route path="teams" element={<Teams />} />
             <Route path="teams/:id" element={<TeamProfile />} />
